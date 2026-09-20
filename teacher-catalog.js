@@ -13,7 +13,7 @@
   function decorateClassModal(){
     const form=$('#classForm');if(!form)return;
     form.innerHTML='<label>Tỉnh/Thành phố công tác<select id="catalogProvince" required><option value="">Chọn tỉnh/thành</option></select></label><label>Xã/Phường<select id="catalogWard" required disabled><option value="">Chọn xã/phường</option></select></label><label>Trường<select id="catalogSchool" required disabled><option value="">Chọn trường</option></select></label><label>Lớp đang quản lý<select id="catalogClass" disabled><option value="">Chọn lớp có sẵn</option></select></label><label>Tạo lớp mới (nếu chưa có)<input id="catalogNewClass" placeholder="Ví dụ: 8B2"></label><label>Khối<input id="classGrade" placeholder="Ví dụ: 8"></label><label>Mô tả<textarea id="classDescription" placeholder="Mục tiêu hoặc ghi chú cho lớp..."></textarea></label><button class="primary-btn" type="submit">Tạo lớp</button>';
-    form.onsubmit=async e=>{e.preventDefault();if(!window.isTeacher?.()&&window.teacherAccess!==true)return;try{
+    form.onsubmit=async e=>{e.preventDefault();try{
       const p=$('#catalogProvince').value,w=$('#catalogWard').value,sid=$('#catalogSchool').value,newName=$('#catalogNewClass').value.trim();if(!sid)throw new Error('Hãy chọn trường.');let cid=$('#catalogClass').value;
       if(!cid&&newName){const ref=await api.addDoc(api.collection(db,'schools',sid,'classes'),{name:newName,createdBy:user.uid,createdAt:Date.now()});cid=ref.id}
       if(!cid)throw new Error('Hãy chọn lớp có sẵn hoặc tạo lớp mới.');
