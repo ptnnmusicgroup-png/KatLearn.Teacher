@@ -20,7 +20,7 @@
       const cSnap=await api.getDoc(api.doc(db,'schools',sid,'classes',cid));const c=cSnap.data();const school=schools.find(x=>x.id===sid);
       const code=(typeof makeJoinCode==='function'?makeJoinCode():Math.random().toString(36).slice(2,8).toUpperCase());
       const classRef=await api.addDoc(api.collection(db,'classes'),{name:c.name,grade:$('#classGrade').value.trim(),description:$('#classDescription').value.trim(),teacherUid:user.uid,teacherEmail:user.email||'',schoolId:sid,schoolName:school?.name||'',province:p,ward:w,catalogClassId:cid,studentCount:0,joinCode:code,createdAt:Date.now(),updatedAt:Date.now()});
-      await api.setDoc(api.doc(db,'classInvites',code),{classId:classRef.id,className:c.name,teacherUid:user.uid,active:true,createdAt:Date.now(),updatedAt:Date.now()});
+      await api.setDoc(api.doc(db,'classInvites',code),{classId:classRef.id,className:c.name,teacherUid:user.uid,active:true,createdAt:Date.now(),updatedAt:Date.now()});const prof=await api.getDoc(api.doc(db,'users',user.uid));const oldIds=prof.exists()&&Array.isArray(prof.data()?.classIds)?prof.data().classIds:[];if(!oldIds.includes(cid))await api.updateDoc(api.doc(db,'users',user.uid),{classIds:[...oldIds,cid],updatedAt:Date.now()});
       closeModal('classModal');form.reset();toast('✓ Đã tạo lớp '+c.name);loadClasses();loadDashboard();renderPending();
     }catch(err){toast('Không thể tạo lớp: '+err.message)}
     };
