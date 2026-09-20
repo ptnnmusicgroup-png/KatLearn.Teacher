@@ -21,7 +21,7 @@
     footer.id='katlearnFooter';
     footer.innerHTML=`
       <div class="footer-left">
-        <p class="footer-title">KatLearn - English Learning Platform</p>
+        <p class="footer-title">KatLearn - English Learning Platform (Teacher)</p>
         <p>Made by Nguyen Dang Phuong from 8B1 - Chu Van An Secondary School (Phuong Me Dev - Part Of PTNN - Dev grp)</p>
         <p>Copyright by Nguyen Dang Phuong (Phuong Me Dev) - all right reserved.</p>
         <p class="dmca">*protected by DMCA*</p>
@@ -29,7 +29,7 @@
       <div class="footer-right">
         <p>Được lưu trữ bởi GitHub</p>
         <p>Dữ liệu người dùng, hệ thống đăng nhập bởi Google Firebase</p>
-        <p>Deploy bởi Netlify</p>
+        <p>Deploy bởi Vercel</p>
         <p>Được bảo vệ bởi DMCA</p>
       </div>`;
     main.appendChild(footer);
