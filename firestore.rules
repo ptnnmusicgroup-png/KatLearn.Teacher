@@ -18,8 +18,10 @@ service cloud.firestore {
     match /classInvites/{code} {
       allow get: if signedIn();
       allow list: if false;
-      allow create, update, delete: if isAdmin()
+      allow create, update: if isAdmin()
         || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+      allow delete: if isAdmin()
+        || (isTeacher() && resource.data.teacherUid == request.auth.uid);
     }
 
     match /classes/{classId} {
