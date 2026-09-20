@@ -1,29 +1,31 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function signedIn() {
-      return request.auth != null;
-    }
-
+    function signedIn() { return request.auth != null; }
     function isAdmin() {
-      return signedIn()
-        && request.auth.token.email == 'katlearn.admin@gmail.com';
+      return signedIn() && request.auth.token.email == 'katlearn.admin@gmail.com';
     }
-
     function isTeacher() {
       return signedIn()
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
     }
-
     function canManageClass(classId) {
       return isAdmin()
         || (isTeacher()
           && get(/databases/$(database)/documents/classes/$(classId)).data.teacherUid == request.auth.uid);
     }
 
+    match /classInvites/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create, update, delete: if isAdmin()
+        || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+    }
+
     match /classes/{classId} {
       allow read: if isAdmin()
-        || (isTeacher() && resource.data.teacherUid == request.auth.uid);
+        || (isTeacher() && resource.data.teacherUid == request.auth.uid)
+        || (signedIn() && exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid)));
 
       allow create: if isAdmin()
         || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
@@ -32,28 +34,37 @@ service cloud.firestore {
         || (isTeacher() && resource.data.teacherUid == request.auth.uid);
 
       match /members/{memberId} {
-        allow read, write: if canManageClass(classId);
+        allow read: if canManageClass(classId)
+          || (signedIn() && memberId == request.auth.uid);
+
+        allow create: if canManageClass(classId)
+          || (signedIn()
+            && memberId == request.auth.uid
+            && request.resource.data.uid == request.auth.uid
+            && request.resource.data.joinCode is string
+            && exists(/databases/$(database)/documents/classInvites/$(request.resource.data.joinCode))
+            && get(/databases/$(database)/documents/classInvites/$(request.resource.data.joinCode)).data.classId == classId
+            && get(/databases/$(database)/documents/classInvites/$(request.resource.data.joinCode)).data.active == true);
+
+        allow update, delete: if canManageClass(classId)
+          || (signedIn() && memberId == request.auth.uid);
       }
     }
 
     match /publicPacks/{packId} {
       allow read: if signedIn();
-
       allow create: if isAdmin()
         || (isTeacher() && request.resource.data.createdByUid == request.auth.uid);
-
       allow update, delete: if isAdmin()
         || (isTeacher() && resource.data.createdByUid == request.auth.uid);
     }
 
     match /users/{userId} {
-      // Teachers/admins can read student profiles; ordinary students can only read themselves.
       allow read: if signedIn() && (
         request.auth.uid == userId
         || isAdmin()
         || (isTeacher() && resource.data.role != 'teacher' && resource.data.role != 'admin')
       );
-
       allow create, update: if signedIn() && request.auth.uid == userId;
       allow delete: if false;
 
