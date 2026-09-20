@@ -5,7 +5,7 @@
   async function boot(){
     const [{initializeApp,getApps},{getFirestore,collection,getDocs,getDoc,doc,addDoc,setDoc,updateDoc,query,where}]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')]);
     const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG);db=getFirestore(app);api={collection,getDocs,getDoc,doc,addDoc,setDoc,updateDoc,query,where};
-    decorateClassModal();decorateStudentModal();decorateAdmin();
+    decorateClassModal();decorateStudentModal();setTimeout(decorateAdmin,2500);setTimeout(renderPending,4500);
   }
   async function loadSchools(){
     const snap=await api.getDocs(api.collection(db,'schools'));schools=snap.docs.map(d=>({id:d.id,...d.data()}));return schools;
