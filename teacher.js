@@ -72,6 +72,29 @@ document.addEventListener('input',e=>{if(e.target.closest('#packWordRows'))refre
 async function createNewPack(name){if(!isTeacher()||!user)return;try{const ref=await fb.addDoc(fb.collection(db,'publicPacks'),{name,words:[],createdBy:user.email||'',createdByUid:user.uid,createdAt:Date.now(),updatedAt:Date.now()});await loadPackChoices();$('#packSelect').value=ref.id;toast('✓ Đã tạo bộ từ mới')}catch(e){toast('Không thể tạo bộ từ: '+e.message)}}
 $('#packForm').onsubmit=async e=>{e.preventDefault();const selectedId=$('#packSelect')?.value?.trim();const selectedOption=$('#packSelect option:checked');const name=selectedOption?.textContent?.trim()||'';const rows=[...document.querySelectorAll('.pack-word-row')];try{const words=rows.map(r=>({word:r.querySelector('.pack-word')?.value.trim(),pron:r.querySelector('.pack-pron')?.value.trim()||'',mean:r.querySelector('.pack-mean')?.value.trim(),type:r.querySelector('.pack-type')?.value||'',example:r.querySelector('.pack-example')?.value.trim()||'',note:r.querySelector('.pack-note')?.value.trim()||'',emoji:'📚'})).filter(x=>x.word&&x.mean);if(!selectedId)return toast('Hãy chọn một bộ từ của bạn.');if(!words.length)return toast('Nhập ít nhất một từ và nghĩa.');const ref=fb.doc(db,'publicPacks',selectedId);const existing=await fb.getDoc(ref);const oldWords=existing.exists()&&Array.isArray(existing.data()?.words)?existing.data().words:[];await fb.updateDoc(ref,{words:[...oldWords,...words],updatedAt:Date.now()});closeModal('packCreateModal');e.target.reset();$('#packWordRows').innerHTML='';addPackRow();toast('✓ Đã xuất bản pack');loadPacks();loadDashboard()}catch(err){toast('Không thể tạo pack: '+err.message)}};
 async function loadProgress(){if(!isTeacher())return;const members=selectedClass?await getMembers(selectedClass):[];if(!members.length){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}const rows=await Promise.all(members.map(async m=>{const s=await fb.getDoc(fb.doc(db,'users',m.uid));return s.exists()?{id:s.id,...s.data()}:{...m}}));rows.sort((a,b)=>Number(b.energy||0)-Number(a.energy||0));$('#progressTable').innerHTML=rows.map((s,i)=>`<div class="student-row"><b>#${i+1}</b><span class="student-avatar">${esc((s.displayName||'K')[0]).toUpperCase()}</span><div><strong>${esc(s.displayName||'KatLearn Student')}</strong><small>${esc(s.email||'')}</small></div><div class="student-score"><b>⚡ ${Number(s.energy||0).toLocaleString()}</b><small>📚 ${Number(s.totalWords||0)} từ</small></div></div>`).join('')}
-$('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');
+$('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');
+
+function parseCsvLine(line){const out=[];let cur='',quoted=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(quoted&&line[i+1]==='"'){cur+='"';i++;}else quoted=!quoted}else if(ch===','&&!quoted){out.push(cur.trim());cur=''}else cur+=ch}out.push(cur.trim());return out}
+async function importPackCsv(file){
+  if(!file)return;
+  try{
+    const text=await file.text();
+    const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    if(!lines.length)throw new Error('File CSV trống.');
+    const header=parseCsvLine(lines[0]).map(x=>x.toLowerCase());
+    const find=(names,def)=>{const i=header.findIndex(h=>names.includes(h));return i>=0?i:def};
+    const wi=find(['word','từ','từ vựng','english'],0), mi=find(['mean','meaning','nghĩa','vietnamese','tiếng việt'],2), pi=find(['pron','pronunciation','phiên âm'],1), ti=find(['type','loại từ'],3), ei=find(['example','ví dụ'],4), ni=find(['note','ghi chú'],5);
+    const words=lines.slice(1).map(line=>{const a=parseCsvLine(line);return {word:a[wi]||'',pron:a[pi]||'',mean:a[mi]||'',type:a[ti]||'',example:a[ei]||'',note:a[ni]||'',emoji:'📚'}}).filter(w=>w.word&&w.mean);
+    if(!words.length)throw new Error('Không tìm thấy dòng dữ liệu hợp lệ. CSV cần có ít nhất cột Từ vựng và Nghĩa.');
+    const selectedId=$('#packSelect')?.value?.trim();
+    if(!selectedId)throw new Error('Hãy chọn bộ từ trước khi nhập CSV.');
+    const ref=fb.doc(db,'publicPacks',selectedId),snap=await fb.getDoc(ref),old=snap.exists()&&Array.isArray(snap.data()?.words)?snap.data().words:[];
+    await fb.updateDoc(ref,{words:[...old,...words],updatedAt:Date.now()});
+    toast('✓ Đã nhập '+words.length+' từ từ CSV');
+    loadPacks();loadDashboard();$('#packFileInput').value='';
+  }catch(e){toast('CSV: '+e.message)}
+}
+$('#importPackBtn').onclick=()=>{$('#packFileInput').click()};
+$('#packFileInput').onchange=e=>importPackCsv(e.target.files?.[0]);
 
 (async()=>{try{await initFirebase();const handled=await consumeIncomingSso();if(!handled&&!user&&!new URLSearchParams(location.search).has('sso'))await startCrossAppCheck();}catch(e){console.error(e);toast('Firebase chưa sẵn sàng: '+e.message)}})();
