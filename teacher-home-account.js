@@ -12,7 +12,7 @@
     const email=(emailEl?.textContent||'').trim();
     root.innerHTML='';
     if(!loggedIn){
-      const b=document.createElement('button');b.className='tha-btn';b.textContent='Đăng nhập';b.onclick=()=>login.click();root.appendChild(b);return true;
+      const b=document.createElement('button');b.className='tha-btn';b.textContent='Đăng nhập';b.onclick=()=>login.click();const s=document.createElement('button');s.className='tha-btn';s.textContent='Đăng ký giáo viên';s.onclick=()=>location.href='teacher-signup.html';root.append(b,s);return true;
     }
     const initial=(name.replace(/^Chưa đăng nhập$/,'Giáo viên').trim()[0]||'K').toUpperCase();
     const trigger=document.createElement('button');trigger.className='tha-user';trigger.innerHTML=`<span class="tha-avatar">${initial}</span><span>${escapeHtml(name)}</span><span>⌄</span>`;
