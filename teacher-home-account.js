@@ -7,7 +7,7 @@
     const nameEl=document.getElementById('accountName'),emailEl=document.getElementById('accountEmail');
     if(!root||!login||!logout)return false;
     if(!document.getElementById('teacher-home-account-style')){const s=document.createElement('style');s.id='teacher-home-account-style';s.textContent=css;document.head.appendChild(s)}
-    const loggedIn=logout.hidden===false;const currentUid=window.user?.uid||'';
+    const loggedIn=logout.hidden===false;const currentUid=user?.uid||'';
     const name=(nameEl?.textContent||'Giáo viên').trim()||'Giáo viên';
     const email=(emailEl?.textContent||'').trim();
     root.innerHTML='';
@@ -24,7 +24,7 @@
     root.append(trigger,panel);return true;
   }
   function escapeHtml(v){return String(v||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]))}
-  async function hydrateProfile(){try{if(!window.db||!window.fb||!window.user?.uid||hydratedUid===window.user.uid)return;const snap=await window.fb.getDoc(window.fb.doc(window.db,'users',window.user.uid));if(!snap.exists())return;const p=snap.data();let label='🐾 Giáo viên';if(p.schoolName)label+=' · '+p.schoolName;else if(p.schoolId){const ss=await window.fb.getDoc(window.fb.doc(window.db,'schools',p.schoolId));if(ss.exists())label+=' · '+ss.data().name}const names=[];if(p.schoolId&&Array.isArray(p.classIds))for(const id of p.classIds.slice(0,8)){const cs=await window.fb.getDoc(window.fb.doc(window.db,'schools',p.schoolId,'classes',id));if(cs.exists())names.push(cs.data().name)}if(names.length)label+=' · '+names.join(', ');profileLabel=label;hydratedUid=window.user.uid;mount()}catch(e){console.warn('[Teacher profile]',e)}}\n  function start(){\n    if(!mount())return;hydrateProfile();
+  async function hydrateProfile(){try{if(!db||!fb||!user?.uid||hydratedUid===user.uid)return;const snap=await fb.getDoc(fb.doc(db,'users',user.uid));if(!snap.exists())return;const p=snap.data();let label='🐾 Giáo viên';if(p.schoolName)label+=' · '+p.schoolName;else if(p.schoolId){const ss=await fb.getDoc(fb.doc(db,'schools',p.schoolId));if(ss.exists())label+=' · '+ss.data().name}const names=[];if(p.schoolId&&Array.isArray(p.classIds))for(const id of p.classIds.slice(0,8)){const cs=await fb.getDoc(fb.doc(db,'schools',p.schoolId,'classes',id));if(cs.exists())names.push(cs.data().name)}if(names.length)label+=' · '+names.join(', ');profileLabel=label;hydratedUid=user.uid;mount()}catch(e){console.warn('[Teacher profile]',e)}}\n  function start(){\n    if(!mount())return;hydrateProfile();
     const login=document.getElementById('loginBtn'),logout=document.getElementById('logoutBtn'),name=document.getElementById('accountName'),email=document.getElementById('accountEmail');
     const obs=new MutationObserver(()=>mount());
     [login,logout,name,email].forEach(x=>x&&obs.observe(x,{attributes:true,childList:true,characterData:true,subtree:true}));
