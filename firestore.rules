@@ -49,7 +49,7 @@ service cloud.firestore {
       match /members/{memberId} {
         allow read: if canManageClass(classId) || (signedIn() && memberId == request.auth.uid);
         allow create: if canManageClass(classId);
-        allow update, delete: if canManageClass(classId) || (signedIn() && memberId == request.auth.uid);
+        allow update, delete: if canManageClass(classId);
       }
     }
 
@@ -82,3 +82,4 @@ service cloud.firestore {
     }
   }
 }
+
