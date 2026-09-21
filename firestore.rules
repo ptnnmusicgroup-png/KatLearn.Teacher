@@ -3,19 +3,30 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
     function isAdmin() { return signedIn() && request.auth.token.email == 'katlearn.admin@gmail.com'; }
-    function isTeacher() { return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher'; }
-    function isPendingTeacher() { return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'pending_teacher_verification'; }
+    function isTeacher() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+    function isPendingTeacher() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'pending_teacher_verification';
+    }
     function canManageClass(classId) {
-      return isAdmin() || (isTeacher() && get(/databases/$(database)/documents/classes/$(classId)).data.teacherUid == request.auth.uid);
+      return isAdmin() || (isTeacher()
+        && get(/databases/$(database)/documents/classes/$(classId)).data.teacherUid == request.auth.uid);
     }
 
     match /schools/{schoolId} {
       allow read: if true;
-      allow create: if isAdmin() || ((isTeacher() || isPendingTeacher()) && request.resource.data.createdBy == request.auth.uid);
+      allow create: if isAdmin() || ((isTeacher() || isPendingTeacher())
+        && request.resource.data.createdBy == request.auth.uid);
       allow update, delete: if isAdmin();
       match /classes/{catalogClassId} {
         allow read: if true;
-        allow create: if isAdmin() || ((isTeacher() || isPendingTeacher()) && request.resource.data.createdBy == request.auth.uid);
+        allow create: if isAdmin() || ((isTeacher() || isPendingTeacher())
+          && request.resource.data.createdBy == request.auth.uid);
         allow update, delete: if isAdmin();
       }
     }
@@ -23,8 +34,10 @@ service cloud.firestore {
     match /classInvites/{code} {
       allow get: if signedIn();
       allow list: if false;
-      allow create, update: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
-      allow delete: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid);
+      allow create, update: if isAdmin()
+        || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+      allow delete: if isAdmin()
+        || (isTeacher() && resource.data.teacherUid == request.auth.uid);
     }
 
     match /classes/{classId} {
@@ -48,21 +61,24 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read: if signedIn() && (
-        request.auth.uid == userId
-        || isAdmin()
+        request.auth.uid == userId || isAdmin()
         || (isTeacher() && resource.data.role != 'teacher' && resource.data.role != 'admin')
       );
       allow create: if signedIn() && request.auth.uid == userId
-        && request.resource.data.role in ['student','pending_teacher_verification'];
+        && request.resource.data.get('role', 'student') in ['student', 'pending_teacher_verification'];
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == userId
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName','email','photoURL','updatedAt','teacherVerification','province','ward','schoolId','classIds','studentAccountType','joinedClassIds']))
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+            'role', 'coins', 'energy', 'streak', 'questionsAnswered', 'correctAnswers',
+            'ownedThemes', 'joinedClassIds'
+          ]))
         || (isTeacher() && resource.data.role == 'student'
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['joinedClassIds','updatedAt']));
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['joinedClassIds', 'updatedAt']));
       allow delete: if false;
 
       match /items/{itemId} { allow read, write: if signedIn() && request.auth.uid == userId; }
       match /attempts/{attemptId} { allow read, write: if signedIn() && request.auth.uid == userId; }
+      match /personalPacks/{packId} { allow read, write: if signedIn() && request.auth.uid == userId; }
     }
   }
 }
