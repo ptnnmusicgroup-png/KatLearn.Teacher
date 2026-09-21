@@ -36,12 +36,8 @@
     const form=$('#studentForm');if(!form)return;
     form.innerHTML='<label>Email học sinh<input id="studentEmail" type="email" required placeholder="student@example.com"></label><p style="font-size:11px;color:#7f8999;line-height:1.5">Tài khoản phải thuộc nhóm lớp hoặc đang chờ GV quản trị. Thêm vào đây sẽ cập nhật hồ sơ học sinh và cấp quyền thành viên.</p><button class="primary-btn" type="submit">Thêm vào lớp</button>';
     form.onsubmit=async e=>{e.preventDefault();if(!selectedClass)return toast('Chọn lớp trước.');const email=$('#studentEmail').value.trim().toLowerCase();try{
-      const snap=await api.getDocs(api.query(api.collection(db,'users'),api.where('email','==',email),api.where('role','==','student')));if(snap.empty)return toast('Không tìm thấy tài khoản học sinh.');const d=snap.docs[0],p=d.data();
-      if(p.studentAccountType==='free')return toast('Tài khoản tự do chưa thuộc nhóm lớp. Hãy để học sinh chuyển sang tài khoản lớp học trước.');
-      await api.setDoc(api.doc(db,'classes',selectedClass.id,'members',d.id),{uid:d.id,email,displayName:p.displayName||email.split('@')[0],addedAt:Date.now(),source:'teacher',schoolId:selectedClass.schoolId,catalogClassId:selectedClass.catalogClassId});
-      const ids=Array.isArray(p.joinedClassIds)?p.joinedClassIds:[];if(!ids.includes(selectedClass.id))ids.push(selectedClass.id);
-      await api.updateDoc(api.doc(db,'users',d.id),{joinedClassIds:ids,updatedAt:Date.now()});
-      await api.updateDoc(api.doc(db,'classes',selectedClass.id),{studentCount:(await getMembers(selectedClass)).length,updatedAt:Date.now()});
+      if(typeof teacherAction!=='function')throw new Error('Chức năng quản lý lớp chưa sẵn sàng.');
+      await teacherAction('invite',{classId:selectedClass.id,email});
       closeModal('studentModal');form.reset();toast('✓ Đã thêm học sinh vào lớp');renderStudents(selectedClass);loadDashboard();
     }catch(err){toast('Không thể thêm học sinh: '+err.message)}};
   }
@@ -59,3 +55,4 @@
   async function verifyTeacher(uid){try{await api.updateDoc(api.doc(db,'users',uid),{role:'teacher','teacherVerification.status':'verified','teacherVerification.verifiedAt':Date.now(),'teacherVerification.verifiedBy':user.uid,updatedAt:Date.now()});toast('✓ Đã cấp quyền giáo viên');renderPending()}catch(e){toast('Không thể xác minh: '+e.message)}}
   boot().catch(e=>console.warn('[KatLearn catalog]',e));
 })();
+
