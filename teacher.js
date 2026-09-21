@@ -1,6 +1,6 @@
 const ADMIN_EMAILS=['katlearn.admin@gmail.com'];
 const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};
-const LMS_HOME='https://lms-katlearn.netlify.app';
+const LMS_HOME='https://lms-katlearn.vercel.app';
 const TEACHER_HOME='https://teacher-katlearn.vercel.app';
 const SSO_EXCHANGE=TEACHER_HOME+'/api/auth-exchange';
 let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false;
