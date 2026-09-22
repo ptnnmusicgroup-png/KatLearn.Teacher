@@ -13,7 +13,7 @@ async function teacherContext(request){
   const profileSnap=await db.collection('users').doc(decoded.uid).get(),profile=profileSnap.exists?profileSnap.data():{};
   const adminEmail=String(decoded.email||'').toLowerCase()==='katlearn.admin@gmail.com';
   if(!adminEmail&&String(profile.role||'').toLowerCase()!=='teacher')throw Object.assign(new Error('Chỉ giáo viên được dùng tính năng này.'),{status:403});
-  return{auth,db,uid:decoded.uid,admin:adminEmail};
+  return{auth,db,uid:decoded.uid,admin:adminEmail,email:decoded.email||'',displayName:decoded.name||''};
 }
 async function assertClass(ctx,classId){
   const snap=await ctx.db.collection('classes').doc(classId).get();
@@ -39,9 +39,41 @@ export default async request=>{
       const studentRef=students.doc(authUser.uid),studentSnap=await studentRef.get();
       if(!studentSnap.exists||String(studentSnap.data().role||'student').toLowerCase()!=='student')throw Object.assign(new Error('Tài khoản này không phải học sinh.'),{status:400});
       const student=studentSnap.data(),oldIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds:[];
+      const teacherSnap=await ctx.db.collection('users').doc(ctx.uid).get();
+      const teacherProfile=teacherSnap.exists?teacherSnap.data():{};
+      let schoolId=String(classData.schoolId||teacherProfile.schoolId||'').trim();
+      let schoolName=String(classData.schoolName||teacherProfile.schoolName||'').trim();
+      let province=String(classData.province||teacherProfile.province||'').trim();
+      let ward=String(classData.ward||teacherProfile.ward||'').trim();
+      if(schoolId){
+        const schoolSnap=await ctx.db.collection('schools').doc(schoolId).get();
+        if(schoolSnap.exists){
+          const school=schoolSnap.data()||{};
+          schoolName=schoolName||String(school.name||'').trim();
+          province=province||String(school.province||'').trim();
+          ward=ward||String(school.ward||'').trim();
+        }
+      }
+      const className=String(classData.name||'').trim();
+      const teacherName=String(teacherProfile.displayName||ctx.displayName||ctx.uid).trim();
+      const profileSync={
+        studentAccountType:'class',
+        joinedClassIds:oldIds.includes(classId)?oldIds:[...oldIds,classId],
+        classId,
+        className,
+        schoolId,
+        schoolName,
+        province,
+        ward,
+        teacherUid:ctx.uid,
+        teacherName,
+        teacherEmail:String(ctx.email||'').toLowerCase(),
+        updatedAt:FieldValue.serverTimestamp()
+      };
+      const memberSync={uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId,className,classId,schoolName,province,ward,teacherUid:ctx.uid,teacherName,teacherEmail:String(decoded.email||'').toLowerCase(),catalogClassId:classData.catalogClassId||''};
       await ctx.db.runTransaction(async transaction=>{
-        transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),{uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId:classData.schoolId||'',catalogClassId:classData.catalogClassId||''},{merge:true});
-        transaction.set(studentRef,{studentAccountType:'class',joinedClassIds:oldIds.includes(classId)?oldIds:[...oldIds,classId],updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),memberSync,{merge:true});
+        transaction.set(studentRef,profileSync,{merge:true});
         transaction.set(classSnap.ref,{updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
