@@ -13,7 +13,7 @@ async function teacherContext(request){
   const profileSnap=await db.collection('users').doc(decoded.uid).get(),profile=profileSnap.exists?profileSnap.data():{};
   const adminEmail=String(decoded.email||'').toLowerCase()==='katlearn.admin@gmail.com';
   if(!adminEmail&&String(profile.role||'').toLowerCase()!=='teacher')throw Object.assign(new Error('Chỉ giáo viên được dùng tính năng này.'),{status:403});
-  return{auth,db,uid:decoded.uid,admin:adminEmail};
+  return{auth,db,uid:decoded.uid,admin:adminEmail,email:decoded.email||'',displayName:decoded.name||''};
 }
 async function assertClass(ctx,classId){
   const snap=await ctx.db.collection('classes').doc(classId).get();
@@ -55,7 +55,7 @@ export default async request=>{
         }
       }
       const className=String(classData.name||'').trim();
-      const teacherName=String(teacherProfile.displayName||decoded.name||ctx.uid).trim();
+      const teacherName=String(teacherProfile.displayName||ctx.displayName||ctx.uid).trim();
       const profileSync={
         studentAccountType:'class',
         joinedClassIds:oldIds.includes(classId)?oldIds:[...oldIds,classId],
@@ -67,7 +67,7 @@ export default async request=>{
         ward,
         teacherUid:ctx.uid,
         teacherName,
-        teacherEmail:String(decoded.email||'').toLowerCase(),
+        teacherEmail:String(ctx.email||'').toLowerCase(),
         updatedAt:FieldValue.serverTimestamp()
       };
       const memberSync={uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId,className,classId,schoolName,province,ward,teacherUid:ctx.uid,teacherName,teacherEmail:String(decoded.email||'').toLowerCase(),catalogClassId:classData.catalogClassId||''};
