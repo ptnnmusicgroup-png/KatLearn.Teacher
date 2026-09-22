@@ -58,7 +58,7 @@ export default async request=>{
       await ctx.db.runTransaction(async transaction=>{
         const studentRef=students.doc(studentUid),studentSnap=await transaction.get(studentRef),oldIds=studentSnap.exists&&Array.isArray(studentSnap.data().joinedClassIds)?studentSnap.data().joinedClassIds:[];
         transaction.delete(memberRef);
-        transaction.set(studentRef,{joinedClassIds:oldIds.filter(id=>id!==classId),updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        const remainingIds=oldIds.filter(id=>id!==classId);transaction.set(studentRef,{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
