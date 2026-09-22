@@ -70,7 +70,7 @@ export default async request=>{
         teacherEmail:String(ctx.email||'').toLowerCase(),
         updatedAt:FieldValue.serverTimestamp()
       };
-      const memberSync={uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId,className,classId,schoolName,province,ward,teacherUid:ctx.uid,teacherName,teacherEmail:String(decoded.email||'').toLowerCase(),catalogClassId:classData.catalogClassId||''};
+      const memberSync={uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId,className,classId,schoolName,province,ward,teacherUid:ctx.uid,teacherName,teacherEmail:String(ctx.email||'').toLowerCase(),catalogClassId:classData.catalogClassId||''};
       await ctx.db.runTransaction(async transaction=>{
         transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),memberSync,{merge:true});
         transaction.set(studentRef,profileSync,{merge:true});
