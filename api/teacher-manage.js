@@ -81,6 +81,25 @@ export default async request=>{
       return Response.json({ok:true,message:'Đã thêm học sinh vào lớp.'},{headers:headers(origin)});
     }
 
+    if(action==='assign-pack'){
+      const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
+      const packRef=ctx.db.collection('publicPacks').doc(packId),packSnap=await packRef.get();if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
+      if(!ctx.admin&&packSnap.data().createdByUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
+      const membersSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
+      const assignmentRef=ctx.db.collection('packAssignments').doc();
+      await assignmentRef.set({packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()});
+      return Response.json({ok:true,assignmentId:assignmentRef.id,studentCount:membersSnap.size},{headers:headers(origin)});
+    }
+    if(action==='pack-achievements'){
+      const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
+      const packSnap=await ctx.db.collection('publicPacks').doc(packId).get();if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
+      if(!ctx.admin&&packSnap.data().createdByUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
+      const words=new Set((Array.isArray(packSnap.data().words)?packSnap.data().words:[]).map(w=>String(w.word||'').trim().toLowerCase()).filter(Boolean));
+      const membersSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
+      const rows=await Promise.all(membersSnap.docs.map(async m=>{const uid=m.id,profileSnap=await students.doc(uid).get(),profile=profileSnap.exists?profileSnap.data():{},attemptsSnap=await students.doc(uid).collection('attempts').get();let attempts=0,correct=0;attemptsSnap.forEach(a=>{const d=a.data()||{},word=String(d.word||'').trim().toLowerCase();if(words.has(word)){attempts++;if(d.correct===true)correct++}});return{uid,displayName:String(profile.displayName||m.data().displayName||'KatLearn Student'),email:String(profile.email||m.data().email||''),attempts,correct,accuracy:attempts?Math.round(correct*100/attempts):0}}));
+      rows.sort((a,b)=>b.correct-a.correct||b.accuracy-a.accuracy||a.displayName.localeCompare(b.displayName));
+      return Response.json({ok:true,rows},{headers:headers(origin)});
+    }
     const studentUid=clean(body?.studentUid,160);
     if(!studentUid)throw Object.assign(new Error('Thiếu học sinh.'),{status:400});
     const memberRef=ctx.db.doc('classes/'+classId+'/members/'+studentUid),memberSnap=await memberRef.get();
