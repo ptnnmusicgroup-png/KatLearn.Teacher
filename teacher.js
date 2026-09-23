@@ -112,7 +112,7 @@ async function generateTeacherQuickPack(){
   }catch(e){
     if(status)status.textContent='Chưa tạo được bộ từ bằng AI.';
     toast('Không tạo được từ vựng bằng AI: '+(e.message||'Lỗi không xác định'));
-  }finally{btn.disabled=false;btn.textContent='✨ Thêm từ vựng của bạnn'}
+  }finally{btn.disabled=false;btn.textContent='✨ Thêm từ vựng của bạn'}
 }
 $('#quickPackAiBtn')?.addEventListener('click',generateTeacherQuickPack);
 
