@@ -90,13 +90,50 @@ export default async request=>{
       await assignmentRef.set({packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()});
       return Response.json({ok:true,assignmentId:assignmentRef.id,studentCount:membersSnap.size},{headers:headers(origin)});
     }
+    if(action==='delete-pack'){
+      const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
+      const packRef=ctx.db.collection('publicPacks').doc(packId),packSnap=await packRef.get();
+      if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
+      if(!ctx.admin&&String(packSnap.data()?.createdByUid||'')!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
+      const assignmentsSnap=await ctx.db.collection('packAssignments').where('packId','==',packId).get();
+      let batch=ctx.db.batch(),ops=0;
+      for(const d of assignmentsSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
+      batch.delete(packRef);await batch.commit();
+      return Response.json({ok:true,message:'Đã xóa bộ từ và các bài giao liên quan.'},{headers:headers(origin)});
+    }
+
+    if(action==='delete-class'){
+      const targetClassId=clean(body?.classId,120);if(!targetClassId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
+      const targetRef=ctx.db.collection('classes').doc(targetClassId),targetSnap=await targetRef.get();
+      if(!targetSnap.exists)throw Object.assign(new Error('Không tìm thấy lớp.'),{status:404});
+      if(!ctx.admin&&String(targetSnap.data()?.teacherUid||'')!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý lớp này.'),{status:403});
+      const membersSnap=await targetRef.collection('members').get();
+      const inviteSnap=await ctx.db.collection('classInvites').where('classId','==',targetClassId).get();
+      const assignmentsSnap=await ctx.db.collection('packAssignments').where('classId','==',targetClassId).get();
+      for(let offset=0;offset<membersSnap.docs.length;offset+=200){
+        const chunk=membersSnap.docs.slice(offset,offset+200),batch=ctx.db.batch();
+        for(const member of chunk){
+          const studentRef=ctx.db.collection('users').doc(member.id),studentSnap=await studentRef.get(),student=studentSnap.exists?studentSnap.data()||{}:{};
+          const ids=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==targetClassId):[];
+          batch.delete(member.ref);
+          batch.set(studentRef,{joinedClassIds:ids,studentAccountType:ids.length?'class':'free',updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        }
+        await batch.commit();
+      }
+      let batch=ctx.db.batch(),ops=0;
+      for(const d of inviteSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
+      for(const d of assignmentsSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
+      batch.delete(targetRef);await batch.commit();
+      return Response.json({ok:true,message:'Đã xóa lớp và dọn dữ liệu thành viên, lời mời, bài giao.'},{headers:headers(origin)});
+    }
+
     if(action==='pack-achievements'){
       const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
       const packSnap=await ctx.db.collection('publicPacks').doc(packId).get();if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
       if(!ctx.admin&&packSnap.data().createdByUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
       const words=new Set((Array.isArray(packSnap.data().words)?packSnap.data().words:[]).map(w=>String(w.word||'').trim().toLowerCase()).filter(Boolean));
       const membersSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
-      const rows=await Promise.all(membersSnap.docs.map(async m=>{const uid=m.id,profileSnap=await students.doc(uid).get(),profile=profileSnap.exists?profileSnap.data():{},attemptsSnap=await students.doc(uid).collection('attempts').get();let attempts=0,correct=0;attemptsSnap.forEach(a=>{const d=a.data()||{},word=String(d.word||'').trim().toLowerCase();if(words.has(word)){attempts++;if(d.correct===true)correct++}});return{uid,displayName:String(profile.displayName||m.data().displayName||'KatLearn Student'),email:String(profile.email||m.data().email||''),attempts,correct,accuracy:attempts?Math.round(correct*100/attempts):0}}));
+      const rows=await Promise.all(membersSnap.docs.map(async m=>{const uid=m.id,profileSnap=await students.doc(uid).get(),profile=profileSnap.exists?profileSnap.data():{},attemptsSnap=await students.doc(uid).collection('attempts').get();let attempts=0,correct=0;attemptsSnap.forEach(a=>{const d=a.data()||{},word=String(d.word||'').trim().toLowerCase(),sourceId=String(d.sourceId||'').trim();const exact=sourceId===packId;const legacy=!sourceId&&words.has(word);if(exact||legacy){attempts++;if(d.correct===true)correct++}});return{uid,displayName:String(profile.displayName||m.data().displayName||'KatLearn Student'),email:String(profile.email||m.data().email||''),attempts,correct,accuracy:attempts?Math.round(correct*100/attempts):0}}));
       rows.sort((a,b)=>b.correct-a.correct||b.accuracy-a.accuracy||a.displayName.localeCompare(b.displayName));
       return Response.json({ok:true,rows},{headers:headers(origin)});
     }
