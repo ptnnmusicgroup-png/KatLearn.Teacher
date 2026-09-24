@@ -28,6 +28,18 @@ export default async request=>{
   if(!allowedOrigins.has(origin))return Response.json({error:'Origin not allowed'},{status:403,headers:headers(origin)});
   try{
     const body=await request.json(),action=clean(body?.action,40),classId=clean(body?.classId,120),ctx=await teacherContext(request);
+    if(action==='delete-pack'){
+      const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
+      const packRef=ctx.db.collection('publicPacks').doc(packId),packSnap=await packRef.get();
+      if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
+      if(!ctx.admin&&String(packSnap.data()?.createdByUid||'')!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
+      const assignmentsSnap=await ctx.db.collection('packAssignments').where('packId','==',packId).get();
+      let batch=ctx.db.batch(),ops=0;
+      for(const d of assignmentsSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
+      batch.delete(packRef);await batch.commit();
+      return Response.json({ok:true,message:'Đã xóa bộ từ và các bài giao liên quan.'},{headers:headers(origin)});
+    }
+
     if(!classId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
     const classSnap=await assertClass(ctx,classId),classData=classSnap.data(),students=ctx.db.collection('users');
 
@@ -90,18 +102,6 @@ export default async request=>{
       await assignmentRef.set({packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()});
       return Response.json({ok:true,assignmentId:assignmentRef.id,studentCount:membersSnap.size},{headers:headers(origin)});
     }
-    if(action==='delete-pack'){
-      const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
-      const packRef=ctx.db.collection('publicPacks').doc(packId),packSnap=await packRef.get();
-      if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
-      if(!ctx.admin&&String(packSnap.data()?.createdByUid||'')!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
-      const assignmentsSnap=await ctx.db.collection('packAssignments').where('packId','==',packId).get();
-      let batch=ctx.db.batch(),ops=0;
-      for(const d of assignmentsSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
-      batch.delete(packRef);await batch.commit();
-      return Response.json({ok:true,message:'Đã xóa bộ từ và các bài giao liên quan.'},{headers:headers(origin)});
-    }
-
     if(action==='delete-class'){
       const targetClassId=clean(body?.classId,120);if(!targetClassId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
       const targetRef=ctx.db.collection('classes').doc(targetClassId),targetSnap=await targetRef.get();
