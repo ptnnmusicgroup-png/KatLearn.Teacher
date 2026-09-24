@@ -1,7 +1,7 @@
 /* DMCA protection badge for KatLearn. */
 (function(){
   const BADGE_URL='https://images.dmca.com/Badges/dmca_protected_16_120.png?ID=755dcf1e-2d8c-4315-8cd3-9f29b4ca890e';
-  const STATUS_URL='https://www.dmca.com/Protection/Status.aspx?id=755dcf1e-2d8c-4315-8cd3-9f29b4ca890e&refurl=https%3A%2F%2Flms-katlearn.netlify.app%2F&rlo=true';
+  const STATUS_URL='https://www.dmca.com/Protection/Status.aspx?id=755dcf1e-2d8c-4315-8cd3-9f29b4ca890e&rlo=true';
   function mount(){
     const footer=document.getElementById('katlearnFooter');
     const right=footer?.querySelector('.footer-right');
