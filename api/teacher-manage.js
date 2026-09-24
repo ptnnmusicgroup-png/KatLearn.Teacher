@@ -38,6 +38,8 @@ async function assertClass(ctx,classId){
   if(!ctx.admin&&snap.data().teacherUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý lớp này.'),{status:403});
   return snap;
 }
+async function batchDelete(refs,db){for(let i=0;i<refs.length;i+=400){const batch=db.batch();refs.slice(i,i+400).forEach(ref=>batch.delete(ref));await batch.commit()}}
+async function batchSet(changes,db){for(let i=0;i<changes.length;i+=400){const batch=db.batch();changes.slice(i,i+400).forEach(x=>batch.set(x.ref,x.data,{merge:true}));await batch.commit()}}
 export default async request=>{
   const origin=request.headers.get('origin')||'';
   if(request.method==='OPTIONS')return new Response('',{status:204,headers:headers(origin)});
@@ -59,6 +61,44 @@ export default async request=>{
 
     if(!classId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
     const classSnap=await assertClass(ctx,classId),classData=classSnap.data(),students=ctx.db.collection('users');
+
+    if(action==='delete-class'){
+      const memberSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
+      const inviteSnap=await ctx.db.collection('classInvites').where('classId','==',classId).get().catch(()=>({docs:[]}));
+      const assignmentSnap=await ctx.db.collection('packAssignments').where('classId','==',classId).get().catch(()=>({docs:[]}));
+      const memberDeletes=memberSnap.docs.map(d=>d.ref);
+      const studentChanges=[];
+      for(const member of memberSnap.docs){
+        const studentRef=students.doc(member.id);
+        const studentSnap=await studentRef.get();
+        if(!studentSnap.exists)continue;
+        const student=studentSnap.data()||{};
+        const remainingIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==classId):[];
+        studentChanges.push({ref:studentRef,data:{
+          joinedClassIds:remainingIds,
+          studentAccountType:remainingIds.length?'class':'free',
+          ...(remainingIds.length?{}:{
+            classId:'',
+            className:'',
+            schoolId:'',
+            schoolName:'',
+            province:'',
+            ward:'',
+            teacherUid:'',
+            teacherName:'',
+            teacherEmail:'',
+            updatedAt:FieldValue.serverTimestamp()
+          }),
+          updatedAt:FieldValue.serverTimestamp()
+        }});
+      }
+      await batchDelete(memberDeletes,ctx.db);
+      await batchSet(studentChanges,ctx.db);
+      await batchDelete(inviteSnap.docs.map(d=>d.ref),ctx.db);
+      await batchDelete(assignmentSnap.docs.map(d=>d.ref),ctx.db);
+      await ctx.db.collection('classes').doc(classId).delete();
+      return Response.json({ok:true,message:'Đã xóa lớp và dọn dữ liệu liên quan.'},{headers:headers(origin)});
+    }
 
     if(action==='invite'){
       const email=clean(body?.email,254).toLowerCase();
