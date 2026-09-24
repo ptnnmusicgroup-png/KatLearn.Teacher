@@ -6,6 +6,23 @@ const allowedOrigins=new Set(['https://teacher-katlearn.vercel.app']);
 function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type';h.vary='Origin'}return h}
 function admin(){if(!getApps().length){const raw=process.env.FIREBASE_SERVICE_ACCOUNT_JSON;if(!raw)throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is not configured');initializeApp({credential:cert(JSON.parse(raw))})}return{auth:getAuth(),db:getFirestore()}}
 const clean=(value,max=120)=>String(value??'').trim().slice(0,max);
+async function activeClassProfile(db,ids){
+  for(const id of Array.isArray(ids)?ids.slice(0,20):[]){
+    const snap=await db.collection('classes').doc(id).get();
+    if(!snap.exists)continue;
+    const cls=snap.data()||{},teacherUid=String(cls.teacherUid||'').trim();
+    let teacher={};
+    if(teacherUid){const ts=await db.collection('users').doc(teacherUid).get();teacher=ts.exists?ts.data()||{}:{}}
+    return{
+      classId:id,className:String(cls.name||'').trim(),schoolId:String(cls.schoolId||'').trim(),
+      schoolName:String(cls.schoolName||teacher.schoolName||'').trim(),province:String(cls.province||teacher.province||'').trim(),
+      ward:String(cls.ward||teacher.ward||'').trim(),teacherUid,
+      teacherName:String(teacher.displayName||cls.teacherName||'').trim(),
+      teacherEmail:String(teacher.email||cls.teacherEmail||'').toLowerCase().trim()
+    };
+  }
+  return{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:''};
+}
 async function teacherContext(request){
   const token=clean(request.headers.get('authorization')||'',4000).replace(/^Bearer\s+/i,'');
   if(!token)throw Object.assign(new Error('Bạn cần đăng nhập.'),{status:401});
@@ -113,10 +130,9 @@ export default async request=>{
       for(let offset=0;offset<membersSnap.docs.length;offset+=200){
         const chunk=membersSnap.docs.slice(offset,offset+200),batch=ctx.db.batch();
         for(const member of chunk){
-          const studentRef=ctx.db.collection('users').doc(member.id),studentSnap=await studentRef.get(),student=studentSnap.exists?studentSnap.data()||{}:{};
-          const ids=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==targetClassId):[];
+          const studentRef=ctx.db.collection('users').doc(member.id),studentSnap=await studentRef.get(),student=studentSnap.exists?studentSnap.data()||{}:{},ids=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==targetClassId):[],active=await activeClassProfile(ctx.db,ids);
           batch.delete(member.ref);
-          batch.set(studentRef,{joinedClassIds:ids,studentAccountType:ids.length?'class':'free',updatedAt:FieldValue.serverTimestamp()},{merge:true});
+          batch.set(studentRef,{joinedClassIds:ids,studentAccountType:ids.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
         }
         await batch.commit();
       }
@@ -143,10 +159,12 @@ export default async request=>{
     if(!memberSnap.exists)throw Object.assign(new Error('Học sinh không thuộc lớp này.'),{status:404});
 
     if(action==='remove'){
+      const studentSnap=await students.doc(studentUid).get(),oldIds=studentSnap.exists&&Array.isArray(studentSnap.data().joinedClassIds)?studentSnap.data().joinedClassIds:[],remainingIds=oldIds.filter(id=>id!==classId),active=await activeClassProfile(ctx.db,remainingIds);
       await ctx.db.runTransaction(async transaction=>{
-        const studentRef=students.doc(studentUid),studentSnap=await transaction.get(studentRef),oldIds=studentSnap.exists&&Array.isArray(studentSnap.data().joinedClassIds)?studentSnap.data().joinedClassIds:[];
+        const freshStudent=await transaction.get(students.doc(studentUid));
+        if(!freshStudent.exists)throw Object.assign(new Error('Không tìm thấy hồ sơ học sinh.'),{status:404});
         transaction.delete(memberRef);
-        const remainingIds=oldIds.filter(id=>id!==classId);transaction.set(studentRef,{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
