@@ -145,6 +145,12 @@ export default async request=>{
         transaction.set(studentRef,profileSync,{merge:true});
         transaction.set(classSnap.ref,{updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
+      const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).limit(50).get();
+      for(let i=0;i<existingAssignments.docs.length;i+=450){
+        const batch=ctx.db.batch();
+        existingAssignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayUnion(authUser.uid),updatedAt:FieldValue.serverTimestamp()}));
+        await batch.commit();
+      }
       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       return Response.json({ok:true,message:'Đã thêm học sinh vào lớp.'},{headers:headers(origin)});
@@ -206,6 +212,12 @@ export default async request=>{
         transaction.delete(memberRef);
         transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
+      const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).limit(50).get();
+      for(let i=0;i<assignments.docs.length;i+=450){
+        const batch=ctx.db.batch();
+        assignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayRemove(studentUid),updatedAt:FieldValue.serverTimestamp()}));
+        await batch.commit();
+      }
       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       return Response.json({ok:true,message:'Đã xóa học sinh khỏi lớp.'},{headers:headers(origin)});
