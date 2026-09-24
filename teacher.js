@@ -49,7 +49,45 @@ async function startCrossAppCheck(){
   ssoAttempted=true;sessionStorage.setItem('katlearn-sso-teacher-attempt','1');
   location.replace(LMS_HOME+'/sso-bridge.html?return=teacher');
 }
-async function initFirebase(){const [{initializeApp,getApps},{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit}]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')]);const {getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut}=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG);db=getFirestore(app);auth=getAuth(app);fb={collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit,GoogleAuthProvider,signInWithPopup,signOut};onAuthStateChanged(auth,async u=>{user=u;teacherAccess=false;if(u){if(ADMIN_EMAILS.includes((u.email||'').toLowerCase()))teacherAccess=true;else{const tokenResult=await u.getIdTokenResult().catch(()=>null);teacherAccess=tokenResult?.claims?.teacherAccess===true;if(!teacherAccess){const profile=await fb.getDoc(fb.doc(db,'users',u.uid)).catch(()=>null);const role=profile?.exists()?profile.data()?.role:null;teacherAccess=role==='teacher';}}if(teacherAccess)sessionStorage.setItem('katlearn-teacher-access','1');else sessionStorage.removeItem('katlearn-teacher-access')}else sessionStorage.removeItem('katlearn-teacher-access');renderAuth();if(u&&isTeacher()){document.body.classList.remove('locked');await loadDashboard()}else{document.body.classList.add('locked');showPage('dashboard')}})}
+async function initFirebase(){
+  const [{initializeApp,getApps},{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit}]=await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')
+  ]);
+  const {getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut}=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
+  const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG);
+  db=getFirestore(app);auth=getAuth(app);
+  fb={collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit,GoogleAuthProvider,signInWithPopup,signOut};
+  let resolveReady;
+  authStateReady=new Promise(resolve=>{resolveReady=resolve});
+  let firstAuthEvent=true;
+  onAuthStateChanged(auth,async u=>{
+    user=u;teacherAccess=false;
+    if(u){
+      if(ADMIN_EMAILS.includes((u.email||'').toLowerCase()))teacherAccess=true;
+      else{
+        const tokenResult=await u.getIdTokenResult().catch(()=>null);
+        teacherAccess=tokenResult?.claims?.teacherAccess===true;
+        if(!teacherAccess){
+          const profile=await fb.getDoc(fb.doc(db,'users',u.uid)).catch(()=>null);
+          const role=profile?.exists()?profile.data()?.role:null;
+          teacherAccess=role==='teacher';
+        }
+      }
+      if(teacherAccess)sessionStorage.setItem('katlearn-teacher-access','1');
+      else sessionStorage.removeItem('katlearn-teacher-access');
+    }else sessionStorage.removeItem('katlearn-teacher-access');
+    renderAuth();
+    if(u&&isTeacher()){
+      document.body.classList.remove('locked');
+      await loadDashboard();
+    }else{
+      document.body.classList.add('locked');
+      showPage('dashboard');
+    }
+    if(firstAuthEvent){firstAuthEvent=false;resolveReady()}
+  });
+}
 function renderAuth(){const name=user?.displayName||user?.email?.split('@')[0]||'Giáo viên';$('#accountName').textContent=user?name:'Chưa đăng nhập';$('#accountEmail').textContent=user?.email||'';$('#loginBtn').hidden=!!user;$('#logoutBtn').hidden=!user;$('.auth-message').textContent=user&&!isTeacher()?'Tài khoản này chưa được cấp quyền giáo viên. Hãy đăng ký/đăng nhập bằng tài khoản có vai trò giáo viên.':user?'Đã đăng nhập và có quyền quản lý.':'Đăng nhập bằng tài khoản giáo viên để tiếp tục.'}
 $('#loginBtn').onclick=async()=>{try{const result=await fb.signInWithPopup(auth,new fb.GoogleAuthProvider());const profile=await fb.getDoc(fb.doc(db,'users',result.user.uid)).catch(()=>null);if(!ADMIN_EMAILS.includes((result.user.email||'').toLowerCase())&&profile?.data()?.role!=='teacher')toast('Tài khoản này chưa được cấp quyền giáo viên.')}catch(e){toast('Không thể đăng nhập: '+e.message)}};$('#logoutBtn').onclick=async()=>{await fb.signOut(auth)};
 async function loadDashboard(){if(!isTeacher())return;const classQuery=isAdminUser()?fb.collection(db,'classes'):fb.query(fb.collection(db,'classes'),fb.where('teacherUid','==',user.uid));const [cs,ps]=await Promise.all([fb.getDocs(classQuery),fb.getDocs(fb.collection(db,'publicPacks'))]);classes=cs.docs.map(d=>({id:d.id,...d.data()}));const stats=await Promise.all(classes.map(classStats));const students=stats.flatMap(s=>s.rows);$('#metricClasses').textContent=classes.length;$('#metricStudents').textContent=students.length;$('#metricPacks').textContent=ps.size;$('#metricActive').textContent=students.filter(s=>Number(s.energy||0)>0).length;$('#recentClasses').innerHTML=stats.slice(0,5).map(s=>`<div class="class-item"><strong>${esc(s.cls.name)}</strong><small>${esc(s.cls.grade||'')} · ${s.rows.length} học sinh · ${s.average}% hiệu quả</small></div>`).join('')||'<div class="empty">Chưa có lớp nào. Tạo lớp đầu tiên nhé.</div>';const analytics=$('#classAnalytics');if(analytics)analytics.innerHTML=stats.length?stats.map(s=>`<article class="class-stat"><div><strong>${esc(s.cls.name)}</strong><small>Sĩ số ${s.rows.length} · Hiệu quả TB ${s.average}%</small></div><ol>${s.rows.slice(0,3).map((x,i)=>`<li><b>${['🥇','🥈','🥉'][i]} ${esc(x.displayName||x.email||'Học sinh')}</b><span>${Number(x.correctAnswers||0)} đúng · ${accuracy(x)}%</span></li>`).join('')||'<li>Chưa có học sinh</li>'}</ol></article>`).join(''):'<div class="empty">Tạo lớp để xem thống kê.</div>'}
@@ -148,5 +186,17 @@ async function importPackCsv(file){
 $('#importPackBtn').onclick=()=>{$('#packFileInput').click()};
 $('#packFileInput').onchange=e=>importPackCsv(e.target.files?.[0]);
 
-(async()=>{try{await initFirebase();const handled=await consumeIncomingSso();if(!handled&&!user&&!new URLSearchParams(location.search).has('sso'))await startCrossAppCheck();}catch(e){console.error(e);toast('Firebase chưa sẵn sàng: '+e.message)}})();
+(async()=>{
+  try{
+    await initFirebase();
+    await authStateReady;
+    const handled=await consumeIncomingSso();
+    if(!handled&&user&&!teacherAccess){
+      await fb.signOut(auth).catch(()=>{});
+      location.replace(LMS_HOME+'/login.html');
+      return;
+    }
+    if(!handled&&!user&&!new URLSearchParams(location.search).has('sso'))await startCrossAppCheck();
+  }catch(e){console.error(e);toast('Firebase chưa sẵn sàng: '+e.message)}
+})();
 
