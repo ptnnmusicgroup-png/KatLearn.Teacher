@@ -65,7 +65,10 @@ service cloud.firestore {
     }
     match /users/{userId} {
       allow read: if signedIn() && (request.auth.uid == userId || isAdmin()
-        || (isTeacher() && resource.data.role != 'teacher' && resource.data.role != 'admin'));
+        || (isTeacher()
+          && resource.data.role != 'teacher'
+          && resource.data.role != 'admin'
+          && resource.data.teacherUid == request.auth.uid));
       allow create: if signedIn() && request.auth.uid == userId
         && request.resource.data.get('role', 'student') in ['student', 'pending_teacher_verification'];
       allow update: if isAdmin()
@@ -73,7 +76,7 @@ service cloud.firestore {
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
             'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'dailyQuestions', 'dailyCorrect', 'questionsAnswered', 'correctAnswers',
             'ownedThemes', 'joinedClassIds', 'studentAccountType'
-          ]))
+          ]));
 
       allow delete: if false;
       match /items/{itemId} {
