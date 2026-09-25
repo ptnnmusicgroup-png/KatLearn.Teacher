@@ -74,21 +74,11 @@ export default async request=>{
         if(!studentSnap.exists)continue;
         const student=studentSnap.data()||{};
         const remainingIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==classId):[];
+        const active=remainingIds.length?await activeClassProfile(ctx.db,remainingIds):{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:''};
         studentChanges.push({ref:studentRef,data:{
           joinedClassIds:remainingIds,
           studentAccountType:remainingIds.length?'class':'free',
-          ...(remainingIds.length?{}:{
-            classId:'',
-            className:'',
-            schoolId:'',
-            schoolName:'',
-            province:'',
-            ward:'',
-            teacherUid:'',
-            teacherName:'',
-            teacherEmail:'',
-            updatedAt:FieldValue.serverTimestamp()
-          }),
+          ...active,
           updatedAt:FieldValue.serverTimestamp()
         }});
       }
@@ -145,7 +135,7 @@ export default async request=>{
         transaction.set(studentRef,profileSync,{merge:true});
         transaction.set(classSnap.ref,{updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
-      const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).limit(50).get();
+      const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       for(let i=0;i<existingAssignments.docs.length;i+=450){
         const batch=ctx.db.batch();
         existingAssignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayUnion(authUser.uid),updatedAt:FieldValue.serverTimestamp()}));
@@ -165,30 +155,6 @@ export default async request=>{
       await assignmentRef.set({packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()});
       return Response.json({ok:true,assignmentId:assignmentRef.id,studentCount:membersSnap.size},{headers:headers(origin)});
     }
-    if(action==='delete-class'){
-      const targetClassId=clean(body?.classId,120);if(!targetClassId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
-      const targetRef=ctx.db.collection('classes').doc(targetClassId),targetSnap=await targetRef.get();
-      if(!targetSnap.exists)throw Object.assign(new Error('Không tìm thấy lớp.'),{status:404});
-      if(!ctx.admin&&String(targetSnap.data()?.teacherUid||'')!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý lớp này.'),{status:403});
-      const membersSnap=await targetRef.collection('members').get();
-      const inviteSnap=await ctx.db.collection('classInvites').where('classId','==',targetClassId).get();
-      const assignmentsSnap=await ctx.db.collection('packAssignments').where('classId','==',targetClassId).get();
-      for(let offset=0;offset<membersSnap.docs.length;offset+=200){
-        const chunk=membersSnap.docs.slice(offset,offset+200),batch=ctx.db.batch();
-        for(const member of chunk){
-          const studentRef=ctx.db.collection('users').doc(member.id),studentSnap=await studentRef.get(),student=studentSnap.exists?studentSnap.data()||{}:{},ids=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==targetClassId):[],active=await activeClassProfile(ctx.db,ids);
-          batch.delete(member.ref);
-          batch.set(studentRef,{joinedClassIds:ids,studentAccountType:ids.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-        }
-        await batch.commit();
-      }
-      let batch=ctx.db.batch(),ops=0;
-      for(const d of inviteSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
-      for(const d of assignmentsSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
-      batch.delete(targetRef);await batch.commit();
-      return Response.json({ok:true,message:'Đã xóa lớp và dọn dữ liệu thành viên, lời mời, bài giao.'},{headers:headers(origin)});
-    }
-
     if(action==='pack-achievements'){
       const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
       const packSnap=await ctx.db.collection('publicPacks').doc(packId).get();if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
@@ -212,7 +178,7 @@ export default async request=>{
         transaction.delete(memberRef);
         transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
-      const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).limit(50).get();
+      const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       for(let i=0;i<assignments.docs.length;i+=450){
         const batch=ctx.db.batch();
         assignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayRemove(studentUid),updatedAt:FieldValue.serverTimestamp()}));
