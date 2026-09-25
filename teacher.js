@@ -9,7 +9,7 @@ const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const isTeacher=()=>teacherAccess;
 const isAdminUser=()=>ADMIN_EMAILS.includes((user?.email||'').toLowerCase());
 function toast(msg){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
-function makeJoinCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+function makeJoinCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=new Uint8Array(6);crypto.getRandomValues(bytes);return [...bytes].map(b=>chars[b%chars.length]).join('')}
 async function copyText(value){const text=String(value??'');if(!text)return;try{await navigator.clipboard.writeText(text);toast('✓ Đã sao chép mã lớp')}catch(_){const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();try{document.execCommand('copy');toast('✓ Đã sao chép mã lớp')}catch(e){toast('Không thể sao chép mã lớp.')}finally{area.remove()}}}
 function showPage(id){$$('.page').forEach(x=>x.classList.remove('active-page'));$('#'+id)?.classList.add('active-page');$$('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='dashboard')loadDashboard();if(id==='classes')loadClasses();if(id==='students')loadStudents();if(id==='packs')loadPacks();if(id==='progress')loadProgress();window.scrollTo({top:0,behavior:'smooth'})}
 $$('.nav-item').forEach(b=>b.onclick=()=>showPage(b.dataset.page));$('.menu-toggle').onclick=()=>$('.sidebar').classList.toggle('open');
