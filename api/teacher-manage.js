@@ -198,10 +198,6 @@ export default async request=>{
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       return Response.json({ok:true,message:'Đã thêm học sinh vào lớp.'},{headers:headers(origin)});
     }
-      const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
-      await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-    }
 
     if(action==='assign-pack'){
       const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
