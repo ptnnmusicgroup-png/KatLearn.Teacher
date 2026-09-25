@@ -3,7 +3,7 @@ const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDoma
 const LMS_HOME='https://lms-katlearn.vercel.app';
 const TEACHER_HOME='https://teacher-katlearn.vercel.app';
 const SSO_EXCHANGE=TEACHER_HOME+'/api/auth-exchange';
-let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false;
+let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false,accountRole='';
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const isTeacher=()=>teacherAccess;
@@ -62,15 +62,17 @@ async function initFirebase(){
   authStateReady=new Promise(resolve=>{resolveReady=resolve});
   let firstAuthEvent=true;
   onAuthStateChanged(auth,async u=>{
-    user=u;teacherAccess=false;
+    user=u;teacherAccess=false;accountRole='';
     if(u){
-      if(ADMIN_EMAILS.includes((u.email||'').toLowerCase()))teacherAccess=true;
+      if(ADMIN_EMAILS.includes((u.email||'').toLowerCase())){teacherAccess=true;accountRole='teacher';}
       else{
         const tokenResult=await u.getIdTokenResult().catch(()=>null);
         teacherAccess=tokenResult?.claims?.teacherAccess===true;
+        if(teacherAccess)accountRole='teacher';
         if(!teacherAccess){
           const profile=await fb.getDoc(fb.doc(db,'users',u.uid)).catch(()=>null);
-          const role=profile?.exists()?profile.data()?.role:null;
+          const role=String(profile?.exists()?profile.data()?.role:'').toLowerCase();
+          accountRole=role;
           teacherAccess=role==='teacher';
         }
       }
@@ -192,6 +194,10 @@ $('#packFileInput').onchange=e=>importPackCsv(e.target.files?.[0]);
     await authStateReady;
     const handled=await consumeIncomingSso();
     if(!handled&&user&&!teacherAccess){
+      if(accountRole==='pending_teacher_verification'){
+        location.replace('teacher-pending.html');
+        return;
+      }
       await fb.signOut(auth).catch(()=>{});
       location.replace(LMS_HOME+'/login.html');
       return;
