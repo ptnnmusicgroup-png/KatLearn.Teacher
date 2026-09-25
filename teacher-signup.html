@@ -1,13 +1,21 @@
 <!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KatLearn Teacher — Đăng ký giáo viên</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="auth-modern.css"><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet"><style>
 :root{--ink:#303747;--muted:#7f8999;--blue:#5d6bea;--line:#e7e9f0;--bg:#f7f8fc}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);font-family:'Be Vietnam Pro',sans-serif;color:var(--ink)}main{max-width:980px;margin:auto;padding:30px 18px 60px}.back{color:#5d6bea;font-weight:800;text-decoration:none}.hero{text-align:center;margin:34px auto 25px;max-width:720px}.hero h1{margin:0;font:700 46px Fredoka,sans-serif}.hero p{color:var(--muted);line-height:1.6}.card{background:#fff;border:1px solid var(--line);border-radius:25px;padding:28px;box-shadow:0 24px 70px #30374712}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:grid;gap:7px;font-size:12px;font-weight:800}input,select{width:100%;min-height:47px;border:1px solid var(--line);border-radius:13px;padding:0 13px;font:inherit;color:var(--ink);background:#fff}input:focus,select:focus{outline:none;border-color:#8d96ed;box-shadow:0 0 0 4px #5d6bea14}.full{grid-column:1/-1}.section{margin:22px 0 8px;font:700 18px Fredoka,sans-serif}.actions{display:flex;gap:10px;align-items:center;margin-top:20px}.submit{min-height:49px;border:0;border-radius:999px;padding:0 22px;background:#5d6bea;color:#fff;font-weight:800;cursor:pointer}.link{color:#5d6bea;font-weight:800;text-decoration:none;font-size:12px}.message{min-height:20px;color:#5d6bea;font-size:11px;font-weight:700}.notice{padding:13px 15px;border-radius:14px;background:#f7f8ff;color:#65708a;font-size:11px;line-height:1.6;margin-top:15px}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.hero h1{font-size:38px}}
 
-/* Teacher signup layout override: keep the registration flow centered and roomy. */
-.teacher-signup-page{
+/* Teacher signup: dedicated centered layout, isolated from shared auth grid. */
+body>main.teacher-signup-page,
+main.teacher-signup-page{
   display:block!important;
-  width:min(1100px,calc(100% - 32px))!important;
+  position:relative!important;
+  z-index:2!important;
+  width:min(1120px,calc(100% - 40px))!important;
   min-height:100vh!important;
+  max-width:none!important;
   margin:0 auto!important;
   padding:34px 0 72px!important;
+  grid-template-columns:none!important;
+  grid-column:none!important;
+  align-items:initial!important;
+  gap:0!important;
 }
 .teacher-signup-page .back{
   margin-bottom:20px!important;
@@ -29,16 +37,17 @@
   margin-right:auto!important;
 }
 .teacher-signup-page .card{
-  width:min(960px,100%)!important;
+  width:min(1040px,100%)!important;
   margin:0 auto!important;
-  padding:36px 38px!important;
+  padding:42px 46px!important;
 }
+.teacher-signup-page .card:before{display:none!important;}
 .teacher-signup-page #form{
   gap:18px!important;
 }
 .teacher-signup-page #form .grid{
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:18px 22px!important;
+  gap:22px 28px!important;
 }
 .teacher-signup-page label{
   gap:8px!important;
@@ -46,10 +55,10 @@
 }
 .teacher-signup-page input,
 .teacher-signup-page select{
-  min-height:56px!important;
-  padding:0 16px!important;
-  border-radius:14px!important;
-  font-size:13px!important;
+  min-height:60px!important;
+  padding:0 17px!important;
+  border-radius:15px!important;
+  font-size:14px!important;
 }
 .teacher-signup-page .notice{
   margin-top:2px!important;
@@ -69,13 +78,14 @@
   padding:0 28px!important;
   font-size:13px!important;
 }
+.teacher-signup-page .actions .submit{min-width:190px!important}
 @media(max-width:760px){
   .teacher-signup-page{
     width:calc(100% - 22px)!important;
     padding:20px 0 40px!important;
   }
   .teacher-signup-page .card{
-    padding:24px 20px!important;
+    padding:28px 20px!important;
   }
   .teacher-signup-page #form .grid{
     grid-template-columns:1fr!important;
