@@ -52,14 +52,14 @@ async function startCrossAppCheck(){
   location.replace(LMS_HOME+'/sso-bridge.html?return=teacher');
 }
 async function initFirebase(){
-  const [{initializeApp,getApps},{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit}]=await Promise.all([
+  const [{initializeApp,getApps},{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit,runTransaction}]=await Promise.all([
     import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
     import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')
   ]);
   const {getAuth,onAuthStateChanged,GoogleAuthProvider,signInWithPopup,signOut}=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
   const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG);
   db=getFirestore(app);auth=getAuth(app);
-  fb={collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit,GoogleAuthProvider,signInWithPopup,signOut};
+  fb={collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit,runTransaction,GoogleAuthProvider,signInWithPopup,signOut};
   let resolveReady;
   authStateReady=new Promise(resolve=>{resolveReady=resolve});
   let firstAuthEvent=true;
@@ -126,7 +126,7 @@ function openPackMenu(anchor,p){
   menu.onclick=async e=>{const action=e.target.closest('[data-pack-action]')?.dataset.packAction;if(!action)return;closePackMenu();if(action==='assign')return assignPack(p);if(action==='achievement')return showPackAchievements(p);if(action==='rename')return renamePack(p);if(action==='delete')return deletePack(p.id)};
 }
 document.addEventListener('click',e=>{if(!e.target.closest('.pack-action-menu')&&!e.target.closest('[data-pack-menu]'))closePackMenu()});
-async function renamePack(p){const name=prompt('Tên mới cho bộ từ:',p.name||'');if(name===null)return;const cleanName=name.trim();if(!cleanName)return toast('Tên bộ từ không được để trống.');if(cleanName===p.name)return;try{await fb.updateDoc(fb.doc(db,'publicPacks',p.id),{name:cleanName,updatedAt:Date.now()});toast('✓ Đã đổi tên bộ từ');loadPacks();loadDashboard()}catch(e){toast('Không thể đổi tên: '+e.message)}}
+async function renamePack(p){const name=prompt('Tên mới cho bộ từ:',p.name||'');if(name===null)return;const cleanName=name.trim();if(!cleanName)return toast('Tên bộ từ không được để trống.');if(cleanName===p.name)return;try{await fb.updateDoc(fb.doc(db,'publicPacks',p.id),{name:cleanName,updatedAt:Date.now()});if(p.memoryDocId)await mirrorTeacherPackToMemory(String(p.memoryDocId),{...p,name:cleanName,updatedAt:Date.now()});toast('✓ Đã đổi tên bộ từ');loadPacks();loadDashboard()}catch(e){toast('Không thể đổi tên: '+e.message)}}
 async function packActionRequest(action,payload){const token=await user?.getIdToken();if(!token)throw new Error('Bạn cần đăng nhập lại.');const res=await fetch('/api/teacher-manage',{method:'POST',headers:{'content-type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({action,...payload})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||'Không thể thực hiện thao tác.');return data}
 async function assignPack(p){if(!classes.length)await loadClasses();if(!classes.length)return toast('Bạn chưa có lớp nào để giao bài.');const choices=classes.map((c,i)=>(i+1)+'. '+c.name).join('\n');const answer=prompt('Giao “'+p.name+'” cho lớp nào?\n\n'+choices+'\n\nNhập số lớp:');if(answer===null)return;const cls=classes[Number(answer)-1];if(!cls)return toast('Số lớp không hợp lệ.');try{const data=await packActionRequest('assign-pack',{classId:cls.id,packId:p.id});toast('✓ Đã giao bài cho lớp '+cls.name+' ('+Number(data.studentCount||0)+' học sinh)')}catch(e){toast('Không thể giao bài: '+e.message)}}
 async function showPackAchievements(p){if(!classes.length)await loadClasses();if(!classes.length)return toast('Bạn chưa có lớp nào để xem thành tích.');const choices=classes.map((c,i)=>(i+1)+'. '+c.name).join('\n');const answer=prompt('Xem thành tích “'+p.name+'” của lớp nào?\n\n'+choices+'\n\nNhập số lớp:');if(answer===null)return;const cls=classes[Number(answer)-1];if(!cls)return toast('Số lớp không hợp lệ.');try{const data=await packActionRequest('pack-achievements',{classId:cls.id,packId:p.id});const rows=Array.isArray(data.rows)?data.rows:[];$('#packDetail').innerHTML=`<h3>${esc(p.name)}</h3><p>${rows.length} học sinh · Lớp ${esc(cls.name)}</p><div class="word-table-card"><div class="word-table-head"><span>Học sinh</span><span>Câu trả lời</span><span>Đúng</span><span>Độ chính xác</span></div>${rows.map(s=>`<div class="word-table-row"><span><b>${esc(s.displayName||'Học sinh')}</b><small>${esc(s.email||'')}</small></span><span>${s.attempts}</span><span>${s.correct}</span><span>${s.accuracy}%</span></div>`).join('')||'<div class="empty">Chưa có dữ liệu học bộ từ này.</div>'}</div>`;openModal('packModal')}catch(e){toast('Không thể xem thành tích: '+e.message)}}
@@ -168,8 +168,47 @@ function refreshPackRowNumbers(){const rows=[...document.querySelectorAll('.pack
 function addPackRow(){const wrap=$('#packWordRows');if(!wrap)return;const row=document.createElement('div');row.className='pack-word-row';row.innerHTML='<span class="row-number"></span><input class="pack-word" placeholder="TỪ VỰNG" required><input class="pack-pron" placeholder="PHIÊN ÂM"><input class="pack-mean" placeholder="NGHĨA*" required><select class="pack-type"><option value="">LOẠI TỪ</option><option>noun</option><option>verb</option><option>adjective</option><option>adverb</option><option>phrase</option><option>other</option></select><input class="pack-example" placeholder="VÍ DỤ"><input class="pack-note" placeholder="GHI CHÚ"><button type="button" class="remove-pack-row" title="Xóa dòng">×</button>';wrap.appendChild(row);refreshPackRowNumbers();row.querySelector('.pack-word')?.focus()}
 document.addEventListener('click',e=>{if(e.target.closest('#addPackRow'))addPackRow();if(e.target.closest('#quickAddBtn')){$('#quickPackPanel')?.removeAttribute('hidden');$('#quickPackPrompt')?.focus();}if(e.target.closest('.remove-pack-row')){const rows=document.querySelectorAll('.pack-word-row');if(rows.length>1)e.target.closest('.pack-word-row').remove();refreshPackRowNumbers()}if(e.target.closest('#cancelPackBtn'))closeModal('packCreateModal');if(e.target.closest('#newPackBtn')){const name=prompt('Tên bộ từ mới:');if(name?.trim())createNewPack(name.trim());}if(e.target.closest('.pack-help'))toast('Điền Từ vựng, Nghĩa và các thông tin bổ sung nếu cần.')});
 document.addEventListener('input',e=>{if(e.target.closest('#packWordRows'))refreshPackRowNumbers()});
-async function createNewPack(name){if(!isTeacher()||!user)return;try{const ref=await fb.addDoc(fb.collection(db,'publicPacks'),{name,words:[],createdBy:user.email||'',createdByUid:user.uid,createdAt:Date.now(),updatedAt:Date.now()});await loadPackChoices();$('#packSelect').value=ref.id;toast('✓ Đã tạo bộ từ mới')}catch(e){toast('Không thể tạo bộ từ: '+e.message)}}
-$('#packForm').onsubmit=async e=>{e.preventDefault();const selectedId=$('#packSelect')?.value?.trim();const selectedOption=$('#packSelect option:checked');const name=selectedOption?.textContent?.trim()||'';const rows=[...document.querySelectorAll('.pack-word-row')];try{const words=rows.map(r=>({word:r.querySelector('.pack-word')?.value.trim(),pron:r.querySelector('.pack-pron')?.value.trim()||'',mean:r.querySelector('.pack-mean')?.value.trim(),type:r.querySelector('.pack-type')?.value||'',example:r.querySelector('.pack-example')?.value.trim()||'',note:r.querySelector('.pack-note')?.value.trim()||'',emoji:'📚'})).filter(x=>x.word&&x.mean);if(!selectedId)return toast('Hãy chọn một bộ từ của bạn.');if(!words.length)return toast('Nhập ít nhất một từ và nghĩa.');const ref=fb.doc(db,'publicPacks',selectedId);const existing=await fb.getDoc(ref);const oldWords=existing.exists()&&Array.isArray(existing.data()?.words)?existing.data().words:[];await fb.updateDoc(ref,{words:[...oldWords,...words],updatedAt:Date.now()});closeModal('packCreateModal');e.target.reset();$('#packWordRows').innerHTML='';addPackRow();toast('✓ Đã xuất bản pack');loadPacks();loadDashboard()}catch(err){toast('Không thể tạo pack: '+err.message)}};
+function stripVietnamese(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function cleanMemoryPart(value,fallback){const clean=stripVietnamese(value).trim().replace(/[^a-zA-Z0-9]+/g,'');return clean||fallback}
+function makeMemoryPackDocId(packCode,name,accountName){return String(packCode).padStart(5,'0')+'_'+cleanMemoryPart(name,'Pack')+'_'+cleanMemoryPart(accountName,'Teacher')}
+async function ensureTeacherPackIdentity(name){
+  const uid=String(user?.uid||'');if(!uid||!db||!isTeacher())throw new Error('Bạn cần đăng nhập bằng tài khoản giáo viên.');
+  const profileSnap=await fb.getDoc(fb.doc(db,'users',uid));
+  const profile=profileSnap.exists()?profileSnap.data()||{}:{};
+  let accountCode=String(profile.accountCode||'');
+  if(!accountCode&&window.__katlearnTeacherAccountCode)accountCode=String(window.__katlearnTeacherAccountCode||'');
+  if(!accountCode)throw new Error('Chưa khởi tạo mã tài khoản. Hãy tải lại trang rồi thử lại.');
+  const seqRef=fb.doc(db,'system','packSequence');
+  const displayName=user.displayName||profile.displayName||user.email?.split('@')[0]||'Teacher';
+  const result=await fb.runTransaction(db,async tx=>{
+    const seq=await tx.get(seqRef);
+    let next=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
+    let docId=makeMemoryPackDocId(next,name,displayName);
+    let ref=fb.doc(db,'accounts',accountCode,'memory',docId);
+    let snap=await tx.get(ref);
+    while(snap.exists()){
+      next++;docId=makeMemoryPackDocId(next,name,displayName);ref=fb.doc(db,'accounts',accountCode,'memory',docId);snap=await tx.get(ref);
+    }
+    tx.set(seqRef,{lastIssued:next,updatedAt:Date.now()},{merge:true});
+    return {packCode:String(next).padStart(5,'0'),docId};
+  });
+  if(String(user?.uid||'')!==uid)throw new Error('Tài khoản đã thay đổi, hãy thử lại.');
+  return {accountCode,displayName,packCode:result.packCode,docId:result.docId};
+}
+async function mirrorTeacherPackToMemory(packDocId,data){
+  if(!packDocId||!user?.uid)return;
+  const profile=await fb.getDoc(fb.doc(db,'users',user.uid));if(!profile.exists())return;
+  const code=String(profile.data()?.accountCode||'');if(!code)return;
+  await fb.setDoc(fb.doc(db,'accounts',code,'memory',packDocId),{...data,kind:'teacherPack',ownerUid:user.uid,ownerEmail:user.email||'',ownerDisplayName:user.displayName||profile.data()?.displayName||'',ownerAccountCode:code,updatedAt:Date.now()},{merge:true});
+}
+async function createNewPack(name){if(!isTeacher()||!user)return;try{
+  const identity=await ensureTeacherPackIdentity(name);
+  const data={name,words:[],createdBy:user.email||'',createdByUid:user.uid,packCode:identity.packCode,memoryDocId:identity.docId,createdAt:Date.now(),updatedAt:Date.now()};
+  const ref=await fb.addDoc(fb.collection(db,'publicPacks'),data);
+  await mirrorTeacherPackToMemory(identity.docId,{...data,publicPackId:ref.id});
+  await loadPackChoices();$('#packSelect').value=ref.id;toast('✓ Đã tạo bộ từ mới · mã '+identity.packCode);
+}catch(e){toast('Không thể tạo bộ từ: '+e.message)}}
+$('#packForm').onsubmit=async e=>{e.preventDefault();const selectedId=$('#packSelect')?.value?.trim();const selectedOption=$('#packSelect option:checked');const name=selectedOption?.textContent?.trim()||'';const rows=[...document.querySelectorAll('.pack-word-row')];try{const words=rows.map(r=>({word:r.querySelector('.pack-word')?.value.trim(),pron:r.querySelector('.pack-pron')?.value.trim()||'',mean:r.querySelector('.pack-mean')?.value.trim(),type:r.querySelector('.pack-type')?.value||'',example:r.querySelector('.pack-example')?.value.trim()||'',note:r.querySelector('.pack-note')?.value.trim()||'',emoji:'📚'})).filter(x=>x.word&&x.mean);if(!selectedId)return toast('Hãy chọn một bộ từ của bạn.');if(!words.length)return toast('Nhập ít nhất một từ và nghĩa.');const ref=fb.doc(db,'publicPacks',selectedId);const existing=await fb.getDoc(ref);if(!existing.exists())throw new Error('Không tìm thấy bộ từ đã chọn.');const existingData=existing.data()||{};const oldWords=Array.isArray(existingData.words)?existingData.words:[];let memoryDocId=String(existingData.memoryDocId||'');let packCode=String(existingData.packCode||'');if(!memoryDocId){const identity=await ensureTeacherPackIdentity(name||existingData.name||'Pack');memoryDocId=identity.docId;packCode=identity.packCode;await fb.updateDoc(ref,{memoryDocId,packCode,updatedAt:Date.now()});}const nextWords=[...oldWords,...words];await fb.updateDoc(ref,{words:nextWords,updatedAt:Date.now()});await mirrorTeacherPackToMemory(memoryDocId,{...existingData,name:existingData.name||name,words:nextWords,packCode,memoryDocId,publicPackId:selectedId});closeModal('packCreateModal');e.target.reset();$('#packWordRows').innerHTML='';addPackRow();toast('✓ Đã xuất bản pack');loadPacks();loadDashboard()}catch(err){toast('Không thể tạo pack: '+err.message)}};
 async function loadProgress(){const uid=String(user?.uid||'');if(!uid||!isTeacher())return;if(!selectedClass&&classes[0])selectedClass=classes[0];const cls=selectedClass;if(!cls){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}const stat=await classStats(cls);if(String(user?.uid||'')!==uid||!isTeacher()||selectedClass?.id!==cls.id)return;if(!stat||!stat.rows.length){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}$('#progressTable').innerHTML=`<p class="progress-note">${esc(cls.name)} · xếp hạng theo số câu đúng, sau đó đến độ chính xác và XP.</p>`+stat.rows.map((s,i)=>`<div class="student-row"><b>#${i+1}</b><span class="student-avatar">${esc((s.displayName||'K')[0]).toUpperCase()}</span><div><strong>${esc(s.displayName||'KatLearn Student')}</strong><small>${esc(s.email||'')} · ${accuracy(s)}% chính xác</small></div><div class="student-score"><b>${Number(s.correctAnswers||0)} câu đúng</b><small>⚡ ${Number(s.energy||0).toLocaleString()} XP · 📚 ${Number(s.totalWords||0)} từ</small></div></div>`).join('')}
 $('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');
 
