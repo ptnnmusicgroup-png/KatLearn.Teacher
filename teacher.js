@@ -86,14 +86,14 @@ async function initFirebase(){
     if((user?.uid||null)!==authUid)return;
     renderAuth();
     window.dispatchEvent(new CustomEvent('katlearn-teacher-auth-change',{detail:{user:u,teacherAccess,role:accountRole}}));
+    if(firstAuthEvent){firstAuthEvent=false;resolveReady(u)}
     if(u&&isTeacher()){
       document.body.classList.remove('locked');
-      await loadDashboard();
+      void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
     }else{
       document.body.classList.add('locked');
       showPage('dashboard');
     }
-    if(firstAuthEvent){firstAuthEvent=false;resolveReady()}
   });
 }
 function renderAuth(){const name=user?.displayName||user?.email?.split('@')[0]||'Giáo viên';$('#accountName').textContent=user?name:'Chưa đăng nhập';$('#accountEmail').textContent=user?.email||'';$('#loginBtn').hidden=!!user;$('#logoutBtn').hidden=!user;$('.auth-message').textContent=user&&!isTeacher()?'Tài khoản này chưa được cấp quyền giáo viên. Hãy đăng ký/đăng nhập bằng tài khoản có vai trò giáo viên.':user?'Đã đăng nhập và có quyền quản lý.':'Đăng nhập bằng tài khoản giáo viên để tiếp tục.'}
