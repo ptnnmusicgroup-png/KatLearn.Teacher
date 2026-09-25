@@ -29,7 +29,7 @@
   function start(){
     if(!mount())return;hydrateProfile();
     const login=document.getElementById('loginBtn'),logout=document.getElementById('logoutBtn'),name=document.getElementById('accountName'),email=document.getElementById('accountEmail');
-    const obs=new MutationObserver(()=>mount());
+    const obs=new MutationObserver(()=>{mount();if(user?.uid)void hydrateProfile();else{hydratedUid='';profileLabel=''}});
     [login,logout,name,email].forEach(x=>x&&obs.observe(x,{attributes:true,childList:true,characterData:true,subtree:true}));
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
