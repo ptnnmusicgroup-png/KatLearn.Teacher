@@ -97,7 +97,7 @@ export default async request=>{
       if(!authUser)throw Object.assign(new Error('Không tìm thấy tài khoản học sinh với email này.'),{status:404});
       const studentRef=students.doc(authUser.uid),studentSnap=await studentRef.get();
       if(!studentSnap.exists||String(studentSnap.data().role||'student').toLowerCase()!=='student')throw Object.assign(new Error('Tài khoản này không phải học sinh.'),{status:400});
-      const student=studentSnap.data(),oldIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds:[];
+      const student=studentSnap.data();
       const teacherSnap=await ctx.db.collection('users').doc(ctx.uid).get();
       const teacherProfile=teacherSnap.exists?teacherSnap.data():{};
       let schoolId=String(classData.schoolId||teacherProfile.schoolId||'').trim();
@@ -117,7 +117,6 @@ export default async request=>{
       const teacherName=String(teacherProfile.displayName||ctx.displayName||ctx.uid).trim();
       const profileSync={
         studentAccountType:'class',
-        joinedClassIds:oldIds.includes(classId)?oldIds:[...oldIds,classId],
         classId,
         className,
         schoolId,
@@ -131,8 +130,14 @@ export default async request=>{
       };
       const memberSync={uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId,className,classId,schoolName,province,ward,teacherUid:ctx.uid,teacherName,teacherEmail:String(ctx.email||'').toLowerCase(),catalogClassId:classData.catalogClassId||''};
       await ctx.db.runTransaction(async transaction=>{
-        transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),memberSync,{merge:true});
-        transaction.set(studentRef,profileSync,{merge:true});
+        const freshStudent=await transaction.get(studentRef);
+        if(!freshStudent.exists)throw Object.assign(new Error('Hồ sơ học sinh không còn tồn tại.'),{status:404});
+        const freshData=freshStudent.data()||{};
+        const freshIds=Array.isArray(freshData.joinedClassIds)?freshData.joinedClassIds:[];
+        const joinedClassIds=freshIds.includes(classId)?freshIds:[...freshIds,classId];
+        const freshMemberSync={...memberSync,displayName:freshData.displayName||authUser.displayName||email.split('@')[0]};
+        transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),freshMemberSync,{merge:true});
+        transaction.set(studentRef,{...profileSync,joinedClassIds},{merge:true});
         transaction.set(classSnap.ref,{updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
       const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
@@ -174,13 +179,17 @@ export default async request=>{
     if(!memberSnap.exists)throw Object.assign(new Error('Học sinh không thuộc lớp này.'),{status:404});
 
     if(action==='remove'){
-      const studentSnap=await students.doc(studentUid).get(),oldIds=studentSnap.exists&&Array.isArray(studentSnap.data().joinedClassIds)?studentSnap.data().joinedClassIds:[],remainingIds=oldIds.filter(id=>id!==classId),active=await activeClassProfile(ctx.db,remainingIds);
+      let remainingIds=[];
       await ctx.db.runTransaction(async transaction=>{
         const freshStudent=await transaction.get(students.doc(studentUid));
         if(!freshStudent.exists)throw Object.assign(new Error('Không tìm thấy hồ sơ học sinh.'),{status:404});
+        const data=freshStudent.data()||{},ids=Array.isArray(data.joinedClassIds)?data.joinedClassIds:[];
+        remainingIds=ids.filter(id=>id!==classId);
         transaction.delete(memberRef);
-        transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
+      const active=await activeClassProfile(ctx.db,remainingIds);
+      await students.doc(studentUid).set({...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       for(let i=0;i<assignments.docs.length;i+=450){
         const batch=ctx.db.batch();
