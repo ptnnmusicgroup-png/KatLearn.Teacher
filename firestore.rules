@@ -86,7 +86,11 @@ service cloud.firestore {
         && request.resource.data.get('dailyCorrect', 0) == 0
         && request.resource.data.get('questionsAnswered', 0) == 0
         && request.resource.data.get('correctAnswers', 0) == 0
-        && request.resource.data.get('ownedThemes', []) == [];
+        && request.resource.data.get('ownedThemes', []) is list
+        && request.resource.data.get('ownedThemes', []).size() == 0
+        && request.resource.data.get('joinedClassIds', []) is list
+        && request.resource.data.get('joinedClassIds', []).size() == 0
+        && request.resource.data.get('teacherUid', '') == '';
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == userId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
