@@ -30,11 +30,17 @@ service cloud.firestore {
     match /classInvites/{code} {
       allow get: if signedIn();
       allow list: if false;
-      allow create: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+      allow create: if isAdmin()
+        || (isTeacher()
+          && request.resource.data.teacherUid == request.auth.uid
+          && exists(/databases/$(database)/documents/classes/$(request.resource.data.classId))
+          && get(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.teacherUid == request.auth.uid);
       allow update: if isAdmin()
         || (isTeacher()
           && resource.data.teacherUid == request.auth.uid
-          && request.resource.data.teacherUid == request.auth.uid);
+          && request.resource.data.teacherUid == request.auth.uid
+          && request.resource.data.classId == resource.data.classId
+          && get(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.teacherUid == request.auth.uid);
       allow delete: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid);
     }
     match /classes/{classId} {
@@ -70,7 +76,16 @@ service cloud.firestore {
           && resource.data.role != 'admin'
           && resource.data.teacherUid == request.auth.uid));
       allow create: if signedIn() && request.auth.uid == userId
-        && request.resource.data.get('role', 'student') in ['student', 'pending_teacher_verification'];
+        && request.resource.data.get('role', 'student') in ['student', 'pending_teacher_verification']
+        && request.resource.data.get('coins', 0) == 0
+        && request.resource.data.get('energy', 0) == 0
+        && request.resource.data.get('streak', 0) == 0
+        && request.resource.data.get('lastStudyDay', '') == ''
+        && request.resource.data.get('dailyQuestions', 0) == 0
+        && request.resource.data.get('dailyCorrect', 0) == 0
+        && request.resource.data.get('questionsAnswered', 0) == 0
+        && request.resource.data.get('correctAnswers', 0) == 0
+        && request.resource.data.get('ownedThemes', []) == [];
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == userId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
