@@ -74,8 +74,7 @@ service cloud.firestore {
             'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'dailyQuestions', 'dailyCorrect', 'questionsAnswered', 'correctAnswers',
             'ownedThemes', 'joinedClassIds', 'studentAccountType'
           ]))
-        || (isTeacher() && resource.data.role == 'student'
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['joinedClassIds', 'updatedAt']));
+
       allow delete: if false;
       match /items/{itemId} {
         allow read: if signedIn() && request.auth.uid == userId;
