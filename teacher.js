@@ -38,7 +38,7 @@ async function consumeIncomingSso(){
     await signInWithCustomToken(auth,data.customToken);
     return true;
   }catch(e){
-    if(e.role==='student'||e.message==='STUDENT_ACCOUNT'){showBlocked();return false}
+    if(e.role==='student'||e.message==='STUDENT_ACCOUNT'){showBlocked();return true}
     console.error('[KatLearn SSO]',e);
     return false;
   }
