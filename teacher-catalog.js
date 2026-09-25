@@ -46,6 +46,15 @@
     const dash=$('#dashboard');if(!dash)return;
     const box=document.createElement('section');box.className='teacher-card-panel';box.style.marginTop='18px';box.innerHTML='<h3>🛡️ Hồ sơ giáo viên chờ xác minh</h3><p>Chỉ admin mới có thể cấp quyền giáo viên.</p><div id="pendingTeachers"><div class="empty">Đang tải...</div></div>';dash.appendChild(box);await renderPending();
   }
+  async function refreshAdminUi(){
+    const existing=$('#pendingTeachers')?.closest('.teacher-card-panel');
+    if(typeof isAdminUser!=='function'||!isAdminUser()){
+      existing?.remove();
+      return;
+    }
+    if(existing){await renderPending();return;}
+    await decorateAdmin();
+  }
   async function renderPending(){
     const uid=String(user?.uid||'');if(typeof isAdminUser!=='function'||!isAdminUser()||!api||!uid)return;const box=$('#pendingTeachers');if(!box)return;
     const snap=await api.getDocs(api.query(api.collection(db,'users'),api.where('role','==','pending_teacher_verification')));if(String(user?.uid||'')!==uid||!isAdminUser())return;const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
