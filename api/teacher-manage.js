@@ -27,6 +27,28 @@ async function activeClassProfile(db,ids){
   }
   return active?{...active,teacherUids}:{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:'',teacherUids:[]};
 }
+async function activeClassProfileTx(transaction,db,ids){
+  let active=null;const teacherUids=[];
+  const refs=Array.isArray(ids)?ids.slice(0,50).map(id=>({id,ref:db.collection('classes').doc(id)})):[];
+  const classSnaps=[];
+  for(const item of refs)classSnaps.push({id:item.id,snap:await transaction.get(item.ref)});
+  for(const item of classSnaps){
+    const snap=item.snap;if(!snap.exists)continue;
+    const cls=snap.data()||{},teacherUid=String(cls.teacherUid||'').trim();
+    if(teacherUid&&!teacherUids.includes(teacherUid))teacherUids.push(teacherUid);
+    if(active)continue;
+    let teacher={};
+    if(teacherUid){const ts=await transaction.get(db.collection('users').doc(teacherUid));teacher=ts.exists?ts.data()||{}:{}}
+    active={
+      classId:item.id,className:String(cls.name||'').trim(),schoolId:String(cls.schoolId||'').trim(),
+      schoolName:String(cls.schoolName||teacher.schoolName||'').trim(),province:String(cls.province||teacher.province||'').trim(),
+      ward:String(cls.ward||teacher.ward||'').trim(),teacherUid,
+      teacherName:String(teacher.displayName||cls.teacherName||'').trim(),
+      teacherEmail:String(teacher.email||cls.teacherEmail||'').toLowerCase().trim()
+    };
+  }
+  return active?{...active,teacherUids}:{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:'',teacherUids:[]};
+}
 async function teacherContext(request){
   const token=clean(request.headers.get('authorization')||'',4000).replace(/^Bearer\s+/i,'');
   if(!token)throw Object.assign(new Error('Bạn cần đăng nhập.'),{status:401});
@@ -67,27 +89,35 @@ export default async request=>{
     const classSnap=await assertClass(ctx,classId),classData=classSnap.data(),students=ctx.db.collection('users');
 
     if(action==='delete-class'){
+      await ctx.db.runTransaction(async transaction=>{
+        const freshClass=await transaction.get(classSnap.ref);
+        if(!freshClass.exists)throw Object.assign(new Error('Lớp không còn tồn tại.'),{status:404});
+        if(freshClass.data()?.deletingAt)throw Object.assign(new Error('Lớp đang được xóa.'),{status:409});
+        transaction.set(classSnap.ref,{deletingAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()},{merge:true});
+      });
       const memberSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
       const inviteSnap=await ctx.db.collection('classInvites').where('classId','==',classId).get();
       const assignmentSnap=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
-      const memberDeletes=memberSnap.docs.map(d=>d.ref);
-      const studentChanges=[];
       for(const member of memberSnap.docs){
         const studentRef=students.doc(member.id);
-        const studentSnap=await studentRef.get();
-        if(!studentSnap.exists)continue;
-        const student=studentSnap.data()||{};
-        const remainingIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==classId):[];
-        const active=remainingIds.length?await activeClassProfile(ctx.db,remainingIds):{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:'',teacherUids:[]};
-        studentChanges.push({ref:studentRef,data:{
-          joinedClassIds:remainingIds,
-          studentAccountType:remainingIds.length?'class':'free',
-          ...active,
-          updatedAt:FieldValue.serverTimestamp()
-        }});
+        await ctx.db.runTransaction(async transaction=>{
+          const studentSnap=await transaction.get(studentRef);
+          if(!studentSnap.exists){
+            transaction.delete(member.ref);
+            return;
+          }
+          const student=studentSnap.data()||{};
+          const remainingIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==classId):[];
+          const active=await activeClassProfileTx(transaction,ctx.db,remainingIds);
+          transaction.delete(member.ref);
+          transaction.set(studentRef,{
+            joinedClassIds:remainingIds,
+            studentAccountType:remainingIds.length?'class':'free',
+            ...active,
+            updatedAt:FieldValue.serverTimestamp()
+          },{merge:true});
+        });
       }
-      await batchDelete(memberDeletes,ctx.db);
-      await batchSet(studentChanges,ctx.db);
       await batchDelete(inviteSnap.docs.map(d=>d.ref),ctx.db);
       await batchDelete(assignmentSnap.docs.map(d=>d.ref),ctx.db);
       const catalogClassId=String(classData.catalogClassId||'').trim(),ownerUid=String(classData.teacherUid||'').trim();
