@@ -181,8 +181,8 @@ export default async request=>{
         if(String(freshData.role||'student').toLowerCase()!=='student')throw Object.assign(new Error('Tài khoản này không phải học sinh.'),{status:400});
         const freshIds=Array.isArray(freshData.joinedClassIds)?freshData.joinedClassIds:[];
         const joinedClassIds=freshIds.includes(classId)?freshIds:[...freshIds,classId];
-        const priorTeacherUids=Array.isArray(freshData.teacherUids)?freshData.teacherUids:[]; 
-        const teacherUids=[...new Set([...priorTeacherUids,String(freshData.teacherUid||'').trim(),ctx.uid].filter(Boolean))];
+        const active=await activeClassProfileTx(transaction,ctx.db,joinedClassIds);
+        const teacherUids=active.teacherUids;
         const freshMemberSync={...memberSync,displayName:freshData.displayName||authUser.displayName||email.split('@')[0]};
         transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),freshMemberSync,{merge:true});
         transaction.set(studentRef,{...profileSync,joinedClassIds,teacherUids},{merge:true});
