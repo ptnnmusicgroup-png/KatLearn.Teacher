@@ -18,12 +18,12 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/classes/$(classId)).data.teacherUid == request.auth.uid);
     }
 match /system/{docId} {
-      allow read: if signedIn() && docId == 'accountSequence';
+      allow read: if signedIn() && (docId == 'accountSequence' || docId == 'packSequence');
       allow create: if signedIn()
-        && docId == 'accountSequence'
+        && (docId == 'accountSequence' || docId == 'packSequence')
         && request.resource.data.get('lastIssued', 0) == 1;
       allow update: if signedIn()
-        && docId == 'accountSequence'
+        && (docId == 'accountSequence' || docId == 'packSequence')
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastIssued', 'updatedAt'])
         && request.resource.data.lastIssued == resource.data.lastIssued + 1;
       allow delete: if false;
