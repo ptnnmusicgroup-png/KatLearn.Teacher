@@ -63,22 +63,27 @@ async function initFirebase(){
   let firstAuthEvent=true;
   onAuthStateChanged(auth,async u=>{
     user=u;teacherAccess=false;accountRole='';
+    const authUid=u?.uid||null;
     if(u){
       if(ADMIN_EMAILS.includes((u.email||'').toLowerCase())){teacherAccess=true;accountRole='teacher';}
       else{
         const tokenResult=await u.getIdTokenResult().catch(()=>null);
+        if((user?.uid||null)!==authUid)return;
         teacherAccess=tokenResult?.claims?.teacherAccess===true;
         if(teacherAccess)accountRole='teacher';
         if(!teacherAccess){
           const profile=await fb.getDoc(fb.doc(db,'users',u.uid)).catch(()=>null);
+          if((user?.uid||null)!==authUid)return;
           const role=String(profile?.exists()?profile.data()?.role:'').toLowerCase();
           accountRole=role;
           teacherAccess=role==='teacher';
         }
       }
+      if((user?.uid||null)!==authUid)return;
       if(teacherAccess)sessionStorage.setItem('katlearn-teacher-access','1');
       else sessionStorage.removeItem('katlearn-teacher-access');
     }else sessionStorage.removeItem('katlearn-teacher-access');
+    if((user?.uid||null)!==authUid)return;
     renderAuth();
     window.dispatchEvent(new CustomEvent('katlearn-teacher-auth-change',{detail:{user:u,teacherAccess,role:accountRole}}));
     if(u&&isTeacher()){
