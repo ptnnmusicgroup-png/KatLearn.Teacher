@@ -224,6 +224,8 @@ export default async request=>{
     }
 
     if(action==='update-student'){
+      const targetSnap=await students.doc(studentUid).get();
+      if(!targetSnap.exists||String(targetSnap.data()?.role||'student').toLowerCase()!=='student')throw Object.assign(new Error('Tài khoản này không phải học sinh.'),{status:400});
       const displayName=clean(body?.displayName,80),password=String(body?.password||'');
       if(!displayName&&!password)throw Object.assign(new Error('Chưa có thay đổi nào.'),{status:400});
       if(password&&(password.length<6||password.length>256))throw Object.assign(new Error('Mật khẩu phải từ 6 đến 256 ký tự.'),{status:400});
