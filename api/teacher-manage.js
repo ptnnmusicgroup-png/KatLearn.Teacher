@@ -172,6 +172,9 @@ export default async request=>{
       };
       const memberSync={uid:authUser.uid,email,displayName:student.displayName||authUser.displayName||email.split('@')[0],addedAt:Date.now(),addedBy:ctx.uid,source:'teacher',schoolId,className,classId,schoolName,province,ward,teacherUid:ctx.uid,teacherName,teacherEmail:String(ctx.email||'').toLowerCase(),catalogClassId:classData.catalogClassId||''};
       await ctx.db.runTransaction(async transaction=>{
+        const freshClass=await transaction.get(classSnap.ref);
+        if(!freshClass.exists)throw Object.assign(new Error('Lớp không còn tồn tại.'),{status:404});
+        if(freshClass.data()?.deletingAt)throw Object.assign(new Error('Lớp đang được xóa, không thể thêm học sinh.'),{status:409});
         const freshStudent=await transaction.get(studentRef);
         if(!freshStudent.exists)throw Object.assign(new Error('Hồ sơ học sinh không còn tồn tại.'),{status:404});
         const freshData=freshStudent.data()||{};
@@ -208,6 +211,9 @@ export default async request=>{
       const result=await ctx.db.runTransaction(async transaction=>{
         const current=await transaction.get(assignmentRef);
         if(current.exists)return{assignmentId:current.id,studentCount:Number(current.data()?.studentCount||0),alreadyAssigned:true};
+        const freshClass=await transaction.get(classSnap.ref);
+        if(!freshClass.exists)throw Object.assign(new Error('Lớp không còn tồn tại.'),{status:404});
+        if(freshClass.data()?.deletingAt)throw Object.assign(new Error('Lớp đang được xóa, không thể giao bài.'),{status:409});
         const membersSnap=await transaction.get(ctx.db.collection('classes').doc(classId).collection('members'));
         const data={packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()};
         transaction.create(assignmentRef,data);
@@ -237,11 +243,10 @@ export default async request=>{
         if(!freshStudent.exists)throw Object.assign(new Error('Không tìm thấy hồ sơ học sinh.'),{status:404});
         const data=freshStudent.data()||{},ids=Array.isArray(data.joinedClassIds)?data.joinedClassIds:[];
         remainingIds=ids.filter(id=>id!==classId);
-        transaction.delete(memberRef);
-        transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',updatedAt:FieldValue.serverTimestamp()},{merge:true});
-      });
-      const active=await activeClassProfile(ctx.db,remainingIds);
-      await students.doc(studentUid).set({...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+         const active=await activeClassProfileTx(transaction,ctx.db,remainingIds);
+         transaction.delete(memberRef);
+         transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+       });
       const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       for(let i=0;i<assignments.docs.length;i+=450){
         const batch=ctx.db.batch();
