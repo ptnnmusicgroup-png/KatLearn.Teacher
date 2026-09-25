@@ -17,7 +17,37 @@ service cloud.firestore {
       return isAdmin() || (isTeacher()
         && get(/databases/$(database)/documents/classes/$(classId)).data.teacherUid == request.auth.uid);
     }
-    match /schools/{schoolId} {
+match /system/{docId} {
+      allow read: if signedIn() && docId == 'accountSequence';
+      allow create: if signedIn()
+        && docId == 'accountSequence'
+        && request.resource.data.get('lastIssued', 0) == 1;
+      allow update: if signedIn()
+        && docId == 'accountSequence'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastIssued', 'updatedAt'])
+        && request.resource.data.lastIssued == resource.data.lastIssued + 1;
+      allow delete: if false;
+    }
+    match /accounts/{accountCode} {
+      allow read: if signedIn() && (request.auth.uid == resource.data.uid || isAdmin());
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.accountCode == accountCode;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.accountCode == accountCode;
+      allow delete: if false;
+      match /memory/{memoryDoc} {
+        allow read, write: if signedIn()
+          && get(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
+        match /{subCollection}/{subDoc} {
+          allow read, write: if signedIn()
+            && get(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
+        }
+      }
+    }
+        match /schools/{schoolId} {
       allow read: if true;
       allow create: if isAdmin() || ((isTeacher() || isPendingTeacher()) && request.resource.data.createdBy == request.auth.uid);
       allow update, delete: if isAdmin();
