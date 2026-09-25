@@ -77,7 +77,7 @@ export default async request=>{
         if(!studentSnap.exists)continue;
         const student=studentSnap.data()||{};
         const remainingIds=Array.isArray(student.joinedClassIds)?student.joinedClassIds.filter(id=>id!==classId):[];
-        const active=remainingIds.length?await activeClassProfile(ctx.db,remainingIds):{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:''};
+        const active=remainingIds.length?await activeClassProfile(ctx.db,remainingIds):{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:'',teacherUids:[]};
         studentChanges.push({ref:studentRef,data:{
           joinedClassIds:remainingIds,
           studentAccountType:remainingIds.length?'class':'free',
