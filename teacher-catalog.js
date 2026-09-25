@@ -47,6 +47,11 @@
     const box=document.createElement('section');box.className='teacher-card-panel';box.style.marginTop='18px';box.innerHTML='<h3>🛡️ Hồ sơ giáo viên chờ xác minh</h3><p>Chỉ admin mới có thể cấp quyền giáo viên.</p><div id="pendingTeachers"><div class="empty">Đang tải...</div></div>';dash.appendChild(box);await renderPending();
   }
   async function renderPending(){
+    const uid=String(user?.uid||'');if(typeof isAdminUser!=='function'||!isAdminUser()||!api||!uid)return;const box=$('#pendingTeachers');if(!box)return;
+    const snap=await api.getDocs(api.query(api.collection(db,'users'),api.where('role','==','pending_teacher_verification')));if(String(user?.uid||'')!==uid||!isAdminUser())return;const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    box.innerHTML=rows.length?rows.map(t=>'<div class="student-row"><div><strong>'+esc(t.displayName||'Giáo viên')+'</strong><small>'+esc(t.email||'')+' · '+esc(t.schoolName||t.schoolId||'Chưa có trường')+'</small></div><div class="student-score"><small>'+esc(t.province||'')+' · '+esc(t.ward||'')+'</small></div><button class="teacher-btn secondary" data-verify-teacher="'+t.id+'">✓ Xác minh</button></div>').join(''):'<div class="empty">Không có hồ sơ chờ xác minh.</div>';
+    box.querySelectorAll('[data-verify-teacher]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verifyTeacher));
+  }
     if(typeof isAdminUser!=='function'||!isAdminUser()||!api)return;const box=$('#pendingTeachers');if(!box)return;
     const snap=await api.getDocs(api.query(api.collection(db,'users'),api.where('role','==','pending_teacher_verification')));const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
     box.innerHTML=rows.length?rows.map(t=>'<div class="student-row"><div><strong>'+esc(t.displayName||'Giáo viên')+'</strong><small>'+esc(t.email||'')+' · '+esc(t.schoolName||t.schoolId||'Chưa có trường')+'</small></div><div class="student-score"><small>'+esc(t.province||'')+' · '+esc(t.ward||'')+'</small></div><button class="teacher-btn secondary" data-verify-teacher="'+t.id+'">✓ Xác minh</button></div>').join(''):'<div class="empty">Không có hồ sơ chờ xác minh.</div>';
