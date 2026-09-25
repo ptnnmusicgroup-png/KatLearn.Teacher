@@ -86,6 +86,14 @@ export default async request=>{
       await batchSet(studentChanges,ctx.db);
       await batchDelete(inviteSnap.docs.map(d=>d.ref),ctx.db);
       await batchDelete(assignmentSnap.docs.map(d=>d.ref),ctx.db);
+      const catalogClassId=String(classData.catalogClassId||'').trim(),ownerUid=String(classData.teacherUid||'').trim();
+      if(catalogClassId&&ownerUid){
+        const ownerRef=students.doc(ownerUid),ownerSnap=await ownerRef.get();
+        if(ownerSnap.exists){
+          const ids=Array.isArray(ownerSnap.data()?.classIds)?ownerSnap.data().classIds:[];
+          if(ids.includes(catalogClassId))await ownerRef.set({classIds:ids.filter(id=>id!==catalogClassId),updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        }
+      }
       await ctx.db.collection('classes').doc(classId).delete();
       return Response.json({ok:true,message:'Đã xóa lớp và dọn dữ liệu liên quan.'},{headers:headers(origin)});
     }
