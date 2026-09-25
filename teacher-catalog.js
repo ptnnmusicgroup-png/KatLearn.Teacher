@@ -5,7 +5,7 @@
   async function boot(){
     const [{initializeApp,getApps},{getFirestore,collection,getDocs,getDoc,doc,addDoc,setDoc,updateDoc,query,where}]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')]);
     const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG);db=getFirestore(app);api={collection,getDocs,getDoc,doc,addDoc,setDoc,updateDoc,query,where};
-    decorateClassModal();decorateStudentModal();setTimeout(decorateAdmin,2500);setTimeout(renderPending,4500);
+    decorateClassModal();decorateStudentModal();await refreshAdminUi();
   }
   async function loadSchools(){
     const snap=await api.getDocs(api.collection(db,'schools'));schools=snap.docs.map(d=>({id:d.id,...d.data()}));return schools;
@@ -53,6 +53,7 @@
     box.querySelectorAll('[data-verify-teacher]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verifyTeacher));
   }
   async function verifyTeacher(uid){try{await api.updateDoc(api.doc(db,'users',uid),{role:'teacher','teacherVerification.status':'verified','teacherVerification.verifiedAt':Date.now(),'teacherVerification.verifiedBy':user.uid,updatedAt:Date.now()});toast('✓ Đã cấp quyền giáo viên');renderPending()}catch(e){toast('Không thể xác minh: '+e.message)}}
+  window.addEventListener('katlearn-teacher-auth-change',()=>{void refreshAdminUi()});
   boot().catch(e=>console.warn('[KatLearn catalog]',e));
 })();
 
