@@ -150,6 +150,9 @@ export default async request=>{
       const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
       const packRef=ctx.db.collection('publicPacks').doc(packId),packSnap=await packRef.get();if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
       if(!ctx.admin&&packSnap.data().createdByUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
+      const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
+      const existing=existingAssignments.docs.find(d=>String(d.data()?.packId||'')===packId);
+      if(existing)return Response.json({ok:true,assignmentId:existing.id,studentCount:Number(existing.data()?.studentCount||0),alreadyAssigned:true},{headers:headers(origin)});
       const membersSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
       const assignmentRef=ctx.db.collection('packAssignments').doc();
       await assignmentRef.set({packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()});
