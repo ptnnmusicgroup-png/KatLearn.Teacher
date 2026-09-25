@@ -7,13 +7,16 @@ function headers(origin){const h={'content-type':'application/json; charset=utf-
 function admin(){if(!getApps().length){const raw=process.env.FIREBASE_SERVICE_ACCOUNT_JSON;if(!raw)throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is not configured');initializeApp({credential:cert(JSON.parse(raw))})}return{auth:getAuth(),db:getFirestore()}}
 const clean=(value,max=120)=>String(value??'').trim().slice(0,max);
 async function activeClassProfile(db,ids){
-  for(const id of Array.isArray(ids)?ids.slice(0,20):[]){
+  let active=null;const teacherUids=[];
+  for(const id of Array.isArray(ids)?ids.slice(0,50):[]){
     const snap=await db.collection('classes').doc(id).get();
     if(!snap.exists)continue;
     const cls=snap.data()||{},teacherUid=String(cls.teacherUid||'').trim();
+    if(teacherUid&&!teacherUids.includes(teacherUid))teacherUids.push(teacherUid);
+    if(active)continue;
     let teacher={};
     if(teacherUid){const ts=await db.collection('users').doc(teacherUid).get();teacher=ts.exists?ts.data()||{}:{}}
-    return{
+    active={
       classId:id,className:String(cls.name||'').trim(),schoolId:String(cls.schoolId||'').trim(),
       schoolName:String(cls.schoolName||teacher.schoolName||'').trim(),province:String(cls.province||teacher.province||'').trim(),
       ward:String(cls.ward||teacher.ward||'').trim(),teacherUid,
@@ -21,7 +24,7 @@ async function activeClassProfile(db,ids){
       teacherEmail:String(teacher.email||cls.teacherEmail||'').toLowerCase().trim()
     };
   }
-  return{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:''};
+  return active?{...active,teacherUids}:{classId:'',className:'',schoolId:'',schoolName:'',province:'',ward:'',teacherUid:'',teacherName:'',teacherEmail:'',teacherUids:[]};
 }
 async function teacherContext(request){
   const token=clean(request.headers.get('authorization')||'',4000).replace(/^Bearer\s+/i,'');
@@ -143,9 +146,11 @@ export default async request=>{
         const freshData=freshStudent.data()||{};
         const freshIds=Array.isArray(freshData.joinedClassIds)?freshData.joinedClassIds:[];
         const joinedClassIds=freshIds.includes(classId)?freshIds:[...freshIds,classId];
+        const priorTeacherUids=Array.isArray(freshData.teacherUids)?freshData.teacherUids:[]; 
+        const teacherUids=[...new Set([...priorTeacherUids,String(freshData.teacherUid||'').trim(),ctx.uid].filter(Boolean))];
         const freshMemberSync={...memberSync,displayName:freshData.displayName||authUser.displayName||email.split('@')[0]};
         transaction.set(ctx.db.doc('classes/'+classId+'/members/'+authUser.uid),freshMemberSync,{merge:true});
-        transaction.set(studentRef,{...profileSync,joinedClassIds},{merge:true});
+        transaction.set(studentRef,{...profileSync,joinedClassIds,teacherUids},{merge:true});
         transaction.set(classSnap.ref,{updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
       const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
