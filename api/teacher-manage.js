@@ -243,20 +243,20 @@ export default async request=>{
         if(!freshStudent.exists)throw Object.assign(new Error('Không tìm thấy hồ sơ học sinh.'),{status:404});
         const data=freshStudent.data()||{},ids=Array.isArray(data.joinedClassIds)?data.joinedClassIds:[];
         remainingIds=ids.filter(id=>id!==classId);
-         const active=await activeClassProfileTx(transaction,ctx.db,remainingIds);
-         transaction.delete(memberRef);
-         transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
-       const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
-       for(let i=0;i<assignments.docs.length;i+=450){
-         const batch=ctx.db.batch();
-         assignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayRemove(studentUid),studentCount:count,updatedAt:FieldValue.serverTimestamp()}));
-         await batch.commit();
-       }
-       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+        const active=await activeClassProfileTx(transaction,ctx.db,remainingIds);
+        transaction.delete(memberRef);
+        transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+      });
+      const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
+      const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
+      for(let i=0;i<assignments.docs.length;i+=450){
+        const batch=ctx.db.batch();
+        assignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayRemove(studentUid),studentCount:count,updatedAt:FieldValue.serverTimestamp()}));
+        await batch.commit();
+      }
+      await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       return Response.json({ok:true,message:'Đã xóa học sinh khỏi lớp.'},{headers:headers(origin)});
     }
-
     if(action==='update-student'){
       const targetSnap=await students.doc(studentUid).get();
       if(!targetSnap.exists||String(targetSnap.data()?.role||'student').toLowerCase()!=='student')throw Object.assign(new Error('Tài khoản này không phải học sinh.'),{status:400});
