@@ -177,7 +177,26 @@ async function ensureTeacherPackIdentity(name){
   const profile=profileSnap.exists()?profileSnap.data()||{}:{};
   let accountCode=String(profile.accountCode||'');
   if(!accountCode&&window.__katlearnTeacherAccountCode)accountCode=String(window.__katlearnTeacherAccountCode||'');
-  if(!accountCode)throw new Error('Chưa khởi tạo mã tài khoản. Hãy tải lại trang rồi thử lại.');
+  if(!accountCode){
+    const accountSeqRef=fb.doc(db,'system','accountSequence');
+    accountCode=await fb.runTransaction(db,async tx=>{
+      const seq=await tx.get(accountSeqRef);
+      let n=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
+      const login=cleanMemoryPart(String(user.email||'').split('@')[0]||'katlearn','katlearn');
+      const display=cleanMemoryPart(user.displayName||profile.displayName||login,'Teacher');
+      let code=login+'_'+display+'_'+String(n).padStart(3,'0');
+      let ref=fb.doc(db,'accounts',code),snap=await tx.get(ref);
+      while(snap.exists()){
+        n++;code=login+'_'+display+'_'+String(n).padStart(3,'0');ref=fb.doc(db,'accounts',code);snap=await tx.get(ref);
+      }
+      tx.set(accountSeqRef,{lastIssued:n,updatedAt:Date.now()},{merge:true});
+      tx.set(ref,{accountCode:code,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',loginName:login,createdAt:profile.createdAt||Date.now(),updatedAt:Date.now()},{merge:true});
+      tx.set(fb.doc(db,'accounts',code,'memory','meta'),{accountCode:code,uid,updatedAt:Date.now()},{merge:true});
+      return code;
+    });
+    if(String(user?.uid||'')!==uid)throw new Error('Tài khoản đã thay đổi, hãy thử lại.');
+    await fb.setDoc(fb.doc(db,'users',uid),{accountCode,updatedAt:Date.now()},{merge:true});
+  }
   const seqRef=fb.doc(db,'system','packSequence');
   const displayName=user.displayName||profile.displayName||user.email?.split('@')[0]||'Teacher';
   const result=await fb.runTransaction(db,async tx=>{
