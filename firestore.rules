@@ -75,7 +75,8 @@ service cloud.firestore {
         || (isTeacher()
           && resource.data.role != 'teacher'
           && resource.data.role != 'admin'
-          && resource.data.teacherUid == request.auth.uid));
+          && (resource.data.teacherUid == request.auth.uid
+            || request.auth.uid in resource.data.get('teacherUids', []))));
       allow create: if signedIn() && request.auth.uid == userId
         && request.resource.data.get('role', 'student') in ['student', 'pending_teacher_verification']
         && request.resource.data.get('coins', 0) == 0
@@ -90,12 +91,14 @@ service cloud.firestore {
         && request.resource.data.get('ownedThemes', []).size() == 0
         && request.resource.data.get('joinedClassIds', []) is list
         && request.resource.data.get('joinedClassIds', []).size() == 0
-        && request.resource.data.get('teacherUid', '') == '';
+        && request.resource.data.get('teacherUid', '') == ''
+        && request.resource.data.get('teacherUids', []) is list
+        && request.resource.data.get('teacherUids', []).size() == 0;
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == userId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
             'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'dailyQuestions', 'dailyCorrect', 'questionsAnswered', 'correctAnswers',
-            'ownedThemes', 'joinedClassIds', 'studentAccountType', 'teacherUid', 'classId', 'className', 'catalogClassId', 'schoolId', 'schoolName',
+            'ownedThemes', 'joinedClassIds', 'studentAccountType', 'teacherUid', 'teacherUids', 'classId', 'className', 'catalogClassId', 'schoolId', 'schoolName',
             'province', 'ward', 'teacherName', 'teacherEmail'
           ]));
 
