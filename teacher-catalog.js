@@ -52,11 +52,6 @@
     box.innerHTML=rows.length?rows.map(t=>'<div class="student-row"><div><strong>'+esc(t.displayName||'Giáo viên')+'</strong><small>'+esc(t.email||'')+' · '+esc(t.schoolName||t.schoolId||'Chưa có trường')+'</small></div><div class="student-score"><small>'+esc(t.province||'')+' · '+esc(t.ward||'')+'</small></div><button class="teacher-btn secondary" data-verify-teacher="'+t.id+'">✓ Xác minh</button></div>').join(''):'<div class="empty">Không có hồ sơ chờ xác minh.</div>';
     box.querySelectorAll('[data-verify-teacher]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verifyTeacher));
   }
-    if(typeof isAdminUser!=='function'||!isAdminUser()||!api)return;const box=$('#pendingTeachers');if(!box)return;
-    const snap=await api.getDocs(api.query(api.collection(db,'users'),api.where('role','==','pending_teacher_verification')));const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-    box.innerHTML=rows.length?rows.map(t=>'<div class="student-row"><div><strong>'+esc(t.displayName||'Giáo viên')+'</strong><small>'+esc(t.email||'')+' · '+esc(t.schoolName||t.schoolId||'Chưa có trường')+'</small></div><div class="student-score"><small>'+esc(t.province||'')+' · '+esc(t.ward||'')+'</small></div><button class="teacher-btn secondary" data-verify-teacher="'+t.id+'">✓ Xác minh</button></div>').join(''):'<div class="empty">Không có hồ sơ chờ xác minh.</div>';
-    box.querySelectorAll('[data-verify-teacher]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verifyTeacher));
-  }
   async function verifyTeacher(uid){try{await api.updateDoc(api.doc(db,'users',uid),{role:'teacher','teacherVerification.status':'verified','teacherVerification.verifiedAt':Date.now(),'teacherVerification.verifiedBy':user.uid,updatedAt:Date.now()});toast('✓ Đã cấp quyền giáo viên');renderPending()}catch(e){toast('Không thể xác minh: '+e.message)}}
   window.addEventListener('katlearn-teacher-auth-change',()=>{void refreshAdminUi()});
   boot().catch(e=>console.warn('[KatLearn catalog]',e));
