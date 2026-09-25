@@ -91,7 +91,7 @@ service cloud.firestore {
         || (signedIn() && request.auth.uid == userId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
             'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'dailyQuestions', 'dailyCorrect', 'questionsAnswered', 'correctAnswers',
-            'ownedThemes', 'joinedClassIds', 'studentAccountType'
+            'ownedThemes', 'joinedClassIds', 'studentAccountType', 'teacherUid'
           ]));
 
       allow delete: if false;
