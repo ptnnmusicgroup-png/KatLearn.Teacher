@@ -71,7 +71,7 @@ service cloud.firestore {
       allow update: if isAdmin()
         || (signedIn() && request.auth.uid == userId
           && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
-            'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'questionsAnswered', 'correctAnswers',
+            'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'dailyQuestions', 'dailyCorrect', 'questionsAnswered', 'correctAnswers',
             'ownedThemes', 'joinedClassIds', 'studentAccountType'
           ]))
         || (isTeacher() && resource.data.role == 'student'
