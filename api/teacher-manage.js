@@ -64,8 +64,8 @@ export default async request=>{
 
     if(action==='delete-class'){
       const memberSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
-      const inviteSnap=await ctx.db.collection('classInvites').where('classId','==',classId).get().catch(()=>({docs:[]}));
-      const assignmentSnap=await ctx.db.collection('packAssignments').where('classId','==',classId).get().catch(()=>({docs:[]}));
+      const inviteSnap=await ctx.db.collection('classInvites').where('classId','==',classId).get();
+      const assignmentSnap=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       const memberDeletes=memberSnap.docs.map(d=>d.ref);
       const studentChanges=[];
       for(const member of memberSnap.docs){
