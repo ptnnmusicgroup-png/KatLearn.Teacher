@@ -227,7 +227,19 @@ export default async request=>{
       if(!ctx.admin&&packSnap.data().createdByUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
       const words=new Set((Array.isArray(packSnap.data().words)?packSnap.data().words:[]).map(w=>String(w.word||'').trim().toLowerCase()).filter(Boolean));
       const membersSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
-      const rows=await Promise.all(membersSnap.docs.map(async m=>{const uid=m.id,profileSnap=await students.doc(uid).get(),profile=profileSnap.exists?profileSnap.data():{},attemptsSnap=await students.doc(uid).collection('attempts').get();let attempts=0,correct=0;attemptsSnap.forEach(a=>{const d=a.data()||{},word=String(d.word||'').trim().toLowerCase(),sourceId=String(d.sourceId||'').trim();const exact=sourceId===packId;const legacy=!sourceId&&words.has(word);if(exact||legacy){attempts++;if(d.correct===true)correct++}});return{uid,displayName:String(profile.displayName||m.data().displayName||'KatLearn Student'),email:String(profile.email||m.data().email||''),attempts,correct,accuracy:attempts?Math.round(correct*100/attempts):0}}));
+      const memberIds=new Set(membersSnap.docs.map(m=>m.id));
+      const exactAttemptsSnap=await ctx.db.collectionGroup('attempts').where('sourceId','==',packId).get();
+      const exactByStudent=new Map();
+      exactAttemptsSnap.forEach(doc=>{const studentDoc=doc.ref.parent.parent,uid=studentDoc?.id;if(!uid||!memberIds.has(uid))return;const list=exactByStudent.get(uid)||[];list.push(doc);exactByStudent.set(uid,list)});
+      const rows=await Promise.all(membersSnap.docs.map(async m=>{
+        const uid=m.id,profileSnap=await students.doc(uid).get(),profile=profileSnap.exists?profileSnap.data():{};
+        let attemptDocs=exactByStudent.get(uid)||[],attempts=attemptDocs.length,correct=attemptDocs.filter(a=>a.data()?.correct===true).length;
+        if(!attemptDocs.length){
+          const legacySnap=await students.doc(uid).collection('attempts').get();
+          legacySnap.forEach(a=>{const d=a.data()||{},word=String(d.word||'').trim().toLowerCase(),sourceId=String(d.sourceId||'').trim();if(!sourceId&&words.has(word)){attempts++;if(d.correct===true)correct++}});
+        }
+        return{uid,displayName:String(profile.displayName||m.data().displayName||'KatLearn Student'),email:String(profile.email||m.data().email||''),attempts,correct,accuracy:attempts?Math.round(correct*100/attempts):0};
+      }));
       rows.sort((a,b)=>b.correct-a.correct||b.accuracy-a.accuracy||a.displayName.localeCompare(b.displayName));
       return Response.json({ok:true,rows},{headers:headers(origin)});
     }
