@@ -100,7 +100,9 @@ service cloud.firestore {
             'role', 'coins', 'energy', 'streak', 'lastStudyDay', 'dailyQuestions', 'dailyCorrect', 'questionsAnswered', 'correctAnswers',
             'ownedThemes', 'joinedClassIds', 'studentAccountType', 'teacherUid', 'teacherUids', 'classId', 'className', 'catalogClassId', 'schoolId', 'schoolName',
             'province', 'ward', 'teacherName', 'teacherEmail'
-          ]));
+          ])
+          && (resource.data.get('studentAccountType', 'free') != 'class'
+            || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['vocab'])));
 
       allow delete: if false;
       match /items/{itemId} {
