@@ -1,6 +1,7 @@
 import { getApps, initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { createHash } from 'node:crypto';
 
 const allowedOrigins=new Set(['https://teacher-katlearn.vercel.app']);
 function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type';h.vary='Origin'}return h}
@@ -144,6 +145,7 @@ export default async request=>{
         const freshStudent=await transaction.get(studentRef);
         if(!freshStudent.exists)throw Object.assign(new Error('Hồ sơ học sinh không còn tồn tại.'),{status:404});
         const freshData=freshStudent.data()||{};
+        if(String(freshData.role||'student').toLowerCase()!=='student')throw Object.assign(new Error('Tài khoản này không phải học sinh.'),{status:400});
         const freshIds=Array.isArray(freshData.joinedClassIds)?freshData.joinedClassIds:[];
         const joinedClassIds=freshIds.includes(classId)?freshIds:[...freshIds,classId];
         const priorTeacherUids=Array.isArray(freshData.teacherUids)?freshData.teacherUids:[]; 
@@ -171,10 +173,17 @@ export default async request=>{
       const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       const existing=existingAssignments.docs.find(d=>String(d.data()?.packId||'')===packId);
       if(existing)return Response.json({ok:true,assignmentId:existing.id,studentCount:Number(existing.data()?.studentCount||0),alreadyAssigned:true},{headers:headers(origin)});
-      const membersSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
-      const assignmentRef=ctx.db.collection('packAssignments').doc();
-      await assignmentRef.set({packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()});
-      return Response.json({ok:true,assignmentId:assignmentRef.id,studentCount:membersSnap.size},{headers:headers(origin)});
+      const assignmentId='assignment-'+createHash('sha256').update(classId+'\\0'+packId).digest('hex').slice(0,32);
+      const assignmentRef=ctx.db.collection('packAssignments').doc(assignmentId);
+      const result=await ctx.db.runTransaction(async transaction=>{
+        const current=await transaction.get(assignmentRef);
+        if(current.exists)return{assignmentId:current.id,studentCount:Number(current.data()?.studentCount||0),alreadyAssigned:true};
+        const membersSnap=await transaction.get(ctx.db.collection('classes').doc(classId).collection('members'));
+        const data={packId,classId,packName:String(packSnap.data().name||''),teacherUid:ctx.uid,studentUids:membersSnap.docs.map(d=>d.id),studentCount:membersSnap.size,status:'assigned',createdAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()};
+        transaction.create(assignmentRef,data);
+        return{assignmentId:assignmentRef.id,studentCount:membersSnap.size,alreadyAssigned:false};
+      });
+      return Response.json({ok:true,...result},{headers:headers(origin)});
     }
     if(action==='pack-achievements'){
       const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
