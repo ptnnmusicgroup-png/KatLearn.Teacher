@@ -188,12 +188,16 @@ export default async request=>{
         transaction.set(studentRef,{...profileSync,joinedClassIds,teacherUids},{merge:true});
         transaction.set(classSnap.ref,{updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
-const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
+      const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
+      const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       for(let i=0;i<existingAssignments.docs.length;i+=450){
         const batch=ctx.db.batch();
         existingAssignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayUnion(authUser.uid),studentCount:count,updatedAt:FieldValue.serverTimestamp()}));
         await batch.commit();
       }
+      await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+      return Response.json({ok:true,message:'Đã thêm học sinh vào lớp.'},{headers:headers(origin)});
+    }
       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
 await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
@@ -246,15 +250,14 @@ await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp
          const active=await activeClassProfileTx(transaction,ctx.db,remainingIds);
          transaction.delete(memberRef);
          transaction.set(students.doc(studentUid),{joinedClassIds:remainingIds,studentAccountType:remainingIds.length?'class':'free',...active,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
-      const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
-      for(let i=0;i<assignments.docs.length;i+=450){
-        const batch=ctx.db.batch();
-        assignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayRemove(studentUid),studentCount:count,updatedAt:FieldValue.serverTimestamp()}));
-        await batch.commit();
-      }
-await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-      await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+       const count=(await ctx.db.collection('classes').doc(classId).collection('members').count().get()).data().count;
+       const assignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
+       for(let i=0;i<assignments.docs.length;i+=450){
+         const batch=ctx.db.batch();
+         assignments.docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{studentUids:FieldValue.arrayRemove(studentUid),studentCount:count,updatedAt:FieldValue.serverTimestamp()}));
+         await batch.commit();
+       }
+       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
       return Response.json({ok:true,message:'Đã xóa học sinh khỏi lớp.'},{headers:headers(origin)});
     }
 
