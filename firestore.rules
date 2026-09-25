@@ -37,7 +37,10 @@ service cloud.firestore {
       allow read: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid)
         || (signedIn() && exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid)));
       allow create: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
-      allow update, delete: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid);
+      allow update, delete: if isAdmin()
+        || (isTeacher()
+          && resource.data.teacherUid == request.auth.uid
+          && (request.resource.data.teacherUid == resource.data.teacherUid));
       match /members/{memberId} {
         allow read: if canManageClass(classId) || (signedIn() && memberId == request.auth.uid);
         allow create: if canManageClass(classId);
@@ -47,7 +50,10 @@ service cloud.firestore {
     match /publicPacks/{packId} {
       allow read: if signedIn();
       allow create: if isAdmin() || (isTeacher() && request.resource.data.createdByUid == request.auth.uid);
-      allow update, delete: if isAdmin() || (isTeacher() && resource.data.createdByUid == request.auth.uid);
+      allow update, delete: if isAdmin()
+        || (isTeacher()
+          && resource.data.createdByUid == request.auth.uid
+          && request.resource.data.createdByUid == resource.data.createdByUid);
     }
     match /leaderboard/{entryId} {
       allow read: if true;
