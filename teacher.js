@@ -80,6 +80,7 @@ async function initFirebase(){
       else sessionStorage.removeItem('katlearn-teacher-access');
     }else sessionStorage.removeItem('katlearn-teacher-access');
     renderAuth();
+    window.dispatchEvent(new CustomEvent('katlearn-teacher-auth-change',{detail:{user:u,teacherAccess,role:accountRole}}));
     if(u&&isTeacher()){
       document.body.classList.remove('locked');
       await loadDashboard();
