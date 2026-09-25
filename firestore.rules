@@ -30,7 +30,11 @@ service cloud.firestore {
     match /classInvites/{code} {
       allow get: if signedIn();
       allow list: if false;
-      allow create, update: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+      allow create: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+      allow update: if isAdmin()
+        || (isTeacher()
+          && resource.data.teacherUid == request.auth.uid
+          && request.resource.data.teacherUid == request.auth.uid);
       allow delete: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid);
     }
     match /classes/{classId} {
