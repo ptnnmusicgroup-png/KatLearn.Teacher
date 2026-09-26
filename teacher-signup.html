@@ -102,15 +102,15 @@ async function init(){const [{initializeApp,getApps},{getAuth,createUserWithEmai
 const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const normPlace=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 async function loadNationalWards(){
   try{
-    const response=await fetch('./data/national-catalog/full-school-tree.json',{cache:'force-cache'});
-    if(!response.ok)return;
-    const tree=await response.json();
-    if(!Array.isArray(tree))return;
+    const response=await fetch('./data/national-catalog/official-ward-list.json',{cache:'force-cache'});
+    if(!response.ok)throw new Error('Không tải được danh sách xã/phường quốc gia.');
+    const catalog=await response.json();
+    if(!catalog||!Array.isArray(catalog.provinces)||catalog.provinceCount!==34||catalog.totalUnitCount!==3321)throw new Error('Danh sách xã/phường quốc gia không hợp lệ.');
     nationalWardsByProvince.clear();nationalProvinceNames=[];
-    for(const province of tree){
-      const name=String(province?.name||'').trim();if(!name)continue;
+    for(const province of catalog.provinces){
+      const name=String(province?.name||'').replace(/\\s+/g,' ').trim();if(!name)continue;
       nationalProvinceNames.push(name);
-      nationalWardsByProvince.set(normPlace(name),(province.wards||[]).map(w=>String(w?.name||'').trim()).filter(Boolean));
+      nationalWardsByProvince.set(normPlace(name),(province.wards||[]).map(w=>String(w?.name||'').replace(/\\s+/g,' ').trim()).filter(Boolean));
     }
   }catch(e){console.warn('[KatLearn Teacher] National ward catalog unavailable:',e)}
 }
