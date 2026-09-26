@@ -27,7 +27,7 @@
   function escapeHtml(v){return String(v||'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]))}
   async function ensureAccountNamespace(){
     const uid=String(user?.uid||'');
-    if(!uid||!db||!fb?.doc)return;
+    if(!uid||!db||!fb?.doc||(!teacherAccess&&!isAdminUser()))return;
     try{
       const profileSnap=await fb.getDoc(fb.doc(db,'users',uid));
       if(!profileSnap.exists()||String(user?.uid||'')!==uid)return;
@@ -68,7 +68,7 @@
       await fb.setDoc(fb.doc(db,'users',uid),{accountCode:code,updatedAt:Date.now()},{merge:true});
     }catch(e){console.warn('[KatLearn] Account namespace provisioning:',e)}
   }
-  async function hydrateProfile(){try{const uid=String(user?.uid||'');if(!db||!fb||!uid||hydratedUid===uid)return;const snap=await fb.getDoc(fb.doc(db,'users',uid));if(!snap.exists()||String(user?.uid||'')!==uid)return;const p=snap.data();let label='🐾 Giáo viên';if(p.schoolName)label+=' · '+String(p.schoolName);else if(p.schoolId){const ss=await fb.getDoc(fb.doc(db,'schools',p.schoolId));if(String(user?.uid||'')!==uid)return;if(ss.exists())label+=' · '+ss.data().name}const names=[];if(p.schoolId&&Array.isArray(p.classIds))for(const id of p.classIds.slice(0,8)){const cs=await fb.getDoc(fb.doc(db,'schools',p.schoolId,'classes',id));if(String(user?.uid||'')!==uid)return;if(cs.exists())names.push(cs.data().name)}if(String(user?.uid||'')!==uid)return;if(names.length)label+=' · '+names.join(', ');profileLabel=label;hydratedUid=uid;mount()}catch(e){if(String(user?.uid||''))console.warn('[Teacher profile]',e)}}
+  async function hydrateProfile(){try{const uid=String(user?.uid||'');if(!db||!fb||!uid||(!teacherAccess&&!isAdminUser())||hydratedUid===uid)return;const snap=await fb.getDoc(fb.doc(db,'users',uid));if(!snap.exists()||String(user?.uid||'')!==uid)return;const p=snap.data();let label='🐾 Giáo viên';if(p.schoolName)label+=' · '+String(p.schoolName);else if(p.schoolId){const ss=await fb.getDoc(fb.doc(db,'schools',p.schoolId));if(String(user?.uid||'')!==uid)return;if(ss.exists())label+=' · '+ss.data().name}const names=[];if(p.schoolId&&Array.isArray(p.classIds))for(const id of p.classIds.slice(0,8)){const cs=await fb.getDoc(fb.doc(db,'schools',p.schoolId,'classes',id));if(String(user?.uid||'')!==uid)return;if(cs.exists())names.push(cs.data().name)}if(String(user?.uid||'')!==uid)return;if(names.length)label+=' · '+names.join(', ');profileLabel=label;hydratedUid=uid;mount()}catch(e){if(String(user?.uid||''))console.warn('[Teacher profile]',e)}}
   function start(){
     if(!mount())return;void ensureAccountNamespace();hydrateProfile();
     const login=document.getElementById('loginBtn'),logout=document.getElementById('logoutBtn'),name=document.getElementById('accountName'),email=document.getElementById('accountEmail');
