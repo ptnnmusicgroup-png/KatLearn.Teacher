@@ -45,94 +45,69 @@ const PROVINCE_ALIASES=new Map([
  ['Cà Mau','Tỉnh Cà Mau'],['Bạc Liêu','Tỉnh Cà Mau']
 ]);
 
-const SOURCES=[
- {level:'primary',url:'https://shopacgame.vn/posts/danh-sach-cac-truong-tieu-hoc-o-viet-nam'},
- {level:'secondary',url:'https://shopacgame.vn/posts/danh-sach-cac-truong-trung-hoc-co-so-tren-ca-nuoc'}
-];
+const SCHOOL_TREE_URL='https://raw.githubusercontent.com/ptnnmusicgroup-png/KatLearn.Teacher/main/data/national-catalog/full-school-tree.json';
 
-function admin(){
-  if(!getApps().length){
-    const raw=process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
-    if(!raw)throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is not configured');
-    initializeApp({credential:cert(JSON.parse(raw))});
-  }
-  return {auth:getAuth(),db:getFirestore()};
+const OFFICIAL_PROVINCES=[
+  ['01','Thành phố Hà Nội'],['04','Tỉnh Cao Bằng'],['08','Tỉnh Tuyên Quang'],['11','Tỉnh Điện Biên'],
+  ['12','Tỉnh Lai Châu'],['14','Tỉnh Sơn La'],['15','Tỉnh Lào Cai'],['19','Tỉnh Thái Nguyên'],
+  ['20','Tỉnh Lạng Sơn'],['22','Tỉnh Quảng Ninh'],['24','Tỉnh Bắc Ninh'],['25','Tỉnh Phú Thọ'],
+  ['31','Thành phố Hải Phòng'],['33','Tỉnh Hưng Yên'],['37','Tỉnh Ninh Bình'],['38','Tỉnh Thanh Hóa'],
+  ['40','Tỉnh Nghệ An'],['42','Tỉnh Hà Tĩnh'],['44','Tỉnh Quảng Trị'],['46','Thành phố Huế'],
+  ['48','Thành phố Đà Nẵng'],['51','Tỉnh Quảng Ngãi'],['52','Tỉnh Gia Lai'],['56','Tỉnh Khánh Hòa'],
+  ['66','Tỉnh Đắk Lắk'],['68','Tỉnh Lâm Đồng'],['75','Tỉnh Đồng Nai'],['79','Thành phố Hồ Chí Minh'],
+  ['80','Tỉnh Tây Ninh'],['82','Tỉnh Đồng Tháp'],['86','Tỉnh Vĩnh Long'],['91','Tỉnh An Giang'],
+  ['92','Thành phố Cần Thơ'],['96','Tỉnh Cà Mau']
+].map(([code,name])=>({code,name}));
+
+const provinceCodeByName=new Map(OFFICIAL_PROVINCES.flatMap(p=>[
+  [norm(p.name),p.code],
+  [norm(p.name.replace(/^(Tỉnh|Thành phố)\s+/i,'')),p.code]
+]));
+const gradeTemplates={
+  primary:['1','2','3','4','5'],
+  middle:['6','7','8','9'],
+  high:['10','11','12'],
+  combined:['1','2','3','4','5','6','7','8','9','10','11','12']
+};
+function inferLevel(name){
+  const n=norm(name);
+  if(n.includes('thcs&thpt')||n.includes('thcs thpt')||n.includes('th&thcs')||n.includes('th-thcs')||n.includes('th thcs'))return'combined';
+  if(n.includes('thpt')||n.includes('trung hoc pho thong'))return'high';
+  if(n.includes('thcs')||n.includes('trung hoc co so'))return'middle';
+  if(n.includes('tieu hoc')||n.includes('th ' )||n.startsWith('th-'))return'primary';
+  return'combined';
 }
-function htmlText(v){
-  return String(v??'')
-    .replace(/<br\s*\/?>/gi,' ')
-    .replace(/<[^>]*>/g,' ')
-    .replace(/&nbsp;/gi,' ')
-    .replace(/&amp;/gi,'&').replace(/&quot;/gi,'"').replace(/&#39;/gi,"'")
-    .replace(/&#x27;/gi,"'").replace(/&lt;/gi,'<').replace(/&gt;/gi,'>')
-    .replace(/\s+/g,' ').trim();
+async function fetchSchoolTree(){
+  const r=await fetch(SCHOOL_TREE_URL,{headers:{'user-agent':'KatLearn-National-Catalog/2.0'}});
+  if(!r.ok)throw new Error('Không tải được school tree ('+r.status+')');
+  const data=await r.json();
+  if(!Array.isArray(data)||data.length!==34)throw new Error('School tree không hợp lệ: cần 34 tỉnh/thành.');
+  return data;
 }
-function norm(v){
-  return htmlText(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
-    .replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ').trim();
-}
-function slugId(value){
-  const h=crypto.createHash('sha1').update(value).digest('hex').slice(0,20);
-  return h;
-}
-function currentProvince(oldName){
-  const clean=htmlText(oldName).replace(/^Tỉnh\s+/i,'').replace(/^Thành phố\s+/i,'').trim();
-  const target=PROVINCE_ALIASES.get(clean)||PROVINCE_ALIASES.get(htmlText(oldName));
-  if(!target)return null;
-  return PROVINCES.find(p=>p.name===target)||null;
-}
-function parseSectionRows(sectionHtml, legacyProvince, level, source){
-  const rows=[];
-  const trRe=/<tr[^>]*>([\s\S]*?)<\/tr>/gi;
-  let m;
-  while((m=trRe.exec(sectionHtml))){
-    const cells=[];
-    const tdRe=/<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
-    let c; while((c=tdRe.exec(m[1])))cells.push(htmlText(c[1]));
-    if(cells.length<2)continue;
-    const provinceInRow=cells.find(v=>PROVINCE_ALIASES.has(v)||currentProvince(v));
-    const p= currentProvince(provinceInRow||legacyProvince);
-    if(!p)continue;
-    let name='',address='';
-    if(cells.length>=4){
-      name=cells[1]||''; address=cells.slice(3).join(' ').trim();
-    }else if(cells.length===3){
-      name=cells[0]||''; address=cells[2]||'';
-      if(/^\d+$/.test(cells[0]))name=cells[1]||'';
-    }else{
-      name=cells[0]||''; address=cells[1]||'';
-      if(/^\d+$/.test(cells[0]))name=cells[1]||'';
+function flattenSchools(tree){
+  const result=[];
+  for(const province of tree){
+    const code=provinceCodeByName.get(norm(province.name));
+    if(!code)continue;
+    for(const ward of (province.wards||[])){
+      for(const school of (ward.schools||[])){
+        const name=htmlText(school.name);
+        if(!name)continue;
+        result.push({
+          sourceProvinceId:province.id,
+          sourceProvinceName:province.name,
+          provinceCode:code,
+          provinceName:OFFICIAL_PROVINCES.find(p=>p.code===code)?.name||province.name,
+          wardId:ward.id,
+          wardName:htmlText(ward.name),
+          sourceSchoolId:String(school.id||''),
+          name,
+          level:inferLevel(name)
+        });
+      }
     }
-    if(!name||/^(stt|tt|tên trường|tỉnh thành|địa chỉ)$/i.test(name))continue;
-    if(level==='primary' && !/(tiểu học|th|ptdt|phổ thông)/i.test(name))continue;
-    if(level==='secondary' && !/(thcs|trung học cơ sở|ptdt|th&thcs|thcs&thpt|thpt|trung học)/i.test(name))continue;
-    rows.push({name:name.replace(/^Trường\s*$/i,'').trim(),address,province:p,legacyProvince,level,source});
   }
-  return rows;
-}
-function parseSchools(html,level,source){
-  const clean=String(html).replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'');
-  const sections=[];
-  const hRe=/<h[2-4][^>]*>([\s\S]*?)<\/h[2-4]>/gi;
-  const hs=[]; let h;
-  while((h=hRe.exec(clean)))hs.push({index:h.index,end:hRe.lastIndex,text:htmlText(h[1])});
-  for(let i=0;i<hs.length;i++){
-    const head=hs[i].text;
-    const match=head.match(/(?:ở|tai|tại)\s+(.+)$/i);
-    const province=match?.[1]?.replace(/^\d+[.)\s-]*/,'').trim();
-    if(!province||!currentProvince(province))continue;
-    const end=hs[i+1]?.index??clean.length;
-    sections.push(...parseSectionRows(clean.slice(hs[i].end,end),province,level,source));
-  }
-  return sections;
-}
-function uniqueSchools(rows){
-  const map=new Map();
-  for(const r of rows){
-    const key=r.province.code+'|'+norm(r.name);
-    if(!map.has(key))map.set(key,r);
-  }
-  return [...map.values()];
+  return result;
 }
 function writeWithLimit(items,worker,limit=20){
   const queue=[...items];
@@ -158,42 +133,65 @@ export default async function handler(req,res){
     if(String(decoded.email||'').toLowerCase()!==ADMIN_EMAIL)return res.status(403).json({ok:false,error:'Admin only'});
 
     const now=Date.now();
-    const provinceWrites=PROVINCES.map(p=>({
+    const tree=await fetchSchoolTree();
+    const rows=flattenSchools(tree);
+    const provinceWrites=OFFICIAL_PROVINCES.map(p=>({
       id:p.code,
-      data:{code:p.code,name:p.name,nameShort:p.name.replace(/^(Tỉnh|Thành phố)\s+/,'').trim(),type:p.name.startsWith('Thành phố')?'city':'province',source:'QuyetDinh19/2025/QD-TTg',updatedAt:now}
+      data:{
+        code:p.code,
+        name:p.name,
+        nameShort:p.name.replace(/^(Tỉnh|Thành phố)\s+/,'').trim(),
+        type:p.name.startsWith('Thành phố')?'city':'province',
+        source:'QuyetDinh19/2025/QD-TTg',
+        catalogSource:'thanhtungct7/data-school-in-ward',
+        updatedAt:now
+      }
     }));
-
-    const htmls=await Promise.all(SOURCES.map(async s=>{
-      const r=await fetch(s.url,{headers:{'user-agent':'KatLearn-National-Catalog/1.0'}});
-      if(!r.ok)throw new Error('Không tải được nguồn '+s.url+' ('+r.status+')');
-      return {...s,html:await r.text()};
-    }));
-    const rows=uniqueSchools(htmls.flatMap(s=>parseSchools(s.html,s.level,s.url)));
-    const stats={provinces:provinceWrites.length,schools:rows.length,classes:0};
+    const stats={provinces:provinceWrites.length,schools:rows.length,classes:0,wards:tree.reduce((n,p)=>n+(p.wards||[]).length,0)};
 
     await writeWithLimit(provinceWrites,async item=>{
       await db.collection('KatLearn_TINHTHANH_1').doc(item.id).set(item.data,{merge:true});
     },20);
 
-    const classTemplates={primary:[1,2,3,4,5],secondary:[6,7,8,9]};
     await writeWithLimit(rows,async r=>{
-      const schoolId=slugId(r.province.code+'|'+norm(r.name));
+      const schoolId=slugId(r.provinceCode+'|'+r.sourceSchoolId+'|'+norm(r.name));
       const schoolData={
-        name:r.name,schoolId,province:r.province.name,provinceId:r.province.code,address:r.address||'',
-        legacyProvince:r.legacyProvince,schoolLevel:r.level,source:r.source,
-        sourceType:'public_national_list',updatedAt:now
+        name:r.name,
+        schoolId,
+        province:r.provinceName,
+        provinceId:r.provinceCode,
+        ward:r.wardName,
+        wardId:r.wardId,
+        sourceSchoolId:r.sourceSchoolId,
+        schoolLevel:r.level,
+        source:'thanhtungct7/data-school-in-ward',
+        sourceType:'community_national_school_tree',
+        updatedAt:now
       };
       await db.collection('KatLearn_TRUONGHOC_1').doc(schoolId).set(schoolData,{merge:true});
       const legacyRef=db.collection('schools').doc(schoolId);
       await legacyRef.set({...schoolData,createdAt:now},{merge:true});
-      for(const grade of classTemplates[r.level]){
+      for(const grade of gradeTemplates[r.level]){
         const classId=schoolId+'-'+grade;
-        const classData={name:'Lớp '+grade,grade:String(grade),schoolId,schoolName:r.name,province:r.province.name,provinceId:r.province.code,schoolLevel:r.level,isTemplate:true,source:'national_catalog_template',updatedAt:now};
-        await db.collection('KatLearn_LOPHOC_1').doc(classId).set({classId,...classData},{merge:true});
+        const classData={
+          classId,
+          name:'Lớp '+grade,
+          grade:String(grade),
+          schoolId,
+          schoolName:r.name,
+          province:r.provinceName,
+          provinceId:r.provinceCode,
+          ward:r.wardName,
+          schoolLevel:r.level,
+          isTemplate:true,
+          source:'national_catalog_template',
+          updatedAt:now
+        };
+        await db.collection('KatLearn_LOPHOC_1').doc(classId).set(classData,{merge:true});
         await legacyRef.collection('classes').doc(classId).set(classData,{merge:true});
         stats.classes++;
       }
-    },12);
+    },18);
 
     return res.status(200).json({ok:true,stats,updatedAt:now,message:'Đã đồng bộ danh mục quốc gia.'});
   }catch(e){
