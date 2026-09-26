@@ -30092,9 +30092,14 @@
         ]
       },
       {
-        "id": "katlearn-ward-tinhhatinhxasonkim2",
+        "id": "689ea4ff229a7e00189361dc",
         "name": "Xã Sơn Kim 2",
-        "schools": []
+        "schools": [
+          {
+            "id": "59cdc4469d2a1700271c508a",
+            "name": "Tiểu học Sơn Kim 2"
+          }
+        ]
       },
       {
         "id": "689ea4ff229a7e00189361cc",
