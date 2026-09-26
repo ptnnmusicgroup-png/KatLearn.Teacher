@@ -251,6 +251,12 @@ async function verifyTeacher(uid){
       }
     }
     if(!schoolId)throw new Error('Hồ sơ chưa có trường hợp lệ.');
+    // Mirror the approved school into the dedicated Firestore catalog.
+    const schoolCatalogRef=doc(db,'KatLearn_Teacher_Schools',schoolId);
+    const schoolCatalogSnap=await getDoc(schoolCatalogRef);
+    if(!schoolCatalogSnap.exists()||String(schoolCatalogSnap.data()?.name||'').trim()!==schoolName){
+      await setDoc(schoolCatalogRef,{name:schoolName,schoolId,province,ward,source:'teacher_verification',updatedAt:Date.now()},{merge:true});
+    }
 
     const valid=[];
     for(const classId of classIds){
