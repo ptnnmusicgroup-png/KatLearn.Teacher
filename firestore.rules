@@ -58,7 +58,7 @@ match /system/{docId} {
     }
     match /schools/{schoolId} {
       allow read: if true;
-      allow create: if isAdmin() || (isTeacher() && request.resource.data.createdBy == request.auth.uid);
+      allow create: if isAdmin() || (isTeacher() && request.resource.data.createdBy == request.auth.uid && request.resource.data.get('schoolId', '') == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('schoolId', ''));
       allow update, delete: if isAdmin();
       match /classes/{catalogClassId} {
         allow read: if true;
@@ -85,11 +85,12 @@ match /system/{docId} {
     match /classes/{classId} {
       allow read: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid)
         || (signedIn() && exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid)));
-      allow create: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+      allow create: if isAdmin() || (isTeacher() && request.resource.data.teacherUid == request.auth.uid && request.resource.data.get('schoolId', '') == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('schoolId', ''));
       allow update: if isAdmin()
         || (isTeacher()
           && resource.data.teacherUid == request.auth.uid
-          && request.resource.data.teacherUid == resource.data.teacherUid);
+          && request.resource.data.teacherUid == resource.data.teacherUid
+          && request.resource.data.get('schoolId', '') == resource.data.get('schoolId', ''));
       allow delete: if isAdmin();
       match /members/{memberId} {
         allow read: if canManageClass(classId) || (signedIn() && memberId == request.auth.uid);
