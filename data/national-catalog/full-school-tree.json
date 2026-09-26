@@ -17568,7 +17568,7 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e0018936830",
+        "id": "katlearn-ward-thanhphodanangxanamtramy",
         "name": "Xã Nam Trà My",
         "schools": []
       },
@@ -39141,18 +39141,9 @@
         ]
       },
       {
-        "id": "689ea4ff229a7e00189363c7",
+        "id": "katlearn-ward-tinhlangsonxahoangvanthu",
         "name": "Xã Hoàng Văn Thụ",
-        "schools": [
-          {
-            "id": "59cdc4519d2a1700271c5dc8",
-            "name": "Tiểu học Tân Mỹ"
-          },
-          {
-            "id": "59cdc4909d2a1700271caa1a",
-            "name": "Tiểu học Hoàng Văn Thụ"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea4ff229a7e00189363c1",
@@ -39489,12 +39480,24 @@
         "schools": []
       },
       {
-        "id": "689ea4ff229a7e00189363a7",
+        "id": "689ea4ff229a7e00189363b5",
         "name": "Xã Tân Thành",
         "schools": [
           {
-            "id": "59cdc4519d2a1700271c5dc9",
-            "name": "Tiểu học Tân Thanh"
+            "id": "59cdc4519d2a1700271c5d98",
+            "name": "Tiểu học Tân Thành"
+          },
+          {
+            "id": "59cdc4819d2a1700271c98ad",
+            "name": "THCS Hòa Lạc"
+          },
+          {
+            "id": "59cdc4819d2a1700271c98bf",
+            "name": "Tiểu học Hòa Lạc"
+          },
+          {
+            "id": "59cdc4819d2a1700271c98c1",
+            "name": "Tiểu học Hòa Sơn"
           }
         ]
       },
@@ -49293,12 +49296,12 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e00189368ff",
+        "id": "689ea500229a7e0018936901",
         "name": "Xã Sơn Hà",
         "schools": []
       },
       {
-        "id": "689ea500229a7e0018936901",
+        "id": "689ea500229a7e00189368ff",
         "name": "Xã Sơn Hạ",
         "schools": []
       },
@@ -49408,7 +49411,7 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e001893690a",
+        "id": "689ea500229a7e001893690c",
         "name": "Xã Ba Tơ",
         "schools": []
       },
@@ -49433,7 +49436,7 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e001893690c",
+        "id": "689ea500229a7e001893690a",
         "name": "Xã Ba Tô",
         "schools": []
       },
@@ -58905,7 +58908,7 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e0018936768",
+        "id": "689ea500229a7e0018936798",
         "name": "Xã Văn Lang",
         "schools": []
       },
@@ -59255,7 +59258,7 @@
         ]
       },
       {
-        "id": "689ea500229a7e0018936798",
+        "id": "689ea500229a7e0018936768",
         "name": "Xã Văn Lăng",
         "schools": []
       },
@@ -60991,14 +60994,9 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e0018936691",
+        "id": "689ea500229a7e00189366d4",
         "name": "Xã Tân Thành",
-        "schools": [
-          {
-            "id": "59cdc4889d2a1700271ca04d",
-            "name": "THCS Kiến Bình"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea500229a7e00189366d2",
@@ -61407,9 +61405,14 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e00189366d4",
+        "id": "689ea500229a7e0018936691",
         "name": "Xã Tân Thạnh",
-        "schools": []
+        "schools": [
+          {
+            "id": "59cdc4889d2a1700271ca04d",
+            "name": "THCS Kiến Bình"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e001893668f",
@@ -67412,14 +67415,9 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e001893661e",
+        "id": "689ea500229a7e0018936622",
         "name": "Xã Lộc Thạnh",
-        "schools": [
-          {
-            "id": "59cdc4399d2a1700271c41d5",
-            "name": "TH&THCS Lộc Thiện"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea500229a7e0018936623",
@@ -67427,9 +67425,14 @@
         "schools": []
       },
       {
-        "id": "689ea500229a7e0018936622",
+        "id": "689ea500229a7e001893661e",
         "name": "Xã Lộc Thành",
-        "schools": []
+        "schools": [
+          {
+            "id": "59cdc4399d2a1700271c41d5",
+            "name": "TH&THCS Lộc Thiện"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936620",
