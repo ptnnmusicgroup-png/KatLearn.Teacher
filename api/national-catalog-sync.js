@@ -46,6 +46,7 @@ const PROVINCE_ALIASES=new Map([
 ]);
 
 const SCHOOL_TREE_URL='https://raw.githubusercontent.com/ptnnmusicgroup-png/KatLearn.Teacher/main/data/national-catalog/full-school-tree.json';
+const WARD_LIST_URL='https://raw.githubusercontent.com/ptnnmusicgroup-png/KatLearn.Teacher/main/data/national-catalog/official-ward-list.json';
 
 const OFFICIAL_PROVINCES=[
   ['01','Thành phố Hà Nội'],['04','Tỉnh Cao Bằng'],['08','Tỉnh Tuyên Quang'],['11','Tỉnh Điện Biên'],
@@ -78,18 +79,32 @@ function inferLevel(name){
   return'combined';
 }
 async function fetchSchoolTree(){
-  const r=await fetch(SCHOOL_TREE_URL,{headers:{'user-agent':'KatLearn-National-Catalog/2.0'}});
+  const r=await fetch(SCHOOL_TREE_URL,{headers:{'user-agent':'KatLearn-National-Catalog/2.1'}});
   if(!r.ok)throw new Error('Không tải được school tree ('+r.status+')');
   const data=await r.json();
   if(!Array.isArray(data)||data.length!==34)throw new Error('School tree không hợp lệ: cần 34 tỉnh/thành.');
   return data;
 }
-function flattenSchools(tree){
+async function fetchOfficialWardList(){
+  const r=await fetch(WARD_LIST_URL,{headers:{'user-agent':'KatLearn-National-Catalog/2.1'}});
+  if(!r.ok)throw new Error('Không tải được danh sách xã/phường chuẩn ('+r.status+')');
+  const data=await r.json();
+  if(!data||!Array.isArray(data.provinces)||data.provinceCount!==34||data.totalUnitCount!==3321)throw new Error('Danh sách xã/phường chuẩn không hợp lệ.');
+  return data;
+}
+function wardKey(value){
+  return norm(String(value||'').replace(/^(Xã|Phường|Đặc khu)\\s+/i,''));
+}
+function flattenSchools(tree,wardCatalog){
   const result=[];
+  const officialByProvince=new Map((wardCatalog?.provinces||[]).map(p=>[String(p.code||'').trim(),p]));
   for(const province of tree){
     const code=provinceCodeByName.get(norm(province.name));
     if(!code)continue;
+    const officialProvince=officialByProvince.get(code);
+    const officialByWard=new Map((officialProvince?.wards||[]).map(w=>[wardKey(w.name),w]));
     for(const ward of (province.wards||[])){
+      const legacyWardName=htmlText(ward.name),canonical=officialByWard.get(wardKey(legacyWardName));
       for(const school of (ward.schools||[])){
         const name=htmlText(school.name);
         if(!name)continue;
@@ -98,8 +113,8 @@ function flattenSchools(tree){
           sourceProvinceName:province.name,
           provinceCode:code,
           provinceName:OFFICIAL_PROVINCES.find(p=>p.code===code)?.name||province.name,
-          wardId:ward.id,
-          wardName:htmlText(ward.name),
+          wardId:String(canonical?.id||ward.id||''),
+          wardName:htmlText(canonical?.name||legacyWardName),
           sourceSchoolId:String(school.id||''),
           name,
           level:inferLevel(name)
@@ -133,8 +148,8 @@ export default async function handler(req,res){
     if(String(decoded.email||'').toLowerCase()!==ADMIN_EMAIL)return res.status(403).json({ok:false,error:'Admin only'});
 
     const now=Date.now();
-    const tree=await fetchSchoolTree();
-    const rows=flattenSchools(tree);
+    const [tree,wardCatalog]=await Promise.all([fetchSchoolTree(),fetchOfficialWardList()]);
+    const rows=flattenSchools(tree,wardCatalog);
     const provinceWrites=OFFICIAL_PROVINCES.map(p=>({
       id:p.code,
       data:{
@@ -147,7 +162,7 @@ export default async function handler(req,res){
         updatedAt:now
       }
     }));
-    const stats={provinces:provinceWrites.length,schools:rows.length,classes:0,wards:tree.reduce((n,p)=>n+(p.wards||[]).length,0)};
+    const stats={provinces:provinceWrites.length,schools:rows.length,classes:0,wards:wardCatalog.totalUnitCount};
 
     await writeWithLimit(provinceWrites,async item=>{
       await db.collection('KatLearn_TINHTHANH_1').doc(item.id).set(item.data,{merge:true});
