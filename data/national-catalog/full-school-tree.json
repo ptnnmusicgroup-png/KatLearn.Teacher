@@ -17568,7 +17568,7 @@
         "schools": []
       },
       {
-        "id": "katlearn-ward-thanhphodanangxanamtramy",
+        "id": "689ea500229a7e0018936830",
         "name": "Xã Nam Trà My",
         "schools": []
       },
@@ -30092,14 +30092,9 @@
         ]
       },
       {
-        "id": "689ea4ff229a7e00189361dc",
+        "id": "katlearn-ward-tinhhatinhxasonkim2",
         "name": "Xã Sơn Kim 2",
-        "schools": [
-          {
-            "id": "59cdc4469d2a1700271c508a",
-            "name": "Tiểu học Sơn Kim 2"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea4ff229a7e00189361cc",
@@ -39141,9 +39136,18 @@
         ]
       },
       {
-        "id": "katlearn-ward-tinhlangsonxahoangvanthu",
+        "id": "689ea4ff229a7e00189363c7",
         "name": "Xã Hoàng Văn Thụ",
-        "schools": []
+        "schools": [
+          {
+            "id": "59cdc4519d2a1700271c5dc8",
+            "name": "Tiểu học Tân Mỹ"
+          },
+          {
+            "id": "59cdc4909d2a1700271caa1a",
+            "name": "Tiểu học Hoàng Văn Thụ"
+          }
+        ]
       },
       {
         "id": "689ea4ff229a7e00189363c1",
@@ -64133,7 +64137,7 @@
         "schools": []
       },
       {
-        "id": "katlearn-ward-tinhvinhlongxalucsithanh",
+        "id": "689ea500229a7e0018936c51",
         "name": "Xã Lục Sĩ Thành",
         "schools": []
       }
