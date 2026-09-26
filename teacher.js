@@ -66,7 +66,6 @@ async function initFirebase(){
   onAuthStateChanged(auth,async u=>{
     user=u;teacherAccess=false;accountRole='';
     if(u&&isAdminUser()&&!location.pathname.endsWith('/admin.html')){location.replace('admin.html');return}
-    if(u&&isAdminUser()&&!location.pathname.endsWith('/admin.html')){location.replace('admin.html');return}
     const authUid=u?.uid||null;
     if(u){
       if(ADMIN_EMAILS.includes((u.email||'').toLowerCase())){teacherAccess=true;accountRole='teacher';}
