@@ -26,7 +26,8 @@ main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var
 .badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:8px;font-weight:800;white-space:nowrap}.badge.pending{background:#fff5e7;color:#b7741b}.badge.teacher{background:#edf8f3;color:#2b8d67}.badge.student{background:#eef2ff;color:#5558ce}.badge.rejected{background:#fff0f2;color:#c45567}
 .actions{display:flex;gap:6px;flex-wrap:wrap}.btn{min-height:35px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#617087;font-size:9px;font-weight:800}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.success{background:#edf9f3;border-color:#d7f0e5;color:#2b8d67}.btn.danger{background:#fff1f3;border-color:#f3dfe2;color:#c45567}.btn:disabled{opacity:.55;cursor:not-allowed}
 .pending-list{display:grid;gap:10px}.pending-item{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fcfcfe}.pending-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.pending-head strong{font-size:11px}.pending-head small{display:block;margin-top:3px;color:var(--muted);font-size:9px}.pending-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}.meta-box{padding:8px 9px;background:#f7f8fc;border-radius:9px}.meta-box b{display:block;font-size:8px;color:#9299aa}.meta-box span{display:block;margin-top:3px;font-size:9px}.empty{padding:22px;text-align:center;color:#8c94a5;background:#fafbfc;border:1px dashed #e2e5ec;border-radius:12px;font-size:10px}
-.quick{display:grid;gap:8px}.quick button{min-height:48px;border:1px solid var(--line);border-radius:13px;background:#fff;text-align:left;padding:0 13px;font-size:10px;font-weight:800;color:#59667c}.quick button:hover{background:#f8f8fd}.quick span{margin-right:7px}
+.quick{display:grid;gap:8px}.catalog-sync-btn{grid-column:1/-1!important;border:1px solid #ddd7ff!important;background:linear-gradient(135deg,#f7f5ff,#fff)!important;color:#5f52df!important}.catalog-sync-btn:hover{border-color:#b9b0ff!important;background:#f1efff!important}.catalog-sync-status{grid-column:1/-1;color:#9a91a9;font-size:9px;margin-top:-2px}.catalog-sync-status.ok{color:#4b9b72}.catalog-sync-status.error{color:#cf6875}
+.quick button{min-height:48px;border:1px solid var(--line);border-radius:13px;background:#fff;text-align:left;padding:0 13px;font-size:10px;font-weight:800;color:#59667c}.quick button:hover{background:#f8f8fd}.quick span{margin-right:7px}
 .notice{display:none;padding:12px 14px;margin-bottom:16px;border-radius:12px;background:#fff3f5;color:#c45567;font-size:10px;font-weight:800;border:1px solid #f3dfe2}.notice.show{display:block}
 #loginGate{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(430px,100%);padding:30px;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}.login-card .logo{display:grid;place-items:center;width:56px;height:56px;border-radius:17px;background:#eeeaff;font-size:28px;margin-bottom:18px}.login-card h1{margin:0;font:700 29px Fredoka,sans-serif}.login-card p{color:var(--muted);font-size:11px;line-height:1.6}.login-card form{display:grid;gap:12px}.login-card label{display:grid;gap:7px;font-size:10px;font-weight:800}.login-card input{min-height:46px;padding:0 12px;border:1px solid var(--line);border-radius:12px;outline:0}.login-card input[readonly]{background:#f7f7fb;color:#6f7890}.login-card input:focus{border-color:#aaa7ff;box-shadow:0 0 0 4px #6e68ff12}.login-submit{min-height:48px;border:0;border-radius:999px;background:var(--primary);color:#fff;font-weight:800}.login-message{min-height:18px;color:var(--danger);font-size:10px;font-weight:800}.login-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px}.login-foot a,.login-foot button{border:0;background:transparent;color:#656d82;font-size:9px;font-weight:800;text-decoration:none}.hidden{display:none!important}
 @media(max-width:1100px){.metrics{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
@@ -108,6 +109,8 @@ main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var
               <button data-page-go="users"><span>👥</span>Kiểm tra tài khoản</button>
               <button data-page-go="classes"><span>🏫</span>Xem toàn bộ lớp</button>
               <button data-page-go="packs"><span>📚</span>Quản lý bộ từ công khai</button>
+              <button id="syncNationalCatalog" class="catalog-sync-btn" type="button"><span>🇻🇳</span>Đồng bộ danh mục toàn quốc</button>
+              <small id="catalogSyncStatus" class="catalog-sync-status">34 tỉnh/thành · trường học · lớp khối</small>
             </div>
           </section>
         </div>
@@ -174,6 +177,7 @@ $$('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
 $$('[data-page-go]').forEach(b=>b.onclick=()=>setPage(b.dataset.pageGo));
 $('#sidebarLogout').onclick=()=>signOut(auth);
 $('#clearSessionBtn').onclick=()=>signOut(auth);
+$('#syncNationalCatalog')?.addEventListener('click',syncNationalCatalog);
 
 function teacherCards(rows){
   return rows.length?rows.map(t=>{
@@ -283,6 +287,30 @@ async function verifyTeacher(uid){
   }catch(e){
     showNotice('Không thể xác minh: '+(e?.message||'Lỗi không xác định'));
     if(button){button.disabled=false;button.textContent='✓ Xác minh và cấp quyền'}
+  }
+}
+
+async function syncNationalCatalog(){
+  if(!user||user.email?.toLowerCase()!==ADMIN_EMAIL)return showNotice('Phiên Admin không hợp lệ. Vui lòng đăng nhập lại.');
+  const btn=$('#syncNationalCatalog'),status=$('#catalogSyncStatus');
+  if(!btn)return;
+  btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
+  try{
+    const token=await user.getIdToken();
+    const response=await fetch('/api/national-catalog-sync',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:'{}'});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.ok)throw new Error(data.error||'Không thể đồng bộ danh mục.');
+    const s=data.stats||{};
+    status.textContent='✓ '+s.provinces+' tỉnh/thành · '+s.schools+' trường · '+s.classes+' lớp mẫu.';
+    status.className='catalog-sync-status ok';
+    showNotice('✓ Đã đồng bộ danh mục quốc gia vào Firestore.');
+    await loadState();
+  }catch(e){
+    status.textContent='✕ '+(e?.message||'Đồng bộ thất bại.');
+    status.className='catalog-sync-status error';
+    showNotice('Không thể đồng bộ danh mục: '+(e?.message||'Lỗi không xác định'));
+  }finally{
+    btn.disabled=false;btn.innerHTML='<span>🇻🇳</span>Đồng bộ danh mục toàn quốc';
   }
 }
 
