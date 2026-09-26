@@ -47,6 +47,18 @@ match /system/{docId} {
         }
       }
     }
+        match /KatLearn_TINHTHANH_1/{provinceId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    match /KatLearn_TRUONGHOC_1/{schoolId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    match /KatLearn_LOPHOC_1/{classId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
         match /KatLearn_Teacher_Schools/{schoolId} {
       allow read: if true;
       allow create, update: if isAdmin()
