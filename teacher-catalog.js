@@ -30,32 +30,32 @@
   }
   async function fillCatalog(){
     const p=$('#catalogProvince');if(!p)return;
+    let officialProvinces=[];
     try{
       const response=await fetch('./data/national-catalog/official-ward-list.json',{cache:'force-cache'});
       if(!response.ok)throw new Error('Không tải được danh sách xã/phường quốc gia.');
       const catalog=await response.json();
       if(!catalog||!Array.isArray(catalog.provinces)||catalog.provinceCount!==34||catalog.totalUnitCount!==3321)throw new Error('Danh sách xã/phường quốc gia không hợp lệ.');
-      officialWardsByProvince=new Map(catalog.provinces.map(x=>[String(x.code||'').trim(),(x.wards||[]).map(w=>String(w.name||'').replace(/\\s+/g,' ').trim()).filter(Boolean)]));
-      p.innerHTML='<option value="">Chọn tỉnh/thành</option>'+catalog.provinces.map(x=>'<option value="'+esc(x.name)+'">'+esc(x.name)+'</option>').join('');
+      officialProvinces=catalog.provinces.filter(x=>x?.code&&x?.name);
+      officialWardsByProvince=new Map(officialProvinces.map(x=>[String(x.code).trim(),(x.wards||[]).map(w=>String(w.name||'').replace(/\\s+/g,' ').trim()).filter(Boolean)]));
+      p.innerHTML='<option value="">Chọn tỉnh/thành</option>'+officialProvinces.map(x=>'<option value="'+esc(x.name)+'">'+esc(x.name)+'</option>').join('');
     }catch(error){
       const ps=[...new Set(schools.map(s=>s.province).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'vi'));
       p.innerHTML='<option value="">Chọn tỉnh/thành</option>'+ps.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
-      toast('Không tải được danh sách xã/phường chuẩn: '+(error.message||'Lỗi không xác định'));
       officialWardsByProvince=new Map();
+      toast('Không tải được danh sách xã/phường chuẩn: '+(error.message||'Lỗi không xác định'));
     }
     const findProvinceCode=name=>{
-      const hit=[...catalog?.provinces||[]].find(x=>normalizePlace(x.name)===normalizePlace(name));
-      return hit?.code||'';
+      const hit=officialProvinces.find(x=>normalizePlace(x.name)===normalizePlace(name));
+      return String(hit?.code||'').trim();
     };
     const renderWards=()=>{
       const code=findProvinceCode(p.value);
       const ws=officialWardsByProvince.get(code)||[];
       $('#catalogWard').disabled=!ws.length;
       $('#catalogWard').innerHTML='<option value="">Chọn xã/phường</option>'+ws.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
-      $('#catalogSchool').disabled=true;
-      $('#catalogSchool').innerHTML='<option value="">Chọn trường</option>';
-      $('#catalogClass').disabled=true;
-      $('#catalogClass').innerHTML='<option value="">Chọn lớp có sẵn</option>';
+      $('#catalogSchool').disabled=true;$('#catalogSchool').innerHTML='<option value="">Chọn trường</option>';
+      $('#catalogClass').disabled=true;$('#catalogClass').innerHTML='<option value="">Chọn lớp có sẵn</option>';
     };
     p.onchange=renderWards;
     $('#catalogWard').onchange=()=>{
@@ -63,8 +63,7 @@
       const rows=schools.filter(s=>normalizePlace(s.province)===normalizePlace(pv)&&normalizePlace(s.ward)===normalizePlace(wv));
       $('#catalogSchool').disabled=!rows.length;
       $('#catalogSchool').innerHTML='<option value="">Chọn trường</option>'+rows.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('');
-      $('#catalogClass').disabled=true;
-      $('#catalogClass').innerHTML='<option value="">Chọn lớp có sẵn</option>';
+      $('#catalogClass').disabled=true;$('#catalogClass').innerHTML='<option value="">Chọn lớp có sẵn</option>';
     };
     $('#catalogSchool').onchange=async()=>{
       const sid=$('#catalogSchool').value;if(!sid)return;
