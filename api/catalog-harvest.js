@@ -74,3 +74,5 @@ export default async function handler(req,res){
 // trigger one-shot enrichment
 
 // trigger official 2026 THPT enrichment run
+
+// rerun with corrected 2026 THPT source
