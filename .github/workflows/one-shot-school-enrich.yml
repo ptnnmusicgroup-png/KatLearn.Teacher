@@ -139,18 +139,36 @@ jobs:
           def parse_official_thpt():
               out = []
               try:
-                  rr = requests.get(THPT_READER, timeout=90, headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
-                  if rr.status_code != 200:
-                      print("official THPT reader failed:", rr.status_code)
+                  from urllib.parse import quote
+                  candidates = [
+                      THPT_READER,
+                      "https://api.allorigins.win/raw?url=" + quote(THPT_PDF, safe=""),
+                      "https://corsproxy.io/?" + quote(THPT_PDF, safe="")
+                  ]
+                  txt = ""
+                  for src in candidates:
+                      try:
+                          rr = requests.get(src, timeout=75, headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
+                          if rr.status_code == 200:
+                              body = rr.content
+                              if body.startswith(b"%PDF"):
+                                  pdf_path = Path("/tmp/thpt2026.pdf")
+                                  pdf_path.write_bytes(body)
+                                  import subprocess
+                                  subprocess.run(["pdftotext","-layout",str(pdf_path),"/tmp/thpt2026.txt"],check=True,timeout=120)
+                                  txt = Path("/tmp/thpt2026.txt").read_text(encoding="utf-8",errors="ignore")
+                                  break
+                              if "Mã Tỉnh/ TP" in rr.text:
+                                  txt = rr.text
+                                  break
+                          print("official THPT source failed:", src[:70], rr.status_code)
+                      except Exception as exc:
+                          print("official THPT source exception:", src[:70], exc)
+                  if not txt:
+                      print("official THPT source unavailable")
                       return out
-                  txt = re.sub(r"\s+", " ", rr.text)
-                  pat = re.compile(
-                      r"Mã Tỉnh/\s*TP\s+(\d{2})\s+Tên Tỉnh/TP\s+(.+?)\s+"
-                      r"Mã Xã/Phường\s+(\d{5})\s+Tên Xã/Phường\s+(.+?)\s+"
-                      r"Mã Trường\s+(\d{3})\s+Tên Trường\s+(.+?)\s+Điện Thoại",
-                      re.I
-                  )
-                  seen=set()
+                  txt = re.sub(r"\s+", " ", txt)
+                  pat = re.compile(                  seen=set()
                   for m in pat.finditer(txt):
                       pcode, pname, wcode, wname, scode, sname = [x.strip() for x in m.groups()]
                       pname = next((p[1] for p in PROV_CODE.items() if p[1] == pcode), None) or next((k for k,v in PROV_CODE.items() if v == pcode), None)
