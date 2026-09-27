@@ -15,8 +15,8 @@ function admin(){
   return {auth:getAuth(),db:getFirestore()};
 }
 
-function tokenFrom(request){
-  const match=/^Bearer\s+(.+)$/i.exec(String(request.headers.get('authorization')||''));
+function tokenFrom(req){
+  const match=/^Bearer\s+(.+)$/i.exec(String(req.headers?.authorization||''));
   if(!match)throw Object.assign(new Error('Bạn cần đăng nhập Admin.'),{status:401});
   return match[1];
 }
@@ -26,17 +26,18 @@ function clean(value,max=200){
 }
 
 const JSON_HEADERS={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
+function send(res,status,body){return res.status(status).set(JSON_HEADERS).json(body);}
 
-export default async function handler(request){
-  if(request.method!=='POST')return Response.json({ok:false,error:'Method not allowed'},{status:405,headers:JSON_HEADERS});
+export default async function handler(req,res){
+  if(req.method!=='POST')return send(res,405,{ok:false,error:'Method not allowed'});
   try{
     const {auth,db}=admin();
-    const token=await auth.verifyIdToken(tokenFrom(request),true);
+    const token=await auth.verifyIdToken(tokenFrom(req),true);
     if(String(token.email||'').toLowerCase()!==ADMIN_EMAIL){
-      return Response.json({ok:false,error:'Tài khoản không có quyền Admin.'},{status:403,headers:JSON_HEADERS});
+      return send(res,403,{ok:false,error:'Tài khoản không có quyền Admin.'});
     }
 
-    const body=await request.json().catch(()=>({}));
+    const body=req.body||{};
     const uid=clean(body.uid,160);
     if(!uid)throw Object.assign(new Error('Thiếu tài khoản giáo viên.'),{status:400});
 
@@ -139,7 +140,7 @@ export default async function handler(request){
       updatedAt:Date.now()
     },{merge:true});
 
-    return Response.json({
+    return send(res,200,{
       ok:true,
       uid,
       schoolId,
@@ -148,10 +149,10 @@ export default async function handler(request){
       ward,
       classIds:validClassIds,
       catalogClassId
-    },{status:200,headers:JSON_HEADERS});
+    });
   }catch(error){
     const status=Number(error?.status||error?.statusCode||0)||500;
     console.error('[KatLearn admin verify teacher]',error);
-    return Response.json({ok:false,error:error?.message||'Không thể xác minh giáo viên.'},{status,headers:JSON_HEADERS});
+    return send(res,status,{ok:false,error:error?.message||'Không thể xác minh giáo viên.'});
   }
 }
