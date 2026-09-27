@@ -201,7 +201,7 @@ async function syncCatalog(){
    while(offset<p[2]){
     if(++guard>1000)throw new Error("Luồng sync bị kẹt tại "+p[1]);
     let response;
-    try{response=await fetch("/api/national-catalog-sync",{method:"POST",headers,body:JSON.stringify({action:"catalog-chunk",provinceCode:p[0],offset,limit:150}),cache:"no-store"})}catch(e){throw new Error("Không kết nối catalog backend: "+errText(e))}
+    try{response=await fetch("/api/national-catalog-sync",{method:"POST",headers,body:JSON.stringify({action:"chunk",provinceCode:p[0],offset,limit:150}),cache:"no-store"})}catch(e){throw new Error("Không kết nối catalog backend: "+errText(e))}
     const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){throw new Error("Catalog backend trả dữ liệu không hợp lệ · HTTP "+response.status)}
     if(!response.ok||!data.ok)throw new Error(errText(data.error||data,"HTTP "+response.status+" · "+p[1]));
     const next=num(data.nextOffset),processed=num(data.processed);if(next<=offset&&processed===0)throw new Error("Backend không trả bản ghi mới · "+p[1]);
