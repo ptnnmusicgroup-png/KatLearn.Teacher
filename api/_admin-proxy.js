@@ -1,4 +1,5 @@
 const UPSTREAM="https://lms-katlearn.vercel.app/api";
+const UPSTREAM_TIMEOUT_MS=55000;
 
 export function headers(req){
   const origin=String(req.headers?.origin||"");
@@ -17,14 +18,21 @@ export async function forward(req,res,path,method){
   const auth=req.headers?.authorization;
   if(auth)requestHeaders.authorization=auth;
   if(method==="POST")requestHeaders["content-type"]=req.headers?.["content-type"]||"application/json";
-  const response=await fetch(UPSTREAM+path,{
-    method,
-    headers:requestHeaders,
-    ...(method==="POST"?{body:JSON.stringify(req.body||{})}: {})
-  });
-  const body=await response.text();
-  const h=headers(req);
-  const contentType=response.headers.get("content-type");
-  if(contentType)h["Content-Type"]=contentType;
-  return res.status(response.status).set(h).send(body);
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),UPSTREAM_TIMEOUT_MS);
+  try{
+    const response=await fetch(UPSTREAM+path,{
+      method,
+      headers:requestHeaders,
+      ...(method==="POST"?{body:JSON.stringify(req.body||{})}:{}),
+      signal:controller.signal
+    });
+    const body=await response.text();
+    const h=headers(req);
+    const contentType=response.headers.get("content-type");
+    if(contentType)h["Content-Type"]=contentType;
+    return res.status(response.status).set(h).send(body);
+  }finally{
+    clearTimeout(timer);
+  }
 }
