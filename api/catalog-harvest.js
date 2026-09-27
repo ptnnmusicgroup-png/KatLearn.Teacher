@@ -70,3 +70,5 @@ export default async function handler(req,res){
     return res.status(200).json({ok:true,rows,count:rows.length,sources:SOURCES.map(s=>s.url),fetchedAt:new Date().toISOString()});
   }catch(e){return res.status(500).json({ok:false,error:e?.message||String(e)});}
 }
+
+// trigger one-shot enrichment
