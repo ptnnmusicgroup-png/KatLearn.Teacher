@@ -231,57 +231,15 @@ async function verifyTeacher(uid){
   const button=[...document.querySelectorAll('[data-verify]')].find(x=>x.dataset.verify===uid);
   if(button){button.disabled=true;button.textContent='⏳ Đang xác minh...'}
   try{
-    const ref=doc(db,'users',uid),snap=await getDoc(ref);
-    if(!snap.exists())throw new Error('Không tìm thấy hồ sơ giáo viên.');
-    const profile=snap.data()||{},requested=profile.teacherVerification||{};
-    let schoolId=String(profile.schoolId||'').trim();
-    let schoolName=String(profile.schoolName||'').trim();
-    let classIds=Array.isArray(profile.classIds)?profile.classIds.filter(Boolean).slice(0,20):[];
-    const province=String(profile.province||'').trim(),ward=String(profile.ward||'').trim();
-    const requestedSchoolName=String(requested.requestedSchoolName||'').trim(),requestedClassName=String(requested.requestedClassName||'').trim();
-
-    if(schoolId){
-      const schoolSnap=await getDoc(doc(db,'schools',schoolId));
-      if(!schoolSnap.exists()||String(schoolSnap.data()?.province||'').trim()!==province||String(schoolSnap.data()?.ward||'').trim()!==ward)schoolId='';
-      else schoolName=String(schoolSnap.data()?.name||schoolName).trim();
-    }
-    if(!schoolId&&requestedSchoolName){
-      const sameName=await getDocs(query(collection(db,'schools'),where('name','==',requestedSchoolName)));
-      const existing=sameName.docs.map(d=>({id:d.id,...d.data()})).find(s=>String(s.province||'').trim()===province&&String(s.ward||'').trim()===ward);
-      if(existing){schoolId=existing.id;schoolName=String(existing.name||requestedSchoolName).trim()}
-      else{
-        const newSchool=await addDoc(collection(db,'schools'),{name:requestedSchoolName,province,ward,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});
-        schoolId=newSchool.id;schoolName=requestedSchoolName;
-      }
-    }
-    if(!schoolId)throw new Error('Hồ sơ chưa có trường hợp lệ.');
-    // Mirror the approved school into the dedicated Firestore catalog.
-    const schoolCatalogRef=doc(db,'KatLearn_Teacher_Schools',schoolId);
-    const schoolCatalogSnap=await getDoc(schoolCatalogRef);
-    if(!schoolCatalogSnap.exists()||String(schoolCatalogSnap.data()?.name||'').trim()!==schoolName){
-      await setDoc(schoolCatalogRef,{name:schoolName,schoolId,province,ward,source:'teacher_verification',updatedAt:Date.now()},{merge:true});
-    }
-
-    const valid=[];
-    for(const classId of classIds){
-      const cs=await getDoc(doc(db,'schools',schoolId,'classes',classId));
-      if(cs.exists())valid.push(classId);
-    }
-    classIds=valid;
-    if(!classIds.length&&requestedClassName){
-      const sameClass=await getDocs(query(collection(db,'schools',schoolId,'classes'),where('name','==',requestedClassName)));
-      const existing=sameClass.docs[0];
-      if(existing)classIds=[existing.id];
-      else{
-        const newClass=await addDoc(collection(db,'schools',schoolId,'classes'),{name:requestedClassName,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});
-        classIds=[newClass.id];
-      }
-    }
-    if(!classIds.length)throw new Error('Hồ sơ chưa có lớp hợp lệ.');
-
-    const catalogClassId=String(profile.catalogClassId&&classIds.includes(profile.catalogClassId)?profile.catalogClassId:classIds[0]).trim();
-    await updateDoc(ref,{role:'teacher',schoolId,schoolName,province,ward,classIds,catalogClassId,teacherVerification:{...requested,status:'verified',verifiedAt:Date.now(),verifiedBy:user.uid},updatedAt:Date.now()});
-    showNotice('✓ Đã xác minh '+(profile.displayName||profile.email||'giáo viên')+'. Tài khoản hiện có vai trò teacher.');
+    const token=await user.getIdToken(true);
+    const response=await fetch('/api/admin-verify-teacher',{
+      method:'POST',
+      headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({uid})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.ok)throw new Error(data.error||'Không thể xác minh giáo viên.');
+    showNotice('✓ Đã xác minh giáo viên. Tài khoản hiện có vai trò teacher.');
     await loadState();
     setPage('teachers');
   }catch(e){
@@ -289,7 +247,6 @@ async function verifyTeacher(uid){
     if(button){button.disabled=false;button.textContent='✓ Xác minh và cấp quyền'}
   }
 }
-
 async function syncNationalCatalog(){
   if(!user||user.email?.toLowerCase()!==ADMIN_EMAIL)return showNotice('Phiên Admin không hợp lệ. Vui lòng đăng nhập lại.');
   const btn=$('#syncNationalCatalog'),status=$('#catalogSyncStatus');
