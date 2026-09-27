@@ -261,16 +261,18 @@ async function syncNationalCatalog(){
   if(!btn)return;
   btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
   try{
-    const token=await user.getIdToken(true);
-    const headers={Authorization:'Bearer '+token,'Content-Type':'application/json'};
-
     const planResponse=await adminFetch('/national-catalog-sync',{
-      method:'POST',headers,body:JSON.stringify({action:'plan'})
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'plan'})
     });
     const plan=await planResponse.json().catch(()=>({}));
     if(!planResponse.ok||!plan.ok)throw new Error(plan.error||('HTTP '+planResponse.status+' khi lập kế hoạch đồng bộ.'));
 
     const provinces=Array.isArray(plan.provinces)?plan.provinces:[];
+    if(!provinces.length)throw new Error('Backend trả về kế hoạch đồng bộ trống.');
+    const token=await user.getIdToken(true);
+    const headers={Authorization:'Bearer '+token,'Content-Type':'application/json'};
     let processed=0;
     const total=Number(plan.totalSchools||0);
 
