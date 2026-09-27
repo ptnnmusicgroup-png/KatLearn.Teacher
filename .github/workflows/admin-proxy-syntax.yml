@@ -4,9 +4,6 @@ on:
   push:
     paths:
       - "api/_admin-proxy.js"
-      - "api/admin-state.js"
-      - "api/admin-verify-teacher.js"
-      - "api/national-catalog-sync.js"
       - "api/admin-hub.js"
       - "admin.html"
       - ".github/workflows/admin-proxy-syntax.yml"
@@ -23,9 +20,6 @@ jobs:
       - name: Check API syntax
         run: |
           node --check api/_admin-proxy.js
-          node --check api/admin-state.js
-          node --check api/admin-verify-teacher.js
-          node --check api/national-catalog-sync.js
       - name: Check Admin page module syntax
         run: |
           node --input-type=module <<'NODE'
