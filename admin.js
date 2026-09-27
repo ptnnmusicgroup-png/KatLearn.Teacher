@@ -215,13 +215,13 @@ function closeModal(value){
 async function inspectTeacher(uid){
   const list=[...(state.cache.teachers?.rows||[]),...(state.cache.overview?.pending||[])],t=list.find(x=>x.id===uid);if(!t)return;
   const v=t.teacherVerification||{};
-  await openModal("Hồ sơ giáo viên","Email: "+(t.email||"—")+"
-Tên: "+(t.displayName||t.name||"—")+"
-Trường: "+(t.schoolName||v.requestedSchoolName||"—")+"
-Lớp đăng ký: "+(v.requestedClassName||t.className||"—")+"
-Khu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—")+"
-Gửi lúc: "+dateOf(v.submittedAt||t.createdAt)+"
-Role: "+roleLabel(t.role),"Đóng","");
+  await openModal("Hồ sơ giáo viên",`Email: ${t.email||"—"}
+Tên: ${t.displayName||t.name||"—"}
+Trường: ${t.schoolName||v.requestedSchoolName||"—"}
+Lớp đăng ký: ${v.requestedClassName||t.className||"—"}
+Khu vực: ${[t.province,t.ward].filter(Boolean).join(" · ")||"—"}
+Gửi lúc: ${dateOf(v.submittedAt||t.createdAt)}
+Role: ${roleLabel(t.role)}`,"Đóng","");
 }
 async function teacherAction(action,uid){
   const verify=action==="verify";
