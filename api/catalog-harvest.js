@@ -84,3 +84,5 @@ export default async function handler(req,res){
 // rerun repaired THPT parser
 
 // rerun proxy-first THPT harvest
+
+// trigger Firestore high-school enrichment
