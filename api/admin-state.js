@@ -17,7 +17,7 @@ function admin(){
 
 function authToken(req){
   const header=String(req.headers?.authorization||'');
-  const match=/^Bearer\\s+(.+)$/i.exec(header);
+  const match=/^Bearer\s+(.+)$/i.exec(header);
   if(!match)throw Object.assign(new Error('Bạn cần đăng nhập Admin.'),{status:401});
   return match[1];
 }
@@ -33,37 +33,70 @@ function serialize(value){
   return value;
 }
 
-function rows(snapshot){
-  return snapshot.docs.map(d=>({id:d.id,...serialize(d.data()||{})}));
+function rows(snapshot,mapper=(d=>({id:d.id,...serialize(d.data()||{})}))){
+  return snapshot.docs.map(mapper);
 }
 
 export default async function handler(req,res){
-  if(req.method!=='GET')return res.status(405).json({error:'Method not allowed'});
+  if(req.method!=='GET')return res.status(405).json({ok:false,error:'Method not allowed'});
   try{
     const {auth,db}=admin();
     const token=await auth.verifyIdToken(authToken(req),true);
     if(String(token.email||'').toLowerCase()!==ADMIN_EMAIL){
-      return res.status(403).json({error:'Tài khoản không có quyền Admin.'});
+      return res.status(403).json({ok:false,error:'Tài khoản không có quyền Admin.'});
     }
 
     const [usersSnap,classesSnap,packsSnap,schoolsSnap]=await Promise.all([
-      db.collection('users').get(),
-      db.collection('classes').get(),
-      db.collection('publicPacks').get(),
-      db.collection('schools').get()
+      db.collection('users').select(
+        'displayName','name','email','role','schoolName','className','accountCode',
+        'coins','energy','teacherVerification','createdAt'
+      ).get(),
+      db.collection('classes').select(
+        'name','grade','teacherEmail','schoolName','joinCode','studentCount','schoolId'
+      ).get(),
+      db.collection('publicPacks').select(
+        'name','createdBy','createdByEmail','createdByUid','createdAt','wordCount','words'
+      ).get(),
+      db.collection('schools').select('name','province','ward').get()
     ]);
 
     const users=rows(usersSnap);
+    const classes=rows(classesSnap);
+    const packs=rows(packsSnap,d=>{
+      const data=d.data()||{};
+      const safe=serialize(data);
+      return {
+        id:d.id,
+        name:safe.name,
+        createdBy:safe.createdBy,
+        createdByEmail:safe.createdByEmail,
+        createdByUid:safe.createdByUid,
+        createdAt:safe.createdAt,
+        wordCount:Number(safe.wordCount||0)||(
+          Array.isArray(data.words)?data.words.length:0
+        )
+      };
+    });
+    const schools=rows(schoolsSnap);
     const pending=users
       .filter(u=>String(u.role||'').toLowerCase()==='pending_teacher_verification')
       .sort((a,b)=>Number(a.teacherVerification?.submittedAt||a.createdAt||0)-Number(b.teacherVerification?.submittedAt||b.createdAt||0));
 
     return res.status(200).json({
       ok:true,
+      stats:{
+        users:users.length,
+        teachers:users.filter(u=>String(u.role||'').toLowerCase()==='teacher').length,
+        students:users.filter(u=>String(u.role||'').toLowerCase()==='student').length,
+        pending:pending.length,
+        classes:classes.length,
+        packs:packs.length,
+        schools:schools.length
+      },
       users,
-      classes:rows(classesSnap),
-      packs:rows(packsSnap).sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0)),
-      schools:rows(schoolsSnap),
+      classes,
+      packs,
+      schools,
       pending
     });
   }catch(error){
