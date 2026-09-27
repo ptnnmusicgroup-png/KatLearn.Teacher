@@ -151,7 +151,7 @@ const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDoma
 const ADMIN_EMAIL='katlearn.admin@gmail.com';
 const ADMIN_API_BASES=['/api','https://lms-katlearn.vercel.app/api'];
 const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG),auth=getAuth(app);
-const $=s=>document.querySelector(s),$=s=>document.querySelectorAll(s);
+const qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
 async function adminFetch(path,options={}){
   let last=null;
   for(const base of ADMIN_API_BASES){
@@ -170,25 +170,25 @@ const roleLabel=r=>({teacher:'Giáo viên',student:'Học sinh',pending_teacher_
 const roleClass=r=>{r=String(r||'').toLowerCase();return r==='teacher'?'teacher':r==='student'?'student':r==='pending_teacher_verification'?'pending':r==='teacher_rejected'?'rejected':''};
 let user=null,state={users:[],classes:[],packs:[],schools:[],pending:[],stats:{}};
 
-function showNotice(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(showNotice.timer);showNotice.timer=setTimeout(()=>n.classList.remove('show'),4500)}
+function showNotice(message){const n=qs('#notice');n.textContent=message;n.classList.add('show');clearTimeout(showNotice.timer);showNotice.timer=setTimeout(()=>n.classList.remove('show'),4500)}
 function setPage(name){
   const map={overview:'Tổng quan',teachers:'Giáo viên',users:'Tài khoản',classes:'Lớp học',packs:'Bộ từ công khai',schools:'Trường học'};
-  $$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+name));
-  $$('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===name));
-  $('#pageTitle').textContent=map[name]||'Tổng quan';
+  qsa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+name));
+  qsa('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===name));
+  qs('#pageTitle').textContent=map[name]||'Tổng quan';
   if(name==='overview')renderOverview();
-  if(name==='teachers')renderTeachers($('#teacherSearch')?.value||'');
-  if(name==='users')renderUsers($('#userSearch')?.value||'');
-  if(name==='classes')renderClasses($('#classSearch')?.value||'');
-  if(name==='packs')renderPacks($('#packSearch')?.value||'');
-  if(name==='schools')renderSchools($('#schoolSearch')?.value||'');
+  if(name==='teachers')renderTeachers(qs('#teacherSearch')?.value||'');
+  if(name==='users')renderUsers(qs('#userSearch')?.value||'');
+  if(name==='classes')renderClasses(qs('#classSearch')?.value||'');
+  if(name==='packs')renderPacks(qs('#packSearch')?.value||'');
+  if(name==='schools')renderSchools(qs('#schoolSearch')?.value||'');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-$$('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
-$$('[data-page-go]').forEach(b=>b.onclick=()=>setPage(b.dataset.pageGo));
-$('#sidebarLogout').onclick=()=>signOut(auth);
-$('#clearSessionBtn').onclick=()=>signOut(auth);
-$('#syncNationalCatalog')?.addEventListener('click',syncNationalCatalog);
+qsa('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
+qsa('[data-page-go]').forEach(b=>b.onclick=()=>setPage(b.dataset.pageGo));
+qs('#sidebarLogout').onclick=()=>signOut(auth);
+qs('#clearSessionBtn').onclick=()=>signOut(auth);
+qs('#syncNationalCatalog')?.addEventListener('click',syncNationalCatalog);
 
 function teacherCards(rows){
   return rows.length?rows.map(t=>{
@@ -198,13 +198,13 @@ function teacherCards(rows){
 }
 function renderOverview(){
   const s=state.stats||{};
-  $('#metricPending').textContent=Number(s.pending??state.pending.length);
-  $('#metricTeachers').textContent=Number(s.teachers??state.users.filter(x=>String(x.role).toLowerCase()==='teacher').length);
-  $('#metricStudents').textContent=Number(s.students??state.users.filter(x=>String(x.role).toLowerCase()==='student').length);
-  $('#metricClasses').textContent=Number(s.classes??state.classes.length);
-  $('#metricPacks').textContent=Number(s.packs??state.packs.length);
-  $('#overviewPending').innerHTML=teacherCards(state.pending.slice(0,5));
-  bindVerify($('#overviewPending'));
+  qs('#metricPending').textContent=Number(s.pending??state.pending.length);
+  qs('#metricTeachers').textContent=Number(s.teachers??state.users.filter(x=>String(x.role).toLowerCase()==='teacher').length);
+  qs('#metricStudents').textContent=Number(s.students??state.users.filter(x=>String(x.role).toLowerCase()==='student').length);
+  qs('#metricClasses').textContent=Number(s.classes??state.classes.length);
+  qs('#metricPacks').textContent=Number(s.packs??state.packs.length);
+  qs('#overviewPending').innerHTML=teacherCards(state.pending.slice(0,5));
+  bindVerify(qs('#overviewPending'));
 }
 function bindVerify(root){
   root?.querySelectorAll('[data-verify]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verify));
@@ -212,30 +212,30 @@ function bindVerify(root){
 function renderTeachers(q=''){
   q=String(q).trim().toLowerCase();
   const rows=state.pending.filter(t=>!q||[t.displayName,t.name,t.email,t.schoolName,t.province,t.ward,t.teacherVerification?.requestedSchoolName,t.teacherVerification?.requestedClassName].join(' ').toLowerCase().includes(q));
-  $('#teacherList').innerHTML=teacherCards(rows);
-  bindVerify($('#teacherList'));
+  qs('#teacherList').innerHTML=teacherCards(rows);
+  bindVerify(qs('#teacherList'));
 }
 function renderUsers(q=''){
   q=String(q).trim().toLowerCase();
   const rows=state.users.filter(u=>!q||[u.displayName,u.name,u.email,u.schoolName,u.className,u.accountCode].join(' ').toLowerCase().includes(q));
-  $('#userTable').innerHTML=rows.map(u=>'<tr><td><strong>'+esc(u.displayName||u.name||'KatLearn User')+'</strong><small>'+esc(u.email||'')+(u.accountCode?' · Mã '+esc(u.accountCode):'')+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span></td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(' · ')||'—')+'</td><td><small>🪙 '+Number(u.coins||0).toLocaleString('vi-VN')+' · ⚡ '+Number(u.energy||0).toLocaleString('vi-VN')+'</small></td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
+  qs('#userTable').innerHTML=rows.map(u=>'<tr><td><strong>'+esc(u.displayName||u.name||'KatLearn User')+'</strong><small>'+esc(u.email||'')+(u.accountCode?' · Mã '+esc(u.accountCode):'')+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span></td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(' · ')||'—')+'</td><td><small>🪙 '+Number(u.coins||0).toLocaleString('vi-VN')+' · ⚡ '+Number(u.energy||0).toLocaleString('vi-VN')+'</small></td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
 }
 function renderClasses(q=''){
   q=String(q).trim().toLowerCase();
   const rows=state.classes.filter(c=>!q||[c.name,c.grade,c.teacherEmail,c.schoolName,c.joinCode].join(' ').toLowerCase().includes(q));
-  $('#classTable').innerHTML=rows.map(c=>'<tr><td><strong>'+esc(c.name||'—')+'</strong><small>Khối '+esc(c.grade||'—')+'</small></td><td>'+esc(c.teacherEmail||'—')+'</td><td>'+esc(c.schoolName||'—')+'</td><td><span class="badge teacher">'+esc(c.joinCode||'—')+'</span></td><td>'+Number(c.studentCount||0)+'</td></tr>').join('')||'<tr><td colspan="5"><div class="empty">Không có lớp học.</div></td></tr>';
+  qs('#classTable').innerHTML=rows.map(c=>'<tr><td><strong>'+esc(c.name||'—')+'</strong><small>Khối '+esc(c.grade||'—')+'</small></td><td>'+esc(c.teacherEmail||'—')+'</td><td>'+esc(c.schoolName||'—')+'</td><td><span class="badge teacher">'+esc(c.joinCode||'—')+'</span></td><td>'+Number(c.studentCount||0)+'</td></tr>').join('')||'<tr><td colspan="5"><div class="empty">Không có lớp học.</div></td></tr>';
 }
 function renderPacks(q=''){
   q=String(q).trim().toLowerCase();
   const rows=state.packs.filter(p=>!q||[p.name,p.createdBy,p.createdByEmail].join(' ').toLowerCase().includes(q));
-  $('#packTable').innerHTML=rows.map(p=>'<tr><td><strong>'+esc(p.name||'Bộ từ chưa đặt tên')+'</strong></td><td>'+Number(p.wordCount||0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||'—')+'</td><td>'+fmtDate(p.createdAt)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
+  qs('#packTable').innerHTML=rows.map(p=>'<tr><td><strong>'+esc(p.name||'Bộ từ chưa đặt tên')+'</strong></td><td>'+Number(p.wordCount||0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||'—')+'</td><td>'+fmtDate(p.createdAt)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
 }
 function renderSchools(q=''){
   q=String(q).trim().toLowerCase();
   const classCounts=new Map();
   state.classes.forEach(c=>{if(c.schoolId)classCounts.set(c.schoolId,(classCounts.get(c.schoolId)||0)+1)});
   const rows=state.schools.filter(s=>!q||[s.name,s.province,s.ward].join(' ').toLowerCase().includes(q));
-  $('#schoolTable').innerHTML=rows.map(s=>'<tr><td><strong>'+esc(s.name||'—')+'</strong><small>ID: '+esc(s.id)+'</small></td><td>'+esc(s.province||'—')+'</td><td>'+esc(s.ward||'—')+'</td><td>'+Number(classCounts.get(s.id)||0)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không tìm thấy trường.</div></td></tr>';
+  qs('#schoolTable').innerHTML=rows.map(s=>'<tr><td><strong>'+esc(s.name||'—')+'</strong><small>ID: '+esc(s.id)+'</small></td><td>'+esc(s.province||'—')+'</td><td>'+esc(s.ward||'—')+'</td><td>'+Number(classCounts.get(s.id)||0)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không tìm thấy trường.</div></td></tr>';
 }
 
 async function verifyTeacher(uid){
@@ -261,7 +261,7 @@ async function verifyTeacher(uid){
 }
 async function syncNationalCatalog(){
   if(!user||user.email?.toLowerCase()!==ADMIN_EMAIL)return showNotice('Phiên Admin không hợp lệ. Vui lòng đăng nhập lại.');
-  const btn=$('#syncNationalCatalog'),status=$('#catalogSyncStatus');
+  const btn=qs('#syncNationalCatalog'),status=qs('#catalogSyncStatus');
   if(!btn)return;
   btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
   try{
@@ -326,15 +326,15 @@ async function loadState(){
   renderOverview();
 }
 
-['teacherSearch','userSearch','classSearch','packSearch','schoolSearch'].forEach(id=>$('#'+id)?.addEventListener('input',e=>{const page=id.replace('Search','').replace('teacher','teachers').replace('user','users').replace('class','classes').replace('pack','packs').replace('school','schools');if(id==='teacherSearch')renderTeachers(e.target.value);if(id==='userSearch')renderUsers(e.target.value);if(id==='classSearch')renderClasses(e.target.value);if(id==='packSearch')renderPacks(e.target.value);if(id==='schoolSearch')renderSchools(e.target.value);}));
+['teacherSearch','userSearch','classSearch','packSearch','schoolSearch'].forEach(id=>qs('#'+id)?.addEventListener('input',e=>{const page=id.replace('Search','').replace('teacher','teachers').replace('user','users').replace('class','classes').replace('pack','packs').replace('school','schools');if(id==='teacherSearch')renderTeachers(e.target.value);if(id==='userSearch')renderUsers(e.target.value);if(id==='classSearch')renderClasses(e.target.value);if(id==='packSearch')renderPacks(e.target.value);if(id==='schoolSearch')renderSchools(e.target.value);}));
 
-$('#adminLoginForm').onsubmit=async e=>{
+qs('#adminLoginForm').onsubmit=async e=>{
   e.preventDefault();
-  const btn=$('#adminLoginBtn'),msg=$('#loginMessage');btn.disabled=true;msg.textContent='⏳ Đang kiểm tra tài khoản Admin...';
+  const btn=qs('#adminLoginBtn'),msg=qs('#loginMessage');btn.disabled=true;msg.textContent='⏳ Đang kiểm tra tài khoản Admin...';
   try{
-    const credential=await signInWithEmailAndPassword(auth,ADMIN_EMAIL,$('#adminPassword').value);
+    const credential=await signInWithEmailAndPassword(auth,ADMIN_EMAIL,qs('#adminPassword').value);
     if((credential.user.email||'').toLowerCase()!==ADMIN_EMAIL)throw new Error('Tài khoản không có quyền Admin.');
-    $('#adminPassword').value='';
+    qs('#adminPassword').value='';
   }catch(err){
     btn.disabled=false;
     msg.textContent=err?.code==='auth/invalid-credential'?'Email hoặc mật khẩu không đúng.':(err?.message||'Không thể đăng nhập.');
@@ -344,13 +344,13 @@ $('#adminLoginForm').onsubmit=async e=>{
 onAuthStateChanged(auth,async u=>{
   user=u||null;
   if(!u){
-    $('#loginGate').classList.remove('hidden');$('#app').classList.add('hidden');$('#adminPassword').value='';$('#adminLoginBtn').disabled=false;
+    qs('#loginGate').classList.remove('hidden');qs('#app').classList.add('hidden');qs('#adminPassword').value='';qs('#adminLoginBtn').disabled=false;
     return;
   }
   if((u.email||'').toLowerCase()!==ADMIN_EMAIL){
-    $('#loginGate').classList.remove('hidden');$('#app').classList.add('hidden');$('#loginMessage').textContent='Tài khoản này không có quyền Admin.';await signOut(auth);return;
+    qs('#loginGate').classList.remove('hidden');qs('#app').classList.add('hidden');qs('#loginMessage').textContent='Tài khoản này không có quyền Admin.';await signOut(auth);return;
   }
-  $('#loginGate').classList.add('hidden');$('#app').classList.remove('hidden');$('#adminEmailLabel').textContent=u.email;
+  qs('#loginGate').classList.add('hidden');qs('#app').classList.remove('hidden');qs('#adminEmailLabel').textContent=u.email;
   try{await loadState()}catch(e){showNotice('Không thể tải dữ liệu quản trị: '+(e?.message||'Lỗi không xác định'))}
 });
 </script>
