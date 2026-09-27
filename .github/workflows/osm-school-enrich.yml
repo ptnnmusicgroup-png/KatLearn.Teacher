@@ -40,7 +40,7 @@ jobs:
 
           TREE = Path("data/national-catalog/full-school-tree.json")
           WARDS = Path("data/national-catalog/official-ward-list.json")
-          BOUNDARY_ROOT = Path("/tmp/vietnamese-provinces-database/dataset-generation-scripts/resources/gis/geojson_11Mar2026")
+          BOUNDARY_ROOT = Path("/tmp/vietnamese-provinces-database/json/geojson")
           SCHOOL_JSON = "https://raw.githubusercontent.com/phoenixvn/OpenData-Vietnam/main/POI/schools_processed.json"
           LEGACY_JSON = "https://raw.githubusercontent.com/luancauthu0729/success/main/Backend/truong_thcs_vn.json"
 
@@ -171,13 +171,15 @@ jobs:
                   if not feats: continue
                   geom = shape(feats[0]["geometry"])
                   if geom.is_empty: continue
-                  pc = code[:2]
+                  pc = fp.parent.parent.name.split("_",1)[0]
+                  if not re.fullmatch(r"\d{2}", pc):
+                      pc = code[:2]
                   geometries.append(geom)
                   geometry_meta.append((pc,code))
               except Exception:
                   continue
 
-          print("Loaded ward polygons:", len(geometries))
+          print("Loaded current ward polygons:", len(geometries))
           if len(geometries) < 3000:
               raise RuntimeError(f"Boundary bundle incomplete: {len(geometries)} wards")
 
