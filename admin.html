@@ -261,13 +261,12 @@ async function syncNationalCatalog(){
   if(!btn)return;
   btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
   try{
-    const planResponse=await adminFetch('/national-catalog-sync',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'plan'})
+    const planResponse=await adminFetch('/national-catalog-sync?action=plan',{
+      method:'GET',
+      cache:'no-store'
     });
     const plan=await planResponse.json().catch(()=>({}));
-    if(!planResponse.ok||!plan.ok)throw new Error(plan.error||('HTTP '+planResponse.status+' khi lập kế hoạch đồng bộ.'));
+    if(!planResponse.ok||!plan.ok)throw new Error((plan.error?plan.error+' ':'')+'HTTP '+planResponse.status+' khi lập kế hoạch đồng bộ.'+(plan.code?' ['+plan.code+']':''));
 
     const provinces=Array.isArray(plan.provinces)?plan.provinces:[];
     if(!provinces.length)throw new Error('Backend trả về kế hoạch đồng bộ trống.');
