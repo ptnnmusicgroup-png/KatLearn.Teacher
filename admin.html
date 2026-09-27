@@ -3,353 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#4f46e5">
-<title>KatLearn Admin — Quản trị hệ thống</title>
+<meta name="theme-color" content="#11131a">
+<title>KatLearn Admin — Control Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#293044;--muted:#788196;--line:#e8eaf1;--bg:#f6f7fb;--card:#fff;--primary:#5d5bea;--primary2:#7b61ff;--danger:#dc6273;--success:#2f9b72;--warning:#d18a35;--shadow:0 18px 60px rgba(43,48,68,.09)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}.shell{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}
-.sidebar{padding:22px 16px;background:#fff;border-right:1px solid var(--line);position:sticky;top:0;height:100vh}
-.brand{display:flex;align-items:center;gap:10px;padding:7px 10px 22px;color:var(--ink);text-decoration:none;font:700 20px Fredoka,sans-serif}.brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#eeeaff;font-size:22px}.brand em{font-style:normal;color:var(--primary)}
-.role{padding:12px 13px;margin-bottom:18px;background:#f4f3ff;border:1px solid #e9e6ff;border-radius:14px}.role b{display:block;font-size:12px}.role small{display:block;margin-top:3px;color:var(--muted);font-size:9px}
-.nav{display:grid;gap:6px}.nav button{display:flex;align-items:center;gap:10px;width:100%;padding:12px 13px;border:0;border-radius:12px;background:transparent;color:#667086;text-align:left;font-weight:800;font-size:11px}.nav button:hover{background:#f7f7fb}.nav button.active{background:#efefff;color:#514ee2}
-.side-bottom{position:absolute;left:16px;right:16px;bottom:18px;display:grid;gap:7px}.side-bottom button,.side-bottom a{min-height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:#637087;text-decoration:none;display:grid;place-items:center;font-size:10px;font-weight:800}.side-bottom .danger{background:#fff2f3;border-color:#f3dfe2;color:var(--danger)}
-main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:20}.topbar .crumb{font:700 22px Fredoka,sans-serif}.admin-user{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:800}.avatar{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#ebeaff;color:#514ee2}
-.content{padding:30px}.page{display:none}.page.active{display:block}.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:24px;padding:28px;background:linear-gradient(135deg,#f2f0ff,#fff);border:1px solid #e6e3ff;border-radius:24px}.eyebrow{margin:0 0 8px;color:#716be9;font-size:10px;font-weight:800;letter-spacing:.12em}.hero h1{margin:0;font:700 34px/1.1 Fredoka,sans-serif}.hero p{margin:8px 0 0;color:var(--muted);font-size:12px;max-width:700px;line-height:1.65}.hero-icon{font-size:64px}
-.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:22px}.metric{padding:17px;background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:0 8px 30px rgba(43,48,68,.04)}.metric span{font-size:20px}.metric small{display:block;margin-top:9px;color:var(--muted);font-size:9px;font-weight:800}.metric b{display:block;margin-top:3px;font:700 24px Fredoka,sans-serif}
-.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:19px;box-shadow:0 8px 30px rgba(43,48,68,.035)}.card h2{margin:0;font:700 18px Fredoka,sans-serif}.card .sub{margin:6px 0 16px;color:var(--muted);font-size:10px;line-height:1.5}
-.toolbar{display:flex;align-items:center;gap:9px;margin-bottom:14px}.toolbar input,.toolbar select{min-height:40px;border:1px solid var(--line);border-radius:10px;padding:0 11px;background:#fff;color:var(--ink);outline:none}.toolbar input{flex:1}.toolbar input:focus,.toolbar select:focus{border-color:#b9b5ff;box-shadow:0 0 0 4px #7770ff12}
-.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:680px}.table th,.table td{padding:11px 9px;border-bottom:1px solid #f0f1f5;text-align:left;font-size:10px;vertical-align:top}.table th{color:#8b94a6;font-size:9px;font-weight:800}.table td strong{font-size:10px}.table td small{display:block;margin-top:3px;color:#8b94a6;font-size:8px;line-height:1.45}
-.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:8px;font-weight:800;white-space:nowrap}.badge.pending{background:#fff5e7;color:#b7741b}.badge.teacher{background:#edf8f3;color:#2b8d67}.badge.student{background:#eef2ff;color:#5558ce}.badge.rejected{background:#fff0f2;color:#c45567}
-.actions{display:flex;gap:6px;flex-wrap:wrap}.btn{min-height:35px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#617087;font-size:9px;font-weight:800}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.success{background:#edf9f3;border-color:#d7f0e5;color:#2b8d67}.btn.danger{background:#fff1f3;border-color:#f3dfe2;color:#c45567}.btn:disabled{opacity:.55;cursor:not-allowed}
-.pending-list{display:grid;gap:10px}.pending-item{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fcfcfe}.pending-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.pending-head strong{font-size:11px}.pending-head small{display:block;margin-top:3px;color:var(--muted);font-size:9px}.pending-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px}.meta-box{padding:8px 9px;background:#f7f8fc;border-radius:9px}.meta-box b{display:block;font-size:8px;color:#9299aa}.meta-box span{display:block;margin-top:3px;font-size:9px}.empty{padding:22px;text-align:center;color:#8c94a5;background:#fafbfc;border:1px dashed #e2e5ec;border-radius:12px;font-size:10px}
-.quick{display:grid;gap:8px}.catalog-sync-btn{grid-column:1/-1!important;border:1px solid #ddd7ff!important;background:linear-gradient(135deg,#f7f5ff,#fff)!important;color:#5f52df!important}.catalog-sync-btn:hover{border-color:#b9b0ff!important;background:#f1efff!important}.catalog-sync-status{grid-column:1/-1;color:#9a91a9;font-size:9px;margin-top:-2px}.catalog-sync-status.ok{color:#4b9b72}.catalog-sync-status.error{color:#cf6875}
-.quick button{min-height:48px;border:1px solid var(--line);border-radius:13px;background:#fff;text-align:left;padding:0 13px;font-size:10px;font-weight:800;color:#59667c}.quick button:hover{background:#f8f8fd}.quick span{margin-right:7px}
-.notice{display:none;padding:12px 14px;margin-bottom:16px;border-radius:12px;background:#fff3f5;color:#c45567;font-size:10px;font-weight:800;border:1px solid #f3dfe2}.notice.show{display:block}
-#loginGate{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(430px,100%);padding:30px;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}.login-card .logo{display:grid;place-items:center;width:56px;height:56px;border-radius:17px;background:#eeeaff;font-size:28px;margin-bottom:18px}.login-card h1{margin:0;font:700 29px Fredoka,sans-serif}.login-card p{color:var(--muted);font-size:11px;line-height:1.6}.login-card form{display:grid;gap:12px}.login-card label{display:grid;gap:7px;font-size:10px;font-weight:800}.login-card input{min-height:46px;padding:0 12px;border:1px solid var(--line);border-radius:12px;outline:0}.login-card input[readonly]{background:#f7f7fb;color:#6f7890}.login-card input:focus{border-color:#aaa7ff;box-shadow:0 0 0 4px #6e68ff12}.login-submit{min-height:48px;border:0;border-radius:999px;background:var(--primary);color:#fff;font-weight:800}.login-message{min-height:18px;color:var(--danger);font-size:10px;font-weight:800}.login-foot{display:flex;justify-content:space-between;gap:8px;margin-top:13px}.login-foot a,.login-foot button{border:0;background:transparent;color:#656d82;font-size:9px;font-weight:800;text-decoration:none}.hidden{display:none!important}
-@media(max-width:1100px){.metrics{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
-@media(max-width:820px){.shell{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:10px 14px}.brand{padding:4px 5px 10px}.role,.side-bottom{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.topbar{padding:0 16px}.content{padding:18px}.hero-icon{font-size:48px}}
-@media(max-width:560px){.metrics{grid-template-columns:repeat(2,1fr)}.metrics .metric:last-child{grid-column:1/-1}.hero{padding:20px}.hero h1{font-size:28px}.hero-icon{display:none}.pending-meta{grid-template-columns:1fr}.topbar .crumb{font-size:18px}}
+:root{--bg:#f5f6f8;--panel:#fff;--ink:#171922;--muted:#747987;--line:#e8e9ee;--accent:#6157e8;--good:#159a6b;--warn:#c97b1a;--bad:#d85d72;--dark:#12141b;--shadow:0 20px 60px rgba(20,22,30,.08)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Be Vietnam Pro",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}.hidden{display:none!important}
+#loginGate{min-height:100vh;display:grid;place-items:center;padding:28px;background:radial-gradient(circle at 15% 15%,#ddd9ff 0,transparent 28%),radial-gradient(circle at 90% 80%,#d9efff 0,transparent 26%),#f7f7fa}
+.login-wrap{width:min(980px,100%);display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden;border:1px solid var(--line);border-radius:30px;background:#fff;box-shadow:var(--shadow)}
+.login-art{padding:42px;background:linear-gradient(145deg,#161821,#292d3b);color:#fff;position:relative;overflow:hidden}.login-art:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:#6b61ff26;right:-90px;top:-90px}
+.login-mark{width:64px;height:64px;display:grid;place-items:center;border-radius:19px;background:#ffffff13;border:1px solid #ffffff18;font-size:30px}
+.login-art h1{margin:36px 0 12px;font:700 48px/1.02 Fredoka,sans-serif;max-width:460px}.login-art p{max-width:510px;line-height:1.75;color:#c9ccd5;font-size:13px}.login-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}.pill{padding:8px 11px;border:1px solid #ffffff16;border-radius:999px;background:#ffffff0c;color:#dfe1e9;font-size:10px;font-weight:800}
+.login-form{padding:42px}.kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}.login-form h2{font:700 34px Fredoka,sans-serif;margin:10px 0 8px}.login-form>p{font-size:11px;color:var(--muted);line-height:1.6}
+.form-stack{display:grid;gap:14px;margin-top:24px}.field{display:grid;gap:7px}.field label{font-size:10px;font-weight:800}.field input{height:48px;border:1px solid var(--line);border-radius:13px;padding:0 13px;outline:0}.field input:focus{border-color:#aaa4ff;box-shadow:0 0 0 4px #6b61ff12}.login-btn{height:50px;border:0;border-radius:14px;background:var(--dark);color:#fff;font-weight:800}.login-btn:disabled{opacity:.55}.login-error{min-height:19px;font-size:10px;font-weight:800;color:var(--bad)}.login-foot{display:flex;justify-content:space-between;margin-top:16px;gap:10px;font-size:9px;font-weight:700;color:var(--muted)}.login-foot a{text-decoration:none}
+.shell{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}.sidebar{position:sticky;top:0;height:100vh;background:#11131a;color:#fff;padding:20px 14px;display:flex;flex-direction:column;z-index:50}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;padding:8px 10px 25px;font:700 22px Fredoka,sans-serif}.brand-cat{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#292d3a;font-size:21px}.brand em{font-style:normal;color:#8b83ff}.admin-chip{padding:13px 12px;border:1px solid #ffffff10;background:#ffffff08;border-radius:16px;margin-bottom:18px}.admin-chip b{font-size:10px}.admin-chip small{display:block;margin-top:4px;color:#aeb2bf;font-size:8px;line-height:1.5}.nav{display:grid;gap:4px}.nav button{width:100%;border:0;background:transparent;color:#aeb2bf;padding:11px 12px;border-radius:12px;text-align:left;display:flex;gap:10px;align-items:center;font-size:10px;font-weight:800}.nav button:hover{background:#ffffff08;color:#fff}.nav button.active{background:#5f57e71f;color:#fff}.nav .ico{width:21px;text-align:center;font-size:16px}.side-bottom{margin-top:auto;display:grid;gap:7px}.side-bottom a,.side-bottom button{min-height:40px;border:1px solid #ffffff12;border-radius:11px;background:#ffffff06;color:#c2c5cf;text-decoration:none;display:grid;place-items:center;font-size:9px;font-weight:800}.side-bottom .logout{background:#d85d7212;color:#ffadb9}
+.main{min-width:0}.topbar{height:72px;position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#fffffff0;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.menu-mobile{display:none;width:38px;height:38px;border:1px solid var(--line);border-radius:11px;background:#fff}.page-title{font:700 21px Fredoka,sans-serif}.top-right{display:flex;align-items:center;gap:9px}.system-dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 0 5px #159a6b14}.sys-label{font-size:9px;font-weight:800;color:var(--muted)}.refresh{height:38px;padding:0 11px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:9px;font-weight:800}
+.content{padding:28px;max-width:1500px}.page{display:none}.page.active{display:block}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:28px 30px;border-radius:24px;background:linear-gradient(135deg,#ecebff,#fff);border:1px solid #dddbff;margin-bottom:20px}.hero h1{font:700 34px/1.05 Fredoka,sans-serif;margin:8px 0 9px}.hero p{margin:0;color:var(--muted);font-size:11px;line-height:1.65;max-width:760px}.hero-visual{font-size:62px}
+.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:11px;margin-bottom:20px}.metric{padding:15px;background:#fff;border:1px solid var(--line);border-radius:17px}.metric .m-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:16px}.metric small{display:block;margin-top:10px;font-size:8px;color:var(--muted);font-weight:800}.metric strong{display:block;margin-top:3px;font:700 26px Fredoka,sans-serif}.metric.accent{background:#171922;color:#fff;border-color:#171922}.metric.accent small,.metric.accent .m-top{color:#b9bdc8}
+.grid2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:18px;box-shadow:0 8px 30px rgba(20,22,30,.03)}.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.card h2{margin:0;font:700 19px Fredoka,sans-serif}.card p{margin:5px 0 0;color:var(--muted);font-size:10px;line-height:1.55}.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}.action{min-height:74px;text-align:left;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;display:flex;gap:10px;align-items:center}.action:hover{background:#fafaff;border-color:#d7d3ff}.action b{display:block;font-size:10px}.action small{display:block;color:var(--muted);font-size:8px;margin-top:3px}.action .ai{font-size:20px}.sync-card{margin-top:10px;padding:14px;border:1px solid #ddd9ff;border-radius:14px;background:linear-gradient(135deg,#f5f3ff,#fff)}.sync-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.sync-head b{font-size:10px}.sync-btn{border:0;background:#6157e8;color:#fff;border-radius:10px;padding:9px 11px;font-size:9px;font-weight:800}.sync-btn:disabled{opacity:.55}.sync-text{margin-top:8px;color:var(--muted);font-size:8px}.progress{height:7px;background:#ececf1;border-radius:999px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6157e8,#8d83ff);transition:width .2s}
+.list{display:grid;gap:8px;margin-top:15px}.list-item{padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#fcfcfd}.list-item .line1{display:flex;justify-content:space-between;gap:10px}.list-item strong{font-size:10px}.list-item small{display:block;color:var(--muted);font-size:8px;margin-top:3px}.mini-actions{display:flex;gap:5px;margin-top:8px}.btn{height:31px;border:1px solid var(--line);border-radius:9px;background:#fff;padding:0 9px;font-size:8px;font-weight:800}.btn.good{background:#eff9f5;border-color:#d6f0e6;color:#16805c}.btn.bad{background:#fff1f3;border-color:#f3dce1;color:#c64c62}.btn.dark{background:#171922;border-color:#171922;color:#fff}.btn:disabled{opacity:.5}.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:13px;flex-wrap:wrap}.search{flex:1;min-width:200px;height:42px;border:1px solid var(--line);border-radius:12px;padding:0 12px;outline:0}.select{height:42px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:0 10px;font-size:9px}.search:focus,.select:focus{border-color:#a8a2ff;box-shadow:0 0 0 4px #6b61ff10}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:11px 9px;border-bottom:1px solid #f0f1f4;text-align:left;vertical-align:top;font-size:9px}.table th{color:#9297a4;font-size:8px;text-transform:uppercase;letter-spacing:.04em}.table td strong{font-size:10px}.table td small{display:block;margin-top:3px;color:#9297a4;font-size:7px;line-height:1.45}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:7px;font-weight:800;white-space:nowrap}.b-pending{background:#fff5e8;color:#ab6c16}.b-teacher{background:#eaf8f2;color:#187c5c}.b-student{background:#eef1ff;color:#5559cf}.b-rejected{background:#fff0f2;color:#c24d62}.b-admin{background:#f0efff;color:#5d57d7}.empty{padding:25px 15px;border:1px dashed #e0e1e7;border-radius:13px;background:#fafbfc;text-align:center;color:#8e93a0;font-size:9px}.limit-note{font-size:8px;color:var(--muted);margin:5px 0 0}.catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.province{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff}.province-head{display:flex;justify-content:space-between;gap:10px}.province b{font-size:10px}.province small,.province em{font-style:normal;font-size:8px;color:var(--muted)}.province .progress{margin-top:9px;height:6px}.activity{display:grid;gap:8px}.activity-row{padding:10px 12px;border:1px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;gap:12px}.activity-row b{font-size:9px}.activity-row small{display:block;color:var(--muted);font-size:7px;margin-top:3px}.activity-row span{font-size:7px;color:var(--muted);white-space:nowrap}.toast{position:fixed;right:22px;bottom:22px;z-index:100;min-width:240px;max-width:420px;padding:13px 15px;border-radius:13px;background:#171922;color:#fff;box-shadow:var(--shadow);font-size:9px;font-weight:800;transform:translateY(18px);opacity:0;pointer-events:none;transition:.2s}.toast.show{transform:none;opacity:1}.toast.good{background:#116f50}.toast.bad{background:#a63b52}.modal-backdrop{position:fixed;inset:0;background:#15172166;backdrop-filter:blur(6px);display:none;place-items:center;z-index:90;padding:20px}.modal-backdrop.open{display:grid}.modal{width:min(620px,100%);background:#fff;border:1px solid var(--line);border-radius:21px;padding:20px;box-shadow:0 30px 90px #15172126}.modal h2{margin:0;font:700 23px Fredoka,sans-serif;white-space:pre-line}.modal p{font-size:10px;color:var(--muted);line-height:1.6;white-space:pre-line}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.mobile-bottom{display:none}
+@media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.catalog-grid{grid-template-columns:1fr}}
+@media(max-width:820px){.shell{grid-template-columns:1fr}.sidebar{position:fixed;left:-270px;width:250px;transition:left .2s}.sidebar.open{left:0}.topbar{padding:0 16px}.menu-mobile{display:block}.content{padding:18px}.hero{padding:22px}.hero h1{font-size:29px}.hero-visual{font-size:48px}.mobile-bottom{display:flex;position:fixed;left:12px;right:12px;bottom:12px;height:56px;background:#171922;border-radius:17px;z-index:60;box-shadow:var(--shadow);align-items:center;justify-content:space-around}.mobile-bottom button{border:0;background:transparent;color:#aeb2bf;font-size:8px;font-weight:800}.mobile-bottom button.active{color:#fff}}
+@media(max-width:600px){.login-wrap{grid-template-columns:1fr}.login-art{display:none}.login-form{padding:28px}.cards{grid-template-columns:repeat(2,1fr)}.metric.accent{grid-column:1/-1}.action-grid{grid-template-columns:1fr}.sys-label{display:none}.hero-visual{display:none}.page-title{font-size:18px}.content{padding-bottom:84px}}
 </style>
 </head>
 <body>
-<section id="loginGate">
-  <div class="login-card">
-    <div class="logo">🛡️</div>
-    <h1>Đăng nhập Admin</h1>
-    <p>Khu vực quản trị hệ thống KatLearn. Email quản trị được cố định để tránh nhầm vai trò với tài khoản học sinh.</p>
-    <form id="adminLoginForm">
-      <label>Email quản trị
-        <input id="adminEmail" type="email" value="katlearn.admin@gmail.com" readonly autocomplete="username">
-      </label>
-      <label>Mật khẩu
-        <input id="adminPassword" type="password" placeholder="Nhập mật khẩu Firebase" autocomplete="current-password" required>
-      </label>
-      <button class="login-submit" id="adminLoginBtn" type="submit">Đăng nhập với vai trò Admin →</button>
-      <div class="login-message" id="loginMessage" aria-live="polite"></div>
-    </form>
-    <div class="login-foot">
-      <a href="https://lms-katlearn.vercel.app/login.html">← Về đăng nhập KatLearn</a>
-      <button type="button" id="clearSessionBtn">Đăng xuất phiên hiện tại</button>
-    </div>
-  </div>
-</section>
-
+<section id="loginGate"><div class="login-wrap"><div class="login-art"><div class="login-mark">🐱</div><h1>KatLearn<br>Control Center</h1><p>Một trung tâm quản trị mới cho toàn bộ hệ thống: tài khoản, giáo viên, lớp học, nội dung và danh mục trường học.</p><div class="login-pills"><span class="pill">Firebase Auth</span><span class="pill">Firestore Admin</span><span class="pill">National Catalog</span><span class="pill">Audit-ready</span></div></div><div class="login-form"><div class="kicker">Admin access</div><h2>Đăng nhập</h2><p>Chỉ tài khoản quản trị được phép vào khu vực này.</p><form id="loginForm" class="form-stack"><div class="field"><label>Email quản trị</label><input id="email" type="email" value="katlearn.admin@gmail.com" readonly></div><div class="field"><label>Mật khẩu</label><input id="password" type="password" placeholder="Mật khẩu Firebase" autocomplete="current-password" required></div><button class="login-btn" id="loginBtn" type="submit">Vào Control Center →</button><div id="loginError" class="login-error"></div></form><div class="login-foot"><a href="https://lms-katlearn.vercel.app/login.html">← Về KatLearn</a><button id="clearSession" class="btn">Xóa phiên</button></div></div></div></section>
 <div id="app" class="shell hidden">
-  <aside class="sidebar">
-    <a class="brand" href="admin.html"><span class="brand-mark">🛡️</span><span>Kat<em>Learn</em> Admin</span></a>
-    <div class="role"><b>QUẢN TRỊ HỆ THỐNG</b><small>Toàn quyền theo Firebase security rules.</small></div>
-    <nav class="nav">
-      <button class="active" data-page="overview">🏠 Tổng quan</button>
-      <button data-page="teachers">🧑‍🏫 Giáo viên</button>
-      <button data-page="users">👥 Tài khoản</button>
-      <button data-page="classes">🏫 Lớp học</button>
-      <button data-page="packs">📚 Bộ từ công khai</button>
-      <button data-page="schools">🏛️ Trường học</button>
-    </nav>
-    <div class="side-bottom">
-      <a href="https://lms-katlearn.vercel.app/">← Về KatLearn</a>
-      <button class="danger" id="sidebarLogout">↪ Đăng xuất Admin</button>
-    </div>
-  </aside>
-  <main>
-    <header class="topbar">
-      <div class="crumb" id="pageTitle">Tổng quan</div>
-      <div class="admin-user"><span id="adminEmailLabel">katlearn.admin@gmail.com</span><button class="btn" id="refreshAdmin" type="button">↻ Làm mới</button><span class="avatar">🛡️</span></div>
-    </header>
-    <div class="content">
-      <div id="notice" class="notice"></div>
-
-      <section class="page active" id="page-overview">
-        <div class="hero">
-          <div><p class="eyebrow">KATLEARN ADMIN CONTROL CENTER</p><h1>Xin chào, Admin 🛡️</h1><p>Quản lý giáo viên, tài khoản học sinh, lớp học, bộ từ và danh mục trường từ một nơi.</p></div>
-          <div class="hero-icon">🐱🛡️</div>
-        </div>
-        <div class="metrics">
-          <div class="metric"><span>⏳</span><small>Chờ xác minh GV</small><b id="metricPending">0</b></div>
-          <div class="metric"><span>🧑‍🏫</span><small>Giáo viên</small><b id="metricTeachers">0</b></div>
-          <div class="metric"><span>🧑‍🎓</span><small>Học sinh</small><b id="metricStudents">0</b></div>
-          <div class="metric"><span>🏫</span><small>Lớp học</small><b id="metricClasses">0</b></div>
-          <div class="metric"><span>📚</span><small>Bộ từ công khai</small><b id="metricPacks">0</b></div>
-        </div>
-        <div class="grid">
-          <section class="card">
-            <h2>Hồ sơ giáo viên chờ xác minh</h2>
-            <p class="sub">Đây là nơi Admin duyệt tài khoản giáo viên mới đăng ký.</p>
-            <div id="overviewPending" class="pending-list"><div class="empty">Đang tải...</div></div>
-          </section>
-          <section class="card">
-            <h2>Thao tác nhanh</h2>
-            <p class="sub">Đi thẳng tới khu vực quản trị thường dùng.</p>
-            <div class="quick">
-              <button data-page-go="teachers"><span>🧑‍🏫</span>Xác minh giáo viên</button>
-              <button data-page-go="users"><span>👥</span>Kiểm tra tài khoản</button>
-              <button data-page-go="classes"><span>🏫</span>Xem toàn bộ lớp</button>
-              <button data-page-go="packs"><span>📚</span>Quản lý bộ từ công khai</button>
-              <button id="syncNationalCatalog" class="catalog-sync-btn" type="button"><span>🇻🇳</span>Đồng bộ danh mục toàn quốc</button>
-              <small id="catalogSyncStatus" class="catalog-sync-status">34 tỉnh/thành · trường học · lớp khối</small>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section class="page" id="page-teachers">
-        <div class="hero"><div><p class="eyebrow">TEACHER VERIFICATION</p><h1>Xác minh giáo viên</h1><p>Kiểm tra hồ sơ đăng ký trước khi cấp vai trò <b>teacher</b>.</p></div><div class="hero-icon">🧑‍🏫✅</div></div>
-        <section class="card"><div class="toolbar"><input id="teacherSearch" placeholder="Tìm theo tên, email, trường..."></div><div id="teacherList" class="pending-list"><div class="empty">Đang tải...</div></div></section>
-      </section>
-
-      <section class="page" id="page-users">
-        <div class="hero"><div><p class="eyebrow">ACCOUNT MANAGEMENT</p><h1>Tài khoản</h1><p>Danh sách các hồ sơ Firebase đang có trên KatLearn.</p></div><div class="hero-icon">👥</div></div>
-        <section class="card"><div class="toolbar"><input id="userSearch" placeholder="Tìm tên hoặc email..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Vai trò</th><th>Trường/Lớp</th><th>Hoạt động</th></tr></thead><tbody id="userTable"></tbody></table></div></section>
-      </section>
-
-      <section class="page" id="page-classes">
-        <div class="hero"><div><p class="eyebrow">CLASS MANAGEMENT</p><h1>Tất cả lớp học</h1><p>Admin có thể nhìn toàn bộ các lớp, giáo viên phụ trách và mã tham gia.</p></div><div class="hero-icon">🏫</div></div>
-        <section class="card"><div class="toolbar"><input id="classSearch" placeholder="Tìm lớp, trường, giáo viên..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã lớp</th><th>Sĩ số</th></tr></thead><tbody id="classTable"></tbody></table></div></section>
-      </section>
-
-      <section class="page" id="page-packs">
-        <div class="hero"><div><p class="eyebrow">PUBLIC CONTENT</p><h1>Bộ từ công khai</h1><p>Kiểm tra toàn bộ pack đang xuất hiện trong kho công khai của KatLearn.</p></div><div class="hero-icon">📚</div></div>
-        <section class="card"><div class="toolbar"><input id="packSearch" placeholder="Tìm tên bộ từ hoặc người tạo..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Tên bộ từ</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th></tr></thead><tbody id="packTable"></tbody></table></div></section>
-      </section>
-
-      <section class="page" id="page-schools">
-        <div class="hero"><div><p class="eyebrow">SCHOOL CATALOG</p><h1>Danh mục trường học</h1><p>Quản lý danh sách trường và số lớp đang tham chiếu trong hệ thống.</p></div><div class="hero-icon">🏛️</div></div>
-        <section class="card"><div class="toolbar"><input id="schoolSearch" placeholder="Tìm trường, tỉnh/thành, xã/phường..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh/Thành</th><th>Xã/Phường</th><th>Số lớp</th></tr></thead><tbody id="schoolTable"></tbody></table></div></section>
-      </section>
-    </div>
-  </main>
-</div>
-
+<aside id="sidebar" class="sidebar"><a href="admin.html" class="brand"><span class="brand-cat">🐱</span><span>Kat<em>Learn</em></span></a><div class="admin-chip"><b>ADMIN CONTROL CENTER</b><small>Quản trị hệ thống · quyền Admin Firebase</small></div><nav class="nav"><button class="active" data-page="overview"><span class="ico">⌂</span>Tổng quan</button><button data-page="teachers"><span class="ico">✓</span>Giáo viên</button><button data-page="users"><span class="ico">♟</span>Tài khoản</button><button data-page="classes"><span class="ico">▦</span>Lớp học</button><button data-page="packs"><span class="ico">▤</span>Bộ từ</button><button data-page="schools"><span class="ico">🏫</span>Trường học</button><button data-page="catalog"><span class="ico">🇻🇳</span>Danh mục toàn quốc</button><button data-page="activity"><span class="ico">◷</span>Hoạt động Admin</button></nav><div class="side-bottom"><a href="https://lms-katlearn.vercel.app/">← Mở KatLearn</a><button id="logout" class="logout">↪ Đăng xuất</button></div></aside>
+<div id="mobileOverlay"></div><main class="main"><header class="topbar"><button id="menuMobile" class="menu-mobile">☰</button><div id="pageTitle" class="page-title">Tổng quan</div><div class="top-right"><span class="system-dot"></span><span class="sys-label">Backend online</span><button class="refresh" id="refresh">↻ Làm mới</button></div></header><div class="content">
+<section class="page active" id="page-overview"><div class="hero"><div><div class="kicker">KATLEARN ADMIN</div><h1>Trung tâm điều khiển 🛡️</h1><p>Mọi thứ quan trọng của KatLearn nằm ở đây — duyệt giáo viên, theo dõi tài khoản, kiểm tra lớp học và quản lý danh mục toàn quốc.</p></div><div class="hero-visual">🐱🛡️</div></div>
+<div class="cards"><div class="metric accent"><div class="m-top">👥 <span>accounts</span></div><small>Tổng tài khoản</small><strong id="mUsers">0</strong></div><div class="metric"><div class="m-top">⏳</div><small>Chờ duyệt GV</small><strong id="mPending">0</strong></div><div class="metric"><div class="m-top">🧑‍🏫</div><small>Giáo viên</small><strong id="mTeachers">0</strong></div><div class="metric"><div class="m-top">🧑‍🎓</div><small>Học sinh</small><strong id="mStudents">0</strong></div><div class="metric"><div class="m-top">▦</div><small>Lớp học</small><strong id="mClasses">0</strong></div><div class="metric"><div class="m-top">🏫</div><small>Trường</small><strong id="mSchools">0</strong></div></div>
+<div class="grid2"><section class="card"><div class="card-head"><div><h2>Giáo viên đang chờ</h2><p>Các hồ sơ cần Admin xử lý.</p></div><button class="btn dark" data-go="teachers">Xem tất cả</button></div><div id="pendingList" class="list"><div class="empty">Đang tải...</div></div></section>
+<section class="card"><div class="card-head"><div><h2>Thao tác nhanh</h2><p>Đi thẳng tới phần thường dùng.</p></div></div><div class="action-grid"><button class="action" data-go="teachers"><span class="ai">🧑‍🏫</span><span><b>Duyệt giáo viên</b><small>Xác minh / từ chối hồ sơ</small></span></button><button class="action" data-go="users"><span class="ai">👥</span><span><b>Tài khoản</b><small>Kiểm tra role và thông tin</small></span></button><button class="action" data-go="classes"><span class="ai">🏫</span><span><b>Lớp học</b><small>Tra cứu lớp & mã tham gia</small></span></button><button class="action" data-go="packs"><span class="ai">📚</span><span><b>Bộ từ</b><small>Kiểm tra nội dung công khai</small></span></button></div><div class="sync-card"><div class="sync-head"><b>🇻🇳 Đồng bộ danh mục toàn quốc</b><button id="quickSync" class="sync-btn">Đồng bộ</button></div><div id="syncText" class="sync-text">34 tỉnh/thành · 22.850 trường dự kiến</div><div class="progress"><i id="syncBar"></i></div></div></section></div></section>
+<section class="page" id="page-teachers"><div class="hero"><div><div class="kicker">TEACHER VERIFICATION</div><h1>Giáo viên</h1><p>Duyệt hồ sơ giáo viên bằng một thao tác và giữ lại trạng thái rõ ràng.</p></div><div class="hero-visual">🧑‍🏫✅</div></div><section class="card"><div class="toolbar"><input id="teacherSearch" class="search" placeholder="Tìm tên, email, trường, tỉnh..."><select id="teacherFilter" class="select"><option value="all">Tất cả</option><option value="pending">Chờ xác minh</option><option value="verified">Đã duyệt</option><option value="rejected">Đã từ chối</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Giáo viên</th><th>Trạng thái</th><th>Trường / khu vực</th><th>Hồ sơ gửi</th><th>Thao tác</th></tr></thead><tbody id="teacherTable"></tbody></table></div></section></section>
+<section class="page" id="page-users"><div class="hero"><div><div class="kicker">ACCOUNT DIRECTORY</div><h1>Tài khoản</h1><p>Danh bạ tài khoản hiện có trong Firebase. Dữ liệu hiển thị được giới hạn để trang luôn nhẹ.</p></div><div class="hero-visual">👥</div></div><section class="card"><div class="toolbar"><input id="userSearch" class="search" placeholder="Tìm tên, email, mã tài khoản, trường..."><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit-note"></div></section></section>
+<section class="page" id="page-classes"><div class="hero"><div><div class="kicker">CLASS DIRECTORY</div><h1>Lớp học</h1><p>Tra cứu toàn bộ lớp đã tạo, giáo viên phụ trách, trường và mã tham gia.</p></div><div class="hero-visual">▦</div></div><section class="card"><div class="toolbar"><input id="classSearch" class="search" placeholder="Tìm tên lớp, giáo viên, trường, mã..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã tham gia</th><th>Sĩ số</th><th>Cập nhật</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit-note"></div></section></section>
+<section class="page" id="page-packs"><div class="hero"><div><div class="kicker">PUBLIC CONTENT</div><h1>Bộ từ công khai</h1><p>Theo dõi các bộ từ đang xuất hiện trong kho công khai và xóa pack khi cần.</p></div><div class="hero-visual">📚</div></div><section class="card"><div class="toolbar"><input id="packSearch" class="search" placeholder="Tìm tên pack hoặc người tạo..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div><div id="packLimit" class="limit-note"></div></section></section>
+<section class="page" id="page-schools"><div class="hero"><div><div class="kicker">SCHOOL DIRECTORY</div><h1>Trường học</h1><p>Danh mục trường đang được ứng dụng tham chiếu.</p></div><div class="hero-visual">🏫</div></div><section class="card"><div class="toolbar"><input id="schoolSearch" class="search" placeholder="Tìm trường, tỉnh/thành, xã/phường..."></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh / thành</th><th>Xã / phường</th><th>Mức</th><th>Nguồn</th></tr></thead><tbody id="schoolTable"></tbody></table></div><div id="schoolLimit" class="limit-note"></div></section></section>
+<section class="page" id="page-catalog"><div class="hero"><div><div class="kicker">NATIONAL CATALOG</div><h1>Danh mục toàn quốc 🇻🇳</h1><p>Theo dõi tiến độ đồng bộ 34 tỉnh/thành và 22.850 trường.</p></div><div class="hero-visual">🇻🇳</div></div><div class="cards"><div class="metric accent"><div class="m-top">🏛️</div><small>Tỉnh/thành kế hoạch</small><strong id="cTotalP">34</strong></div><div class="metric"><div class="m-top">🏫</div><small>Trường kế hoạch</small><strong id="cTotalS">22.850</strong></div><div class="metric"><div class="m-top">✓</div><small>Tỉnh đã ghi</small><strong id="cSyncedP">0</strong></div><div class="metric"><div class="m-top">✓</div><small>Trường đã ghi</small><strong id="cSyncedS">0</strong></div></div><section class="card"><div class="card-head"><div><h2>Tiến độ theo tỉnh/thành</h2><p>Đồng bộ theo từng tỉnh để tránh request khổng lồ.</p></div><button id="catalogSync" class="btn dark">🇻🇳 Đồng bộ toàn bộ</button></div><div id="catalogGrid" class="catalog-grid" style="margin-top:15px"></div></section></section>
+<section class="page" id="page-activity"><div class="hero"><div><div class="kicker">AUDIT VIEW</div><h1>Hoạt động Admin</h1><p>Các thao tác quan trọng được backend ghi lại.</p></div><div class="hero-visual">◷</div></div><section class="card"><div id="activityList" class="activity"><div class="empty">Nhật ký được ghi ở backend. Mục đọc chi tiết sẽ mở sau khi thêm endpoint audit-list.</div></div></section></section>
+</div></main></div>
+<div id="mobileBottom" class="mobile-bottom"><button data-go="overview">⌂<br>Tổng quan</button><button data-go="teachers">✓<br>GV</button><button data-go="users">♟<br>Tài khoản</button><button data-go="catalog">🇻🇳<br>Catalog</button></div>
+<div id="modalBackdrop" class="modal-backdrop"><div class="modal"><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div></div><div id="toast" class="toast"></div>
 <script type="module">
-import{initializeApp,getApps}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};
-const ADMIN_EMAIL='katlearn.admin@gmail.com';
-const ADMIN_API_BASES=['/api'];
-const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG),auth=getAuth(app);
-const qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
-async function adminFetch(path,options={}){
-  const base=ADMIN_API_BASES[0];
-  try{
-    return await fetch(base+path,options);
-  }catch(error){
-    throw new Error('Không kết nối được API Admin /api. Hãy thử tải lại trang sau khi Vercel triển khai bản mới.');
-  }
-}
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmtDate=v=>{const n=typeof v?.toMillis==='function'?v.toMillis():Number(v||0);if(!n)return'—';return new Date(n).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'})};
-const roleLabel=r=>({teacher:'Giáo viên',student:'Học sinh',pending_teacher_verification:'Chờ xác minh',teacher_rejected:'Từ chối',admin:'Admin'}[String(r||'').toLowerCase()]||r||'Chưa rõ');
-const roleClass=r=>{r=String(r||'').toLowerCase();return r==='teacher'?'teacher':r==='student'?'student':r==='pending_teacher_verification'?'pending':r==='teacher_rejected'?'rejected':''};
-let user=null,state={users:[],classes:[],packs:[],schools:[],pending:[],stats:{}};
-
-function showNotice(message){const n=qs('#notice');n.textContent=message;n.classList.add('show');clearTimeout(showNotice.timer);showNotice.timer=setTimeout(()=>n.classList.remove('show'),4500)}
-function setPage(name){
-  const map={overview:'Tổng quan',teachers:'Giáo viên',users:'Tài khoản',classes:'Lớp học',packs:'Bộ từ công khai',schools:'Trường học'};
-  qsa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+name));
-  qsa('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===name));
-  qs('#pageTitle').textContent=map[name]||'Tổng quan';
-  if(name==='overview')renderOverview();
-  if(name==='teachers')renderTeachers(qs('#teacherSearch')?.value||'');
-  if(name==='users')renderUsers(qs('#userSearch')?.value||'');
-  if(name==='classes')renderClasses(qs('#classSearch')?.value||'');
-  if(name==='packs')renderPacks(qs('#packSearch')?.value||'');
-  if(name==='schools')renderSchools(qs('#schoolSearch')?.value||'');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-qsa('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
-qsa('[data-page-go]').forEach(b=>b.onclick=()=>setPage(b.dataset.pageGo));
-qs('#sidebarLogout').onclick=()=>signOut(auth);
-qs('#clearSessionBtn').onclick=()=>signOut(auth);
-qs('#syncNationalCatalog')?.addEventListener('click',syncNationalCatalog);
-
-function teacherCards(rows){
-  return rows.length?rows.map(t=>{
-    const tv=t.teacherVerification||{};
-    return '<article class="pending-item"><div class="pending-head"><div><strong>'+esc(t.displayName||t.name||'Giáo viên')+'</strong><small>'+esc(t.email||'')+'</small></div><span class="badge pending">CHỜ XÁC MINH</span></div><div class="pending-meta"><div class="meta-box"><b>Trường</b><span>'+esc(t.schoolName||tv.requestedSchoolName||'Chưa có')+'</span></div><div class="meta-box"><b>Lớp đăng ký</b><span>'+esc(tv.requestedClassName||'Chưa có')+'</span></div><div class="meta-box"><b>Khu vực</b><span>'+esc([t.province,t.ward].filter(Boolean).join(' · ')||'Chưa có')+'</span></div><div class="meta-box"><b>Gửi lúc</b><span>'+fmtDate(tv.submittedAt||t.createdAt)+'</span></div></div><div class="actions" style="margin-top:10px"><button class="btn success" data-verify="'+t.id+'">✓ Xác minh và cấp quyền</button></div></article>'
-  }).join(''):'<div class="empty">Không có hồ sơ giáo viên đang chờ xác minh. 🎉</div>';
-}
-function renderOverview(){
-  const s=state.stats||{};
-  qs('#metricPending').textContent=Number(s.pending??state.pending.length);
-  qs('#metricTeachers').textContent=Number(s.teachers??state.users.filter(x=>String(x.role).toLowerCase()==='teacher').length);
-  qs('#metricStudents').textContent=Number(s.students??state.users.filter(x=>String(x.role).toLowerCase()==='student').length);
-  qs('#metricClasses').textContent=Number(s.classes??state.classes.length);
-  qs('#metricPacks').textContent=Number(s.packs??state.packs.length);
-  qs('#overviewPending').innerHTML=teacherCards(state.pending.slice(0,5));
-  bindVerify(qs('#overviewPending'));
-}
-function bindVerify(root){
-  root?.querySelectorAll('[data-verify]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verify));
-}
-function renderTeachers(q=''){
-  q=String(q).trim().toLowerCase();
-  const rows=state.pending.filter(t=>!q||[t.displayName,t.name,t.email,t.schoolName,t.province,t.ward,t.teacherVerification?.requestedSchoolName,t.teacherVerification?.requestedClassName].join(' ').toLowerCase().includes(q));
-  qs('#teacherList').innerHTML=teacherCards(rows);
-  bindVerify(qs('#teacherList'));
-}
-function renderUsers(q=''){
-  q=String(q).trim().toLowerCase();
-  const rows=state.users.filter(u=>!q||[u.displayName,u.name,u.email,u.schoolName,u.className,u.accountCode].join(' ').toLowerCase().includes(q));
-  qs('#userTable').innerHTML=rows.map(u=>'<tr><td><strong>'+esc(u.displayName||u.name||'KatLearn User')+'</strong><small>'+esc(u.email||'')+(u.accountCode?' · Mã '+esc(u.accountCode):'')+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span></td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(' · ')||'—')+'</td><td><small>🪙 '+Number(u.coins||0).toLocaleString('vi-VN')+' · ⚡ '+Number(u.energy||0).toLocaleString('vi-VN')+'</small></td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
-}
-function renderClasses(q=''){
-  q=String(q).trim().toLowerCase();
-  const rows=state.classes.filter(c=>!q||[c.name,c.grade,c.teacherEmail,c.schoolName,c.joinCode].join(' ').toLowerCase().includes(q));
-  qs('#classTable').innerHTML=rows.map(c=>'<tr><td><strong>'+esc(c.name||'—')+'</strong><small>Khối '+esc(c.grade||'—')+'</small></td><td>'+esc(c.teacherEmail||'—')+'</td><td>'+esc(c.schoolName||'—')+'</td><td><span class="badge teacher">'+esc(c.joinCode||'—')+'</span></td><td>'+Number(c.studentCount||0)+'</td></tr>').join('')||'<tr><td colspan="5"><div class="empty">Không có lớp học.</div></td></tr>';
-}
-function renderPacks(q=''){
-  q=String(q).trim().toLowerCase();
-  const rows=state.packs.filter(p=>!q||[p.name,p.createdBy,p.createdByEmail].join(' ').toLowerCase().includes(q));
-  qs('#packTable').innerHTML=rows.map(p=>'<tr><td><strong>'+esc(p.name||'Bộ từ chưa đặt tên')+'</strong></td><td>'+Number(p.wordCount||0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||'—')+'</td><td>'+fmtDate(p.createdAt)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
-}
-function renderSchools(q=''){
-  q=String(q).trim().toLowerCase();
-  const classCounts=new Map();
-  state.classes.forEach(c=>{if(c.schoolId)classCounts.set(c.schoolId,(classCounts.get(c.schoolId)||0)+1)});
-  const rows=state.schools.filter(s=>!q||[s.name,s.province,s.ward].join(' ').toLowerCase().includes(q));
-  qs('#schoolTable').innerHTML=rows.map(s=>'<tr><td><strong>'+esc(s.name||'—')+'</strong><small>ID: '+esc(s.id)+'</small></td><td>'+esc(s.province||'—')+'</td><td>'+esc(s.ward||'—')+'</td><td>'+Number(classCounts.get(s.id)||0)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không tìm thấy trường.</div></td></tr>';
-}
-
-async function verifyTeacher(uid){
-  if(!user||user.email?.toLowerCase()!==ADMIN_EMAIL)return showNotice('Phiên Admin không hợp lệ. Vui lòng đăng nhập lại.');
-  const button=[...document.querySelectorAll('[data-verify]')].find(x=>x.dataset.verify===uid);
-  if(button){button.disabled=true;button.textContent='⏳ Đang xác minh...'}
-  try{
-    const token=await user.getIdToken(true);
-    const response=await adminFetch('/admin-verify-teacher',{
-      method:'POST',
-      headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},
-      body:JSON.stringify({uid})
-    });
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok||!data.ok)throw new Error(data.error||'Không thể xác minh giáo viên.');
-    showNotice('✓ Đã xác minh giáo viên. Tài khoản hiện có vai trò teacher.');
-    await loadState();
-    setPage('teachers');
-  }catch(e){
-    showNotice('Không thể xác minh: '+(e?.message||'Lỗi không xác định'));
-    if(button){button.disabled=false;button.textContent='✓ Xác minh và cấp quyền'}
-  }
-}
-async function syncNationalCatalog(){
-  if(!user||user.email?.toLowerCase()!==ADMIN_EMAIL)return showNotice('Phiên Admin không hợp lệ. Vui lòng đăng nhập lại.');
-  const btn=qs('#syncNationalCatalog'),status=qs('#catalogSyncStatus');
-  if(!btn)return;
-  btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
-  try{
-    const planResponse=await adminFetch('/national-catalog-plan',{
-      method:'GET',
-      cache:'no-store'
-    });
-    const plan=await planResponse.json().catch(()=>({}));
-    if(!planResponse.ok||!plan.ok)throw new Error((plan.error?plan.error+' ':'')+'HTTP '+planResponse.status+' khi lập kế hoạch đồng bộ.'+(plan.code?' ['+plan.code+']':''));
-
-    const provinces=Array.isArray(plan.provinces)?plan.provinces:[];
-    if(!provinces.length)throw new Error('Backend trả về kế hoạch đồng bộ trống.');
-    const token=await user.getIdToken(true);
-    const headers={Authorization:'Bearer '+token,'Content-Type':'application/json'};
-    let processed=0;
-    const total=Number(plan.totalSchools||0);
-
-    for(const province of provinces){
-      let offset=0;
-      while(offset<Number(province.total||0)){
-        const response=await adminFetch('/national-catalog-sync',{
-          method:'POST',headers,body:JSON.stringify({
-            action:'chunk',
-            provinceCode:province.code,
-            offset,
-            limit:150
-          })
-        });
-        const data=await response.json().catch(()=>({}));
-        if(!response.ok||!data.ok)throw new Error(data.error||('HTTP '+response.status+' khi đồng bộ '+province.name+'.'));
-        processed+=Number(data.processed||0);
-        offset=Number(data.nextOffset||offset);
-        status.textContent='⏳ '+processed.toLocaleString('vi-VN')+' / '+total.toLocaleString('vi-VN')+' trường · đang xử lý '+province.name;
-      }
-    }
-
-    status.textContent='✓ '+provinces.length+' tỉnh/thành · '+processed.toLocaleString('vi-VN')+' trường đã đồng bộ.';
-    status.className='catalog-sync-status ok';
-    showNotice('✓ Đã đồng bộ danh mục quốc gia vào Firebase.');
-    await loadState();
-  }catch(e){
-    status.textContent='✕ '+(e?.message||'Đồng bộ thất bại.');
-    status.className='catalog-sync-status error';
-    showNotice('Không thể đồng bộ danh mục: '+(e?.message||'Lỗi không xác định'));
-  }finally{
-    btn.disabled=false;btn.innerHTML='<span>🇻🇳</span>Đồng bộ danh mục toàn quốc';
-  }
-}
-
-async function loadState(){
-  if(!user)throw new Error('Chưa đăng nhập Admin.');
-  const token=await user.getIdToken(true);
-  if(!token)throw new Error('Không lấy được phiên Admin.');
-  const response=await adminFetch('/admin-state',{method:'GET',headers:{Authorization:'Bearer '+token}});
-  const data=await response.json().catch(()=>({}));
-  if(!response.ok||!data.ok)throw new Error(data.error||('HTTP '+response.status+' khi tải dữ liệu quản trị.'));
-  state.stats=data.stats&&typeof data.stats==='object'?data.stats:{};
-  state.users=Array.isArray(data.users)?data.users:[];
-  state.classes=Array.isArray(data.classes)?data.classes:[];
-  state.packs=Array.isArray(data.packs)?data.packs:[];
-  state.schools=Array.isArray(data.schools)?data.schools:[];
-  state.pending=Array.isArray(data.pending)?data.pending:[];
-  renderOverview();
-}
-
-['teacherSearch','userSearch','classSearch','packSearch','schoolSearch'].forEach(id=>qs('#'+id)?.addEventListener('input',e=>{const page=id.replace('Search','').replace('teacher','teachers').replace('user','users').replace('class','classes').replace('pack','packs').replace('school','schools');if(id==='teacherSearch')renderTeachers(e.target.value);if(id==='userSearch')renderUsers(e.target.value);if(id==='classSearch')renderClasses(e.target.value);if(id==='packSearch')renderPacks(e.target.value);if(id==='schoolSearch')renderSchools(e.target.value);}));
-
-qs('#adminLoginForm').onsubmit=async e=>{
-  e.preventDefault();
-  const btn=qs('#adminLoginBtn'),msg=qs('#loginMessage');btn.disabled=true;msg.textContent='⏳ Đang kiểm tra tài khoản Admin...';
-  try{
-    const credential=await signInWithEmailAndPassword(auth,ADMIN_EMAIL,qs('#adminPassword').value);
-    if((credential.user.email||'').toLowerCase()!==ADMIN_EMAIL)throw new Error('Tài khoản không có quyền Admin.');
-    qs('#adminPassword').value='';
-  }catch(err){
-    btn.disabled=false;
-    msg.textContent=err?.code==='auth/invalid-credential'?'Email hoặc mật khẩu không đúng.':(err?.message||'Không thể đăng nhập.');
-  }
-};
-
-onAuthStateChanged(auth,async u=>{
-  user=u||null;
-  if(!u){
-    qs('#loginGate').classList.remove('hidden');qs('#app').classList.add('hidden');qs('#adminPassword').value='';qs('#adminLoginBtn').disabled=false;
-    return;
-  }
-  if((u.email||'').toLowerCase()!==ADMIN_EMAIL){
-    qs('#loginGate').classList.remove('hidden');qs('#app').classList.add('hidden');qs('#loginMessage').textContent='Tài khoản này không có quyền Admin.';await signOut(auth);return;
-  }
-  qs('#loginGate').classList.add('hidden');qs('#app').classList.remove('hidden');qs('#adminEmailLabel').textContent=u.email;
-  try{await loadState()}catch(e){showNotice('Không thể tải dữ liệu quản trị: '+(e?.message||'Lỗi không xác định'))}
-});
+import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+const FIREBASE_CONFIG={apiKey:"AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8",authDomain:"elp---katlearn.firebaseapp.com",projectId:"elp---katlearn",storageBucket:"elp---katlearn.firebasestorage.app",messagingSenderId:"344478447672",appId:"1:344478447672:web:4ed109a40303d0b41b0ecd",measurementId:"G-KTW11GD97T"};
+const ADMIN_EMAIL="katlearn.admin@gmail.com",app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG),auth=getAuth(app),qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[c])),fmtDate=v=>{const n=Number(v||0);return n?new Date(n).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"}):"—"};
+const roleLabel=r=>({teacher:"Giáo viên",student:"Học sinh",pending_teacher_verification:"Chờ xác minh",teacher_rejected:"Từ chối",admin:"Admin"}[String(r||"").toLowerCase()]||String(r||"Chưa rõ"));
+const roleBadge=r=>{const s=String(r||"").toLowerCase();return s==="teacher"?"b-teacher":s==="student"?"b-student":s==="pending_teacher_verification"?"b-pending":s==="teacher_rejected"?"b-rejected":s==="admin"?"b-admin":""};
+let currentUser=null,page="overview",cache={overview:null,teachers:null,users:null,classes:null,packs:null,schools:null,catalog:null};
+let modalResolve=null;
+function toast(msg,type=""){const e=qs("#toast");e.textContent=msg;e.className="toast show "+type;clearTimeout(toast.t);toast.t=setTimeout(()=>e.className="toast",4200)}
+function openModal(title,text,ok="Xác nhận"){qs("#modalTitle").textContent=title;qs("#modalText").textContent=text;qs("#modalOk").textContent=ok;qs("#modalBackdrop").classList.add("open");return new Promise(r=>modalResolve=r)}
+qs("#modalCancel").onclick=()=>{qs("#modalBackdrop").classList.remove("open");modalResolve?.(false);modalResolve=null};qs("#modalOk").onclick=()=>{qs("#modalBackdrop").classList.remove("open");modalResolve?.(true);modalResolve=null};
+async function getToken(){if(!currentUser)throw new Error("Chưa đăng nhập Admin.");return currentUser.getIdToken(true)}
+async function api(path="",opt={}){const h={"Accept":"application/json"};if(opt.body!==undefined)h["Content-Type"]="application/json";if(opt.authz)h.Authorization="Bearer "+await getToken();let r;try{r=await fetch("/api/admin-hub"+path,{method:opt.method||"GET",headers:h,body:opt.body===undefined?undefined:JSON.stringify(opt.body),cache:"no-store"})}catch(e){throw new Error("Không kết nối được Admin backend.")}const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw new Error(d.error||("HTTP "+r.status+" từ Admin backend"));return d}
+const titleOf=n=>({overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"})[n]||"Tổng quan";
+function go(n){page=n;qsa(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+n));qsa(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===n));qsa(".mobile-bottom button").forEach(x=>x.classList.toggle("active",x.dataset.go===n));qs("#pageTitle").textContent=titleOf(n);qs("#sidebar").classList.remove("open");if(n==="overview")loadOverview();if(["teachers","users","classes","packs","schools"].includes(n))loadSection(n);if(n==="catalog")loadCatalog();window.scrollTo({top:0,behavior:"smooth"})}
+qsa("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));qsa("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));qs("#logout").onclick=()=>signOut(auth);qs("#clearSession").onclick=()=>signOut(auth);qs("#refresh").onclick=()=>refresh();qs("#quickSync").onclick=runCatalogSync;qs("#catalogSync").onclick=runCatalogSync;qs("#menuMobile").onclick=()=>qs("#sidebar").classList.add("open");
+async function refresh(){cache={overview:null,teachers:null,users:null,classes:null,packs:null,schools:null,catalog:null};try{await loadOverview(true);if(page!=="overview")go(page);toast("✓ Đã làm mới","good")}catch(e){toast(e.message,"bad")}}
+async function loadOverview(force=false){if(cache.overview&&!force){renderOverview();return}const d=await api("?section=overview",{authz:true});cache.overview=d;cache.catalog=d.catalog;renderOverview()}
+function renderOverview(){const s=cache.overview?.stats||{};qs("#mUsers").textContent=(s.users||0).toLocaleString("vi-VN");qs("#mPending").textContent=(s.pending||0).toLocaleString("vi-VN");qs("#mTeachers").textContent=(s.teachers||0).toLocaleString("vi-VN");qs("#mStudents").textContent=(s.students||0).toLocaleString("vi-VN");qs("#mClasses").textContent=(s.classes||0).toLocaleString("vi-VN");qs("#mSchools").textContent=(s.schools||0).toLocaleString("vi-VN");
+const rows=cache.overview?.pending||[];qs("#pendingList").innerHTML=rows.length?rows.slice(0,6).map(t=>"<div class=\"list-item\"><div class=\"line1\"><div><strong>"+esc(t.displayName||t.name||"Giáo viên")+"</strong><small>"+esc(t.email||"")+" · "+esc(t.schoolName||t.teacherVerification?.requestedSchoolName||"Chưa có trường")+"</small></div><span class=\"badge b-pending\">CHỜ DUYỆT</span></div><div class=\"mini-actions\"><button class=\"btn good\" data-action=\"verify\" data-id=\""+esc(t.id)+"\">✓ Duyệt</button><button class=\"btn\" data-action=\"inspect\" data-id=\""+esc(t.id)+"\">Xem hồ sơ</button></div></div>").join(""):"<div class=\"empty\">Không có hồ sơ đang chờ. 🎉</div>";
+qsa("#pendingList [data-action='verify']").forEach(b=>b.onclick=()=>teacherAction("verify",b.dataset.id));qsa("#pendingList [data-action='inspect']").forEach(b=>b.onclick=()=>inspectTeacher(b.dataset.id));qs("#syncText").textContent=(cache.catalog?.totalProvinces||34)+" tỉnh/thành · "+(cache.catalog?.totalSchools||22850).toLocaleString("vi-VN")+" trường dự kiến · đã ghi "+(s.syncedSchools||0).toLocaleString("vi-VN")}
+async function loadSection(s,force=false){if(cache[s]&&!force){renderSection(s);return}try{cache[s]=await api("?section="+encodeURIComponent(s),{authz:true});renderSection(s)}catch(e){toast(e.message,"bad")}}
+function renderSection(s){const rows=cache[s]?.rows||[];if(s==="teachers")renderTeachers(rows);if(s==="users")renderUsers(rows);if(s==="classes")renderClasses(rows);if(s==="packs")renderPacks(rows);if(s==="schools")renderSchools(rows)}
+function has(row,q,fields){if(!q)return true;const z=fields.map(k=>k.split(".").reduce((a,b)=>a?.[b],row)||"").join(" ").toLowerCase();return z.includes(q)}
+function renderTeachers(rows){const q=qs("#teacherSearch").value.trim().toLowerCase(),f=qs("#teacherFilter").value,ls=rows.filter(t=>(f==="all"||(f==="pending"&&t._status==="pending")||(f==="verified"&&t._status==="verified")||(f==="rejected"&&t.role==="teacher_rejected"))&&has(t,q,["displayName","name","email","schoolName","province","ward","teacherVerification.requestedSchoolName","teacherVerification.requestedClassName"]));qs("#teacherTable").innerHTML=ls.map(t=>"<tr><td><strong>"+esc(t.displayName||t.name||"Giáo viên")+"</strong><small>"+esc(t.email||"")+" · UID "+esc(t.id)+"</small></td><td><span class=\"badge "+(t._status==="pending"?"b-pending":t.role==="teacher_rejected"?"b-rejected":"b-teacher")+"\">"+(t._status==="pending"?"CHỜ XÁC MINH":t.role==="teacher_rejected"?"ĐÃ TỪ CHỐI":"ĐÃ DUYỆT")+"</span></td><td>"+esc(t.schoolName||t.teacherVerification?.requestedSchoolName||"—")+"<small>"+esc([t.province,t.ward].filter(Boolean).join(" · ")||"Chưa có khu vực")+" · Lớp: "+esc(t.teacherVerification?.requestedClassName||t.className||"—")+"</small></td><td>"+fmtDate(t.teacherVerification?.submittedAt||t.createdAt)+"</td><td><div class=\"mini-actions\">"+(t._status==="pending"?("<button class=\"btn good\" data-action=\"verify\" data-id=\""+esc(t.id)+"\">✓ Duyệt</button><button class=\"btn bad\" data-action=\"reject\" data-id=\""+esc(t.id)+"\">Từ chối</button>"):"<button class=\"btn\" data-action=\"inspect\" data-id=\""+esc(t.id)+"\">Xem</button>")+"</div></td></tr>").join("")||"<tr><td colspan=\"5\"><div class=\"empty\">Không có giáo viên phù hợp.</div></td></tr>";qsa("#teacherTable [data-action]").forEach(b=>b.onclick=()=>b.dataset.action==="inspect"?inspectTeacher(b.dataset.id):teacherAction(b.dataset.action,b.dataset.id))}
+function renderUsers(rows){const q=qs("#userSearch").value.trim().toLowerCase(),f=qs("#userFilter").value,ls=rows.filter(u=>(f==="all"||u.role===f)&&has(u,q,["displayName","name","email","accountCode","schoolName","className"]));qs("#userTable").innerHTML=ls.map(u=>"<tr><td><strong>"+esc(u.displayName||u.name||"KatLearn User")+"</strong><small>"+esc(u.email||"")+" "+(u.accountCode?"· Mã "+esc(u.accountCode):"")+"</small></td><td><span class=\"badge "+roleBadge(u.role)+"\">"+esc(roleLabel(u.role))+"</span></td><td>"+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+"<small>"+esc([u.province,u.ward].filter(Boolean).join(" · "))+"</small></td><td>🪙 "+Number(u.coins||0).toLocaleString("vi-VN")+" · ⚡ "+Number(u.energy||0).toLocaleString("vi-VN")+"<small>🔥 streak "+Number(u.streak||0)+"</small></td><td>"+fmtDate(u.createdAt)+"</td></tr>").join("")||"<tr><td colspan=\"5\"><div class=\"empty\">Không tìm thấy tài khoản.</div></td></tr>";qs("#userLimit").textContent=cache.users?.limited?"Đang hiển thị tối đa 300 tài khoản.":"Đang hiển thị toàn bộ dữ liệu được trả về."}
+function renderClasses(rows){const q=qs("#classSearch").value.trim().toLowerCase(),ls=rows.filter(c=>has(c,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));qs("#classTable").innerHTML=ls.map(c=>"<tr><td><strong>"+esc(c.name||"—")+"</strong><small>Khối "+esc(c.grade||"—")+" · ID "+esc(c.id)+"</small></td><td>"+esc(c.teacherEmail||c.teacherUid||"—")+"</td><td>"+esc(c.schoolName||"—")+"<small>"+esc([c.province,c.ward].filter(Boolean).join(" · "))+"</small></td><td><span class=\"badge b-teacher mono\">"+esc(c.joinCode||"—")+"</span></td><td>"+Number(c.studentCount||0).toLocaleString("vi-VN")+"</td><td>"+fmtDate(c.updatedAt||c.createdAt)+"</td></tr>").join("")||"<tr><td colspan=\"6\"><div class=\"empty\">Không có lớp học.</div></td></tr>";qs("#classLimit").textContent=cache.classes?.limited?"Đang hiển thị tối đa 300 lớp.":""}
+function renderPacks(rows){const q=qs("#packSearch").value.trim().toLowerCase(),ls=rows.filter(p=>has(p,q,["name","createdBy","createdByEmail","createdByUid"]));qs("#packTable").innerHTML=ls.map(p=>"<tr><td><strong>"+esc(p.name||"Bộ từ chưa đặt tên")+"</strong><small>ID "+esc(p.id)+"</small></td><td>"+Number(p.wordCount||0).toLocaleString("vi-VN")+"</td><td>"+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+"</td><td>"+fmtDate(p.createdAt)+"</td><td><button class=\"btn bad\" data-delete-pack=\""+esc(p.id)+"\">Xóa</button></td></tr>").join("")||"<tr><td colspan=\"5\"><div class=\"empty\">Không có bộ từ công khai.</div></td></tr>";qsa("#packTable [data-delete-pack]").forEach(b=>b.onclick=()=>deletePack(b.dataset.deletePack));qs("#packLimit").textContent=cache.packs?.limited?"Đang hiển thị tối đa 300 bộ từ.":""}
+function renderSchools(rows){const q=qs("#schoolSearch").value.trim().toLowerCase(),ls=rows.filter(s=>has(s,q,["name","province","ward","schoolLevel","source"]));qs("#schoolTable").innerHTML=ls.map(s=>"<tr><td><strong>"+esc(s.name||"—")+"</strong><small>ID "+esc(s.id)+"</small></td><td>"+esc(s.province||"—")+"</td><td>"+esc(s.ward||"—")+"</td><td>"+esc(s.schoolLevel||"—")+"</td><td>"+esc(s.source||"local")+"</td></tr>").join("")||"<tr><td colspan=\"5\"><div class=\"empty\">Không tìm thấy trường.</div></td></tr>";qs("#schoolLimit").textContent=cache.schools?.limited?"Đang hiển thị tối đa 300 trường.":""}
+function inspectTeacher(uid){const list=(cache.teachers?.rows||[]).concat(cache.overview?.pending||[]),t=list.find(x=>x.id===uid);if(!t)return;const v=t.teacherVerification||{};const msg="Email: "+(t.email||"—")+"\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\nLớp đăng ký: "+(v.requestedClassName||t.className||"—")+"\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—")+"\nGửi lúc: "+fmtDate(v.submittedAt||t.createdAt)+"\nRole: "+roleLabel(t.role);openModal("Hồ sơ giáo viên",msg,"Đóng").then(()=>{})}
+async function teacherAction(action,uid){const ok=await openModal(action==="verify"?"Duyệt giáo viên":"Từ chối hồ sơ",action==="verify"?"Tài khoản sẽ chuyển sang role teacher. Backend còn kiểm tra trường/lớp trước khi lưu.":"Tài khoản sẽ được đánh dấu teacher_rejected.","Tiếp tục");if(!ok)return;try{await api("",{method:"POST",authz:true,body:{action:action==="verify"?"verify-teacher":"reject-teacher",uid}});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");cache.teachers=null;cache.overview=null;await loadOverview(true);await loadSection("teachers",true)}catch(e){toast(e.message,"bad")}}
+async function deletePack(id){const ok=await openModal("Xóa bộ từ?","Bộ từ sẽ bị xóa cùng các bài giao liên quan. Thao tác này không thể hoàn tác.","Xóa bộ từ");if(!ok)return;try{await api("",{method:"POST",authz:true,body:{action:"delete-pack",packId:id}});toast("✓ Đã xóa bộ từ","good");cache.packs=null;await loadSection("packs",true)}catch(e){toast(e.message,"bad")}}
+async function loadCatalog(force=false){if(cache.catalog&&!force){renderCatalog();return}try{const d=await api("?section=overview",{authz:true});cache.overview=d;cache.catalog=d.catalog;renderCatalog();renderOverview()}catch(e){toast(e.message,"bad")}}
+function renderCatalog(){const c=cache.catalog||{provinces:[],totalSchools:22850,totalProvinces:34},s=cache.overview?.stats||{};qs("#cTotalP").textContent=Number(c.totalProvinces||34).toLocaleString("vi-VN");qs("#cTotalS").textContent=Number(c.totalSchools||22850).toLocaleString("vi-VN");qs("#cSyncedP").textContent=Number(s.syncedProvinces||0).toLocaleString("vi-VN");qs("#cSyncedS").textContent=Number(s.syncedSchools||0).toLocaleString("vi-VN");const ratio=Number(c.totalSchools||22850)?Math.min(100,Math.round(Number(s.syncedSchools||0)*100/Number(c.totalSchools||22850))):0;qs("#catalogGrid").innerHTML=(c.provinces||[]).map(p=>"<div class=\"province\"><div class=\"province-head\"><div><b>"+esc(p.name)+"</b><small> · "+esc(p.code)+"</small></div><em>"+Number(p.total||0).toLocaleString("vi-VN")+" trường</em></div><div class=\"progress\"><i style=\"width:"+ratio+"%\"></i></div><em style=\"display:block;margin-top:6px\">Tổng tiến độ hiện tại: "+ratio+"%</em></div>").join("")}
+function setSync(done,total,label){const p=total?Math.min(100,Math.round(done*100/total)):0;qs("#syncBar").style.width=p+"%";qs("#syncText").textContent="⏳ "+done.toLocaleString("vi-VN")+" / "+total.toLocaleString("vi-VN")+" · "+(label||"đang đồng bộ")}
+async function runCatalogSync(){if(runCatalogSync.active)return;runCatalogSync.active=true;qs("#quickSync").disabled=true;qs("#catalogSync").disabled=true;try{if(!cache.catalog){const d=await api("?section=overview",{authz:true});cache.overview=d;cache.catalog=d.catalog}const plan=cache.catalog||{},provinces=plan.provinces||[],total=Number(plan.totalSchools||0),doneState={n:0};setSync(0,total,"bắt đầu");for(const p of provinces){let offset=0,guard=0;while(offset<Number(p.total||0)){if(++guard>1000)throw new Error("Luồng sync bị kẹt ở "+p.name);let d=null,last=null;for(let retry=0;retry<3;retry++){try{d=await api("",{method:"POST",authz:true,body:{action:"catalog-chunk",provinceCode:p.code,offset,limit:180}});last=null;break}catch(e){last=e;if(retry<2)await new Promise(r=>setTimeout(r,700*(retry+1)))}}if(!d)throw new Error((last?.message||"Sync thất bại")+" · "+p.name+" · offset "+offset);offset=Number(d.nextOffset||offset);doneState.n+=Number(d.processed||0);setSync(doneState.n,total,p.name);if(!Number(d.processed||0)&&offset<Number(p.total||0))throw new Error("Backend không trả về bản ghi mới ở "+p.name)}}toast("✓ Đã đồng bộ toàn bộ danh mục quốc gia","good");cache.overview=null;cache.catalog=null;await loadOverview(true);await loadCatalog(true)}catch(e){toast("Sync lỗi: "+e.message,"bad");qs("#syncText").textContent="✕ "+e.message}finally{runCatalogSync.active=false;qs("#quickSync").disabled=false;qs("#catalogSync").disabled=false}}
+["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"].forEach(id=>qs("#"+id).addEventListener("input",()=>renderSection(page)));["teacherFilter","userFilter"].forEach(id=>qs("#"+id).addEventListener("change",()=>renderSection(page)));
+qs("#loginForm").onsubmit=async e=>{e.preventDefault();const b=qs("#loginBtn"),err=qs("#loginError");b.disabled=true;err.textContent="Đang xác thực…";try{const c=await signInWithEmailAndPassword(auth,ADMIN_EMAIL,qs("#password").value);if(String(c.user.email||"").toLowerCase()!==ADMIN_EMAIL){await signOut(auth);throw new Error("Tài khoản không có quyền Admin.")}qs("#password").value=""}catch(e){err.textContent=e?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":e?.message||"Không thể đăng nhập.";b.disabled=false}};
+onAuthStateChanged(auth,async u=>{currentUser=u||null;if(!u){qs("#loginGate").classList.remove("hidden");qs("#app").classList.add("hidden");qs("#password").value="";qs("#loginBtn").disabled=false;return}if(String(u.email||"").toLowerCase()!==ADMIN_EMAIL){qs("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}qs("#loginGate").classList.add("hidden");qs("#app").classList.remove("hidden");try{await loadOverview(true)}catch(e){toast("Không tải được Admin Hub: "+e.message,"bad")}});
 </script>
-</body>
-</html>
+</body></html>
