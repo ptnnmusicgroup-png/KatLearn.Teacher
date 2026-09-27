@@ -1,0 +1,170 @@
+name: OSM school catalog enrichment
+
+on:
+  push:
+    paths:
+      - "catalog/trigger-osm-school-enrich.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requests
+        run: python -m pip install --disable-pip-version-check requests
+
+      - name: Enrich from OpenStreetMap
+        run: |
+          python <<'PY'
+          import hashlib, json, re, time
+          from pathlib import Path
+          import requests
+
+          TREE=Path("data/national-catalog/full-school-tree.json")
+          WARDS=Path("data/national-catalog/official-ward-list.json")
+
+          def norm(v):
+              import unicodedata
+              s=str(v or "")
+              s="".join(c for c in unicodedata.normalize("NFD",s) if unicodedata.category(c)!="Mn")
+              s=s.replace("đ","d").replace("Đ","D").lower()
+              return re.sub(r"[^a-z0-9]+"," ",s).strip()
+
+          tree=json.loads(TREE.read_text(encoding="utf-8"))
+          wards=json.loads(WARDS.read_text(encoding="utf-8"))
+          current=[]
+          tree_by_key={}
+          province_codes={p["name"]:p["code"] for p in wards["provinces"]}
+
+          for p in tree:
+              for w in p.get("wards",[]):
+                  bare=norm(re.sub(r"^(Xã|Phường|Đặc khu)\s+","",w["name"],flags=re.I))
+                  current.append((p["name"],w["name"],bare,w))
+                  for s in w.get("schools",[]):
+                      bare_name=re.sub(r"^\([^)]*\)\s*","",str(s.get("name",""))).strip()
+                      tree_by_key.setdefault((p["name"],norm(bare_name)),[]).append((w,s))
+
+          # Empty wards are the main target; existing wards can also receive a genuinely new school.
+          empty={(p,w):bare for p,w,bare,tw in current if not tw.get("schools")}
+
+          query='''[out:json][timeout:300];
+          area["ISO3166-1"="VN"][admin_level=2]->.vn;
+          (
+            nwr["amenity"="school"](area.vn);
+          );
+          out center tags;'''
+          endpoints=[
+              "https://overpass-api.de/api/interpreter",
+              "https://overpass.kumi.systems/api/interpreter",
+              "https://overpass.private.coffee/api/interpreter"
+          ]
+          body=None
+          for url in endpoints:
+              try:
+                  rr=requests.post(url,data={"data":query},timeout=240,headers={"User-Agent":"KatLearn-OSM-Catalog-Enricher/1.0"})
+                  print("Overpass",url,rr.status_code,len(rr.content))
+                  if rr.status_code==200:
+                      body=rr.json()
+                      break
+              except Exception as exc:
+                  print("Overpass failed",url,exc)
+          if not body:
+              raise SystemExit("No Overpass endpoint available")
+
+          added=0
+          by_level={"TH":0,"THCS":0,"THPT":0}
+          matched_empty=0
+          ambiguous=0
+
+          def level_from_name(name):
+              n=norm(name)
+              if re.search(r"thpt|trung hoc pho thong",n): return "THPT"
+              if re.search(r"thcs|trung hoc co so",n): return "THCS"
+              if re.search(r"tieu hoc|(^|\s)th\b|pdtbt tieu hoc|pdtnt tieu hoc",n): return "TH"
+              return None
+
+          for el in body.get("elements",[]):
+              tags=el.get("tags") or {}
+              name=str(tags.get("name") or tags.get("name:vi") or "").strip()
+              level=level_from_name(name)
+              if not name or not level: continue
+
+              province_txt=" ".join(str(tags.get(k,"")) for k in ("addr:province","addr:city","is_in:province","is_in:city","addr:state"))
+              addr_txt=" ".join(str(tags.get(k,"")) for k in ("addr:full","addr:subdistrict","addr:district","addr:quarter","addr:hamlet","addr:street"))
+              alltxt=norm(name+" "+province_txt+" "+addr_txt)
+              pn=norm(province_txt)
+              candidates=[]
+
+              for p,w,bare,tw in current:
+                  if not bare or len(bare)<5: continue
+                  if (p,w) not in empty and not addr_txt and not re.search(r"\b"+re.escape(bare)+r"\b",alltxt):
+                      continue
+                  # Prefer current province in address; allow no province when the ward name is explicit.
+                  pbare=norm(re.sub(r"^(Tỉnh|Thành phố)\s+","",p))
+                  province_ok=(pbare and pbare in pn) or re.search(r"\b"+re.escape(bare)+r"\b",alltxt)
+                  if not province_ok: continue
+                  if re.search(r"\b"+re.escape(bare)+r"\b",alltxt):
+                      candidates.append((p,w,tw))
+
+              if len(candidates)!=1:
+                  if len(candidates)>1: ambiguous+=1
+                  continue
+
+              p,w,tw=candidates[0]
+              # Avoid duplicate same-named schools in the same province.
+              if (p,norm(name)) in tree_by_key:
+                  continue
+
+              # Stable six-digit catalog code: current province code + hashed local school id.
+              osm_id=f'{el.get("type","n")}/{el.get("id")}'
+              seed=f'{p}|{w}|{osm_id}|{name}'
+              tail=int(hashlib.sha1(seed.encode()).hexdigest()[:8],16)%10000
+              code=province_codes.get(p,"99")+f"{tail:04d}"
+              used={re.match(r"^\(([^)]*)\)",str(s.get("name",""))).group(1)
+                    for pp in tree for ww in pp.get("wards",[]) for s in ww.get("schools",[])
+                    if re.match(r"^\(([^)]*)\)",str(s.get("name","")))}
+              guard=0
+              while code in used and guard<10000:
+                  tail=(tail+1)%10000
+                  code=province_codes.get(p,"99")+f"{tail:04d}"
+                  guard+=1
+
+              sid="osm_school_"+hashlib.sha1(seed.encode()).hexdigest()[:20]
+              tw.setdefault("schools",[]).append({"id":sid,"name":f"({code}) {name}"})
+              tree_by_key.setdefault((p,norm(name)),[]).append((tw,tw["schools"][-1]))
+              used.add(code)
+              added+=1
+              by_level[level]+=1
+              if (p,w) in empty: matched_empty+=1
+
+          TREE.write_text(json.dumps(tree,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(json.dumps({
+              "osmElements":len(body.get("elements",[])),
+              "added":added,
+              "matchedEmptyWards":matched_empty,
+              "byLevel":by_level,
+              "ambiguous":ambiguous,
+              "schoolsAfter":sum(len(w.get("schools",[])) for p in tree for w in p.get("wards",[])),
+              "emptyWardsAfter":sum(1 for p in tree for w in p.get("wards",[]) if not w.get("schools")),
+              "formatErrors":sum(1 for p in tree for w in p.get("wards",[]) for s in w.get("schools",[]) if not re.match(r"^\([^)]*\)\s+.+$",str(s.get("name",""))))
+          },ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit OSM enrichment
+        run: |
+          git config user.name "KatLearn Catalog Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/national-catalog/full-school-tree.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(catalog): enrich schools from OpenStreetMap"
+          git push
