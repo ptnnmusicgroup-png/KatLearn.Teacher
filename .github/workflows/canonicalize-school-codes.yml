@@ -35,7 +35,7 @@ jobs:
 
           TREE=Path("data/national-catalog/full-school-tree.json")
           WARDS=Path("data/national-catalog/official-ward-list.json")
-          SRC="https://raw.githubusercontent.com/SU26-PRM393/PRM393_Lab03_SE193626_SE184889_SE182280_SE192491/main/schools.json"
+          SRC="https://raw.githubusercontent.com/SU26-PRM393/PRM393_Lab03_SE193626_SE184889_SE182280_SE192491/f0f7cacc03124e15552f0dd2678e0ba3ca128b47/schools.json"
 
           def norm(v):
               s=str(v or "").strip()
