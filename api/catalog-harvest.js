@@ -76,3 +76,5 @@ export default async function handler(req,res){
 // trigger official 2026 THPT enrichment run
 
 // rerun with corrected 2026 THPT source
+
+// rerun after code-based THPT mapping
