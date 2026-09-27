@@ -82,3 +82,5 @@ export default async function handler(req,res){
 // rerun with resilient PDF source fallbacks
 
 // rerun repaired THPT parser
+
+// rerun proxy-first THPT harvest
