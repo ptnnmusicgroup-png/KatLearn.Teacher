@@ -29,9 +29,14 @@ const roleClass=r=>{r=String(r||"").toLowerCase();return r==="teacher"?"teacher"
 
 let toastTimer;
 function toast(m,type=""){const x=$("#toast");x.textContent=errText(m);x.className="toast show "+type;clearTimeout(toastTimer);toastTimer=setTimeout(()=>x.className="toast",4000)}
-function notice(m){const x=$("#globalNotice");x.textContent=errText(m);x.classList.remove("hidden")}
-function clearNotice(){$("#globalNotice").classList.add("hidden")}
-function health(id,ok,text){const x=$(id);x.textContent="● "+text;x.style.color=ok?"var(--good)":"var(--bad)"}
+function notice(m){const x=$("#pageError");x.textContent=errText(m);x.classList.remove("hidden")}
+function clearNotice(){$("#pageError").classList.add("hidden")}
+const healthState={auth:null,fs:null,admin:null,catalog:{ok:true,text:"Tách riêng"}};
+function health(id,ok,text){
+ const map={"#healthAuth":"auth","#healthFs":"fs","#healthAdmin":"admin","#healthCatalog":"catalog"};const key=map[id];if(key)healthState[key]={ok,text};
+ const list=$("#healthList");if(!list)return;
+ list.innerHTML=Object.entries(healthState).map(([k,v])=>{const name={auth:"Firebase Auth",fs:"Firestore",admin:"Admin account",catalog:"Catalog backend"}[k];const value=v?.text||"Đang kiểm tra";const good=v?.ok!==false;return '<div class="health-row"><span>'+name+'</span><b style="color:'+(good?"var(--good)":"var(--bad)")+'">● '+esc(value)+'</b></div>'}).join("");
+}
 function rows(s){return s.docs.map(d=>({id:d.id,...(d.data()||{})}))}
 
 async function countCollection(name,filters=[]){
@@ -53,18 +58,18 @@ async function writeAudit(action,target,extra={}){
 function showPage(name){
  state.page=name;
  $$(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+name));
- $$("#nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===name));
+ $$(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===name));
  $("#pageTitle").textContent=titles[name]||"Tổng quan";
- $("#sidebar").classList.remove("open");$("#overlay").classList.remove("show");clearNotice();window.scrollTo({top:0,behavior:"smooth"});
+ $("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show");clearNotice();window.scrollTo({top:0,behavior:"smooth"});
  loadPage(name,true).catch(e=>{notice(errText(e,"Không tải được dữ liệu."));toast(e,"bad")});
 }
 function bind(){
- $$("#nav button,[data-page-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.pageGo)));
- $("#menuBtn").onclick=()=>{$("#sidebar").classList.add("open");$("#overlay").classList.add("show")};
- $("#overlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#overlay").classList.remove("show")};
+ $$(".nav button,[data-page-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.pageGo)));
+ $("#menuMobile").onclick=()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show")};
+ $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")};
  $("#logout").onclick=()=>signOut(auth);$("#clearSession").onclick=()=>signOut(auth);
- $("#refreshBtn").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{notice(e);toast(e,"bad")});
- $("#syncCatalog").onclick=syncCatalog;
+ $("#refresh")?.addEventListener("click",()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{notice(e);toast(e,"bad")}));
+ $("#catalogSync").onclick=syncCatalog;
  ["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"].forEach(id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  ["teacherFilter","userFilter"].forEach(id=>$("#"+id)?.addEventListener("change",()=>render("teachers"==state.page||"users"==state.page?state.page:"overview")));
 }
@@ -86,10 +91,10 @@ async function loadOverview(force=false){
 }
 function renderOverview(){
  const s=state.cache.overview?.stats||{};
- $("#sUsers").textContent=s.users==null?"—":fmt(s.users);$("#sPending").textContent=s.pending==null?"—":fmt(s.pending);$("#sTeachers").textContent=s.teachers==null?"—":fmt(s.teachers);$("#sStudents").textContent=s.students==null?"—":fmt(s.students);$("#sClasses").textContent=s.classes==null?"—":fmt(s.classes);$("#sSchools").textContent=s.schools==null?"—":fmt(s.schools);
+ $("#mUsers").textContent=s.users==null?"—":fmt(s.users);$("#mPending").textContent=s.pending==null?"—":fmt(s.pending);$("#mTeachers").textContent=s.teachers==null?"—":fmt(s.teachers);$("#mStudents").textContent=s.students==null?"—":fmt(s.students);$("#mClasses").textContent=s.classes==null?"—":fmt(s.classes);$("#mSchools").textContent=s.schools==null?"—":fmt(s.schools);
  const p=state.cache.overview?.pending||[];
- $("#overviewPending").innerHTML=p.length?p.slice(0,6).map(t=>{const v=t.teacherVerification||{};return '<div class="pending-row"><div class="pending-main"><div><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+' · '+esc(t.schoolName||v.requestedSchoolName||"Chưa có trường")+'</small></div><span class="badge pending">CHỜ DUYỆT</span></div><div class="row-actions"><button class="btn good" data-verify="'+esc(t.id)+'">✓ Duyệt</button><button class="btn" data-reject="'+esc(t.id)+'">Từ chối</button></div></div>'}).join(""):'<div class="empty">Không có hồ sơ giáo viên chờ duyệt. 🎉</div>';
- $$("#overviewPending [data-verify]").forEach(b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));$$(".pending-row [data-reject]").forEach(b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));
+ $("#pendingList").innerHTML=p.length?p.slice(0,6).map(t=>{const v=t.teacherVerification||{};return '<div class="pending-row"><div class="pending-main"><div><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+' · '+esc(t.schoolName||v.requestedSchoolName||"Chưa có trường")+'</small></div><span class="badge pending">CHỜ DUYỆT</span></div><div class="row-actions"><button class="btn good" data-verify="'+esc(t.id)+'">✓ Duyệt</button><button class="btn" data-reject="'+esc(t.id)+'">Từ chối</button></div></div>'}).join(""):'<div class="empty">Không có hồ sơ giáo viên chờ duyệt. 🎉</div>';
+ $$("#pendingList [data-verify]").forEach(b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));$$(".pending-row [data-reject]").forEach(b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));
 }
 async function loadSection(section){
  if(section==="teachers"){
@@ -180,7 +185,7 @@ async function loadActivity(force=false){
 function renderActivity(){
  const a=state.cache.activity?.rows||[];$("#activityList").innerHTML=a.length?a.map(x=>'<div class="activity-row"><div><b>'+esc(x.action||"Admin action")+'</b><small>'+esc(x.target||"—")+' · '+esc(x.adminEmail||"")+'</small></div><time>'+date(x.at)+'</time></div>').join(""):'<div class="empty">Chưa có nhật ký Admin.</div>';
 }
-function renderCatalog(s={}){const sp=n(s.provinces),ss=n(s.schools);$("#catProvinces").textContent=fmt(34);$("#catSchools").textContent=fmt(TOTAL_CATALOG);$("#catSyncedP").textContent=fmt(sp);$("#catSyncedS").textContent=fmt(ss);$("#provinceGrid").innerHTML=CATALOG.map(p=>{const done=n(s[p[0]]),pct=Math.min(100,Math.round(done*100/p[2]));return'<div class="province"><div class="province-head"><div><b>'+esc(p[1])+'</b><small> · '+esc(p[0])+'</small></div><em>'+fmt(p[2])+' trường</em></div><div class="province-track"><i style="width:'+pct+'%"></i></div><div class="province-meta"><span>'+fmt(done)+' đã ghi</span><span>'+pct+'%</span></div></div>'}).join("")}
+function renderCatalog(s={}){const sp=n(s.provinces),ss=n(s.schools);$("#catProvinces").textContent=fmt(34);$("#catSchools").textContent=fmt(TOTAL_CATALOG);$("#catSyncedP").textContent=fmt(sp);$("#catSyncedS").textContent=fmt(ss);$("#catalogGrid").innerHTML=CATALOG.map(p=>{const done=n(s[p[0]]),pct=Math.min(100,Math.round(done*100/p[2]));return'<div class="province"><div class="province-head"><div><b>'+esc(p[1])+'</b><small> · '+esc(p[0])+'</small></div><em>'+fmt(p[2])+' trường</em></div><div class="province-track"><i style="width:'+pct+'%"></i></div><div class="province-meta"><span>'+fmt(done)+' đã ghi</span><span>'+pct+'%</span></div></div>'}).join("")}
 async function loadCatalog(force=false){
  if(state.cache.catalog&&!force)return renderCatalog(state.cache.catalog);
  const [p,s]=await Promise.all([countCollection("KatLearn_TINHTHANH_1"),countCollection("KatLearn_TRUONGHOC_1")]);state.cache.catalog={provinces:p||0,schools:s||0};renderCatalog(state.cache.catalog);
@@ -188,7 +193,7 @@ async function loadCatalog(force=false){
 async function syncCatalog(){
  if(state.sync)return;
  if(!(await dialog("Đồng bộ danh mục toàn quốc","Tác vụ ghi theo từng tỉnh/thành. Trang Admin vẫn giữ nguyên sau khi đồng bộ xong.","Bắt đầu")))return;
- state.sync=true;$("#syncCatalog").disabled=true;let done=0;const progress={provinces:0,schools:0};
+ state.sync=true;$("#catalogSync").disabled=true;let done=0;const progress={provinces:0,schools:0};
  try{
   const token=await state.user.getIdToken(true),headers={Authorization:"Bearer "+token,"Content-Type":"application/json"};$("#syncText").textContent="⏳ Đang bắt đầu…";
   for(const p of CATALOG){
@@ -205,14 +210,14 @@ async function syncCatalog(){
    progress.provinces++;renderCatalog(progress);
   }
   state.cache.catalog={provinces:34,schools:done};toast("✓ Đã đồng bộ "+fmt(done)+" trường","good");$("#syncText").textContent="✓ Hoàn tất · "+fmt(done)+" trường";
- }catch(e){$("#syncText").textContent="✕ "+errText(e);toast(e,"bad")}finally{state.sync=false;$("#syncCatalog").disabled=false}
+ }catch(e){$("#syncText").textContent="✕ "+errText(e);toast(e,"bad")}finally{state.sync=false;$("#catalogSync").disabled=false}
 }
 
 let modalResolve=null;
-function dialog(title,text,ok="Xác nhận",cancel="Hủy"){return new Promise(resolve=>{modalResolve=resolve;$("#modalTitle").textContent=title;$("#modalText").textContent=text;$("#modalOk").textContent=ok;$("#modalCancel").textContent=cancel;$("#modalCancel").classList.toggle("hidden",!cancel);$("#modal").classList.remove("hidden")})}
-function closeDialog(v){$("#modal").classList.add("hidden");const r=modalResolve;modalResolve=null;r?.(v)}
-$("#modalOk").onclick=()=>closeDialog(true);$("#modalCancel").onclick=()=>closeDialog(false);$("#modal").onclick=e=>{if(e.target.id==="modal")closeDialog(false)};
+function dialog(title,text,ok="Xác nhận",cancel="Hủy"){return new Promise(resolve=>{modalResolve=resolve;$("#modalBackdropTitle").textContent=title;$("#modalBackdropText").textContent=text;$("#modalBackdropOk").textContent=ok;$("#modalBackdropCancel").textContent=cancel;$("#modalBackdropCancel").classList.toggle("hidden",!cancel);$("#modalBackdrop").classList.remove("hidden")})}
+function closeDialog(v){$("#modalBackdrop").classList.add("hidden");const r=modalResolve;modalResolve=null;r?.(v)}
+$("#modalBackdropOk").onclick=()=>closeDialog(true);$("#modalBackdropCancel").onclick=()=>closeDialog(false);$("#modalBackdrop").onclick=e=>{if(e.target.id==="modal")closeDialog(false)};
 
-$("#loginForm").onsubmit=async e=>{e.preventDefault();const b=$("#loginBtn"),m=$("#loginError");b.disabled=true;m.textContent="Đang xác thực…";try{const c=await signInWithEmailAndPassword(auth,ADMIN,$("#loginPassword").value);if(String(c.user.email||"").toLowerCase()!==ADMIN){await signOut(auth);throw new Error("Tài khoản không có quyền Admin.")}$("#loginPassword").value=""}catch(x){m.textContent=x?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":errText(x);b.disabled=false}};
-onAuthStateChanged(auth,async u=>{state.user=u||null;if(!u){$("#loginView").classList.remove("hidden");$("#app").classList.add("hidden");health("#healthAuth",false,"Chưa đăng nhập");return}if(String(u.email||"").toLowerCase()!==ADMIN){$("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}$("#loginView").classList.add("hidden");$("#app").classList.remove("hidden");health("#healthAuth",true,"Đã xác thực");loadOverview(true).catch(e=>{notice("Không thể tải tổng quan: "+errText(e));toast(e,"bad")})});
+$("#loginForm").onsubmit=async e=>{e.preventDefault();const b=$("#loginBtn"),m=$("#loginError");b.disabled=true;m.textContent="Đang xác thực…";try{const c=await signInWithEmailAndPassword(auth,ADMIN,$("#password").value);if(String(c.user.email||"").toLowerCase()!==ADMIN){await signOut(auth);throw new Error("Tài khoản không có quyền Admin.")}$("#password").value=""}catch(x){m.textContent=x?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":errText(x);b.disabled=false}};
+onAuthStateChanged(auth,async u=>{state.user=u||null;if(!u){$("#loginGate").classList.remove("hidden");$("#app").classList.add("hidden");health("#healthAuth",false,"Chưa đăng nhập");return}if(String(u.email||"").toLowerCase()!==ADMIN){$("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}$("#loginGate").classList.add("hidden");$("#app").classList.remove("hidden");health("#healthAuth",true,"Đã xác thực");loadOverview(true).catch(e=>{notice("Không thể tải tổng quan: "+errText(e));toast(e,"bad")})});
 bind();renderCatalog({});
