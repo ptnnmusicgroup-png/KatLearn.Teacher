@@ -168,7 +168,7 @@ jobs:
                   "https://corsproxy.io/?url="+quote(THPT_PDF,safe=""),
               ]:
                   try:
-                      rr=requests.get(src,timeout=75,headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
+                      rr=requests.get(src,timeout=25,headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
                       if rr.status_code!=200: continue
                       body=rr.content
                       if body.startswith(b"%PDF"):
@@ -188,7 +188,7 @@ jobs:
                   except Exception as exc:
                       print("THPT source exception:",src[:80],exc)
               try:
-                  rr=requests.get(THPT_READER,timeout=45,headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
+                  rr=requests.get(THPT_READER,timeout=20,headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
                   if rr.status_code==200:
                       rows=parse_thpt_text(rr.text,THPT_READER)
                       if rows: return rows
