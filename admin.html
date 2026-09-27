@@ -315,18 +315,17 @@ async function syncNationalCatalog(){
 }
 
 async function loadState(){
-  const [us,cs,ps,ss,pend]=await Promise.all([
-    getDocs(collection(db,'users')),
-    getDocs(collection(db,'classes')),
-    getDocs(collection(db,'publicPacks')),
-    getDocs(collection(db,'schools')),
-    getDocs(query(collection(db,'users'),where('role','==','pending_teacher_verification')))
-  ]);
-  state.users=us.docs.map(d=>({id:d.id,...d.data()}));
-  state.classes=cs.docs.map(d=>({id:d.id,...d.data()}));
-  state.packs=ps.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));
-  state.schools=ss.docs.map(d=>({id:d.id,...d.data()}));
-  state.pending=pend.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(Number(a.teacherVerification?.submittedAt||a.createdAt)||0)-(Number(b.teacherVerification?.submittedAt||b.createdAt)||0));
+  if(!user)throw new Error('Chưa đăng nhập Admin.');
+  const token=await user.getIdToken(true);
+  if(!token)throw new Error('Không lấy được phiên Admin.');
+  const response=await fetch('/api/admin-state',{method:'GET',headers:{Authorization:'Bearer '+token}});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||!data.ok)throw new Error(data.error||'Không thể tải dữ liệu quản trị.');
+  state.users=Array.isArray(data.users)?data.users:[];
+  state.classes=Array.isArray(data.classes)?data.classes:[];
+  state.packs=Array.isArray(data.packs)?data.packs:[];
+  state.schools=Array.isArray(data.schools)?data.schools:[];
+  state.pending=Array.isArray(data.pending)?data.pending:[];
   renderOverview();
 }
 
