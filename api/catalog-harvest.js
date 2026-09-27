@@ -88,3 +88,5 @@ export default async function handler(req,res){
 // trigger Firestore high-school enrichment
 
 // trigger current-ward TH and THCS enrichment
+
+// trigger fixed current-ward TH and THCS enrichment
