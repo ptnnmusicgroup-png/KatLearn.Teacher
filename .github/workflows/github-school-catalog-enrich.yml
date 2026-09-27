@@ -1,0 +1,230 @@
+name: github school catalog enrichment
+
+on:
+  push:
+    paths:
+      - ".github/workflows/github-school-catalog-enrich.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check requests
+
+      - name: Enrich school catalog from GitHub 2026 datasets
+        run: |
+          python <<'PY'
+          import hashlib, json, re
+          from pathlib import Path
+          import requests
+
+          TREE = Path("data/national-catalog/full-school-tree.json")
+          WARDS = Path("data/national-catalog/official-ward-list.json")
+
+          SOURCES = [
+              (
+                  "su26-school-list-2026",
+                  "https://raw.githubusercontent.com/SU26-PRM393/PRM393_Lab03_SE193626_SE184889_SE182280_SE192491/f0f7cacc03124e15552f0dd2678e0ba3ca128b47/schools.json",
+              ),
+              (
+                  "thanh-hoa-schools-2026",
+                  "https://raw.githubusercontent.com/quangthe2104/kav-miniapp/54b6f07ec358d61c11fd01c17571efe38677de1f/backend/database/data/schools_thanh_hoa.json",
+              ),
+          ]
+
+          def norm(v):
+              import unicodedata
+              s = str(v or "").replace("&amp;", "&")
+              s = "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
+              s = s.replace("đ","d").replace("Đ","D").lower()
+              return re.sub(r"[^a-z0-9]+"," ",s).strip()
+
+          def school_level(name):
+              n = norm(name)
+              has_th = bool(re.search(r"\bth\b|tieu hoc", n))
+              has_cs = bool(re.search(r"\bthcs\b|trung hoc co so", n))
+              has_pt = bool(re.search(r"\bthpt\b|trung hoc pho thong", n))
+              if not (has_th or has_cs or has_pt):
+                  return None
+              # Exclude centers/vocational entities unless they are clearly a school with a school level.
+              if re.search(r"giao duc thuong xuyen|gdnn|trung tam|trung cap|cao dang", n) and not (has_cs or has_pt):
+                  return None
+              if has_pt and has_cs:
+                  return "THCS-THPT"
+              if has_th and has_cs:
+                  return "TH-THCS"
+              if has_th and has_pt:
+                  return "TH-THPT"
+              if has_th:
+                  return "TH"
+              if has_cs:
+                  return "THCS"
+              return "THPT"
+
+          tree = json.loads(TREE.read_text(encoding="utf-8"))
+          wards = json.loads(WARDS.read_text(encoding="utf-8"))
+
+          ward_map = {}
+          for p in wards.get("provinces", []):
+              for w in p.get("wards", []):
+                  ward_map[(p["code"], w["id"])] = (p["name"], w["name"])
+
+          tree_ward = {(p["name"], norm(w["name"])): w for p in tree for w in p.get("wards", [])}
+          existing_by_ward = {}
+          for p in tree:
+              for w in p.get("wards", []):
+                  existing_by_ward[(p["name"], w["name"])] = {
+                      norm(re.sub(r"^\([^)]*\)\s*","",str(s.get("name","")))): s
+                      for s in w.get("schools", [])
+                  }
+
+          all_codes = set()
+          for p in tree:
+              for w in p.get("wards", []):
+                  for s in w.get("schools", []):
+                      m = re.match(r"^\(([^)]*)\)", str(s.get("name","")))
+                      if m:
+                          all_codes.add(m.group(1))
+
+          stats = {
+              "sources": {},
+              "added": 0,
+              "updated": 0,
+              "skippedNoWard": 0,
+              "skippedNonSchool": 0,
+              "skippedDuplicate": 0,
+          }
+
+          for label, url in SOURCES:
+              rr = requests.get(url, timeout=60, headers={"User-Agent":"KatLearn-GitHub-2026-Catalog/1.0"})
+              rr.raise_for_status()
+              if label == "su26-school-list-2026":
+                  source_rows = json.loads(rr.content.decode("utf-8"))
+              else:
+                  source_rows = json.loads(rr.content.decode("utf-8"))
+
+              source_added = source_updated = source_skipped = 0
+
+              for raw in source_rows:
+                  if label == "su26-school-list-2026":
+                      pcode = str(raw.get("Mã Tỉnh/TP") or "").strip()
+                      wcode = str(raw.get("Mã Xã/ Phường") or "").strip()
+                      school_code = str(raw.get("Mã Trường") or "").strip()
+                      name = str(raw.get("Tên Trường") or "").strip()
+                  else:
+                      # Thanh Hóa compact seed: province is encoded by the 5-digit ward prefix.
+                      pcode = "38"
+                      wcode = str(raw.get("ward_code") or "").strip()
+                      school_code = str(raw.get("external_id") or "").strip()
+                      name = str(raw.get("name") or "").strip()
+
+                  if not name or not school_code:
+                      source_skipped += 1
+                      continue
+
+                  level = school_level(name)
+                  if not level:
+                      stats["skippedNonSchool"] += 1
+                      source_skipped += 1
+                      continue
+
+                  # Current 2026 ward codes are 5 digits. For the SU26 source, ignore
+                  # admission-region pseudo-wards and old 7-digit administrative codes.
+                  if not re.fullmatch(r"\d{5}", wcode):
+                      source_skipped += 1
+                      continue
+
+                  target_info = ward_map.get((pcode, wcode))
+                  if not target_info:
+                      stats["skippedNoWard"] += 1
+                      source_skipped += 1
+                      continue
+
+                  pname, wname = target_info
+                  target = tree_ward.get((pname, norm(wname)))
+                  if not target:
+                      stats["skippedNoWard"] += 1
+                      source_skipped += 1
+                      continue
+
+                  base_name = re.sub(r"^Tru?o?ng?\s+", "Trường ", name, flags=re.I).strip()
+                  key = (pname, target["name"])
+                  existing = existing_by_ward.setdefault(key, {})
+                  nk = norm(name)
+
+                  if nk in existing:
+                      item = existing[nk]
+                      clean = re.sub(r"^\([^)]*\)\s*", "", str(item.get("name",""))).strip()
+                      desired = f"({school_code}) {clean}"
+                      if item.get("name") != desired:
+                          item["name"] = desired
+                          source_updated += 1
+                          stats["updated"] += 1
+                      else:
+                          stats["skippedDuplicate"] += 1
+                      continue
+
+                  sid = "github2026_" + hashlib.sha1(f"{label}|{pcode}|{wcode}|{school_code}|{name}".encode("utf-8")).hexdigest()[:20]
+                  item = {"id": sid, "name": f"({school_code}) {name}"}
+                  target.setdefault("schools", []).append(item)
+                  existing[nk] = item
+                  all_codes.add(school_code)
+                  source_added += 1
+                  stats["added"] += 1
+
+              stats["sources"][label] = {
+                  "rows": len(source_rows),
+                  "added": source_added,
+                  "updated": source_updated,
+                  "skipped": source_skipped,
+              }
+
+          # Normalize every row one final time; never leave double/missing prefixes.
+          for p in tree:
+              for w in p.get("wards", []):
+                  for s in w.get("schools", []):
+                      raw = re.sub(r"^\([^)]*\)\s*", "", str(s.get("name",""))).strip()
+                      code = re.match(r"^\(([^)]*)\)", str(s.get("name","")))
+
+                      # Newly added rows already carry their source code. Existing rows
+                      # retain their current code if no source update replaced it.
+                      if code:
+                          s["name"] = f"({code.group(1)}) {raw}"
+                      elif raw:
+                          seed = f'{p["name"]}|{w["name"]}|{s.get("id","")}|{raw}'
+                          n = int(hashlib.sha1(seed.encode("utf-8")).hexdigest()[:4],16)
+                          code_num = f"{p['id'][:2] if p.get('id') else '99'}{n:04d}"
+                          s["name"] = f"({code_num}) {raw}"
+
+          TREE.write_text(json.dumps(tree, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          stats["schoolsAfter"] = sum(len(w.get("schools", [])) for p in tree for w in p.get("wards", []))
+          stats["emptyWardsAfter"] = sum(1 for p in tree for w in p.get("wards", []) if not w.get("schools"))
+          stats["formatErrors"] = sum(
+              1 for p in tree for w in p.get("wards", []) for s in w.get("schools", [])
+              if not re.match(r"^\([^)]*\)\s+.+$", str(s.get("name","")))
+          )
+          print(json.dumps(stats, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit enriched catalog
+        run: |
+          git config user.name "KatLearn Catalog Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/national-catalog/full-school-tree.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(catalog): enrich 2026 schools from GitHub datasets"
+          git push
