@@ -1,6 +1,6 @@
 const UPSTREAM="https://lms-katlearn.vercel.app/api";
 
-function headers(req){
+export function headers(req){
   const origin=String(req.headers?.origin||"");
   const h={"Content-Type":"application/json","Cache-Control":"no-store"};
   if(origin==="https://teacher-katlearn.vercel.app"){
@@ -12,7 +12,7 @@ function headers(req){
   return h;
 }
 
-async function forward(req,res,path,method){
+export async function forward(req,res,path,method){
   const requestHeaders={};
   const auth=req.headers?.authorization;
   if(auth)requestHeaders.authorization=auth;
@@ -28,5 +28,3 @@ async function forward(req,res,path,method){
   if(contentType)h["Content-Type"]=contentType;
   return res.status(response.status).set(h).send(body);
 }
-
-module.exports={headers,forward};
