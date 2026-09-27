@@ -86,3 +86,5 @@ export default async function handler(req,res){
 // rerun proxy-first THPT harvest
 
 // trigger Firestore high-school enrichment
+
+// trigger current-ward TH and THCS enrichment
