@@ -1,0 +1,127 @@
+name: hcm 2026 school catalog enrichment
+
+on:
+  push:
+    paths:
+      - ".github/workflows/hcm-2026-school-enrich.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Enrich HCM schools from KHKT_26 2026 dataset
+        run: |
+          python <<'PY'
+          import hashlib, json, re
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          TREE=Path("data/national-catalog/full-school-tree.json")
+          src_url="https://raw.githubusercontent.com/zeroit999/KHKT_26/9c53255607e1ba48ad2a53c6ef1f3b1890dd11ad/frontend/src/data/schools/hcm.json"
+
+          def norm(v):
+              import unicodedata
+              s=str(v or "")
+              s="".join(c for c in unicodedata.normalize("NFD",s) if unicodedata.category(c)!="Mn")
+              s=s.replace("đ","d").replace("Đ","D").lower()
+              return re.sub(r"[^a-z0-9]+"," ",s).strip()
+
+          raw=urlopen(Request(src_url,headers={"User-Agent":"KatLearn-2026-HCM-Catalog/1.0"}),timeout=60).read().decode("utf-8")
+          source=json.loads(raw)
+          tree=json.loads(TREE.read_text(encoding="utf-8"))
+
+          province=None
+          ward_lookup={}
+          for p in tree:
+              if p.get("name")=="Thành phố Hồ Chí Minh":
+                  province=p
+                  for w in p.get("wards",[]):
+                      key=norm(w.get("name",""))
+                      bare=norm(re.sub(r"^(Phường|Xã|Đặc khu)\\s+","",w.get("name",""),flags=re.I))
+                      ward_lookup[key]=w
+                      ward_lookup[bare]=w
+                  break
+          if province is None:
+              raise SystemExit("HCMC province missing from tree")
+
+          existing_by_ward={}
+          code_index={}
+          for w in province.get("wards",[]):
+              existing_by_ward[w["name"]]={}
+              for s in w.get("schools",[]):
+                  clean=re.sub(r"^\\([^)]*\\)\\s*","",str(s.get("name",""))).strip()
+                  existing_by_ward[w["name"]][norm(clean)]=s
+                  m=re.match(r"^\\(([^)]*)\\)",str(s.get("name","")))
+                  if m: code_index[m.group(1)]=s
+
+          def level(name):
+              n=norm(name)
+              if not re.search(r"(tieu hoc|thcs|trung hoc co so|thpt|trung hoc pho thong)",n):
+                  return None
+              if re.search(r"(giao duc thuong xuyen|gdnn|trung tam|trung cap|cao dang)",n) and not re.search(r"(thcs|thpt|trung hoc co so|trung hoc pho thong|tieu hoc)",n):
+                  return None
+              return "TH/THCS/THPT"
+
+          added=updated=duplicate_code=skipped=0
+          for r in source:
+              name=str(r.get("name") or "").strip()
+              code=str(r.get("school_code") or "").strip()
+              ward_name=str(r.get("ward") or "").strip()
+              if not name or not code or not level(name):
+                  skipped+=1
+                  continue
+              w=ward_lookup.get(norm(ward_name)) or ward_lookup.get(norm(re.sub(r"^(Phường|Xã|Đặc khu)\\s+","",ward_name,flags=re.I)))
+              if not w:
+                  skipped+=1
+                  continue
+              ex=existing_by_ward[w["name"]]
+              nk=norm(name)
+              if nk in ex:
+                  item=ex[nk]
+                  clean=re.sub(r"^\\([^)]*\\)\\s*","",str(item.get("name",""))).strip()
+                  desired=f"({code}) {clean}"
+                  if item.get("name")!=desired:
+                      item["name"]=desired
+                      updated+=1
+                  continue
+              if code in code_index:
+                  # Same source school code already exists under a different label; keep one canonical row.
+                  duplicate_code+=1
+                  continue
+              sid="hcm2026_"+hashlib.sha1(f"{ward_name}|{code}|{name}".encode("utf-8")).hexdigest()[:20]
+              item={"id":sid,"name":f"({code}) {name}"}
+              w.setdefault("schools",[]).append(item)
+              ex[nk]=item
+              code_index[code]=item
+              added+=1
+
+          TREE.write_text(json.dumps(tree,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+          stats={
+              "sourceRows":len(source),
+              "added":added,
+              "updated":updated,
+              "duplicateCode":duplicate_code,
+              "skipped":skipped,
+              "schoolsAfter":sum(len(w.get("schools",[])) for p in tree for w in p.get("wards",[])),
+              "emptyWardsAfter":sum(1 for p in tree for w in p.get("wards",[]) if not w.get("schools")),
+              "formatErrors":sum(1 for p in tree for w in p.get("wards",[]) for s in w.get("schools",[]) if not re.match(r"^\\([^)]*\\)\\s+.+$",str(s.get("name",""))))
+          }
+          print(json.dumps(stats,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit
+        run: |
+          git config user.name "KatLearn Catalog Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/national-catalog/full-school-tree.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(catalog): enrich HCM schools from 2026 KHKT dataset"
+          git push
