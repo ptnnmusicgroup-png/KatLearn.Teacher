@@ -31,7 +31,7 @@ function roleClass(r){r=String(r||"").toLowerCase();return r==="teacher"?"teache
 let toastTimer;
 function toast(value,type=""){const x=$("#toast");x.textContent=errText(value);x.className="toast show "+type;clearTimeout(toastTimer);toastTimer=setTimeout(()=>x.className="toast",4300)}
 function clearPageError(){$("#pageError").classList.add("hidden")}
-function pageError(error,title="Không thể tải dữ liệu"){const x=$("#pageError");$("#pageErrorTitle").textContent=title;const value=error||{};$("#pageErrorText").textContent=errText(value);$("#pageErrorCode").textContent=value?.code?"Mã lỗi: "+value.code:"";x.classList.remove("hidden")}
+function pageError(error,title="Không thể tải dữ liệu"){const x=$("#pageError");$("#pageErrorTitle").textContent=title;const value=error||{};$("#pageErrorText").textContent=errText(value);const code=value?.code?"Mã lỗi: "+value.code:"";const details=value?.details!=null?(() => {try{return typeof value.details==="string"?value.details:JSON.stringify(value.details)}catch(_){return String(value.details)}})():"";$("#pageErrorCode").textContent=[code,details].filter(Boolean).join("\n");x.classList.remove("hidden")}
 function health(id,ok,text){const x=$(id);x.textContent=text;x.classList.toggle("good-text",ok===true);x.classList.toggle("bad-text",ok===false)}
 function setConnection(ok,text){const x=$("#backendStatus");x.classList.toggle("good",ok===true);x.classList.toggle("bad",ok===false);$("#backendLabel").textContent=text}
 
@@ -169,7 +169,7 @@ async function syncCatalog(){
 }
 async function teacherAction(action,uid){
  const ok=await dialog(action==="verify"?"Duyệt giáo viên":"Từ chối hồ sơ",action==="verify"?"Tài khoản sẽ chuyển sang role teacher và được gắn trường/lớp.":"Tài khoản sẽ chuyển sang teacher_rejected.","Xác nhận");if(!ok)return;
- try{await apiAction(action==="verify"?"verify-teacher":"reject-teacher",{uid});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.data.teachers=null;state.data.overview=null;await loadPage("overview",true);showPage("overview")}catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật giáo viên")}}
+ try{await apiAction(action==="verify"?"verify-teacher":"reject-teacher",{uid});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.data.teachers=null;state.data.overview=null;await loadPage("overview",true);state.page="overview";clearPageError();renderOverview(state.data.overview||{});$(".page").forEach(x=>x.classList.toggle("active",x.id==="page-overview"));$(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page==="overview"));$("#pageTitle").textContent="Tổng quan";window.scrollTo({top:0,behavior:"smooth"})}catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật giáo viên")}}
 async function inspectTeacher(uid){
  const t=(state.data.teachers?.rows||[]).find(x=>x.id===uid);if(!t)return;const v=t.teacherVerification||{};await dialog("Hồ sơ giáo viên","Tên: "+(t.displayName||t.name||"—")+"\nEmail: "+(t.email||"—")+"\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\nLớp: "+(v.requestedClassName||t.className||"—")+"\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—"),"Đóng","");}
 async function deletePack(id){
