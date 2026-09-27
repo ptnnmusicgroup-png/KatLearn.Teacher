@@ -26,6 +26,14 @@
           {
             "id": "firestore_thpt_3f8dff7276a7772dd99c",
             "name": "(079) Trường TH, THCS và THPT Quốc tế Hòa Bình"
+          },
+          {
+            "id": "github2026_715144e6d1cc0fbee64f",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_205b1839e29735a9c8fd",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -88,6 +96,14 @@
           {
             "id": "firestore_thpt_92f17663322e839e92f7",
             "name": "(076) Trường THCS và THPT Nguyễn Bỉnh Khiêm"
+          },
+          {
+            "id": "github2026_e7c794c9b54a4ef8c4be",
+            "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "github2026_2779b343ef9294084c6d",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -206,6 +222,10 @@
           {
             "id": "firestore_thpt_fa9b3f8a917b7e4bc4b1",
             "name": "(004) Trường THCS và THPT Thới Thạnh"
+          },
+          {
+            "id": "github2026_cb56d18f84aacca827d6",
+            "name": "(482) Trường THPT Lương Định Của (Cần Thơ cũ) (Trước 01/7/2025)"
           }
         ]
       },
@@ -1684,6 +1704,10 @@
           {
             "id": "firestore_thpt_6b0cc1315595fe2dae57",
             "name": "(280) Trường TH, THCS và THPT FPT Sóc Trăng"
+          },
+          {
+            "id": "github2026_8a0a8dc2f87d724a3c04",
+            "name": "(483) THPT DTNT Huỳnh Cương (trước 01/7/2025)"
           }
         ]
       },
@@ -4466,6 +4490,10 @@
           {
             "id": "firestore_thpt_5c52567e02b5fb28d677",
             "name": "(008) THPT chuyên Chu Văn An"
+          },
+          {
+            "id": "github2026_4a142b2ccbbd448656f8",
+            "name": "(152) THPT Chu Văn An (trước 01/2025)"
           }
         ]
       },
@@ -5332,6 +5360,10 @@
           {
             "id": "firestore_thpt_e8e99f1ac6da9ac87b11",
             "name": "(097) THPT Trần Nhân Tông"
+          },
+          {
+            "id": "github2026_ee2bfb27c0e43ce71eee",
+            "name": "(354) THPT Hòa Bình-La Trobe-Hà Nội (trước 9/2025)"
           }
         ]
       },
@@ -7148,6 +7180,10 @@
           {
             "id": "firestore_thpt_1d3e378822d41e218ec0",
             "name": "(061) THPT Nguyễn Thị Minh Khai"
+          },
+          {
+            "id": "github2026_c43223f80a4954d7ef1d",
+            "name": "(154) THPT Khoa học Giáo dục (trước 01/2025)"
           }
         ]
       },
@@ -7222,6 +7258,10 @@
           {
             "id": "firestore_thpt_aec8bb26371520238d4d",
             "name": "(311) THPT FPT Tây Hà Nội"
+          },
+          {
+            "id": "github2026_70f53164435c3ef414fb",
+            "name": "(355) THPT Tây Hà Nội (trước 9/2025)"
           }
         ]
       },
@@ -9216,6 +9256,10 @@
           {
             "id": "firestore_thpt_4c91152a583729bc4636",
             "name": "(030) THPT Hoài Đức B"
+          },
+          {
+            "id": "github2026_df2319c2effbadbff9eb",
+            "name": "(353) THCS&THPT Phạm Văn Đồng (trước 01/7/2025)"
           }
         ]
       },
@@ -12480,6 +12524,10 @@
           {
             "id": "firestore_thpt_871380ab50b35630dd79",
             "name": "(236) THPT Sao Đỏ"
+          },
+          {
+            "id": "github2026_9e10856c766ac0745b9a",
+            "name": "(401) THPT Sao Đỏ (Hệ GDTX)"
           }
         ]
       },
@@ -15430,7 +15478,7 @@
           },
           {
             "id": "59cdc4779d2a1700271c8c9f",
-            "name": "(797206) Trung - Tiểu học Pétrus Ký"
+            "name": "(588) Trung - Tiểu học Pétrus Ký"
           },
           {
             "id": "firestore_thpt_aa8ad0b341084710ff4c",
@@ -15585,6 +15633,10 @@
           {
             "id": "firestore_thpt_ba2355c3ab344b07fdf3",
             "name": "(435) THPT Dầu Tiếng"
+          },
+          {
+            "id": "github2026_525b84378d13366f4f29",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -15607,6 +15659,10 @@
           {
             "id": "59cdc4399d2a1700271c4116",
             "name": "(799058) Tiểu học Minh Thạnh"
+          },
+          {
+            "id": "github2026_5296ab952f8d636b3bd6",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -17079,6 +17135,10 @@
           {
             "id": "directory_school_fe7ad6a971665898e6d1",
             "name": "(79778416) TH Nam Sài Gòn"
+          },
+          {
+            "id": "github2026_85262611fd1fc456dec6",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -19729,6 +19789,10 @@
           {
             "id": "firestore_thpt_cc89e0480ec478b8c65a",
             "name": "(112) THCS - THPT Thạnh An"
+          },
+          {
+            "id": "github2026_d29b537625d0db69b285",
+            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       }
@@ -20161,6 +20225,22 @@
           {
             "id": "firestore_thpt_e5ba5e3ab173b14ab782",
             "name": "(007) THPT Ngô Quyền"
+          },
+          {
+            "id": "github2026_ffcf333650732987f845",
+            "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "github2026_c138ab622b52a6c12566",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_8cf32515c8a1b642a1ca",
+            "name": "(802) Trường THPT - Khu vực 2NT"
+          },
+          {
+            "id": "github2026_31a7afc5975591223646",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -26570,6 +26650,14 @@
           {
             "id": "firestore_thpt_fada342316c0618df9aa",
             "name": "(211) Tiểu học, THCS và THPT FPT Bắc Giang"
+          },
+          {
+            "id": "github2026_20b2c0803dcb6b2b0dc1",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_5792de2c8e448fd9d98f",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -27620,6 +27708,10 @@
           {
             "id": "firestore_thpt_c357c12a853bbe4a7dab",
             "name": "(206) THPT Lê Hồng Phong"
+          },
+          {
+            "id": "github2026_1d0e7ccf55c8e43db8f6",
+            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -28306,6 +28398,10 @@
           {
             "id": "59cdc4309d2a1700271c3ab0",
             "name": "(278470) THCS Đức Giang"
+          },
+          {
+            "id": "github2026_2a4be4fff3ec1bd3f6fb",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -31250,6 +31346,10 @@
           {
             "id": "68ded6730c465f00cf9480a5",
             "name": "(969984) Trung tâm GDNN-GDTX Hồng Dân"
+          },
+          {
+            "id": "github2026_be6e1e98a39a1938af9e",
+            "name": "(985) THPT Ngan Dừa (GDTX)"
           }
         ]
       },
@@ -31390,6 +31490,10 @@
           {
             "id": "68dee643250ad200985e2e3b",
             "name": "(961231) Trung tâm GDNN và GDTX Phước Long"
+          },
+          {
+            "id": "github2026_5aa81d19e19f40ec3851",
+            "name": "(986) THPT Võ Văn Kiệt (GDTX)"
           }
         ]
       },
@@ -31530,6 +31634,10 @@
           {
             "id": "68dee3c453920400f0602e02",
             "name": "(965538) Trung tâm GDNN và GDTX Hoà Bình"
+          },
+          {
+            "id": "github2026_06b45930b212516305bf",
+            "name": "(983) THPT Lê Thị Riêng (GDTX)"
           }
         ]
       },
@@ -31598,6 +31706,10 @@
           {
             "id": "firestore_thpt_34fcc99635ac7dbc5eb7",
             "name": "(518) THPT Lê Văn Đẩu"
+          },
+          {
+            "id": "github2026_e1da370ee5e58717082c",
+            "name": "(984) THPT Lê Văn Đẩu (GDTX)"
           }
         ]
       },
@@ -31770,6 +31882,10 @@
           {
             "id": "68ec70b097b33d00408a16d1",
             "name": "(968225) Tiểu học Phong Thạnh"
+          },
+          {
+            "id": "github2026_381935f859ef085d6724",
+            "name": "(982) THPT Giá Rai (GDTX)"
           }
         ]
       },
@@ -31940,6 +32056,10 @@
           {
             "id": "68dedab2469ce40018c46721",
             "name": "(960298) THCS Trần Phú"
+          },
+          {
+            "id": "github2026_2d885996fbe4b7fda6bc",
+            "name": "(981) THPT Điền Hải (GDTX)"
           }
         ]
       },
@@ -32186,6 +32306,22 @@
           {
             "id": "59cdc4919d2a1700271caadc",
             "name": "(969544) Tiểu học Lạc Long Quân"
+          },
+          {
+            "id": "github2026_0964718bd9918a70dd84",
+            "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "github2026_0d916175918543ec6c29",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_c2c5171139bafc82ef43",
+            "name": "(802) Trường THPT - Khu vực 2NT"
+          },
+          {
+            "id": "github2026_b3c6948ac938a7de7516",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -33656,6 +33792,10 @@
           {
             "id": "firestore_thpt_ac748366a69ca55dcc37",
             "name": "(048) Trường THPT Trưng Vương"
+          },
+          {
+            "id": "github2026_340a11a08923ed371ac3",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -33720,7 +33860,12 @@
       {
         "id": "689ea500229a7e00189364e0",
         "name": "Xã An Toàn",
-        "schools": []
+        "schools": [
+          {
+            "id": "github2026_57782ab0e2491ef4a988",
+            "name": "(801) Trường THPT - Khu vực 1"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e00189364dd",
@@ -33915,6 +34060,10 @@
           {
             "id": "firestore_thpt_541b3195cef58aee7248",
             "name": "(033) Trường THPT số 1 Phù Mỹ"
+          },
+          {
+            "id": "github2026_f21a7edf42c696e6fafa",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -35130,6 +35279,10 @@
           {
             "id": "firestore_thpt_82e0535823368bab032e",
             "name": "(069) Tiểu học, THCS và THPT iSchool Hà Tĩnh"
+          },
+          {
+            "id": "github2026_1b90fc3226be0940e220",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -37186,6 +37339,10 @@
           {
             "id": "firestore_thpt_7a2b3add59a467b8c936",
             "name": "(007) Trường THPT Hưng Yên"
+          },
+          {
+            "id": "github2026_9556fde0c0d9dbb6afd9",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -37589,6 +37746,10 @@
           {
             "id": "firestore_thpt_3268724ac814f2602b26",
             "name": "(042) Trường THPT Đinh Tiên Hoàng"
+          },
+          {
+            "id": "github2026_d4180bc7c0d8a074fc5f",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -39492,6 +39653,10 @@
           {
             "id": "firestore_thpt_3e7ffc858bcbd2aa0ce8",
             "name": "(026) Trường TH, THCS và THPT Quốc tế Việt Nam Singapore"
+          },
+          {
+            "id": "github2026_8b80ae3362749ce8a680",
+            "name": "(070) Trường THPT Hà Huy Tập (Hệ GDTX)"
           }
         ]
       },
@@ -39540,6 +39705,10 @@
           {
             "id": "firestore_thpt_e73a814e546853c489e5",
             "name": "(039) Trường THPT Ngô Gia Tự"
+          },
+          {
+            "id": "github2026_47c96463f839a04fac96",
+            "name": "(071) Trường THPT Ngô Gia Tự (Hệ GDTX)"
           }
         ]
       },
@@ -40355,6 +40524,10 @@
           {
             "id": "firestore_thpt_14e3dcae0243dfe8c86e",
             "name": "(126) Trường Phổ thông dân tộc nội trú Trung học phổ thông Tam Đường"
+          },
+          {
+            "id": "github2026_33360598284e6e4134ba",
+            "name": "(049) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Tam Đường (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40383,6 +40556,22 @@
           {
             "id": "firestore_thpt_f3c8a01ecc07ca3d1edf",
             "name": "(103) Trường Trung học phổ thông Chu Văn An"
+          },
+          {
+            "id": "github2026_b3e6eb12f29fb3c51645",
+            "name": "(803) Trường Trung học phổ thông - Khu vực 2"
+          },
+          {
+            "id": "github2026_bfa6872afd901574def1",
+            "name": "(802) Trường Trung học phổ thông - Khu vực 2NT"
+          },
+          {
+            "id": "github2026_1c9da1d2d331f429af2e",
+            "name": "(804) Trường Trung học phổ thông - Khu vực 3"
+          },
+          {
+            "id": "github2026_159ffb50149d5c41ee54",
+            "name": "(002) Trường Trung học phổ thông thành phố Lai Châu (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40407,6 +40596,10 @@
           {
             "id": "firestore_thpt_8f1e1418486e3e5a42f6",
             "name": "(122) Trường Phổ thông dân tộc nội trú Trung học phổ thông Mường Tè"
+          },
+          {
+            "id": "github2026_dca31f8f976f1ca7af76",
+            "name": "(055) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Mường Tè (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40437,6 +40630,10 @@
           {
             "id": "firestore_thpt_45db649c8cff1cdeed2b",
             "name": "(123) Trường Phổ thông dân tộc nội trú Trung học phổ thông Nậm Nhùn"
+          },
+          {
+            "id": "github2026_ad79a84ac68cd67672af",
+            "name": "(054) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Nậm Nhùn (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40455,6 +40652,10 @@
           {
             "id": "firestore_thpt_88d11caaefc737cd4e8b",
             "name": "(121) Trường Phổ thông dân tộc nội trú Trung học phổ thông Ka Lăng"
+          },
+          {
+            "id": "github2026_db782e4f85d858f2f4c1",
+            "name": "(048) Trường Phổ thông dân tộc nội trú Trung học Phổ Thông Ka Lăng huyện Mường Tè (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40528,6 +40729,10 @@
           {
             "id": "firestore_thpt_84d7c77b70767e78968c",
             "name": "(125) Trường Phổ thông dân tộc nội trú Trung học phổ thông Sìn Hồ"
+          },
+          {
+            "id": "github2026_ecfd145c31b4e1d22cc4",
+            "name": "(053) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Sìn Hồ (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40630,6 +40835,10 @@
           {
             "id": "firestore_thpt_a66f1ea393b048e59b7b",
             "name": "(124) Trường Phổ thông dân tộc nội trú Trung học phổ thông Phong Thổ"
+          },
+          {
+            "id": "github2026_7d24b0c2f4a6448700df",
+            "name": "(052) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Phong Thổ (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40688,6 +40897,10 @@
           {
             "id": "firestore_thpt_7112fe9d78c5f989e24e",
             "name": "(128) Trường Phổ thông dân tộc nội trú Trung học phổ thông Than Uyên"
+          },
+          {
+            "id": "github2026_015ab836534ddb7f11c5",
+            "name": "(051) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Than Uyên (Trước ngày 18/8/2025)"
           }
         ]
       },
@@ -40730,6 +40943,10 @@
           {
             "id": "firestore_thpt_5bcfdafb79f72b66890b",
             "name": "(127) Trường Phổ thông dân tộc nội trú Trung học phổ thông Tân Uyên"
+          },
+          {
+            "id": "github2026_497e599011e164a50af8",
+            "name": "(050) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Tân Uyên (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -52306,6 +52523,14 @@
           {
             "id": "firestore_thpt_a6ea7aa994a1b8f5af02",
             "name": "(601) THPT Trương Hán Siêu"
+          },
+          {
+            "id": "github2026_b1f4ef3d56b189f563fb",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_f62b7dab635526efab1f",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -52624,6 +52849,10 @@
           {
             "id": "firestore_thpt_b42dd283c656e7323901",
             "name": "(504) THPT Dân tộc nội trú Ninh Bình"
+          },
+          {
+            "id": "github2026_99e7b459bce840013777",
+            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -53018,6 +53247,10 @@
           {
             "id": "firestore_thpt_869decd15caca050c65d",
             "name": "(521) THPT Yên Khánh B"
+          },
+          {
+            "id": "github2026_bfb7fb5e009e50a55eec",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -54778,6 +55011,22 @@
           {
             "id": "firestore_thpt_a1b130f4fdc3586f1eaf",
             "name": "(416) THPT Trần Phú - Việt Trì"
+          },
+          {
+            "id": "github2026_cba89d4c174b378e88c6",
+            "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "github2026_d64ae3be8dac3c95d0cb",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_4336bae1073b3057c442",
+            "name": "(802) Trường THPT - Khu vực 2NT"
+          },
+          {
+            "id": "github2026_33ff43f94fdf84384990",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -57078,6 +57327,10 @@
           {
             "id": "firestore_thpt_c9aa935b1ccec7f80555",
             "name": "(012) Trường THPT Lê Trung Đình"
+          },
+          {
+            "id": "github2026_4abcfd261777cfa22d8a",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -57122,6 +57375,10 @@
           {
             "id": "59cdc45f9d2a1700271c6f0a",
             "name": "(510838) TH&THCS Nghĩa Phú"
+          },
+          {
+            "id": "github2026_f0f1d5b68c5ac4b89d6e",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -57907,7 +58164,12 @@
       {
         "id": "689ea500229a7e001893692e",
         "name": "Xã Ya Ly",
-        "schools": []
+        "schools": [
+          {
+            "id": "github2026_0ea41fa42e7e180ccd37",
+            "name": "(801) Trường THPT - Khu vực 1"
+          }
+        ]
       }
     ]
   },
@@ -58066,6 +58328,10 @@
           {
             "id": "firestore_thpt_2eedcd134cb8bc30543b",
             "name": "(065) TH,THCS&THPT Quốc tế song ngữ Học Viện Anh Quốc - UK Academy"
+          },
+          {
+            "id": "github2026_d4a29ef50ca2d5a0531a",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -58517,6 +58783,10 @@
           {
             "id": "firestore_thpt_8c962714ce2badc4da94",
             "name": "(024) THPT Hoành Bồ"
+          },
+          {
+            "id": "github2026_93b1d5017d92fd39e1ee",
+            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -59181,6 +59451,10 @@
           {
             "id": "firestore_thpt_ed0420de2128eafb3000",
             "name": "(082) THPT Số 2 Lê Lợi"
+          },
+          {
+            "id": "github2026_e80f63c990cf0d9efabb",
+            "name": "(582) THPT Lê Lợi (Quảng Bình cũ trước 7/2026)"
           }
         ]
       },
@@ -59606,6 +59880,10 @@
           {
             "id": "firestore_thpt_21287c0d8f82cc80faa2",
             "name": "(080) THPT Số 1 Lê Lợi"
+          },
+          {
+            "id": "github2026_a6f621876b78f6d8643d",
+            "name": "(580) THPT Lê Lợi (Quảng Trị cũ trước 7/2026)"
           }
         ]
       },
@@ -59648,6 +59926,10 @@
           {
             "id": "firestore_thpt_c1b8dea3e0bf56f83ec0",
             "name": "(060) THPT Nguyễn Huệ"
+          },
+          {
+            "id": "github2026_67a7088e388b9d4e1888",
+            "name": "(576) THPT Thị xã Quảng Trị (trước 2026)"
           }
         ]
       },
@@ -59943,6 +60225,10 @@
           {
             "id": "firestore_thpt_c69cd59cd84cbb79bf66",
             "name": "(112) THCS và THPT Đakrông"
+          },
+          {
+            "id": "github2026_7436dbf71ac7756468e4",
+            "name": "(512) THPT Số 2 Đakrông (trước 24/2/2020)"
           }
         ]
       },
@@ -61795,6 +62081,26 @@
           {
             "id": "59cdc46a9d2a1700271c7d23",
             "name": "(382239) Tiểu học Hàm Rồng"
+          },
+          {
+            "id": "github2026_5fbc109873d16a343526",
+            "name": "(38380413) Trường Tiểu học Nam Ngạn"
+          },
+          {
+            "id": "github2026_1f0f1273703f7ad9f8de",
+            "name": "(38380414) Trường Tiểu học Nguyễn Bá Ngọc"
+          },
+          {
+            "id": "github2026_f1127e426212511ec4bb",
+            "name": "(38380416) Trường Tiểu học Hàm Rồng"
+          },
+          {
+            "id": "github2026_6023d5b1443b640a30cb",
+            "name": "(38380421) Trường Tiểu học Đông Cương"
+          },
+          {
+            "id": "github2026_63ffb2e5eea0919f785e",
+            "name": "(38398431) Trường Tiểu học Thiệu Dương"
           }
         ]
       },
@@ -61969,6 +62275,106 @@
           {
             "id": "firestore_thpt_75f368a94e419b3b41d5",
             "name": "(009) THPT DTNT tỉnh Thanh Hóa"
+          },
+          {
+            "id": "github2026_88b2307518ffd2d70c1e",
+            "name": "(804) Trường THPT - Khu vực 3"
+          },
+          {
+            "id": "github2026_f419845d0d781d174ea8",
+            "name": "(3800004002) Trường TH, THCS&THPT Hồng Đức"
+          },
+          {
+            "id": "github2026_73505e69ce65868e187d",
+            "name": "(3838002001) Trường Tiểu học Vietkids"
+          },
+          {
+            "id": "github2026_62b8c959351022b34664",
+            "name": "(3838003001) Trường TH, THCS&THPT Vinschool Star City"
+          },
+          {
+            "id": "github2026_15d0ed24b303d572fd6c",
+            "name": "(38380402) Trường Tiểu học Đông Vệ 1"
+          },
+          {
+            "id": "github2026_4210fb3f44b257de831f",
+            "name": "(38380403) Trường Tiểu học Đông Vệ 2"
+          },
+          {
+            "id": "github2026_3d7695393fcfd8e83ed8",
+            "name": "(38380404) Trường Tiểu học Nguyễn Văn Trỗi"
+          },
+          {
+            "id": "github2026_995d98ecd598ad8c7df8",
+            "name": "(38380405) Trường Tiểu học Ba Đình"
+          },
+          {
+            "id": "github2026_1e27aa83f325a3063694",
+            "name": "(38380406) Trường Tiểu học Lê Văn Tám"
+          },
+          {
+            "id": "github2026_4238920157d73e0d5b90",
+            "name": "(38380407) Trường Tiểu học Tân Sơn"
+          },
+          {
+            "id": "github2026_0c32692ec51ace6fc04b",
+            "name": "(38380408) Trường Tiểu học Trần Phú"
+          },
+          {
+            "id": "github2026_f75e5732e026188b2fca",
+            "name": "(38380409) Trường Tiểu học Hoàng Hoa Thám"
+          },
+          {
+            "id": "github2026_b8a3af5c4ee145bddaf3",
+            "name": "(38380410) Trường Tiểu học Điện Biên 1"
+          },
+          {
+            "id": "github2026_71858da19570d77a8a5c",
+            "name": "(38380411) Trường Tiểu học Điện Biên 2"
+          },
+          {
+            "id": "github2026_e24dab32baabb37e8f92",
+            "name": "(38380415) Trường Tiểu học Đông Thọ"
+          },
+          {
+            "id": "github2026_12fb1cb4e627529e01cd",
+            "name": "(38380417) Trường Tiểu học Đông Hương"
+          },
+          {
+            "id": "github2026_f9a9df3c444594a79d0e",
+            "name": "(38380418) Trường Tiểu học Đông Hải 1"
+          },
+          {
+            "id": "github2026_798a6f07b0edb140b3b2",
+            "name": "(38380419) Trường Tiểu học Đông Hải 2"
+          },
+          {
+            "id": "github2026_a4a3abe33165e1825567",
+            "name": "(38380420) Trường Tiểu học Lý Tự Trọng"
+          },
+          {
+            "id": "github2026_3b16d1a48abb2139b524",
+            "name": "(38380424) Trường Tiểu học Minh Khai 1"
+          },
+          {
+            "id": "github2026_92c938db1d7f2d5a797a",
+            "name": "(38380425) Trường Tiểu học Minh Khai 2"
+          },
+          {
+            "id": "github2026_0c9fa23926d1f299cb29",
+            "name": "(38380426) Trường TH, THCS&THPT Đông Bắc Ga"
+          },
+          {
+            "id": "github2026_dab0bd05670dc7e2fb35",
+            "name": "(38380428) Trường Tiểu học Tân Phú Khang"
+          },
+          {
+            "id": "github2026_7a536b765f704dd7f19c",
+            "name": "(38380429) Trường TH, THCS&THPT Fansipan"
+          },
+          {
+            "id": "github2026_4a386ebbafadf53db7dc",
+            "name": "(38380520) Trường TH&THCS Newton TH"
           }
         ]
       },
@@ -62027,6 +62433,30 @@
           {
             "id": "firestore_thpt_aa01d4e9f941b15b5298",
             "name": "(022) THPT Lê Hồng Phong"
+          },
+          {
+            "id": "github2026_8d98c5b4cebf21abfa5a",
+            "name": "(38381402) Trường Tiểu học Hà Lan"
+          },
+          {
+            "id": "github2026_129299b36ee6ce3c358c",
+            "name": "(38381403) Trường Tiểu học Lam Sơn 3"
+          },
+          {
+            "id": "github2026_28307cb7ebd9c0b983f2",
+            "name": "(38381404) Trường Tiểu học Ba Đình"
+          },
+          {
+            "id": "github2026_7dd1cf1e8d82dcb05c6d",
+            "name": "(38381405) Trường Tiểu học Lam Sơn 1"
+          },
+          {
+            "id": "github2026_42810d074156a64e0010",
+            "name": "(38381408) Trường Tiểu học Đông Sơn"
+          },
+          {
+            "id": "github2026_adc701f06fed02318560",
+            "name": "(38392410) Trường tiểu học Hà Vinh"
           }
         ]
       },
@@ -62061,6 +62491,22 @@
           {
             "id": "68f8aac6b25fb00086cb021a",
             "name": "(38381501) TH&THCS Phú Sơn"
+          },
+          {
+            "id": "github2026_48e279801454f11bcde4",
+            "name": "(38381401) Trường TH&THCS Quang Trung"
+          },
+          {
+            "id": "github2026_ceab08b84c10228a11b3",
+            "name": "(38381406) Trường Tiểu học Ngọc Trạo"
+          },
+          {
+            "id": "github2026_cdc32adcafc4d308e14f",
+            "name": "(38381407) Trường Tiểu học Bắc Sơn"
+          },
+          {
+            "id": "github2026_05d9ede014cf997b30cc",
+            "name": "(38381501) Trường TH và THCS Phú Sơn"
           }
         ]
       },
@@ -62083,6 +62529,14 @@
           {
             "id": "firestore_thpt_fa9ea082aa9ef4b27ccb",
             "name": "(035) THPT Mường Lát"
+          },
+          {
+            "id": "github2026_2dd59859a34210d6c8e8",
+            "name": "(38384404) Trường Tiểu học Tén Tằn"
+          },
+          {
+            "id": "github2026_81811275bdc0308907bc",
+            "name": "(38384411) Trường TH và THCS Mường Lát"
           }
         ]
       },
@@ -62097,6 +62551,10 @@
           {
             "id": "59cdc4679d2a1700271c79ac",
             "name": "(381523) Tiểu học Tam Chung"
+          },
+          {
+            "id": "github2026_2f324fdf6cfc6a04ce33",
+            "name": "(38384403) Trường Tiểu học Tam Chung"
           }
         ]
       },
@@ -62115,6 +62573,14 @@
           {
             "id": "68de82c9301778015eb60bd0",
             "name": "(389375) Tiểu học Tây Tiến"
+          },
+          {
+            "id": "github2026_418956ed717f5e6a25bc",
+            "name": "(38384408) Trường Tiểu học Mường Lý"
+          },
+          {
+            "id": "github2026_3c0e90b462427c1394d8",
+            "name": "(38384412) Trường Tiểu học Tây Tiến"
           }
         ]
       },
@@ -62133,6 +62599,14 @@
           {
             "id": "68de82e20bca880195b66da1",
             "name": "(383404) Tiểu học Trung Lý 2"
+          },
+          {
+            "id": "github2026_8b969bb3677c6ea01164",
+            "name": "(38384401) Trường Tiểu học Trung Lý 1"
+          },
+          {
+            "id": "github2026_1a03b33896cf889caf91",
+            "name": "(38384409) Trường Tiểu học Trung Lý 2"
           }
         ]
       },
@@ -62151,6 +62625,14 @@
           {
             "id": "68de824b8e5310002a138e61",
             "name": "(387437) Tiểu học Quang Chiểu 2"
+          },
+          {
+            "id": "github2026_1c514e811fc996cd7030",
+            "name": "(38384405) Trường Tiểu học Quang Chiểu I"
+          },
+          {
+            "id": "github2026_ad087b9a2ece6526ac82",
+            "name": "(38384410) Trường Tiểu học Quang Chiểu 2"
           }
         ]
       },
@@ -62165,6 +62647,10 @@
           {
             "id": "59cdc4679d2a1700271c79a8",
             "name": "(385451) PTDTBT THCS Pù Nhi"
+          },
+          {
+            "id": "github2026_8630d5977f7de9370396",
+            "name": "(38384402) Trường Tiểu học Pù Nhi"
           }
         ]
       },
@@ -62179,6 +62665,10 @@
           {
             "id": "68de82980c465f00cf948097",
             "name": "(385685) Tiểu học Nhi Sơn"
+          },
+          {
+            "id": "github2026_9649f890257dc032a1cd",
+            "name": "(38384407) Trưởng Tiểu học Nhi Sơn"
           }
         ]
       },
@@ -62193,6 +62683,10 @@
           {
             "id": "59cdc4679d2a1700271c79a4",
             "name": "(384242) THCS Mường Chanh"
+          },
+          {
+            "id": "github2026_60e86d9d5252df625949",
+            "name": "(38384406) Trường Tiểu học Mường Chanh"
           }
         ]
       },
@@ -62223,6 +62717,18 @@
           {
             "id": "firestore_thpt_03c7ed0124206c7ac0a2",
             "name": "(029) THPT Quan Hoá"
+          },
+          {
+            "id": "github2026_b3f56a6d74ead62d276b",
+            "name": "(38385409) Trường Tiểu học Quan Hóa"
+          },
+          {
+            "id": "github2026_822f0c3cfd4898f85edc",
+            "name": "(38385416) Trường Tiểu học Hồi Xuân"
+          },
+          {
+            "id": "github2026_108cdfe9c85a374c035b",
+            "name": "(38385418) Trường Tiểu học Phú nghiêm"
           }
         ]
       },
@@ -62245,6 +62751,14 @@
           {
             "id": "59cdc4689d2a1700271c7ac3",
             "name": "(388329) Tiểu học Trung Thành"
+          },
+          {
+            "id": "github2026_be73ebd6efdf16a0dcef",
+            "name": "(38385402) Trường Tiểu học Thành Sơn"
+          },
+          {
+            "id": "github2026_a3a68327db22964cc858",
+            "name": "(38385408) Trường Tiểu học Trung Thành"
           }
         ]
       },
@@ -62259,6 +62773,10 @@
           {
             "id": "59cdc4689d2a1700271c7ac5",
             "name": "(382026) Tiểu học Trung Sơn"
+          },
+          {
+            "id": "github2026_47c97499cc61f4e79a09",
+            "name": "(38385412) Trường Tiểu học Trung Sơn"
           }
         ]
       },
@@ -62281,6 +62799,18 @@
           {
             "id": "59cdc4689d2a1700271c7ac2",
             "name": "(385914) Tiểu học Phú Thanh"
+          },
+          {
+            "id": "github2026_2672b0ada2fd26e8a93c",
+            "name": "(38385401) Trường Tiểu học Phú Sơn"
+          },
+          {
+            "id": "github2026_563113c42dd290fe4b72",
+            "name": "(38385404) Trường Tiểu học Phú Thanh"
+          },
+          {
+            "id": "github2026_af0901273adc83ea4363",
+            "name": "(38385413) Trường Tiểu học Phú Lệ"
           }
         ]
       },
@@ -62303,6 +62833,14 @@
           {
             "id": "59cdc4689d2a1700271c7abf",
             "name": "(385606) Tiểu học Phú Xuân"
+          },
+          {
+            "id": "github2026_af5bb5bc597efec4974b",
+            "name": "(38385410) Trường Tiểu học Phú Xuân"
+          },
+          {
+            "id": "github2026_f50be4e16c33dbd408cd",
+            "name": "(38385417) Trường Tiểu học Thanh Xuân"
           }
         ]
       },
@@ -62325,6 +62863,14 @@
           {
             "id": "59cdc4689d2a1700271c7abd",
             "name": "(386804) Tiểu học Hiền Kiệt"
+          },
+          {
+            "id": "github2026_59b88f1ae1285d716736",
+            "name": "(38385407) Trường Tiểu học Hiền Kiệt"
+          },
+          {
+            "id": "github2026_7cabd0ac7478e045fc96",
+            "name": "(38385414) Trường Tiểu học Hiền Chung"
           }
         ]
       },
@@ -62347,6 +62893,14 @@
           {
             "id": "59cdc4689d2a1700271c7ab8",
             "name": "(383475) Tiểu học Nam Xuân"
+          },
+          {
+            "id": "github2026_db5b764013358876108b",
+            "name": "(38385405) Trường Tiểu học Nam Tiến"
+          },
+          {
+            "id": "github2026_441d405f57f0e1311eba",
+            "name": "(38385411) Trường Tiểu học Nam Xuân"
           }
         ]
       },
@@ -62369,6 +62923,14 @@
           {
             "id": "59cdc4859d2a1700271c9d19",
             "name": "(031) THCS&THPT Quan Hóa"
+          },
+          {
+            "id": "github2026_89dc6db88410a858b639",
+            "name": "(38385406) Trường Tiểu học Thiên Phủ"
+          },
+          {
+            "id": "github2026_d803a977593025ada940",
+            "name": "(38385415) Trường Tiểu học Nam Động"
           }
         ]
       },
@@ -62427,6 +62989,26 @@
           {
             "id": "firestore_thpt_439c65199bd6f7ab0d16",
             "name": "(037) THPT Bá Thước"
+          },
+          {
+            "id": "github2026_938f6eae483751b9402c",
+            "name": "(38386411) Trường Tiểu học Lâm Xa"
+          },
+          {
+            "id": "github2026_112e7d351744767495ee",
+            "name": "(38386415) Trường Tiểu học Tân Lập"
+          },
+          {
+            "id": "github2026_cbf27c0fed6e9ce2c962",
+            "name": "(38386418) Trường Tiểu học Hạ Trung"
+          },
+          {
+            "id": "github2026_3aae888c0130fa0c1e0e",
+            "name": "(38386420) Trường Tiểu học Cành Nàng"
+          },
+          {
+            "id": "github2026_bdd1341e93748c294dae",
+            "name": "(38386423) Trường Tiểu học Ban Công"
           }
         ]
       },
@@ -62457,6 +63039,18 @@
           {
             "id": "68c23b204b2e100082a6f74e",
             "name": "(387972) THCS Bùi Xuân Chúc"
+          },
+          {
+            "id": "github2026_420e87e17dc942ebd2e8",
+            "name": "(38386404) Trường Tiểu học Điền Thượng"
+          },
+          {
+            "id": "github2026_5630c6059956ed890a51",
+            "name": "(38386414) Trường Tiểu học Điền Hạ"
+          },
+          {
+            "id": "github2026_eca6cc72816404c7fc17",
+            "name": "(38386429) Trường Tiểu học Điền Quang"
           }
         ]
       },
@@ -62491,6 +63085,18 @@
           {
             "id": "firestore_thpt_337bbf97d665633f4d15",
             "name": "(038) THPT Hà Văn Mao"
+          },
+          {
+            "id": "github2026_db9798e0d6ade7658646",
+            "name": "(38386413) Trường Tiểu học Ái Thượng"
+          },
+          {
+            "id": "github2026_36a98ec1d6161fb29b12",
+            "name": "(38386427) Trường Tiểu học Điền Trung"
+          },
+          {
+            "id": "github2026_aa63a8c04c558142bdaf",
+            "name": "(38386431) Trường Tiểu học Điền Lư"
           }
         ]
       },
@@ -62521,6 +63127,18 @@
           {
             "id": "59cdc4669d2a1700271c7850",
             "name": "(381180) Tiểu học Lương Trung"
+          },
+          {
+            "id": "github2026_005c6d604036d469683d",
+            "name": "(38386412) Trường Tiểu học Lương Nội"
+          },
+          {
+            "id": "github2026_30a2c39b174547c05fbc",
+            "name": "(38386416) Trường Tiểu học Lương Ngoại"
+          },
+          {
+            "id": "github2026_331d4bb2e685e6b4798d",
+            "name": "(38386419) Trường Tiểu học Lương Trung"
           }
         ]
       },
@@ -62547,6 +63165,18 @@
           {
             "id": "59cdc4859d2a1700271c9cf1",
             "name": "(040) THCS&THPT Bá Thước"
+          },
+          {
+            "id": "github2026_b7e29cdae9c4492802be",
+            "name": "(38386405) Trường Tiểu học Thành Lâm"
+          },
+          {
+            "id": "github2026_85858c0828a4fe22aa0d",
+            "name": "(38386417) Trường Tiểu học Lũng Niêm"
+          },
+          {
+            "id": "github2026_f1e70eb9977caeb6a4df",
+            "name": "(38386524) Trường TH&THCS Thành Sơn"
           }
         ]
       },
@@ -62573,6 +63203,18 @@
           {
             "id": "68c23aca0035d70153f1fad1",
             "name": "(380517) TH&THCS Cao Sơn"
+          },
+          {
+            "id": "github2026_683772dae307ae3abe91",
+            "name": "(38386407) Trường Tiểu học Cổ Lũng"
+          },
+          {
+            "id": "github2026_3b4c7c13d65a7f33b4f5",
+            "name": "(38386428) Trường Tiểu học Lũng Cao"
+          },
+          {
+            "id": "github2026_c28871a2b58ef0035eea",
+            "name": "(38386601) Trường TH&THCS Cao Sơn"
           }
         ]
       },
@@ -62591,6 +63233,14 @@
           {
             "id": "59cdc4679d2a1700271c7867",
             "name": "(383934) Tiểu học Kỳ Tân"
+          },
+          {
+            "id": "github2026_199b664447dc3dabc5f5",
+            "name": "(38386403) Trường Tiểu học Văn Nho"
+          },
+          {
+            "id": "github2026_219a986355c080b94a11",
+            "name": "(38386408) Trường Tiểu học Kỳ Tân"
           }
         ]
       },
@@ -62613,6 +63263,14 @@
           {
             "id": "59cdc4679d2a1700271c7865",
             "name": "(387484) Tiểu học Thiết Kế"
+          },
+          {
+            "id": "github2026_3a062b9622c70bea571a",
+            "name": "(38386409) Trường Tiểu học Thiết Kế"
+          },
+          {
+            "id": "github2026_4e97ca40e90483aedc18",
+            "name": "(38386424) Trường Tiểu học Thiết Ống"
           }
         ]
       },
@@ -62639,6 +63297,18 @@
           {
             "id": "68de83146b4b8801020d2ec3",
             "name": "(385367) Tiểu học Trung Tiến"
+          },
+          {
+            "id": "github2026_f7a61703414518e9988b",
+            "name": "(38387402) Trường Tiểu học Trung Hạ"
+          },
+          {
+            "id": "github2026_eb1b0a0d92d11bbf7eb8",
+            "name": "(38387403) Trường Tiểu học Trung Tiến"
+          },
+          {
+            "id": "github2026_50b1f14c9856f0b79447",
+            "name": "(38387501) Trường TH amp; THCS Trung Xuân"
           }
         ]
       },
@@ -62653,6 +63323,10 @@
           {
             "id": "59cdc4799d2a1700271c8f97",
             "name": "(388248) Tiểu học Tam Thanh"
+          },
+          {
+            "id": "github2026_664b23598dd737015d0b",
+            "name": "(38387407) Trường Tiểu học Tam Thanh"
           }
         ]
       },
@@ -62667,6 +63341,10 @@
           {
             "id": "59cdc4799d2a1700271c8f9b",
             "name": "(388739) Tiểu học Sơn Thủy"
+          },
+          {
+            "id": "github2026_6a0d52a9c2af362f6e61",
+            "name": "(38387409) Trường Tiểu học Sơn Thủy"
           }
         ]
       },
@@ -62681,6 +63359,10 @@
           {
             "id": "68c23902cf260800cf65f58b",
             "name": "(380638) PTDTBT THCS Na Mèo"
+          },
+          {
+            "id": "github2026_d9e7d1fda772869d8020",
+            "name": "(38387412) Trường Tiểu học Na Mèo"
           }
         ]
       },
@@ -62711,6 +63393,18 @@
           {
             "id": "firestore_thpt_aaea60bcd0428a4de790",
             "name": "(032) THPT Quan Sơn"
+          },
+          {
+            "id": "github2026_9fdfbc35b2d53e2878b3",
+            "name": "(38387404) Trường Tiểu học Sơn Lư"
+          },
+          {
+            "id": "github2026_dc9df452c263ca86cc6b",
+            "name": "(38387410) Trường Tiểu học Trung Thượng"
+          },
+          {
+            "id": "github2026_d7ec681cdc0ae57727b1",
+            "name": "(38387415) Trường THamp;THCS Sơn Lư"
           }
         ]
       },
@@ -62733,6 +63427,14 @@
           {
             "id": "59cdc4799d2a1700271c8f96",
             "name": "(387340) Tiểu học Tam Lư"
+          },
+          {
+            "id": "github2026_93cc265ce4dae8a06ac3",
+            "name": "(38387405) Trường Tiểu học Sơn Hà"
+          },
+          {
+            "id": "github2026_48bb922dbc1f6ab0767b",
+            "name": "(38387406) Trường Tiểu học Tam Lư"
           }
         ]
       },
@@ -62751,6 +63453,14 @@
           {
             "id": "59cdc4799d2a1700271c8f99",
             "name": "(386556) Tiểu học Sơn Điện 2"
+          },
+          {
+            "id": "github2026_f7c1434ef3bd6e57d11c",
+            "name": "(38387408) Trường Tiểu học Sơn Điện 1"
+          },
+          {
+            "id": "github2026_c235bc75cddea0f88736",
+            "name": "(38387413) Trường Tiểu học Sơn Điện 2"
           }
         ]
       },
@@ -62765,6 +63475,10 @@
           {
             "id": "59cdc4859d2a1700271c9d1a",
             "name": "(034) THCS&THPT Quan Sơn"
+          },
+          {
+            "id": "github2026_e88a39d9fe7d09905e3f",
+            "name": "(38387411) Trường Tiểu học Mường Mìn"
           }
         ]
       },
@@ -62779,6 +63493,10 @@
           {
             "id": "59cdc4679d2a1700271c79a1",
             "name": "(387897) Tiểu học Yên Khương"
+          },
+          {
+            "id": "github2026_11c1d0133c9c95be3df5",
+            "name": "(38388406) Trường Tiểu Học Yên Khương"
           }
         ]
       },
@@ -62793,6 +63511,10 @@
           {
             "id": "59cdc4679d2a1700271c7997",
             "name": "(383730) Tiểu học Yên Thắng"
+          },
+          {
+            "id": "github2026_30d5c6953b24c17d1e96",
+            "name": "(38388405) Trường Tiểu Học Yên Thắng"
           }
         ]
       },
@@ -62811,6 +63533,14 @@
           {
             "id": "59cdc4679d2a1700271c798f",
             "name": "(384217) THCS Giao Thiện"
+          },
+          {
+            "id": "github2026_0c75d5a3149a519a63d6",
+            "name": "(38388403) Trường Tiểu học Giao Thiện"
+          },
+          {
+            "id": "github2026_eafdfb3548fba4dece6b",
+            "name": "(38388509) Trường TH&THCS Giao An"
           }
         ]
       },
@@ -62829,6 +63559,14 @@
           {
             "id": "59cdc4679d2a1700271c7991",
             "name": "(384714) TH&THCS Tam Văn"
+          },
+          {
+            "id": "github2026_b3aa36e94ff87af8a42f",
+            "name": "(38388402) Trường Tiểu Học Lâm Phú"
+          },
+          {
+            "id": "github2026_f33dbde30619a50db0c5",
+            "name": "(38388504) Trường TH&THCS Tam Văn"
           }
         ]
       },
@@ -62859,6 +63597,18 @@
           {
             "id": "firestore_thpt_322510ef44dfdda26a4f",
             "name": "(052) THPT Lang Chánh"
+          },
+          {
+            "id": "github2026_ede7933a26d7b4c12d7e",
+            "name": "(38388411) Trường Tiểu Học Linh Sơn - Xã Linh Sơn"
+          },
+          {
+            "id": "github2026_2d3c51f205984a6a59b2",
+            "name": "(38388412) Trường Tiểu học Linh Sơn 2"
+          },
+          {
+            "id": "github2026_2dc9591e1c9096ad76b8",
+            "name": "(38388501) Trường THamp;THCS Chí Linh"
           }
         ]
       },
@@ -62881,6 +63631,14 @@
           {
             "id": "59cdc4679d2a1700271c79a3",
             "name": "(386778) Tiểu học Đồng Lương"
+          },
+          {
+            "id": "github2026_14554ff0d2c58cae7d86",
+            "name": "(38388404) Trường Tiểu Học Đồng Lương"
+          },
+          {
+            "id": "github2026_641dba6ddeb0644ecfc6",
+            "name": "(38388410) Trường Tiểu học Tân Phúc"
           }
         ]
       },
@@ -62935,6 +63693,30 @@
           {
             "id": "firestore_thpt_8ad50c563e82cf0be2ab",
             "name": "(054) THPT Ngọc Lặc"
+          },
+          {
+            "id": "github2026_81894569eaf46ec8af74",
+            "name": "(38389403) Trường Tiểu học Thúy Sơn 1"
+          },
+          {
+            "id": "github2026_cfc2c0be23cf343a4367",
+            "name": "(38389404) Trường Tiểu học Ngọc Khê 1"
+          },
+          {
+            "id": "github2026_defd275653a33b847a86",
+            "name": "(38389407) Trường Tiểu học Mỹ Tân"
+          },
+          {
+            "id": "github2026_cfb1d83b22564e3bc547",
+            "name": "(38389410) Trường Tiểu học Ngọc Lặc"
+          },
+          {
+            "id": "github2026_3d7dd235b6a503dba702",
+            "name": "(38389411) Trường Tiểu học Ngọc Khê 2"
+          },
+          {
+            "id": "github2026_c715961e3b935f39bfd3",
+            "name": "(38389429) Trường Tiểu học Thúy Sơn 2"
           }
         ]
       },
@@ -62965,6 +63747,22 @@
           {
             "id": "59cdc4689d2a1700271c7a17",
             "name": "(38405513) TH&THCS Đồng Thịnh"
+          },
+          {
+            "id": "github2026_f084ae7ede3bc1e344f1",
+            "name": "(38389408) Trường Tiểu Học Quang Trung"
+          },
+          {
+            "id": "github2026_88789c2fef27c7fef4f1",
+            "name": "(38389426) Trường Tiểu học Thạch Lập 1"
+          },
+          {
+            "id": "github2026_b98d343236b685888130",
+            "name": "(38389433) Trường Tiểu học Thạch Lập 2"
+          },
+          {
+            "id": "github2026_0957dccbb1b33198d1c4",
+            "name": "(38389522) Trường TH&THCS Đồng Thịnh"
           }
         ]
       },
@@ -63011,6 +63809,26 @@
           {
             "id": "firestore_thpt_27c6ec4f21ef2be59bea",
             "name": "(057) THPT Bắc Sơn"
+          },
+          {
+            "id": "github2026_03b7e200082b4d30baa3",
+            "name": "(38389413) Trường Tiểu học Ngọc Trung"
+          },
+          {
+            "id": "github2026_6cc6a86245b8e23cf092",
+            "name": "(38389417) Trường TH&THCS Lộc Thịnh"
+          },
+          {
+            "id": "github2026_3ac711166ce7f6b41f26",
+            "name": "(38389420) Trường Tiểu học Cao Thịnh"
+          },
+          {
+            "id": "github2026_d99ff7ff42e404f5384f",
+            "name": "(38389421) Trường Tiểu học Ngọc Liên"
+          },
+          {
+            "id": "github2026_5ae725bc95d334d43643",
+            "name": "(38389423) Trường Tiểu học Ngọc Sơn"
           }
         ]
       },
@@ -63049,6 +63867,26 @@
           {
             "id": "59cdc4689d2a1700271c7a06",
             "name": "(384863) Tiểu học Nguyệt Ấn 2"
+          },
+          {
+            "id": "github2026_72c10293bc99e727e569",
+            "name": "(38389406) Trường Tiểu học Vân Am 2"
+          },
+          {
+            "id": "github2026_987367e33303e158c55c",
+            "name": "(38389414) Trường Tiểu học Nguyệt Ấn 1"
+          },
+          {
+            "id": "github2026_e89b4a2a3a3865493e0d",
+            "name": "(38389419) Trường Tiểu học Phùng Giáo"
+          },
+          {
+            "id": "github2026_3a8929756fd190f0368e",
+            "name": "(38389422) Trường Tiểu học Vân Am"
+          },
+          {
+            "id": "github2026_044fc283798d7e893d9e",
+            "name": "(38389436) Trường Tiểu học Nguyệt Ấn 2"
           }
         ]
       },
@@ -63083,6 +63921,22 @@
           {
             "id": "firestore_thpt_c21fd5bb29b439d46db9",
             "name": "(055) THPT Lê Lai"
+          },
+          {
+            "id": "github2026_b5caba4a6623cab65e97",
+            "name": "(38389402) Trường Tiểu học Kiên Thọ 2"
+          },
+          {
+            "id": "github2026_410ef385ca1b6114515d",
+            "name": "(38389409) Trường Tiểu học Kiên Thọ 1"
+          },
+          {
+            "id": "github2026_1a0bd17b905c3758d2c3",
+            "name": "(38389416) Trường Tiểu học Phúc Thịnh"
+          },
+          {
+            "id": "github2026_27b0332afd6a1355930d",
+            "name": "(38389520) Trường TH&THCS Phùng Minh"
           }
         ]
       },
@@ -63129,6 +63983,26 @@
           {
             "id": "59cdc4799d2a1700271c8f2c",
             "name": "(383077) PT DTNT THCS Ngọc Lặc"
+          },
+          {
+            "id": "github2026_e1cffd71196258783452",
+            "name": "(38389401) Trường Tiểu học Lam Sơn"
+          },
+          {
+            "id": "github2026_459b95cdcf16fb084d56",
+            "name": "(38389412) Trường Tiểu học Minh Sơn 1"
+          },
+          {
+            "id": "github2026_130c64dd8901a84b9e55",
+            "name": "(38389415) Trường Tiểu Học Minh Tiến"
+          },
+          {
+            "id": "github2026_0d0d386ba8941ce28024",
+            "name": "(38389418) Trường Tiểu học Cao Ngọc"
+          },
+          {
+            "id": "github2026_ba4ceeb7d7ca047576b3",
+            "name": "(38389430) Trường Tiểu học Minh Sơn 2"
           }
         ]
       },
@@ -63175,6 +64049,22 @@
           {
             "id": "firestore_thpt_e37a51ac031ad6b8d4c4",
             "name": "(167) THPT Cẩm Thuỷ 1"
+          },
+          {
+            "id": "github2026_9fabff49334f9ae5f041",
+            "name": "(38390403) Trường tiểu học Cẩm Phong"
+          },
+          {
+            "id": "github2026_18a3942301d61261980f",
+            "name": "(38390413) Trường tiểu học Cẩm Ngọc"
+          },
+          {
+            "id": "github2026_1042793844ae98e762ec",
+            "name": "(38390416) Trường tiểu học Cẩm Sơn"
+          },
+          {
+            "id": "github2026_3ce74ab41aacc5d06ecf",
+            "name": "(38390425) Trường tiểu học Cẩm Thủy"
           }
         ]
       },
@@ -63217,6 +64107,26 @@
           {
             "id": "firestore_thpt_ceec06146ab0f23f362a",
             "name": "(169) THPT Cẩm Thuỷ 3"
+          },
+          {
+            "id": "github2026_38ab43f1bdfe30f24414",
+            "name": "(38390409) Trường TH&THCS Cẩm Liên"
+          },
+          {
+            "id": "github2026_7c28966a4511c944509d",
+            "name": "(38390410) Trường tiểu học Cẩm Thành"
+          },
+          {
+            "id": "github2026_72fe01019f59e65ae7d5",
+            "name": "(38390414) Trường tiểu học Cẩm Thạch"
+          },
+          {
+            "id": "github2026_4ff61331739a4eaa8ae9",
+            "name": "(38390417) Trường tiểu học Cẩm Bình 1"
+          },
+          {
+            "id": "github2026_7c7c066350a994b14c75",
+            "name": "(38390420) Trường tiểu học Cẩm Bình 3"
           }
         ]
       },
@@ -63251,6 +64161,22 @@
           {
             "id": "59cdc4679d2a1700271c788c",
             "name": "(380344) Tiểu học Cẩm Quý"
+          },
+          {
+            "id": "github2026_b530aacfe6197f7e2a06",
+            "name": "(38390402) Trường Tiểu học Cẩm Giang"
+          },
+          {
+            "id": "github2026_2e1b4ade6dea1a7e162b",
+            "name": "(38390408) Trường Tiểu học Cẩm Quý"
+          },
+          {
+            "id": "github2026_cac5eb6ea5bd47a3c1c7",
+            "name": "(38390424) Trường Tiểu học Cẩm Tú"
+          },
+          {
+            "id": "github2026_060a104319c70a3e3870",
+            "name": "(38390504) Trường TH&THCS Cẩm Lương"
           }
         ]
       },
@@ -63281,6 +64207,22 @@
           {
             "id": "59cdc4679d2a1700271c7894",
             "name": "(388166) Tiểu học Cẩm Vân"
+          },
+          {
+            "id": "github2026_a3cfb0ce769b0bb19d04",
+            "name": "(38390401) Trường Tiểu học Cẩm Châu"
+          },
+          {
+            "id": "github2026_c6d9124111f4683136d1",
+            "name": "(38390406) Trường Tiểu học Cẩm Vân"
+          },
+          {
+            "id": "github2026_1722259f8e3464451ef8",
+            "name": "(38390502) Trường TH&THCS Cẩm Yên"
+          },
+          {
+            "id": "github2026_b1d06c5823ba1170f803",
+            "name": "(38390503) Trường TH&THCS Cẩm Tâm"
           }
         ]
       },
@@ -63315,6 +64257,18 @@
           {
             "id": "firestore_thpt_05c4219014e8010a3c57",
             "name": "(223) THPT Cẩm Thuỷ 2"
+          },
+          {
+            "id": "github2026_73bfbe80ddf07cf2ac1b",
+            "name": "(38390407) Trường tiểu học Cẩm Tân"
+          },
+          {
+            "id": "github2026_9a870d74a9a660f5198a",
+            "name": "(38390419) Trường Tiểu học Cẩm Long"
+          },
+          {
+            "id": "github2026_2aa04a98df1c9fd2c4cc",
+            "name": "(38390423) Trường Tiểu học Cẩm Phú"
           }
         ]
       },
@@ -63332,7 +64286,7 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b5b",
-            "name": "(380648) Tiểu học Thành Thọ"
+            "name": "(38391429) Tiểu học Thành Thọ"
           },
           {
             "id": "59cdc4699d2a1700271c7b33",
@@ -63352,7 +64306,7 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b59",
-            "name": "(383806) Tiểu học Thành Tiến"
+            "name": "(38391427) Tiểu học Thành Tiến"
           },
           {
             "id": "59cdc4699d2a1700271c7b32",
@@ -63376,7 +64330,27 @@
           },
           {
             "id": "firestore_thpt_dcb941dc524f37931db4",
-            "name": "(059) THPT Thạch Thành 1"
+            "name": "(226) THPT Thạch Thành 1"
+          },
+          {
+            "id": "github2026_5c744019ec57db9c7651",
+            "name": "(38391421) Trường Tiểu Học Thành Trực"
+          },
+          {
+            "id": "github2026_92c174db26bbc2f545c6",
+            "name": "(38391423) Trường Tiểu học Thành Kim"
+          },
+          {
+            "id": "github2026_0d8b6f538f0964584545",
+            "name": "(38391425) Trường Tiểu học Kim Tân"
+          },
+          {
+            "id": "github2026_3e99eddd144ce4d84a5c",
+            "name": "(38391426) Trường Tiểu Học Thành Hưng"
+          },
+          {
+            "id": "github2026_8590f7367713c0205de0",
+            "name": "(38391508) Trường TH&THCS Thạch Định"
           }
         ]
       },
@@ -63394,11 +64368,11 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b60",
-            "name": "(380813) Tiểu học Thành Công"
+            "name": "(38391434) Tiểu học Thành Công"
           },
           {
             "id": "59cdc4699d2a1700271c7b63",
-            "name": "(383918) Tiểu học Thành Vân"
+            "name": "(38391437) Tiểu học Thành Vân"
           },
           {
             "id": "59cdc4699d2a1700271c7b3a",
@@ -63414,11 +64388,15 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b64",
-            "name": "(380595) Tiểu học Vân Du"
+            "name": "(38391438) Tiểu học Vân Du"
           },
           {
             "id": "firestore_thpt_8b440fa0f8dd4192b563",
             "name": "(061) THPT Thạch Thành 3"
+          },
+          {
+            "id": "github2026_7801f84b90b35774bdc5",
+            "name": "(38391435) Trường Tiểu Học Thành Tân"
           }
         ]
       },
@@ -63456,15 +64434,31 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b42",
-            "name": "(383769) Tiểu học Thạch Tượng 2"
+            "name": "(38391404) Tiểu học Thạch Tượng 2"
           },
           {
             "id": "68c7c12c1f616700dae777e2",
-            "name": "(389901) Tiểu học Thạch Quảng 2"
+            "name": "(38391406) Tiểu học Thạch Quảng 2"
           },
           {
             "id": "firestore_thpt_81c01fe1aaf07f77fcf9",
             "name": "(063) THPT Thạch Thành 4"
+          },
+          {
+            "id": "github2026_eb6894f91d280da04f29",
+            "name": "(38391401) Trường Tiểu Học Thạch Lâm 1"
+          },
+          {
+            "id": "github2026_60889910ff892b1e39cf",
+            "name": "(38391402) Trường Tiểu Học Thạch Lâm 2"
+          },
+          {
+            "id": "github2026_1716a8562fc0ecc47445",
+            "name": "(38391403) Trường Tiểu Học Thạch Tượng 1"
+          },
+          {
+            "id": "github2026_18b691384c2a013e5529",
+            "name": "(38391405) Trường Tiểu Học Thạch Quảng"
           }
         ]
       },
@@ -63498,7 +64492,7 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b48",
-            "name": "(385137) Tiểu học Thạch Bình"
+            "name": "(38391410) Tiểu học Thạch Bình"
           },
           {
             "id": "59cdc4699d2a1700271c7b4c",
@@ -63510,11 +64504,11 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b4e",
-            "name": "(382487) Tiểu học Thạch Long"
+            "name": "(38391416) Tiểu học Thạch Long"
           },
           {
             "id": "59cdc4699d2a1700271c7b47",
-            "name": "(380425) Tiểu học Thạch Sơn"
+            "name": "(38391409) Tiểu học Thạch Sơn"
           },
           {
             "id": "59cdc4819d2a1700271c987d",
@@ -63523,6 +64517,18 @@
           {
             "id": "firestore_thpt_22bf9ad0344e370439e5",
             "name": "(060) THPT Thạch Thành 2"
+          },
+          {
+            "id": "github2026_213ba14be4cea757dd21",
+            "name": "(38391407) Trường Tiểu học Thạch Cẩm 1"
+          },
+          {
+            "id": "github2026_511f42e29595e7c6a2e4",
+            "name": "(38391408) Trường Tiểu học Thạch Cẩm 2"
+          },
+          {
+            "id": "github2026_53897954b286bd588836",
+            "name": "(38391414) Trường Tiểu học Thạch Đồng"
           }
         ]
       },
@@ -63552,11 +64558,11 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b51",
-            "name": "(389982) Tiểu học Thành Mỹ"
+            "name": "(38391419) Tiểu học Thành Mỹ"
           },
           {
             "id": "59cdc4699d2a1700271c7b5e",
-            "name": "(388495) Tiểu học Thành Minh 1"
+            "name": "(38391432) Tiểu học Thành Minh 1"
           },
           {
             "id": "59cdc4699d2a1700271c7b50",
@@ -63564,7 +64570,15 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b5f",
-            "name": "(385655) Tiểu học Thành Minh 2"
+            "name": "(38391433) Tiểu học Thành Minh 2"
+          },
+          {
+            "id": "github2026_a6b5ed931d845b341415",
+            "name": "(38391418) Trường Tiểu học Thành Yên"
+          },
+          {
+            "id": "github2026_e4f84ac575bac613dee7",
+            "name": "(38391420) Trường Tiểu học Thành Vinh"
           }
         ]
       },
@@ -63586,7 +64600,7 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b65",
-            "name": "(380237) Tiểu học Thành Tâm"
+            "name": "(38391439) Tiểu học Thành Tâm"
           },
           {
             "id": "59cdc4699d2a1700271c7b35",
@@ -63603,6 +64617,18 @@
           {
             "id": "59cdc4699d2a1700271c7b5d",
             "name": "(384903) Tiểu học Ngọc Trạo"
+          },
+          {
+            "id": "github2026_dceec2a6057807c90990",
+            "name": "(38391428) Trường Tiểu Học Thành Long"
+          },
+          {
+            "id": "github2026_18ad1fdf01e65abc7259",
+            "name": "(38391430) Trường Tiểu học Thành An"
+          },
+          {
+            "id": "github2026_8e8fae8f3a71c3a417fb",
+            "name": "(38391431) Trường Tiểu học Ngọc Trạo"
           }
         ]
       },
@@ -63653,6 +64679,26 @@
           {
             "id": "firestore_thpt_48ca98bb3c956da05dd8",
             "name": "(203) THPT Hoàng Lê Kha"
+          },
+          {
+            "id": "github2026_5479309f846fc24554b4",
+            "name": "(38392417) Trường tiểu học Hà Ngọc"
+          },
+          {
+            "id": "github2026_29f49457575a4f985c93",
+            "name": "(38392419) Trường tiểu học Hà Ninh"
+          },
+          {
+            "id": "github2026_f726791f7d491b8e4d67",
+            "name": "(38392420) Trường Tiểu học Hà Trung"
+          },
+          {
+            "id": "github2026_7090bd4fc6a1f61f585b",
+            "name": "(38392423) Trường tiểu học Hà Lâm"
+          },
+          {
+            "id": "github2026_555002c360898a03e8d0",
+            "name": "(38392424) Trường tiểu học Hà Đông"
           }
         ]
       },
@@ -63687,6 +64733,22 @@
           {
             "id": "68de4bb968846300825eb6e1",
             "name": "(382941) Tiểu học Hà Long 2"
+          },
+          {
+            "id": "github2026_5da53c318f5fb277f538",
+            "name": "(38392401) Trường tiểu học Hà Bắc"
+          },
+          {
+            "id": "github2026_2caa090c73f7a12d40e5",
+            "name": "(38392402) Trường tiểu học Hà Long 1"
+          },
+          {
+            "id": "github2026_47f0f8e4b02600b9d816",
+            "name": "(38392403) Trường tiểu học Hà Giang"
+          },
+          {
+            "id": "github2026_a0820ba81e397b6abbf9",
+            "name": "(38392427) Trường tiểu học Hà Long 2"
           }
         ]
       },
@@ -63725,6 +64787,22 @@
           {
             "id": "firestore_thpt_f4658f534f48f856c799",
             "name": "(202) THPT Hà Trung"
+          },
+          {
+            "id": "github2026_0c9f92dc7277157410cc",
+            "name": "(38392406) Trường tiểu hoc Hà Yên"
+          },
+          {
+            "id": "github2026_fbc851c6a67ec0252ba2",
+            "name": "(38392407) Trường tiểu học Hà Dương"
+          },
+          {
+            "id": "github2026_1ae456d1611dfc84238a",
+            "name": "(38392408) Trường Tiểu Học Hoạt Giang"
+          },
+          {
+            "id": "github2026_b858363a6741e3e2928f",
+            "name": "(38392418) Trường tiểu học Hà Bình"
           }
         ]
       },
@@ -63767,6 +64845,26 @@
           {
             "id": "68de4c094306600111291407",
             "name": "(386583) Tiểu học Lĩnh Toại"
+          },
+          {
+            "id": "github2026_9baf4149397f52019c43",
+            "name": "(38392411) Trường tiểu học Hà Châu"
+          },
+          {
+            "id": "github2026_340f2cb9b7f60ece854f",
+            "name": "(38392412) Trường tiểu học Hà Lai"
+          },
+          {
+            "id": "github2026_b66eff72633d1b08b12b",
+            "name": "(38392413) Trường Tiểu học Hà Thái"
+          },
+          {
+            "id": "github2026_99373830b6aed7635bb0",
+            "name": "(38392414) Trường Tiểu Học Lĩnh Toại"
+          },
+          {
+            "id": "github2026_e279de1dcb83b732c133",
+            "name": "(38392415) Trường Tiểu Học Hà Hải"
           }
         ]
       },
@@ -63801,6 +64899,22 @@
           {
             "id": "59cdc47d9d2a1700271c93a5",
             "name": "(385087) THCS Hà Tân"
+          },
+          {
+            "id": "github2026_69f3bf256829f2a26809",
+            "name": "(38392404) Trường tiểu hoc Hà Tân"
+          },
+          {
+            "id": "github2026_1142b62946f675fdbb2e",
+            "name": "(38392425) Trường tiểu học Hà Sơn"
+          },
+          {
+            "id": "github2026_b079338fe12b8633e583",
+            "name": "(38392426) Trường tiểu học Hà Lĩnh"
+          },
+          {
+            "id": "github2026_5d813fd9acc08e20d28f",
+            "name": "(38392428) Trường Tiểu học Hà Tiến"
           }
         ]
       },
@@ -63863,6 +64977,34 @@
           {
             "id": "firestore_thpt_9217321c771533645331",
             "name": "(165) THPT Vĩnh Lộc"
+          },
+          {
+            "id": "github2026_b7a705d00997d3a764dd",
+            "name": "(38393406) Trường tiểu học Vĩnh Hòa"
+          },
+          {
+            "id": "github2026_0908964c3b1ae657ae14",
+            "name": "(38393408) Trường Tiểu học Vĩnh Ninh"
+          },
+          {
+            "id": "github2026_3843f9068a8e2ca103fd",
+            "name": "(38393409) Trường tiểu học Vĩnh Thành"
+          },
+          {
+            "id": "github2026_4caa321ec6dc8d3c45fe",
+            "name": "(38393410) Trường tiểu học Vĩnh Phúc"
+          },
+          {
+            "id": "github2026_d5f92130c9d33f2a4539",
+            "name": "(38393411) Trường tiểu học Vĩnh Hưng"
+          },
+          {
+            "id": "github2026_90e8c5f9243a6f445303",
+            "name": "(38393417) Trường Tiểu học Vĩnh Lộc"
+          },
+          {
+            "id": "github2026_873f2e92370d45f5f1fb",
+            "name": "(38393507) Trường TH&THCS Vĩnh Khang"
           }
         ]
       },
@@ -63897,6 +65039,22 @@
           {
             "id": "68c23709caa48b0118c1af9e",
             "name": "(381090) THCS Vĩnh Quang"
+          },
+          {
+            "id": "github2026_de9cbf8f7eda25558049",
+            "name": "(38393412) Trường Tiểu học Vĩnh Yên"
+          },
+          {
+            "id": "github2026_281f1edf9a63b44e9d05",
+            "name": "(38393414) Trường tiểu học Vĩnh Long"
+          },
+          {
+            "id": "github2026_02078e8384ff9c13860a",
+            "name": "(38393415) Trường tiểu học Vĩnh Quang"
+          },
+          {
+            "id": "github2026_cd308b528b3a80c3542b",
+            "name": "(38393513) Trường THamp;THCS Vĩnh Tiến"
           }
         ]
       },
@@ -63943,6 +65101,26 @@
           {
             "id": "firestore_thpt_8e27820178d102e10712",
             "name": "(166) THPT Tống Duy Tân"
+          },
+          {
+            "id": "github2026_f86d2dadf416c0be21b7",
+            "name": "(38393401) Trường tiểu học Vĩnh An"
+          },
+          {
+            "id": "github2026_ce7c724a11e3702a4d57",
+            "name": "(38393402) Trường tiểu học Vĩnh Thịnh"
+          },
+          {
+            "id": "github2026_86cb9b1e495f396ef9f7",
+            "name": "(38393403) Trường Tiểu học Vĩnh Minh"
+          },
+          {
+            "id": "github2026_2d48530f94e1741dcc8b",
+            "name": "(38393405) Trường tiểu học Vĩnh Hùng"
+          },
+          {
+            "id": "github2026_885e497a40b1e890a3eb",
+            "name": "(38393516) Trường TH&THCS Vĩnh Tân"
           }
         ]
       },
@@ -63977,6 +65155,18 @@
           {
             "id": "firestore_thpt_a8d1ade859d2327fa4c8",
             "name": "(174) THPT Yên Định 3"
+          },
+          {
+            "id": "github2026_d0092cc52c32ed2444f9",
+            "name": "(38394406) Trường Tiểu Học Yên Tâm"
+          },
+          {
+            "id": "github2026_7f58fb8ce48c1e255123",
+            "name": "(38394412) Trường Tiểu học Thị trấn Thống Nhất"
+          },
+          {
+            "id": "github2026_6fdb2aac6225b363b45d",
+            "name": "(38394504) Trường Tiểu Học Yên Phú"
           }
         ]
       },
@@ -64007,6 +65197,18 @@
           {
             "id": "59cdc4799d2a1700271c8f00",
             "name": "(385530) THCS Yên Lâm"
+          },
+          {
+            "id": "github2026_88d83ab184a62013fa54",
+            "name": "(38394401) Trường Tiểu Học Quý Lộc"
+          },
+          {
+            "id": "github2026_716340a1b57dab0466dc",
+            "name": "(38394403) Trường Tiểu Học Yên Thọ"
+          },
+          {
+            "id": "github2026_a93366d415e3418f1edd",
+            "name": "(38394405) Trường Tiểu Học Yên Lâm"
           }
         ]
       },
@@ -64037,6 +65239,22 @@
           {
             "id": "firestore_thpt_5d32ca117db9a928d36f",
             "name": "(173) THPT Yên Định 2"
+          },
+          {
+            "id": "github2026_bb4ebe988873329ccfdb",
+            "name": "(38394402) Trường Tiểu học Yên Trung"
+          },
+          {
+            "id": "github2026_f0cf515acdf9b893c0f7",
+            "name": "(38394408) Trường Tiểu học Yên Phong"
+          },
+          {
+            "id": "github2026_3bdb2a288415c0e5c963",
+            "name": "(38394409) Trường Tiểu Học Yên Thái"
+          },
+          {
+            "id": "github2026_538f9a81c219e9e1d873",
+            "name": "(38394411) Trường Tiểu học Yên Trường"
           }
         ]
       },
@@ -64071,6 +65289,22 @@
           {
             "id": "68c1ab1a4b2e100082a6f6dc",
             "name": "(385918) THCS Hà Tông Huân"
+          },
+          {
+            "id": "github2026_cfc4ce0b4631b4a2a1b0",
+            "name": "(38394413) Trường Tiểu Học Yên Hùng"
+          },
+          {
+            "id": "github2026_9ee88cd2f3d55ea1b2e9",
+            "name": "(38394414) Trường Tiểu Học Yên Thịnh"
+          },
+          {
+            "id": "github2026_fd3723f4e1f3ed0a913c",
+            "name": "(38394416) Trường Tiểu Học Yên Lạc"
+          },
+          {
+            "id": "github2026_a007a66db5b481fa5d8d",
+            "name": "(38394515) Trường TH&THCS Yên Ninh"
           }
         ]
       },
@@ -64109,6 +65343,22 @@
           {
             "id": "59cdc46a9d2a1700271c7d01",
             "name": "(386881) Tiểu học Định Thành"
+          },
+          {
+            "id": "github2026_dd89a33835869938a72e",
+            "name": "(38394425) Trường Tiểu Học Định Hòa"
+          },
+          {
+            "id": "github2026_768777881d16a99988d1",
+            "name": "(38394426) Trường Tiểu Học Định Bình"
+          },
+          {
+            "id": "github2026_59d4ef8b4bb276d9ae31",
+            "name": "(38394427) Trường Tiểu học Định Thành"
+          },
+          {
+            "id": "github2026_3f4ba277a610d6f19a67",
+            "name": "(38394428) Trường Tiểu Học Định Công"
           }
         ]
       },
@@ -64147,6 +65397,22 @@
           {
             "id": "59cdc46a9d2a1700271c7cfc",
             "name": "(387638) Tiểu học Định Tiến"
+          },
+          {
+            "id": "github2026_6c2c9d05ebafa63d5b28",
+            "name": "(38394421) Trường Tiểu Học Định Tân"
+          },
+          {
+            "id": "github2026_519b9185afd7d37ab181",
+            "name": "(38394422) Trường Tiểu học Định Tiến"
+          },
+          {
+            "id": "github2026_bd9695dff49bcafcbd32",
+            "name": "(38394423) Trường Tiểu Học Định Hưng"
+          },
+          {
+            "id": "github2026_d84f70ebb28767632517",
+            "name": "(38394424) Trường Tiểu Học Định Hải"
           }
         ]
       },
@@ -64209,6 +65475,30 @@
           {
             "id": "firestore_thpt_4226f04b69c1bb6e28ee",
             "name": "(172) THPT Yên Định 1"
+          },
+          {
+            "id": "github2026_d72dfc6b43b522c71719",
+            "name": "(3839403001) Trường TH,THCS&THPT Nobel School VIII"
+          },
+          {
+            "id": "github2026_6dd1a1df4eff9dfed02f",
+            "name": "(38394417) Trường Tiểu Học Định Tăng"
+          },
+          {
+            "id": "github2026_7edfaf99420f1a4acbe7",
+            "name": "(38394418) Trường Tiểu Học Định Tường"
+          },
+          {
+            "id": "github2026_d63e9a7a1078ed63da47",
+            "name": "(38394419) Trường Tiểu Học Định Long"
+          },
+          {
+            "id": "github2026_dd7a27721266781fb253",
+            "name": "(38394420) Trường Tiểu Học Định Liên"
+          },
+          {
+            "id": "github2026_8e963f7489a9691d5e05",
+            "name": "(38394429) Trường Tiểu Học Quán Lào"
           }
         ]
       },
@@ -64255,6 +65545,22 @@
           {
             "id": "firestore_thpt_64af9d46f2a4e70459e1",
             "name": "(177) THPT Lê Lợi"
+          },
+          {
+            "id": "github2026_d1d896b4c01607542fb3",
+            "name": "(38395401) Trường Tiểu học Xuân Trường"
+          },
+          {
+            "id": "github2026_3b20fa6df69d04abf42e",
+            "name": "(38395408) Trường Tiểu học Thọ Xuân"
+          },
+          {
+            "id": "github2026_0884cd22a0ff0b20e5b4",
+            "name": "(38395414) Trường Tiểu học Xuân Hồng"
+          },
+          {
+            "id": "github2026_5ba69f51fe6c7db94b65",
+            "name": "(38395438) Trường Tiểu học Xuân Giang"
           }
         ]
       },
@@ -64301,6 +65607,26 @@
           {
             "id": "59cdc4699d2a1700271c7bb7",
             "name": "(38395506) THCS Bắc Lương"
+          },
+          {
+            "id": "github2026_99e3688b568fb9f69608",
+            "name": "(38395405) Trường Tiểu học Xuân Phong"
+          },
+          {
+            "id": "github2026_eb5a34d9daa890678702",
+            "name": "(38395406) Trường Tiểu học Bắc Lương"
+          },
+          {
+            "id": "github2026_e79a359b58563d359022",
+            "name": "(38395417) Trường Tiểu học Nam Giang"
+          },
+          {
+            "id": "github2026_d8698b391b1f61283578",
+            "name": "(38395420) Trường Tiểu học Tây Hồ"
+          },
+          {
+            "id": "github2026_c6048801eb17738ce6b8",
+            "name": "(38395432) Trường Tiểu học Thọ Lộc"
           }
         ]
       },
@@ -64339,6 +65665,22 @@
           {
             "id": "59cdc4919d2a1700271cab69",
             "name": "(383592) Tiểu học Xuân Hưng"
+          },
+          {
+            "id": "github2026_d3680a6352d49dbd854d",
+            "name": "(38395404) Trường Tiểu học Xuân Hòa"
+          },
+          {
+            "id": "github2026_680a23b5a27afe408d09",
+            "name": "(38395413) Trường Tiểu học Thọ Hải"
+          },
+          {
+            "id": "github2026_7d2d341044ab26572020",
+            "name": "(38395421) Trường Tiểu học Xuân Hưng"
+          },
+          {
+            "id": "github2026_51812dccf8a10cb9eeda",
+            "name": "(38395431) Trường Tiểu học Thọ Diên"
           }
         ]
       },
@@ -64377,6 +65719,18 @@
           {
             "id": "firestore_thpt_2f3674d069bbc537ad53",
             "name": "(181) THPT Thọ Xuân 5"
+          },
+          {
+            "id": "github2026_0bddd013148627c3513d",
+            "name": "(38395402) Trường Tiểu học Xuân Bái"
+          },
+          {
+            "id": "github2026_03bbecf601a3d498c679",
+            "name": "(38395403) Trường Tiểu học Lam Sơn"
+          },
+          {
+            "id": "github2026_70b7740d08e920b8feb1",
+            "name": "(38395416) Trường Tiểu học Thọ Xương"
           }
         ]
       },
@@ -64419,6 +65773,22 @@
           {
             "id": "68dce17d17f6ca001189d06a",
             "name": "(384239) Tiểu học Xuân Sinh"
+          },
+          {
+            "id": "github2026_0a2f49f6550f408a1c5e",
+            "name": "(38395409) Trường Tiểu học Thọ Lâm"
+          },
+          {
+            "id": "github2026_dc7dc0f14f0f71844f31",
+            "name": "(38395410) Trường Tiểu học Sao Vàng"
+          },
+          {
+            "id": "github2026_9c83377cf488001004d4",
+            "name": "(38395423) Trường Tiểu học Xuân Sinh"
+          },
+          {
+            "id": "github2026_985d325a4f9e356c1fa5",
+            "name": "(38395427) Trường Tiểu học Xuân Phú"
           }
         ]
       },
@@ -64449,6 +65819,18 @@
           {
             "id": "firestore_thpt_38adc4d2e5e4c5694b8e",
             "name": "(180) THPT Thọ Xuân 4"
+          },
+          {
+            "id": "github2026_edf53818c3858b7b7198",
+            "name": "(38395419) Trường Tiểu học Xuân Thiên"
+          },
+          {
+            "id": "github2026_226066ade8aabb7cb11e",
+            "name": "(38395426) Trường Tiểu Học Thuận Minh"
+          },
+          {
+            "id": "github2026_56b67d90f08566a10a5c",
+            "name": "(38395430) Trường Tiểu học Thọ Lập"
           }
         ]
       },
@@ -64475,6 +65857,18 @@
           {
             "id": "68de8191469ce40018c46712",
             "name": "(388955) Tiểu học Phú Xuân"
+          },
+          {
+            "id": "github2026_4ef953d38f3d08132ef4",
+            "name": "(38395425) Trường Tiểu học Xuân Tín"
+          },
+          {
+            "id": "github2026_32c98d65eeed3e7e4e44",
+            "name": "(38395428) Trường Tiểu học Quảng Phú"
+          },
+          {
+            "id": "github2026_edcd6b02626b5aa1d743",
+            "name": "(38395439) Trường Tiểu học Phú Xuân"
           }
         ]
       },
@@ -64517,6 +65911,22 @@
           {
             "id": "firestore_thpt_28fd2ddaf6eebafeadbd",
             "name": "(178) THPT Lê Hoàn"
+          },
+          {
+            "id": "github2026_593d941367253c984009",
+            "name": "(38395415) Trường Tiểu học Xuân Lai"
+          },
+          {
+            "id": "github2026_cdb4894793c1f4853ac1",
+            "name": "(38395424) Trường Tiểu học Xuân Lập"
+          },
+          {
+            "id": "github2026_1e68e64cada1aab6975a",
+            "name": "(38395435) Trường TH Trường Xuân"
+          },
+          {
+            "id": "github2026_035f80666138528c0951",
+            "name": "(38395436) Trường Tiểu học Xuân Minh"
           }
         ]
       },
@@ -64535,6 +65945,14 @@
           {
             "id": "59cdc4699d2a1700271c7c04",
             "name": "(389063) Tiểu học Bát Mọt 1"
+          },
+          {
+            "id": "github2026_730049c42830fc3c0e09",
+            "name": "(38396405) Trường Tiểu học Bát Mọt 2"
+          },
+          {
+            "id": "github2026_2c10f3f9e7b529d3aafe",
+            "name": "(38396407) Trường Tiểu học Bát Mọt 1"
           }
         ]
       },
@@ -64553,6 +65971,14 @@
           {
             "id": "59cdc4699d2a1700271c7c1a",
             "name": "(382549) Tiểu học Yên Nhân 2"
+          },
+          {
+            "id": "github2026_00849867730153e58520",
+            "name": "(38396404) Trường Tiểu Học Yên Nhân 1"
+          },
+          {
+            "id": "github2026_0f4cb777079c4069f644",
+            "name": "(38396416) Trường Tiểu học Yên Nhân 2"
           }
         ]
       },
@@ -64567,6 +65993,10 @@
           {
             "id": "firestore_thpt_f5823979966682f19520",
             "name": "(044) THPT Thường Xuân 3"
+          },
+          {
+            "id": "github2026_90762e9860b69ba93305",
+            "name": "(38396417) Trường Tiểu Học Vạn Xuân"
           }
         ]
       },
@@ -64585,6 +66015,14 @@
           {
             "id": "59cdc4699d2a1700271c7c07",
             "name": "(386139) Tiểu học Lương Sơn 2"
+          },
+          {
+            "id": "github2026_9606668d9e7c7dc1117b",
+            "name": "(38396419) Trường Tiểu Học Lương Sơn 2"
+          },
+          {
+            "id": "github2026_6e91c92503cbca1da256",
+            "name": "(38396424) Trường Tiểu Học Lương Sơn 1"
           }
         ]
       },
@@ -64611,6 +66049,14 @@
           {
             "id": "firestore_thpt_13d90b1dae0a127a9399",
             "name": "(042) THPT Thường Xuân 2"
+          },
+          {
+            "id": "github2026_ff1f321649c3d4d6d114",
+            "name": "(38396408) Trường Tiểu học Luận Thành"
+          },
+          {
+            "id": "github2026_80089938e6c3e097e0d1",
+            "name": "(38396413) Trường Tiểu Học Xuân Cao"
           }
         ]
       },
@@ -64633,6 +66079,14 @@
           {
             "id": "59cdc4699d2a1700271c7c10",
             "name": "(384010) Tiểu học Xuân Thắng"
+          },
+          {
+            "id": "github2026_7e4e1ab007efa58b2cff",
+            "name": "(38396401) Trường Tiểu học Xuân Thắng"
+          },
+          {
+            "id": "github2026_e93b574e428efa807384",
+            "name": "(38396421) Trường Tiểu Học Xuân Lộc"
           }
         ]
       },
@@ -64687,6 +66141,30 @@
           {
             "id": "firestore_thpt_e3b75fb3ae298af32615",
             "name": "(041) THPT Cầm Bá Thước"
+          },
+          {
+            "id": "github2026_0209cf4b3d84f27d2223",
+            "name": "(38396403) Trường Tiểu Học Xuân Cẩm"
+          },
+          {
+            "id": "github2026_82affa3817393aa8da4e",
+            "name": "(38396409) Trường Tiểu Học Xuân Dương"
+          },
+          {
+            "id": "github2026_7541b005a73fd4518998",
+            "name": "(38396410) Trường Tiểu học Thường Xuân"
+          },
+          {
+            "id": "github2026_b09899393a849fdc8f1f",
+            "name": "(38396411) Trường Tiểu học Thọ Thanh"
+          },
+          {
+            "id": "github2026_e913c6c726c137a90c61",
+            "name": "(38396420) Trường Tiểu Học Ngọc Phụng 2"
+          },
+          {
+            "id": "github2026_33bef49784abc5058cc1",
+            "name": "(38396425) Trường Tiểu Học Ngọc Phụng 1"
           }
         ]
       },
@@ -64709,6 +66187,14 @@
           {
             "id": "59cdc4699d2a1700271c7bfb",
             "name": "(38396510) PTDTBT THCS Xuân Chinh"
+          },
+          {
+            "id": "github2026_2b70ee6a0802195e854f",
+            "name": "(38396415) Trường Tiểu Học Xuân Chinh"
+          },
+          {
+            "id": "github2026_c63b3b3af282e1b3aece",
+            "name": "(38396422) Trường Tiểu học Xuân Lẹ"
           }
         ]
       },
@@ -64739,6 +66225,22 @@
           {
             "id": "59cdc4699d2a1700271c7c1c",
             "name": "(389435) Tiểu học Luận Khê 2"
+          },
+          {
+            "id": "github2026_7ee5a45f41580cc45eb8",
+            "name": "(38396414) Trường Tiểu Học Luận Khê 1"
+          },
+          {
+            "id": "github2026_b009659e9614f24faec0",
+            "name": "(38396426) Trường Tiểu học Tân Thành 1"
+          },
+          {
+            "id": "github2026_1128a6e1aafa37b29c01",
+            "name": "(38396427) Trường Tiểu học Tân Thành 2"
+          },
+          {
+            "id": "github2026_a98f94b4f28a49200d72",
+            "name": "(38396429) Trường Tiểu Học Luận Khê 2"
           }
         ]
       },
@@ -64797,6 +66299,34 @@
           {
             "id": "firestore_thpt_8a793a81cbbbe2487e6f",
             "name": "(084) THPT Triệu Sơn 1"
+          },
+          {
+            "id": "github2026_5ea540d7af53866c3a40",
+            "name": "(38397404) Trường Tiểu học Nguyễn Bá Ngọc"
+          },
+          {
+            "id": "github2026_4479ca2196bd182b251c",
+            "name": "(38397407) Trường Tiểu học Lê Văn Tám"
+          },
+          {
+            "id": "github2026_f50ac5cb7b465bdfbf4d",
+            "name": "(38397409) Trường Tiểu học Dân Lực"
+          },
+          {
+            "id": "github2026_e2a6c048b727b0e3a7d9",
+            "name": "(38397412) Trường Tiểu học Dân Quyền"
+          },
+          {
+            "id": "github2026_33e340ad4010fec9eec4",
+            "name": "(38397416) Trường Tiểu học Kim Đồng"
+          },
+          {
+            "id": "github2026_4dd69ef5dc193ee07d77",
+            "name": "(38397426) Trường Tiểu học Dân Lý"
+          },
+          {
+            "id": "github2026_c0c5d1f5abb4659aaef4",
+            "name": "(38397503) Trường TH và THCS Minh Sơn"
           }
         ]
       },
@@ -64823,6 +66353,18 @@
           {
             "id": "59cdc46a9d2a1700271c7cb1",
             "name": "(382065) TH&THCS Bình Sơn"
+          },
+          {
+            "id": "github2026_842cc31e6e30e3e7ae54",
+            "name": "(38397434) Trường Tiểu học Thọ Sơn"
+          },
+          {
+            "id": "github2026_bf40926dbb12bed012bc",
+            "name": "(38397439) Trường Tiểu học Thọ Bình"
+          },
+          {
+            "id": "github2026_f308f6350e9c32f2242e",
+            "name": "(38397537) Trường TH&THCS Bình Sơn"
           }
         ]
       },
@@ -64869,6 +66411,26 @@
           {
             "id": "firestore_thpt_6233d0675a387454af6f",
             "name": "(086) THPT Triệu Sơn 3"
+          },
+          {
+            "id": "github2026_5f409c016e9beb160cdd",
+            "name": "(38397414) Trường Tiểu học Triệu Thành"
+          },
+          {
+            "id": "github2026_4c38bb3d350cc08a7ba6",
+            "name": "(38397419) Trường Tiểu học Hợp Thắng"
+          },
+          {
+            "id": "github2026_2bcd6c481ca349b4f99c",
+            "name": "(38397431) Trường Tiểu học Hợp Thành"
+          },
+          {
+            "id": "github2026_e79e80e3f0e9953aa851",
+            "name": "(38397432) Trường Tiểu học Hợp Lý"
+          },
+          {
+            "id": "github2026_d0dc95f0d90bc0e2f522",
+            "name": "(38397517) Trường TH và THCS Hợp Tiến"
           }
         ]
       },
@@ -64903,6 +66465,18 @@
           {
             "id": "firestore_thpt_f7dbdaef9520ca35e63f",
             "name": "(085) THPT Triệu Sơn 2"
+          },
+          {
+            "id": "github2026_9352400af68a51670ad6",
+            "name": "(38397423) Trường Tiểu học Vân Sơn"
+          },
+          {
+            "id": "github2026_cd24984d14d9137c0b48",
+            "name": "(38397428) Trường Tiểu học Tân Ninh"
+          },
+          {
+            "id": "github2026_0a360661c18e5539cadc",
+            "name": "(38397438) Trường Tiểu học Thái Hòa"
           }
         ]
       },
@@ -64937,6 +66511,18 @@
           {
             "id": "firestore_thpt_baaf11018244857d449a",
             "name": "(088) THPT Triệu Sơn 5"
+          },
+          {
+            "id": "github2026_dedee03cd5a89bc730ed",
+            "name": "(38397411) Trường Tiểu học Đồng Tiến"
+          },
+          {
+            "id": "github2026_4ecbbfbd01b12fbf5b4b",
+            "name": "(38397425) Trường Tiểu học Đồng Lợi"
+          },
+          {
+            "id": "github2026_7276dedd4b09f9fc3926",
+            "name": "(38397427) Trường Tiểu học Đồng Thắng"
           }
         ]
       },
@@ -64975,6 +66561,22 @@
           {
             "id": "59cdc46a9d2a1700271c7ca8",
             "name": "(386773) Tiểu học Thọ Ngọc"
+          },
+          {
+            "id": "github2026_c94e168265903b0525a4",
+            "name": "(38397405) Trường Tiểu học Thọ Cường"
+          },
+          {
+            "id": "github2026_7dfb3e45abf859a47196",
+            "name": "(38397410) Trường Tiểu học Thọ Tiến"
+          },
+          {
+            "id": "github2026_2a60b248bbb766521d71",
+            "name": "(38397413) Trường Tiểu học Xuân Thọ"
+          },
+          {
+            "id": "github2026_e281e3a856df0c97c73f",
+            "name": "(38397429) Trường Tiểu học Thọ Ngọc"
           }
         ]
       },
@@ -65029,6 +66631,34 @@
           {
             "id": "firestore_thpt_163ec5549f4f871e86ea",
             "name": "(087) THPT Triệu Sơn 4"
+          },
+          {
+            "id": "github2026_9e8cecf38d936d756380",
+            "name": "(38397406) Trường Tiểu học Thọ Tân"
+          },
+          {
+            "id": "github2026_e771734e70cbd669dfd2",
+            "name": "(38397415) Trường Tiểu học Thọ Vực"
+          },
+          {
+            "id": "github2026_8d820aadef537429ae9e",
+            "name": "(38397418) Trường Tiểu học Thọ Dân"
+          },
+          {
+            "id": "github2026_9cb0185c7c7093df260e",
+            "name": "(38397424) Trường Tiểu học Thọ Thế"
+          },
+          {
+            "id": "github2026_9f5e8613b267b1b352b1",
+            "name": "(38397514) Trường TH&THCS Thọ Phú"
+          },
+          {
+            "id": "github2026_3d2a4aa5ca20fa6c3527",
+            "name": "(38397518) Trường TH&THCS Xuân Lộc"
+          },
+          {
+            "id": "github2026_ec6dbae3378734898f47",
+            "name": "(38397534) Trường TH và THCS Xuân Thịnh"
           }
         ]
       },
@@ -65067,6 +66697,22 @@
           {
             "id": "59cdc46a9d2a1700271c7ca9",
             "name": "(380668) Tiểu học Nông Trường"
+          },
+          {
+            "id": "github2026_7d44802c16376d862200",
+            "name": "(38397402) Trường Tiểu học Khuyến Nông"
+          },
+          {
+            "id": "github2026_c5988d847bd8354dd537",
+            "name": "(38397408) Trường Tiểu học Tiến Nông"
+          },
+          {
+            "id": "github2026_f9db42a3935347f13c34",
+            "name": "(38397422) Trường Tiểu học An Nông"
+          },
+          {
+            "id": "github2026_7af86c4d596f8b174fcd",
+            "name": "(38397430) Trường Tiểu học Nông Trường"
           }
         ]
       },
@@ -65125,6 +66771,34 @@
           {
             "id": "firestore_thpt_6db617b879fd9bc0b4f6",
             "name": "(079) THPT Thiệu Hoá"
+          },
+          {
+            "id": "github2026_1f3ef5e23219003c31a3",
+            "name": "(3800000002) Trường Tiểu học, THCS&THPT Nobel School V"
+          },
+          {
+            "id": "github2026_15660cf6b05ae531fd30",
+            "name": "(38398405) Trường Tiểu học Thiệu Công"
+          },
+          {
+            "id": "github2026_c9283e75276bc2fca1cb",
+            "name": "(38398406) Trường Tiểu học Thiệu Phú"
+          },
+          {
+            "id": "github2026_ac715fec83cc860aab36",
+            "name": "(38398407) Trường Tiểu học Thiệu Phúc"
+          },
+          {
+            "id": "github2026_32863ae3214b38757a68",
+            "name": "(38398408) Trường Tiểu học Vạn Hà"
+          },
+          {
+            "id": "github2026_56b8b4ae27f164d44d9d",
+            "name": "(38398409) Trường Tiểu học Thiệu Nguyên"
+          },
+          {
+            "id": "github2026_2f83c1336fddf33675e4",
+            "name": "(38398414) Trường Tiểu học Thiệu Long"
           }
         ]
       },
@@ -65159,6 +66833,22 @@
           {
             "id": "59cdc4699d2a1700271c7b86",
             "name": "(387411) Tiểu học Thiệu Vũ"
+          },
+          {
+            "id": "github2026_6cd65c3b7bd9210a1b74",
+            "name": "(38398401) Trường Tiểu học Thiệu Ngọc"
+          },
+          {
+            "id": "github2026_578efd5f5ad03715f1fb",
+            "name": "(38398402) Trường Tiểu học Thiệu Vũ"
+          },
+          {
+            "id": "github2026_8fd56c558b80de9d6731",
+            "name": "(38398403) Trường Tiểu học Thiệu Tiến"
+          },
+          {
+            "id": "github2026_6d61454a528b7f10c41b",
+            "name": "(38398404) Trường Tiểu học Thiệu Thành"
           }
         ]
       },
@@ -65201,6 +66891,26 @@
           {
             "id": "firestore_thpt_8a5aaf259f59d706e41a",
             "name": "(080) THPT Nguyễn Quán Nho"
+          },
+          {
+            "id": "github2026_0eda4b0e03b68ab50a2b",
+            "name": "(38398410) Trường Tiểu học Thiệu Duy"
+          },
+          {
+            "id": "github2026_484aed5e4d6ede9a13b1",
+            "name": "(38398412) Trường Tiểu học Thiệu Hợp"
+          },
+          {
+            "id": "github2026_ae8062d91671734da901",
+            "name": "(38398413) Trường Tiểu học Thiệu Quang"
+          },
+          {
+            "id": "github2026_13a9b0bd17c01a7e3f05",
+            "name": "(38398415) Trường Tiểu học Thiệu Giang"
+          },
+          {
+            "id": "github2026_f022afca36f5234e7aef",
+            "name": "(38398728) Trường TH&THCS Thiệu Thịnh"
           }
         ]
       },
@@ -65247,6 +66957,26 @@
           {
             "id": "59cdc4699d2a1700271c7b98",
             "name": "(386581) Tiểu học Thiệu Tâm"
+          },
+          {
+            "id": "github2026_3b40eb526ed6f5257aa7",
+            "name": "(38398416) Trường Tiểu học Thiệu Toán"
+          },
+          {
+            "id": "github2026_0285ab2a18bb8a102533",
+            "name": "(38398417) Trường Tiểu học Thiệu Chính"
+          },
+          {
+            "id": "github2026_94f43c1d0d1841b9e8b2",
+            "name": "(38398418) Trường Tiểu học Thiệu Hòa"
+          },
+          {
+            "id": "github2026_27fbcc3873a38a2a1ffc",
+            "name": "(38398420) Trường Tiểu học Thiệu Tâm"
+          },
+          {
+            "id": "github2026_1cf082cd9f6a657ede83",
+            "name": "(38398519) Trường THamp;THCS Thiệu Minh"
           }
         ]
       },
@@ -65289,6 +67019,26 @@
           {
             "id": "firestore_thpt_243e3ca649103c148229",
             "name": "(081) THPT Lê Văn Hưu"
+          },
+          {
+            "id": "github2026_9622c1963638b542dfba",
+            "name": "(38398421) Trường Tiểu học Thiệu Lý"
+          },
+          {
+            "id": "github2026_bd86345a06d8ba89e5cc",
+            "name": "(38398422) Trường Tiểu học Thiệu Viên"
+          },
+          {
+            "id": "github2026_0d1a0c1fcf188d5dc5ba",
+            "name": "(38398424) Trường Tiểu học Thiệu Trung"
+          },
+          {
+            "id": "github2026_2536f7568cf580269f01",
+            "name": "(38398425) Trường Tiểu học Thiệu Đô"
+          },
+          {
+            "id": "github2026_976b9b4cc883d2265d80",
+            "name": "(38398523) Trường TH&THCS Thiệu Vận"
           }
         ]
       },
@@ -65339,6 +67089,38 @@
           {
             "id": "68de4c7052410b0040cea4ab",
             "name": "(383556) Tiểu học Đông Tiến"
+          },
+          {
+            "id": "github2026_e731e37e96b421886127",
+            "name": "(38398426) Trường TH&THCS Thiệu Châu"
+          },
+          {
+            "id": "github2026_94196009066651afc896",
+            "name": "(38398429) Trường Tiểu học Thiệu Khánh"
+          },
+          {
+            "id": "github2026_154e421787997953f186",
+            "name": "(38398527) Trường TH & THCS Thiệu Tân"
+          },
+          {
+            "id": "github2026_2b40ca77280d4b15036e",
+            "name": "(38398528) Trường THamp;THCS Thiệu Vân"
+          },
+          {
+            "id": "github2026_04ad3afcc2820df07355",
+            "name": "(38398729) Trường TH&THCS Thiệu Giao"
+          },
+          {
+            "id": "github2026_3c4244a3a26533d9e603",
+            "name": "(38405404) Trường Tiểu học Đông Lĩnh"
+          },
+          {
+            "id": "github2026_94c359a1effb06fc665e",
+            "name": "(38405450) Trường Tiểu học Đông Tiến"
+          },
+          {
+            "id": "github2026_0b8b0746d47393325cff",
+            "name": "(38405501) Trường TH&THCS Đông Thanh"
           }
         ]
       },
@@ -65397,6 +67179,46 @@
           {
             "id": "firestore_thpt_255cd021f8531d0354e9",
             "name": "(187) THPT Lương Đắc Bằng"
+          },
+          {
+            "id": "github2026_1908beec434355c11294",
+            "name": "(3800000010) Trường TH, THCS&THPT Delta"
+          },
+          {
+            "id": "github2026_63fb0617a7250f2812ea",
+            "name": "(38399425) Trường Tiểu học Hoằng Đạt"
+          },
+          {
+            "id": "github2026_3b86ebed765a9801131a",
+            "name": "(38399427) Tiểu học Bút Sơn"
+          },
+          {
+            "id": "github2026_e8a73d680c97a1942a7e",
+            "name": "(38399438) Trường Tiểu học Hoằng Đạo"
+          },
+          {
+            "id": "github2026_d1c11edc281a1aa28e1b",
+            "name": "(38399448) Trường Tiểu học Lê Tất Đắc"
+          },
+          {
+            "id": "github2026_e1183768bf941d441728",
+            "name": "(38399473) Trường Tiểu học Camellia"
+          },
+          {
+            "id": "github2026_a10f488d67023d223f03",
+            "name": "(38399521) Trường TH&THCS Hoằng Đức 2"
+          },
+          {
+            "id": "github2026_2b4ff083cbd0e8a4afaa",
+            "name": "(38399523) Trường TH&THCS Hoằng Đức 1"
+          },
+          {
+            "id": "github2026_b78010798ba83d51920e",
+            "name": "(38399524) Trường TH&THCS Hoằng Hà"
+          },
+          {
+            "id": "github2026_88c6b1f78ce4ae402349",
+            "name": "(38399526) Trường THamp;THCS Hoằng Đồng"
           }
         ]
       },
@@ -65447,6 +67269,30 @@
           {
             "id": "68de4ad80c465f00cf947fdb",
             "name": "(383080) Tiểu học Hoằng Xuân 2"
+          },
+          {
+            "id": "github2026_3ec3ebdfe2473a69e3bb",
+            "name": "(38399401) Trường Tiểu học Hoằng Giang"
+          },
+          {
+            "id": "github2026_51d68f88f75e1a7b1b69",
+            "name": "(38399402) Trường Tiểu học Hoằng Xuân 1"
+          },
+          {
+            "id": "github2026_09e52a0595a1723f8b54",
+            "name": "(38399403) Trường Tiểu học Hoằng Xuân 2"
+          },
+          {
+            "id": "github2026_5dd94d52d6590e65b432",
+            "name": "(38399404) Trường tiểu học Hoằng Phượng"
+          },
+          {
+            "id": "github2026_5d61019831527f374b84",
+            "name": "(38399416) Trường Tiểu học Hoằng Quỳ"
+          },
+          {
+            "id": "github2026_cfccce605d0f00e67871",
+            "name": "(38399417) Trường Tiểu học Hoằng Hợp"
           }
         ]
       },
@@ -65481,6 +67327,22 @@
           {
             "id": "firestore_thpt_e49bf542458e704b8bf5",
             "name": "(188) THPT Hoằng Hoá 2"
+          },
+          {
+            "id": "github2026_856c76feda45af0e4205",
+            "name": "(38399406) Trường Tiểu học Hoằng Quý"
+          },
+          {
+            "id": "github2026_1a6c471101c9395bddb9",
+            "name": "(38399407) Trường Tiểu học Hoằng Kim"
+          },
+          {
+            "id": "github2026_b1d842cec4c21ecc7c94",
+            "name": "(38399408) Trường Tiểu học Hoằng Trung"
+          },
+          {
+            "id": "github2026_0fd8d7e84d2d4aab1570",
+            "name": "(38399505) Trường Tiểu học và THCS Hoằng Phú"
           }
         ]
       },
@@ -65510,7 +67372,7 @@
           },
           {
             "id": "59cdc4679d2a1700271c7964",
-            "name": "(380570) Tiểu học Hoằng Xuyên 1"
+            "name": "(38399412) Tiểu học Hoằng Xuyên 1"
           },
           {
             "id": "59cdc4679d2a1700271c7931",
@@ -65519,6 +67381,26 @@
           {
             "id": "68de4b08250ad200985e2db9",
             "name": "(386653) Tiểu học Hoằng Xuyên 2"
+          },
+          {
+            "id": "github2026_7a9017633f52454a1789",
+            "name": "(38399410) Trường Tiểu học Hoằng Trinh"
+          },
+          {
+            "id": "github2026_1586f94bc45010b325c9",
+            "name": "(38399413) Trường Tiểu học Hoằng Cát"
+          },
+          {
+            "id": "github2026_5fecabbe75382aa656ef",
+            "name": "(38399414) Trường Tiểu học Hoằng Xuyên 2"
+          },
+          {
+            "id": "github2026_96a06dfe943d65e99111",
+            "name": "(38399509) Trường TH&THCS Hoằng Sơn 1"
+          },
+          {
+            "id": "github2026_578e46c2ff347fc5ce9f",
+            "name": "(38399511) Trường TH&THCS Hoằng Sơn 2"
           }
         ]
       },
@@ -65561,6 +67443,26 @@
           {
             "id": "68bfe430f144b3003c8d1f42",
             "name": "(382000) THCS Long Anh"
+          },
+          {
+            "id": "github2026_76e77c5c56aee6d2108b",
+            "name": "(38399415) Trường Tiểu học Tào Xuyên"
+          },
+          {
+            "id": "github2026_63c02f808ec040e20ce3",
+            "name": "(38399418) Trường Tiểu học Hoằng Quang"
+          },
+          {
+            "id": "github2026_aff972cd1328ab9c09b1",
+            "name": "(38399419) Trường Tiểu học Hoằng Long"
+          },
+          {
+            "id": "github2026_cf2e5d8dd623f16dfe78",
+            "name": "(38399420) Trường Tiểu học Hoằng Anh"
+          },
+          {
+            "id": "github2026_a0509bff98242492c60d",
+            "name": "(38399433) Trường Tiểu học Hoằng Đại"
           }
         ]
       },
@@ -65619,6 +67521,30 @@
           {
             "id": "firestore_thpt_2e28990929e54079fc5f",
             "name": "(190) THPT Hoằng Hoá 4"
+          },
+          {
+            "id": "github2026_628f4b8bea73ac697168",
+            "name": "(38399428) Trường Tiểu học Hoằng Thịnh"
+          },
+          {
+            "id": "github2026_104383c50a341d911c58",
+            "name": "(38399429) Trường Tiểu học Hoằng Thái"
+          },
+          {
+            "id": "github2026_cf50bdb19dd65e215e7d",
+            "name": "(38399430) Trường Tiểu học Lê Mạnh Trinh"
+          },
+          {
+            "id": "github2026_1deae2a9b1e02bf90b68",
+            "name": "(38399431) Trường Tiểu học Hoằng Thành"
+          },
+          {
+            "id": "github2026_82102f55373c0578373a",
+            "name": "(38399432) Trường Tiểu học Hoằng Trạch"
+          },
+          {
+            "id": "github2026_885ee0e1c480f3dec012",
+            "name": "(38399437) Trường Tiểu học Hoằng Tân"
           }
         ]
       },
@@ -65657,6 +67583,22 @@
           {
             "id": "59cdc4679d2a1700271c797f",
             "name": "(381192) Tiểu học Hoằng Thắng"
+          },
+          {
+            "id": "github2026_d677ee6b8afbe718af66",
+            "name": "(38399434) Trường Tiểu học Hoằng Phong"
+          },
+          {
+            "id": "github2026_58d9af5fa958aa54b957",
+            "name": "(38399435) Trường Tiểu học Hoằng Lưu"
+          },
+          {
+            "id": "github2026_81dce95ef4911f774077",
+            "name": "(38399436) Trường Tiểu học Hoằng Châu"
+          },
+          {
+            "id": "github2026_dd1edeaf87b99e39d670",
+            "name": "(38399439) Trường Tiểu học Hoằng Thắng"
           }
         ]
       },
@@ -65695,6 +67637,22 @@
           {
             "id": "68de4b2817f6ca001189d78a",
             "name": "(388206) Tiểu học Lê Xuân Lan"
+          },
+          {
+            "id": "github2026_8fc7ffc7b47afc4f5841",
+            "name": "(38399441) Trường Tiểu học Lê Xuân Lan"
+          },
+          {
+            "id": "github2026_77e4c91e2c5aa705d1cc",
+            "name": "(38399442) Trường Tiểu học Hoằng Hải"
+          },
+          {
+            "id": "github2026_15cd52212ef24834fa40",
+            "name": "(38399443) Trường Tiểu học Hoằng Trường"
+          },
+          {
+            "id": "github2026_da386d96b8308942c1ea",
+            "name": "(38399540) Trường TH&THCS Hoằng Yến"
           }
         ]
       },
@@ -65745,6 +67703,22 @@
           {
             "id": "firestore_thpt_adfbe722f4fc239e430e",
             "name": "(191) THPT Hoằng Hoá"
+          },
+          {
+            "id": "github2026_2aac4159e9cda877b925",
+            "name": "(38399444) Trường Tiểu học Hoằng Đông"
+          },
+          {
+            "id": "github2026_419d1eb431cfcec04a25",
+            "name": "(38399445) Trường Tiểu học Hoằng Thanh"
+          },
+          {
+            "id": "github2026_0f13c40fa11501af4cd6",
+            "name": "(38399446) Trường Tiểu học Hoằng Phụ"
+          },
+          {
+            "id": "github2026_6fdb44547bd00834e867",
+            "name": "(38399447) Trường Tiểu học Hoằng Ngọc"
           }
         ]
       },
@@ -65791,6 +67765,26 @@
           {
             "id": "firestore_thpt_0c1cfe08e0a88b7875c6",
             "name": "(123) THPT Hậu Lộc 2"
+          },
+          {
+            "id": "github2026_5bc4fe4478e75c26e3d9",
+            "name": "(38400407) Trường Tiểu học Hậu Lộc"
+          },
+          {
+            "id": "github2026_91c3de67f2dec95163d6",
+            "name": "(38400418) Trường Tiểu học Thuần Lộc"
+          },
+          {
+            "id": "github2026_dda59c96287f83bc8541",
+            "name": "(38400424) Trường Tiểu học Lộc Tân"
+          },
+          {
+            "id": "github2026_66d793225c6fc5cf6f3d",
+            "name": "(38400501) Trường TH&THCS Mỹ Lộc"
+          },
+          {
+            "id": "github2026_c0f868866eb95ac6e228",
+            "name": "(38400524) Trường THamp;THCS Lộc Sơn"
           }
         ]
       },
@@ -65829,6 +67823,22 @@
           {
             "id": "firestore_thpt_30bc24f294eb6e0a39de",
             "name": "(126) THPT Hậu Lộc 3"
+          },
+          {
+            "id": "github2026_429a75b04dbf94011f84",
+            "name": "(38400401) Trường Tiểu học Đại Lộc"
+          },
+          {
+            "id": "github2026_4a5548de49f076a6cbe3",
+            "name": "(38400405) Trường Tiểu học Triệu Lộc"
+          },
+          {
+            "id": "github2026_48ea1eedd86c9620ddbd",
+            "name": "(38400406) Trường Tiểu học Tiến Lộc"
+          },
+          {
+            "id": "github2026_a6cbf1687ff718316e0c",
+            "name": "(38400428) Trường Tiểu học Châu Lộc"
           }
         ]
       },
@@ -65871,6 +67881,26 @@
           {
             "id": "68bfe719eda08a001165181c",
             "name": "(382607) THCS Cầu Lộc"
+          },
+          {
+            "id": "github2026_394c952fc405cd29d01d",
+            "name": "(38400415) Trường Tiểu học Cầu Lộc"
+          },
+          {
+            "id": "github2026_3bd050a4abf494dba760",
+            "name": "(38400417) Trường Tiểu học Tuy Lộc"
+          },
+          {
+            "id": "github2026_d959f8c16869d275f0c4",
+            "name": "(38400429) Trường Tiểu học Đồng Lộc"
+          },
+          {
+            "id": "github2026_aef276048ba61d3eb34e",
+            "name": "(38400430) Trường Tiểu học Thành Lộc"
+          },
+          {
+            "id": "github2026_29382eacc6dc3eb9f1e4",
+            "name": "(38400521) Trường TH&THCS Phong Lộc"
           }
         ]
       },
@@ -65929,6 +67959,26 @@
           {
             "id": "firestore_thpt_7fd79bee44bf965a6f4e",
             "name": "(122) THPT Hậu Lộc 1"
+          },
+          {
+            "id": "github2026_96729d27d998e04627a8",
+            "name": "(38400403) Trường Tiểu học Xuân Lộc"
+          },
+          {
+            "id": "github2026_1dc3876cf9fe54411de7",
+            "name": "(38400409) Trường Tiểu học Phú Lộc"
+          },
+          {
+            "id": "github2026_7cb0640d2ed893dbb5c5",
+            "name": "(38400419) Trường Tiểu học Quang Lộc"
+          },
+          {
+            "id": "github2026_edb6f154f3cdd69f867f",
+            "name": "(38400420) Trường Tiểu học Liên Lộc"
+          },
+          {
+            "id": "github2026_39200baf0a3523012345",
+            "name": "(38400425) Trường Tiểu học Hòa Lộc"
           }
         ]
       },
@@ -65991,6 +68041,38 @@
           {
             "id": "firestore_thpt_143d87bb9e965efa83b6",
             "name": "(161) THPT Hậu Lộc 4"
+          },
+          {
+            "id": "github2026_bcf5d6d14921bbbf4779",
+            "name": "(38400402) Trường Tiểu học Đa Lộc"
+          },
+          {
+            "id": "github2026_a25ec49234e0b32df4b2",
+            "name": "(38400411) Trường Tiểu học Ngư Lộc 2"
+          },
+          {
+            "id": "github2026_e900183b46a04a4c5b75",
+            "name": "(38400413) Trường Tiểu học Hải Lộc"
+          },
+          {
+            "id": "github2026_129ddae30d24620d0932",
+            "name": "(38400414) Trường Tiểu học Hưng Lộc 1"
+          },
+          {
+            "id": "github2026_cd8e83b4ed6168486f2e",
+            "name": "(38400416) Trường Tiểu học Ngư Lộc 1"
+          },
+          {
+            "id": "github2026_963934c1daf6edef921d",
+            "name": "(38400427) Trường Tiểu học Minh Lộc 1"
+          },
+          {
+            "id": "github2026_936afa79cb7aea029f82",
+            "name": "(38400432) Trường Tiểu học Minh Lộc 2"
+          },
+          {
+            "id": "github2026_1b0f7c8a38e16494f721",
+            "name": "(38400433) Trường Tiểu học Hưng Lộc 2"
           }
         ]
       },
@@ -66061,6 +68143,34 @@
           {
             "id": "firestore_thpt_1cf47623186f4f510de5",
             "name": "(185) THPT Nga Sơn"
+          },
+          {
+            "id": "github2026_932bf2ed4674fb1f2100",
+            "name": "(38401403) Trường Tiểu Học Nga Thủy"
+          },
+          {
+            "id": "github2026_abaf106323d3bca4905d",
+            "name": "(38401407) Trường Tiểu Học Thị Trấn Nga Sơn"
+          },
+          {
+            "id": "github2026_627e6aca607dbb2de3ad",
+            "name": "(38401417) Trường Tiểu học Nga Bạch"
+          },
+          {
+            "id": "github2026_ee5ba48548a302f704f6",
+            "name": "(38401422) Trường tiểu học Nga Thanh"
+          },
+          {
+            "id": "github2026_b030e551054f28ae0137",
+            "name": "(38401423) Trường Tiểu học Nga Yên"
+          },
+          {
+            "id": "github2026_2556e4b1fe5ce29a7614",
+            "name": "(38401426) Trường tiểu học Nga Trung"
+          },
+          {
+            "id": "github2026_95e52cec092ca98f5496",
+            "name": "(38401520) Trường Tiểu Học Mỹ Hưng"
           }
         ]
       },
@@ -66079,6 +68189,18 @@
           {
             "id": "59cdc4799d2a1700271c8fbc",
             "name": "(38401512) THCS Nga Tiến"
+          },
+          {
+            "id": "github2026_dfe493c02727a7fc68ad",
+            "name": "(38401413) Trường tiểu học Nga Tiến"
+          },
+          {
+            "id": "github2026_88316e7dad247d002c9b",
+            "name": "(38401415) Trường tiểu học Nga Thái"
+          },
+          {
+            "id": "github2026_2f13b1e8e6c216d8ea33",
+            "name": "(38401428) Trường tiểu học Nga Tân"
           }
         ]
       },
@@ -66113,6 +68235,26 @@
           {
             "id": "68de48ee8de40600682dfa79",
             "name": "(388337) Tiểu học Nga Phượng 2"
+          },
+          {
+            "id": "github2026_4092e1db6bcf719655db",
+            "name": "(38401401) Trường Tiểu học Nga Phượng 1"
+          },
+          {
+            "id": "github2026_1baa9b0d86ce1b5df79f",
+            "name": "(38401402) Trường tiểu học Nga Thắng"
+          },
+          {
+            "id": "github2026_4fc3273711e9ef7d8d33",
+            "name": "(38401411) Trường Tiểu học Nga Thạch"
+          },
+          {
+            "id": "github2026_c4f5521b3df4107c8f00",
+            "name": "(38401412) Trường Tiểu học Nga Phượng 2"
+          },
+          {
+            "id": "github2026_93694e627a2948cc011c",
+            "name": "(38401421) Trường TH&THCS Nga Văn"
           }
         ]
       },
@@ -66139,6 +68281,26 @@
           {
             "id": "firestore_thpt_b306b5f1826759a1b1a7",
             "name": "(184) THPT Mai Anh Tuấn"
+          },
+          {
+            "id": "github2026_e8ef44a39276c03fa07a",
+            "name": "(38401405) Trường tiểu học Nga Hải"
+          },
+          {
+            "id": "github2026_2ef52a7c64a040fdc250",
+            "name": "(38401406) Trường tiểu học Nga Liên 1"
+          },
+          {
+            "id": "github2026_912f3d3b8e53869b0e99",
+            "name": "(38401409) Trường Tiểu học Nga Giáp"
+          },
+          {
+            "id": "github2026_64ff96f504137265ebd5",
+            "name": "(38401410) Trường tiểu học Nga Thành"
+          },
+          {
+            "id": "github2026_5e78b0026793dcb29aad",
+            "name": "(38401429) Trường tiểu học Nga Liên 2"
           }
         ]
       },
@@ -66173,6 +68335,22 @@
           {
             "id": "59cdc47e9d2a1700271c94be",
             "name": "(388881) Tiểu học Nga Điền 2"
+          },
+          {
+            "id": "github2026_85ad17581c93585e6b80",
+            "name": "(38401414) Trường tiểu học Nga Điền"
+          },
+          {
+            "id": "github2026_5f8dcaa116122cc3a3b3",
+            "name": "(38401416) Trường tiểu học Nga Phú"
+          },
+          {
+            "id": "github2026_344ef019ba62081b5092",
+            "name": "(38401419) Trường tiểu học Nga An"
+          },
+          {
+            "id": "github2026_ffd00fb09a81b1cadb78",
+            "name": "(38401430) Trường tiểu học Nga Điền 2"
           }
         ]
       },
@@ -66207,6 +68385,22 @@
           {
             "id": "59cdc4799d2a1700271c8fbf",
             "name": "(38401523) THCS Nga Trường"
+          },
+          {
+            "id": "github2026_3a06e018b0970dd5a031",
+            "name": "(38401420) Trường Tiểu học Ba Đình"
+          },
+          {
+            "id": "github2026_b2183c5e72fb5243781a",
+            "name": "(38401424) Trường tiểu học Nga Trường"
+          },
+          {
+            "id": "github2026_1cee13599af909cb0263",
+            "name": "(38401425) Trường Tiểu Học Nga Thiện"
+          },
+          {
+            "id": "github2026_4a40eb13d353f739d1c9",
+            "name": "(38401504) Trường TH&THCS Nga Vịnh"
           }
         ]
       },
@@ -66237,6 +68431,18 @@
           {
             "id": "firestore_thpt_bbecc4c82c76e858809b",
             "name": "(045) THPT Như Xuân"
+          },
+          {
+            "id": "github2026_614aff795c0e8b2d988d",
+            "name": "(38402410) Trường Tiểu Học Yên Cát"
+          },
+          {
+            "id": "github2026_e19be192f24113c31941",
+            "name": "(38402503) Trường THamp;THCS Tân Bình"
+          },
+          {
+            "id": "github2026_12a61a5b4b2d168fe2df",
+            "name": "(38402511) Trường TH Và THCS Yên Lễ"
           }
         ]
       },
@@ -66271,6 +68477,18 @@
           {
             "id": "firestore_thpt_4fafe99f0a8b41392352",
             "name": "(047) THPT Như Xuân 2"
+          },
+          {
+            "id": "github2026_88ded2e7d9c39db00c99",
+            "name": "(38402401) Trường Tiểu Học Xuân Bình"
+          },
+          {
+            "id": "github2026_096ffd169bbc5dead01a",
+            "name": "(38402402) Trường Tiểu Học Bãi Trành"
+          },
+          {
+            "id": "github2026_1395e70730ebc3a1b530",
+            "name": "(38402419) Trường Tiểu Học Xuân Hòa"
           }
         ]
       },
@@ -66293,6 +68511,18 @@
           {
             "id": "59cdc4689d2a1700271c7a6c",
             "name": "(38402518) TH&THCS Xuân Quỳ"
+          },
+          {
+            "id": "github2026_7915de8f733a238e951b",
+            "name": "(38402415) Trường TH amp; THCS Bình Lương"
+          },
+          {
+            "id": "github2026_1a9da057a11e7f721674",
+            "name": "(38402417) Trường Tiểu Học Hóa Quỳ"
+          },
+          {
+            "id": "github2026_819d42f336cac8eb857c",
+            "name": "(38402518) Trường TH&THCS Xuân Quỳ"
           }
         ]
       },
@@ -66319,6 +68549,18 @@
           {
             "id": "59cdc4689d2a1700271c7a5e",
             "name": "(382631) THCS Thanh Lâm"
+          },
+          {
+            "id": "github2026_585b504a7b690a340f92",
+            "name": "(38402404) Trường Tiểu Học Thanh Lâm"
+          },
+          {
+            "id": "github2026_b5873c998669ac3dc8fa",
+            "name": "(38402412) Trường Tiểu Học Thanh Phong"
+          },
+          {
+            "id": "github2026_5322092d48344e257d11",
+            "name": "(38402517) Trường THamp;THCS Thanh Hòa"
           }
         ]
       },
@@ -66349,6 +68591,18 @@
           {
             "id": "59cdc4859d2a1700271c9d13",
             "name": "(150) THCS&THPT Như Xuân"
+          },
+          {
+            "id": "github2026_37e7a2ee12f939554486",
+            "name": "(38402405) Trường Tiểu Học Thanh Sơn"
+          },
+          {
+            "id": "github2026_fdb0a44791538244bbc9",
+            "name": "(38402411) Trường Tiểu học Thanh Quân"
+          },
+          {
+            "id": "github2026_34d3ac29d74e2251c467",
+            "name": "(38402413) Trường Tiểu học Thanh xuân"
           }
         ]
       },
@@ -66362,7 +68616,7 @@
           },
           {
             "id": "59cdc4689d2a1700271c7a69",
-            "name": "(389712) Tiểu học Thượng Ninh"
+            "name": "(38402409) Tiểu học Thượng Ninh"
           },
           {
             "id": "59cdc4689d2a1700271c7a66",
@@ -66375,6 +68629,14 @@
           {
             "id": "59cdc4689d2a1700271c7a65",
             "name": "(38402504) TH&THCS Cát Vân"
+          },
+          {
+            "id": "github2026_38ed348ea48862718ac3",
+            "name": "(38402414) Trường Tiểu học Cát Tân"
+          },
+          {
+            "id": "github2026_c1bfa4a082c99c35098c",
+            "name": "(38402504) Trường THamp;THCS Cát Vân"
           }
         ]
       },
@@ -66417,6 +68679,22 @@
           {
             "id": "firestore_thpt_41cba86b158c35edf83b",
             "name": "(224) THPT Như Thanh"
+          },
+          {
+            "id": "github2026_94eb754614066a5916a8",
+            "name": "(38403403) Trường Tiểu học Xuân Khang 2"
+          },
+          {
+            "id": "github2026_3a6c42f4394e683d5e69",
+            "name": "(38403405) Trường Tiểu học Hải Long"
+          },
+          {
+            "id": "github2026_30c6066704302932a736",
+            "name": "(38403419) Trường Tiểu học Xuân Khang 1"
+          },
+          {
+            "id": "github2026_360adfb6e1d6c3cec222",
+            "name": "(38403420) Trường Tiểu học Bến Sung"
           }
         ]
       },
@@ -66447,6 +68725,18 @@
           {
             "id": "59cdc4859d2a1700271c9d11",
             "name": "(051) THCS&THPT Như Thanh"
+          },
+          {
+            "id": "github2026_cb688b07ab9e0f07297d",
+            "name": "(38403408) Trường Tiểu học Xuân Du"
+          },
+          {
+            "id": "github2026_897cea1884560d82fbbc",
+            "name": "(38403409) Trường Tiểu học Cán Khê"
+          },
+          {
+            "id": "github2026_e854ea00bc02dbfb5494",
+            "name": "(38403417) Trường Tiểu học Phượng Nghi"
           }
         ]
       },
@@ -66473,6 +68763,18 @@
           {
             "id": "68c23c8570224700e57010ca",
             "name": "(381772) Tiểu học Mậu Lâm 2"
+          },
+          {
+            "id": "github2026_68ec27f41338f1c9c1e7",
+            "name": "(38403402) Trường Tiểu học Phú Nhuận"
+          },
+          {
+            "id": "github2026_e1b4d82dd202dfbd3fe4",
+            "name": "(38403406) Trường Tiểu học Mậu Lâm 1"
+          },
+          {
+            "id": "github2026_119c76641b3a4b2e8dea",
+            "name": "(38403407) Trường Tiểu học Mậu Lâm 2"
           }
         ]
       },
@@ -66487,6 +68789,10 @@
           {
             "id": "59cdc4689d2a1700271c7a37",
             "name": "(383747) Tiểu học Xuân Thái"
+          },
+          {
+            "id": "github2026_c8932241cebc5de807b1",
+            "name": "(38403414) Trường Tiểu học Xuân Thái"
           }
         ]
       },
@@ -66521,6 +68827,22 @@
           {
             "id": "68dee9a41e017a004bc45b5c",
             "name": "(38403504) THCS Xuân Phúc"
+          },
+          {
+            "id": "github2026_c851f9d1d2e6eac19337",
+            "name": "(38403401) Trường Tiểu Học Yên Thọ 1"
+          },
+          {
+            "id": "github2026_ba7550e17c19121a5117",
+            "name": "(38403404) Trường Tiểu học Yên Thọ 2"
+          },
+          {
+            "id": "github2026_36f1b2f3d535cb7f803c",
+            "name": "(38403415) Trường Tiểu học Xuân Phúc"
+          },
+          {
+            "id": "github2026_cd9e10fbe2cd7e26f844",
+            "name": "(38403418) Trường Tiểu học Yên Lạc"
           }
         ]
       },
@@ -66551,6 +68873,18 @@
           {
             "id": "firestore_thpt_ab246943d259992083a5",
             "name": "(049) THPT Như Thanh 2"
+          },
+          {
+            "id": "github2026_990040f2989edfa8164d",
+            "name": "(38403412) Trường Tiểu học Thanh Kỳ"
+          },
+          {
+            "id": "github2026_8c505f024b907b79bc0e",
+            "name": "(38403413) Trường Tiểu học Thanh Tân 2"
+          },
+          {
+            "id": "github2026_e2734313362ac6a406bb",
+            "name": "(38403421) Trường Tiểu học Thanh Tân 1"
           }
         ]
       },
@@ -66617,6 +68951,34 @@
           {
             "id": "firestore_thpt_d1dceedac1a9768e3fa8",
             "name": "(093) THPT Nông Cống 1"
+          },
+          {
+            "id": "github2026_1b0432daa84736acd385",
+            "name": "(38404414) Trường Tiểu học Minh Thọ"
+          },
+          {
+            "id": "github2026_69ea8801a6f1cb1cb464",
+            "name": "(38404415) Trường Tiểu học Minh Khôi"
+          },
+          {
+            "id": "github2026_7f5209782b9093881f42",
+            "name": "(38404416) Trường Tiểu học Minh Nghĩa"
+          },
+          {
+            "id": "github2026_60e1695215483b4d4a74",
+            "name": "(38404417) Trường Tiểu học Vạn Hòa"
+          },
+          {
+            "id": "github2026_0f7fe2cd8282cea8f201",
+            "name": "(38404418) Trường Tiểu học Vạn Thắng"
+          },
+          {
+            "id": "github2026_f83b8c64171bf63b5417",
+            "name": "(38404419) Trường Tiểu học Vạn Thiện"
+          },
+          {
+            "id": "github2026_b518bba448b2cf1bd7ec",
+            "name": "(38404435) Trường Tiểu học Kim Đồng"
           }
         ]
       },
@@ -66675,6 +69037,30 @@
           {
             "id": "firestore_thpt_47da6abb3b61aa4de04c",
             "name": "(099) THPT Nông Cống"
+          },
+          {
+            "id": "github2026_922376274c37085e0d84",
+            "name": "(38404401) Trường Tiểu học Tân Thọ"
+          },
+          {
+            "id": "github2026_06b9771cea463dc668ba",
+            "name": "(38404402) Trường Tiểu học Tân Khang"
+          },
+          {
+            "id": "github2026_fe2f59b2d2f097ec836d",
+            "name": "(38404403) Trường Tiểu học Tân Phúc"
+          },
+          {
+            "id": "github2026_110cea48511259658252",
+            "name": "(38404406) Trường Tiểu học Trung Chính"
+          },
+          {
+            "id": "github2026_08b721c89978ea9e65ff",
+            "name": "(38404408) Trường Tiểu học Hoàng Giang"
+          },
+          {
+            "id": "github2026_1f4a27f624f505d3d013",
+            "name": "(38404409) Trường Tiểu học Hoàng Sơn"
           }
         ]
       },
@@ -66717,6 +69103,22 @@
           {
             "id": "firestore_thpt_af4250c462b0dc1bb333",
             "name": "(094) THPT Nông Cống 2"
+          },
+          {
+            "id": "github2026_3274e2cf2cc64f00b20a",
+            "name": "(38404404) Trường Tiểu học Trung Thành"
+          },
+          {
+            "id": "github2026_fd6eafd77c87c57b4e4b",
+            "name": "(38404410) Trường Tiểu học Tế Thắng"
+          },
+          {
+            "id": "github2026_193d4864d5b37f85cc01",
+            "name": "(38404411) Trường Tiểu học Tế Lợi"
+          },
+          {
+            "id": "github2026_4f17e9162f82a950d539",
+            "name": "(38404413) Trường Tiểu học Tế Nông"
           }
         ]
       },
@@ -66751,6 +69153,22 @@
           {
             "id": "59cdc4689d2a1700271c7a95",
             "name": "(386945) Tiểu học Thăng Thọ"
+          },
+          {
+            "id": "github2026_ed644934bdb4a2e37d18",
+            "name": "(38404429) Trường Tiểu học Thăng Bình"
+          },
+          {
+            "id": "github2026_d2d0aa988af68aed9c33",
+            "name": "(38404430) Trường Tiểu học Thăng Thọ"
+          },
+          {
+            "id": "github2026_16a78e305804a1c31986",
+            "name": "(38404431) Trường Tiểu học Thăng Long 2"
+          },
+          {
+            "id": "github2026_cd01dc5e31cb51c5264c",
+            "name": "(38404436) Trường Tiểu học Thăng Long 1"
           }
         ]
       },
@@ -66797,6 +69215,26 @@
           {
             "id": "firestore_thpt_e60a8e4736bf3586e356",
             "name": "(096) THPT Nông Cống 4"
+          },
+          {
+            "id": "github2026_52a8833ab106adb16316",
+            "name": "(38404420) Trường Tiểu học Trường Minh"
+          },
+          {
+            "id": "github2026_d27c64d3985aed19701b",
+            "name": "(38404421) Trường Tiểu học Trường Trung"
+          },
+          {
+            "id": "github2026_ba926e7f1ad6d1a0ab56",
+            "name": "(38404422) Trường Tiểu học Trường Giang 1"
+          },
+          {
+            "id": "github2026_024a7cd810b0e0e9b6eb",
+            "name": "(38404423) Trường Tiểu học Trường Giang 2"
+          },
+          {
+            "id": "github2026_cc509a2c3896db6156fe",
+            "name": "(38404424) Trường Tiểu học Trường Sơn"
           }
         ]
       },
@@ -66827,6 +69265,18 @@
           {
             "id": "59cdc4689d2a1700271c7a9c",
             "name": "(381841) Tiểu học Tượng Văn"
+          },
+          {
+            "id": "github2026_bcd82b4e9dcd3d70b8e9",
+            "name": "(38404425) Trường Tiểu học Tượng Văn"
+          },
+          {
+            "id": "github2026_eee3f7dd8a63cf1799f6",
+            "name": "(38404426) Trường Tiểu học Tượng Lĩnh"
+          },
+          {
+            "id": "github2026_5d4bab86a04bf57dd413",
+            "name": "(38404427) Trường Tiểu học Tượng Sơn"
           }
         ]
       },
@@ -66865,6 +69315,22 @@
           {
             "id": "firestore_thpt_6b8ce86dfb204f74c9c4",
             "name": "(095) THPT Nông Cống 3"
+          },
+          {
+            "id": "github2026_ba8bc7cf144c64199c3c",
+            "name": "(38404405) Trường Tiểu học Công Chính"
+          },
+          {
+            "id": "github2026_0e982aeb6d1ca652f2d8",
+            "name": "(38404428) Trường Tiểu học Công Liêm 1"
+          },
+          {
+            "id": "github2026_d430b13faebdcd8af58a",
+            "name": "(38404433) Trường Tiểu học Yên Mỹ"
+          },
+          {
+            "id": "github2026_52ed0236c2c89f36e426",
+            "name": "(38404437) Trường Tiểu học Công Liêm 2"
           }
         ]
       },
@@ -66918,7 +69384,7 @@
           },
           {
             "id": "68c23bf40035d70153f1fad4",
-            "name": "(382975) Tiểu học Lê Thế Long"
+            "name": "(38405422) Tiểu học Lê Thế Long"
           },
           {
             "id": "firestore_thpt_6b63467196ebf3dbccf4",
@@ -66927,6 +69393,42 @@
           {
             "id": "firestore_thpt_f2b86cc4ca687a09f906",
             "name": "(218) TH, THCS&THPT Nobel School II"
+          },
+          {
+            "id": "github2026_f7576c2f8363efcdec11",
+            "name": "(3800004003) Trường TH, THCS và THPT Nobel School II"
+          },
+          {
+            "id": "github2026_5703420c55de844ca5e6",
+            "name": "(38405407) Trường Tiểu học Đông Tân"
+          },
+          {
+            "id": "github2026_229bc86e5c0dc8f3c3db",
+            "name": "(38405418) Trường tiểu học Đông Ninh"
+          },
+          {
+            "id": "github2026_4f6aa23689591b4db976",
+            "name": "(38405505) Trường TH&THCS Đông Minh"
+          },
+          {
+            "id": "github2026_140c1b8c2fcb09c9abe9",
+            "name": "(38405506) Trường TH&THCS Đông Hoàng"
+          },
+          {
+            "id": "github2026_f4a853bf2c32008527b0",
+            "name": "(38405509) Trường TH&THCS Đông Khê"
+          },
+          {
+            "id": "github2026_2e42d5890d7e72e08bac",
+            "name": "(38405513) Trường TH&THCS Đông Thịnh"
+          },
+          {
+            "id": "github2026_17256013aabfe089156e",
+            "name": "(38405514) Trường TH&THCS Đông Anh"
+          },
+          {
+            "id": "github2026_bc41ef9d96d121aa429e",
+            "name": "(38405517) Trường TH&THCS Đông Hòa"
           }
         ]
       },
@@ -66993,6 +69495,42 @@
           {
             "id": "firestore_thpt_f2bde83fd42a5ee1ac6a",
             "name": "(205) TH, THCS&THPT Nobel School"
+          },
+          {
+            "id": "github2026_c7e4a2f32510b78ffdc5",
+            "name": "(38380401) Trường Tiểu học Quảng Thắng"
+          },
+          {
+            "id": "github2026_21178d45ecceea3bf92d",
+            "name": "(38380522) Trường TH, THCS&THPT Nobel"
+          },
+          {
+            "id": "github2026_b48d98e3637c845e7083",
+            "name": "(38405406) Trường Tiểu học Đông Hưng"
+          },
+          {
+            "id": "github2026_e09ad6f67ef3d4858852",
+            "name": "(38405417) Trường Tiểu học Đông Văn"
+          },
+          {
+            "id": "github2026_1c43fafc7925da6e609a",
+            "name": "(38405419) Trường Tiểu học Đông Quang"
+          },
+          {
+            "id": "github2026_88bec811aef799d6cd20",
+            "name": "(38405503) Trường TH&THCS Đông Vinh"
+          },
+          {
+            "id": "github2026_bb6d40d5f7f79bf98e11",
+            "name": "(38405508) Trường TH&THCS Đông Nam"
+          },
+          {
+            "id": "github2026_4e46605949b53e5d5e20",
+            "name": "(38405518) Trường TH&THCS Đông Yên"
+          },
+          {
+            "id": "github2026_73484b2af2a8c348b75d",
+            "name": "(38405520) Trường TH&THCS Đông Phú"
           }
         ]
       },
@@ -67043,6 +69581,30 @@
           {
             "id": "firestore_thpt_28dc9b43474eafb2dec4",
             "name": "(193) THPT Quảng Xương 1"
+          },
+          {
+            "id": "github2026_a8443c518c40d47e6475",
+            "name": "(3800004004) Trường TH, THCS&THPT Nobel School III"
+          },
+          {
+            "id": "github2026_3b3e8d2cec714072fb10",
+            "name": "(38406425) Trường Tiểu học Tân Phong 2"
+          },
+          {
+            "id": "github2026_1a9234e4761b6ff6ec66",
+            "name": "(38406426) Trường Tiểu học Tân Phong 3"
+          },
+          {
+            "id": "github2026_b3935739ccc0a65c2475",
+            "name": "(38406427) Trường Tiểu học Tân Phong 1"
+          },
+          {
+            "id": "github2026_3961f3487050ec6dc9b5",
+            "name": "(38406430) Trường Tiểu học Quảng Định"
+          },
+          {
+            "id": "github2026_83d89077ce388cc248a5",
+            "name": "(38406431) Trường Tiểu học Quảng Đức"
           }
         ]
       },
@@ -67081,6 +69643,22 @@
           {
             "id": "59cdc4699d2a1700271c7af5",
             "name": "(381742) THCS Quảng Hoà"
+          },
+          {
+            "id": "github2026_a6429e05fc0fd6b323de",
+            "name": "(38406432) Trường Tiểu học Quảng Yên"
+          },
+          {
+            "id": "github2026_bd2075adf4db71ec13f1",
+            "name": "(38406433) Trường Tiểu học Quảng Trạch"
+          },
+          {
+            "id": "github2026_b4808111763548396efa",
+            "name": "(38406435) Trường Tiểu học Quảng Long"
+          },
+          {
+            "id": "github2026_32870caef411cb5f5929",
+            "name": "(38406436) Trường Tiểu học Quảng Hòa"
           }
         ]
       },
@@ -67119,6 +69697,22 @@
           {
             "id": "59cdc4799d2a1700271c8f3c",
             "name": "(389185) Tiểu học Quảng Trường"
+          },
+          {
+            "id": "github2026_bbe9218c21d4d7ee933b",
+            "name": "(38406419) Trường Tiểu học Nguyễn Bá Ngọc"
+          },
+          {
+            "id": "github2026_90cc05e120606e2705ba",
+            "name": "(38406420) Trường Tiểu học Quảng Chính"
+          },
+          {
+            "id": "github2026_8200d82e9469f0ba7bdc",
+            "name": "(38406421) Trường Tiểu học Quảng Khê"
+          },
+          {
+            "id": "github2026_10fbc8e615c24bf84929",
+            "name": "(38406441) Trường Tiểu học Quảng Trường"
           }
         ]
       },
@@ -67161,6 +69755,22 @@
           {
             "id": "firestore_thpt_e02e730bc4a65eb83648",
             "name": "(194) THPT Quảng Xương 2"
+          },
+          {
+            "id": "github2026_9a7267ce0b0beff3e06d",
+            "name": "(38406434) Trường Tiểu học Quảng Văn"
+          },
+          {
+            "id": "github2026_4b8deb0f2f19d6685540",
+            "name": "(38406437) Trường Tiểu học Quảng Hợp"
+          },
+          {
+            "id": "github2026_a7df719f9d87dc01d43e",
+            "name": "(38406439) Trường Tiểu học Quảng Phúc"
+          },
+          {
+            "id": "github2026_0dca44b889ffbbec5adf",
+            "name": "(38406440) Trường Tiểu học Quảng Ngọc"
           }
         ]
       },
@@ -67203,6 +69813,26 @@
           {
             "id": "firestore_thpt_28922cdbf09184702d9b",
             "name": "(200) THPT Chu Văn An"
+          },
+          {
+            "id": "github2026_d0b25eebf8958753ef5c",
+            "name": "(38382411) Trường Tiểu học Quảng Minh"
+          },
+          {
+            "id": "github2026_35514d6ee129d0f043e1",
+            "name": "(38406403) Trường Tiểu học Quảng Vinh"
+          },
+          {
+            "id": "github2026_91ad41cced60d217d1bd",
+            "name": "(38406408) Trường Tiểu học Quảng Hùng"
+          },
+          {
+            "id": "github2026_bf3209c9e667bbc7721d",
+            "name": "(38406412) Trường Tiểu học Quảng Đại"
+          },
+          {
+            "id": "github2026_aea95d7cd6b0d7c5c037",
+            "name": "(38406509) Trường TH&THCS Nguyễn Xuân Nguyên"
           }
         ]
       },
@@ -67281,6 +69911,46 @@
           {
             "id": "firestore_thpt_8437ee181bc512b186cd",
             "name": "(216) Tiểu học, THCS và THPT FPT Thanh Hóa"
+          },
+          {
+            "id": "github2026_7010a2d69dd91cbe7caa",
+            "name": "(3800004005) Trường TH, THCS&THPT FPT"
+          },
+          {
+            "id": "github2026_217e78e4fefcd76b4982",
+            "name": "(38380422) Trường Tiểu học Quảng Hưng"
+          },
+          {
+            "id": "github2026_e2df096c68c77444622c",
+            "name": "(38380423) TRƯỜNG TIỂU HỌC QUẢNG THÀNH"
+          },
+          {
+            "id": "github2026_e79ca4cad6685ca0c73e",
+            "name": "(38380427) Trường Tiểu học Hermann Gmeiner"
+          },
+          {
+            "id": "github2026_43349d393dff0b642e1c",
+            "name": "(38380430) Trường TH, THCS&THPT QTHSCHOOL"
+          },
+          {
+            "id": "github2026_aab7a144d92e3375df03",
+            "name": "(38406404) Trường Tiểu học Quảng Phú"
+          },
+          {
+            "id": "github2026_d73296a8b50574740c2b",
+            "name": "(38406405) Trường Tiểu học Quảng Tâm"
+          },
+          {
+            "id": "github2026_e35824268b344d77c1a2",
+            "name": "(38406406) Trường Tiểu học Quảng Cát"
+          },
+          {
+            "id": "github2026_029bfc66d05c75070c6e",
+            "name": "(38406428) Trường Tiểu học Quảng Thịnh"
+          },
+          {
+            "id": "github2026_bca9774871bb42932474",
+            "name": "(38406429) Trường Tiểu học Quảng Đông"
           }
         ]
       },
@@ -67363,6 +70033,46 @@
           {
             "id": "firestore_thpt_0c1fa7211f434561c713",
             "name": "(199) THPT Nguyễn Thị Lợi"
+          },
+          {
+            "id": "github2026_ec0b3283df7dad1a901f",
+            "name": "(3838202002) Trường Tiểu học Darwin"
+          },
+          {
+            "id": "github2026_e8fdf5d2a6e23c780188",
+            "name": "(38382401) Trường Tiểu học Trường Sơn"
+          },
+          {
+            "id": "github2026_3f658fa0d601d45d1731",
+            "name": "(38382402) Trường Tiểu học Bắc Sơn Sầm Sơn"
+          },
+          {
+            "id": "github2026_12e13447f735b8df9d0c",
+            "name": "(38382403) Trường Tiểu học Trung Sơn 1"
+          },
+          {
+            "id": "github2026_3c486bb47dc5f47644c8",
+            "name": "(38382404) Trường Tiểu học Quảng Tiến 1"
+          },
+          {
+            "id": "github2026_f68a1079d593cb2bb3f5",
+            "name": "(38382405) Trường Tiểu học Quảng Cư"
+          },
+          {
+            "id": "github2026_89e9edeb450ed4af17e8",
+            "name": "(38382406) Trường Tiểu học Quảng Tiến 2"
+          },
+          {
+            "id": "github2026_1b10b0edc1ad70caccf2",
+            "name": "(38382407) Trường Tiểu học Trung Sơn 2"
+          },
+          {
+            "id": "github2026_821c3095f4d6ae80e516",
+            "name": "(38382408) Trường Tiểu học Quảng Châu"
+          },
+          {
+            "id": "github2026_8ef9bfc75317e4958385",
+            "name": "(38382409) Trường Tiểu học Quảng Thọ"
           }
         ]
       },
@@ -67388,11 +70098,19 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b07",
-            "name": "(387354) Tiểu học Quảng Hải"
+            "name": "(38406413) Tiểu học Quảng Hải"
           },
           {
             "id": "59cdc4699d2a1700271c7b12",
             "name": "(380081) Tiểu học Quảng Ninh"
+          },
+          {
+            "id": "github2026_5153d221324c237d79ab",
+            "name": "(38406414) Trường Tiểu học Quảng Nhân"
+          },
+          {
+            "id": "github2026_8af45e8537f068069713",
+            "name": "(38406424) Trường Tiểu học Quảng Ninh"
           }
         ]
       },
@@ -67426,7 +70144,7 @@
           },
           {
             "id": "59cdc4699d2a1700271c7b05",
-            "name": "(386019) Tiểu học Quảng Lộc"
+            "name": "(38406411) Tiểu học Quảng Lộc"
           },
           {
             "id": "59cdc4699d2a1700271c7b11",
@@ -67435,6 +70153,18 @@
           {
             "id": "firestore_thpt_ec0336219637563c5573",
             "name": "(196) THPT Đặng Thai Mai"
+          },
+          {
+            "id": "github2026_03f7cac496de086379f5",
+            "name": "(38406410) Trường Tiểu học Quảng Lưu"
+          },
+          {
+            "id": "github2026_3b74f191c81b932eae21",
+            "name": "(38406416) Trường Tiểu học Quảng Thái."
+          },
+          {
+            "id": "github2026_700e72b7e127072797be",
+            "name": "(38406423) Trường Tiểu học Quảng Bình"
           }
         ]
       },
@@ -67473,6 +70203,22 @@
           {
             "id": "firestore_thpt_df1ee6ef67445f3b15f8",
             "name": "(195) THPT Quảng Xương 4"
+          },
+          {
+            "id": "github2026_282f1c73637286404668",
+            "name": "(38406415) Trường Tiểu học Tiên Trang"
+          },
+          {
+            "id": "github2026_25c26baea4cb1c24c2c1",
+            "name": "(38406417) Trường Tiểu học Quảng Nham 1"
+          },
+          {
+            "id": "github2026_16ca37b4a34ed980a6bf",
+            "name": "(38406418) Trường Tiểu học Quảng Thạch"
+          },
+          {
+            "id": "github2026_37ed2274bb67d0f2f742",
+            "name": "(38406443) Trường Tiểu học Quảng Nham 2"
           }
         ]
       },
@@ -67527,6 +70273,34 @@
           {
             "id": "firestore_thpt_286a5fbfee073740e29a",
             "name": "(154) THPT Tĩnh Gia 1"
+          },
+          {
+            "id": "github2026_ecace89450c32a3405c1",
+            "name": "(38407408) Trường Tiểu học Hải Nhân"
+          },
+          {
+            "id": "github2026_c00951a4e55907eabd3f",
+            "name": "(38407410) Trường Tiểu học Thị Trấn"
+          },
+          {
+            "id": "github2026_ac6c88ba143126c0caed",
+            "name": "(38407411) Trường Tiểu học Hải Hòa"
+          },
+          {
+            "id": "github2026_2f0bea688f55a867e6fc",
+            "name": "(38407422) Trường Tiểu học Hải Thanh A"
+          },
+          {
+            "id": "github2026_5a4430fa866d13ded433",
+            "name": "(38407423) Trường Tiểu học Bình Minh"
+          },
+          {
+            "id": "github2026_d870ac6e4c410c9dc89f",
+            "name": "(38407432) Trường Tiểu học Hải Thanh"
+          },
+          {
+            "id": "github2026_3ffa11ed63724366bf79",
+            "name": "(38407533) Trường TH&THCS Lương Chí"
           }
         ]
       },
@@ -67573,6 +70347,26 @@
           {
             "id": "firestore_thpt_14d006cd6dc7d735a200",
             "name": "(155) THPT Tĩnh Gia 2"
+          },
+          {
+            "id": "github2026_5c42fd8106259314ad43",
+            "name": "(38407403) Trường Tiểu học Thanh Sơn"
+          },
+          {
+            "id": "github2026_3b14a71f2bf1c56a33d6",
+            "name": "(38407404) Trường Tiểu học Hải Châu"
+          },
+          {
+            "id": "github2026_59177a22514956a976bc",
+            "name": "(38407406) Trường Tiểu học Hải Ninh"
+          },
+          {
+            "id": "github2026_e326f983f0af6fc5f08c",
+            "name": "(38407435) Trường Tiểu học Thanh Thuỷ"
+          },
+          {
+            "id": "github2026_118cd38e7946b8e59d0b",
+            "name": "(38407534) Trường TH&THCS Triêu Dương"
           }
         ]
       },
@@ -67603,6 +70397,22 @@
           {
             "id": "59cdc46a9d2a1700271c7c64",
             "name": "(382693) Tiểu học Các Sơn B"
+          },
+          {
+            "id": "github2026_30e035c92073bc4fe2a0",
+            "name": "(38407401) Trường Tiểu học Các Sơn A"
+          },
+          {
+            "id": "github2026_77607996557109703dea",
+            "name": "(38407433) Trường Tiểu học Anh Sơn"
+          },
+          {
+            "id": "github2026_0a7d95e4f692181f328e",
+            "name": "(38407434) Trường Tiểu học Hùng Sơn"
+          },
+          {
+            "id": "github2026_522373ccaee74a5807d6",
+            "name": "(38407439) Trường Tiểu học Các Sơn B"
           }
         ]
       },
@@ -67637,6 +70447,18 @@
           {
             "id": "firestore_thpt_2bf9b6d4c101bac16aeb",
             "name": "(157) THPT Tĩnh Gia 4"
+          },
+          {
+            "id": "github2026_b0d4b6072229599fde4d",
+            "name": "(38407402) Trường Tiểu học Ngọc Lĩnh"
+          },
+          {
+            "id": "github2026_b1ceb29c8bb81ba65b80",
+            "name": "(38407407) Trường Tiểu học Tân Dân"
+          },
+          {
+            "id": "github2026_fa7f10e28520a06c1774",
+            "name": "(38407437) Trường Tiểu học Hải An"
           }
         ]
       },
@@ -67663,6 +70485,18 @@
           {
             "id": "59cdc46a9d2a1700271c7c50",
             "name": "(380395) Tiểu học Ninh Hải"
+          },
+          {
+            "id": "github2026_3981044d6963045dcc8d",
+            "name": "(38407416) Trường Tiểu học Ninh Hải"
+          },
+          {
+            "id": "github2026_fc35f6cfa40ddab5c457",
+            "name": "(38407431) Trường Tiểu học Hải Lĩnh"
+          },
+          {
+            "id": "github2026_c7d0e7c2f4737825c42b",
+            "name": "(38407512) Trường TH amp; THCS Định Hải"
           }
         ]
       },
@@ -67693,6 +70527,18 @@
           {
             "id": "68bfe5704e0674008d75b980",
             "name": "(380181) TH&THCS Hải Yến"
+          },
+          {
+            "id": "github2026_bb286728adb93f4d2f14",
+            "name": "(38407412) Trường Tiểu học Nguyên Bình"
+          },
+          {
+            "id": "github2026_c89c544ad6b7b86c00fb",
+            "name": "(38407414) Trường Tiểu học Xuân Lâm"
+          },
+          {
+            "id": "github2026_1c9a798a6884d09609f5",
+            "name": "(38407535) Trường TH&THCS Hải Yến"
           }
         ]
       },
@@ -67731,6 +70577,22 @@
           {
             "id": "59cdc46a9d2a1700271c7c58",
             "name": "(381746) Tiểu học Trúc Lâm"
+          },
+          {
+            "id": "github2026_2db9757307d4c977a0e1",
+            "name": "(38407424) Trường Tiểu học Trúc Lâm"
+          },
+          {
+            "id": "github2026_cd87a852510e52727990",
+            "name": "(38407425) Trường Tiểu học Phú Sơn"
+          },
+          {
+            "id": "github2026_fc9ca2ab2c1c3d11e30c",
+            "name": "(38407426) Trường Tiểu học Tùng Lâm"
+          },
+          {
+            "id": "github2026_e842f164b8bc60c5914f",
+            "name": "(38407427) Trường Tiểu học Phú Lâm"
           }
         ]
       },
@@ -67753,6 +70615,14 @@
           {
             "id": "59cdc46a9d2a1700271c7c59",
             "name": "(381122) Tiểu học Tân Trường"
+          },
+          {
+            "id": "github2026_8f201b5912a1e9d0d784",
+            "name": "(38407415) Trường Tiểu học Trường Lâm"
+          },
+          {
+            "id": "github2026_26a3f6648b5c62238ef5",
+            "name": "(38407428) Trường Tiểu học Tân Trường"
           }
         ]
       },
@@ -67787,6 +70657,22 @@
           {
             "id": "firestore_thpt_a1841ea97ffff665fe6c",
             "name": "(156) THPT Tĩnh Gia 3"
+          },
+          {
+            "id": "github2026_a241613b57d93d7eba23",
+            "name": "(38407420) Trường Tiểu học Tĩnh Hải"
+          },
+          {
+            "id": "github2026_bd1e248fca3cd5bfd182",
+            "name": "(38407421) Trường Tiểu học Hải Bình"
+          },
+          {
+            "id": "github2026_ccb65628688e8a73be55",
+            "name": "(38407429) Trường Tiểu học Mai Lâm"
+          },
+          {
+            "id": "github2026_1b985ae48a265ec2cd05",
+            "name": "(38407525) Trường THamp;THCS Queensland"
           }
         ]
       },
@@ -67817,6 +70703,18 @@
           {
             "id": "59cdc4949d2a1700271caf30",
             "name": "(158) THCS&THPT Nghi Sơn"
+          },
+          {
+            "id": "github2026_1270db346bc4c518a441",
+            "name": "(38407418) Trường Tiểu Học Hải Hà"
+          },
+          {
+            "id": "github2026_db8b7697775f03fc3afb",
+            "name": "(38407419) Trường Tiểu học Nghi Sơn"
+          },
+          {
+            "id": "github2026_02da074850793c88d213",
+            "name": "(38407430) Trường Tiểu học Hải Thượng"
           }
         ]
       }
@@ -68301,6 +71199,10 @@
           {
             "id": "firestore_thpt_51be749fdc6dad396093",
             "name": "(094) THPT Edison"
+          },
+          {
+            "id": "github2026_b1f20401475f7427e2c0",
+            "name": "(801) 801-Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -69019,6 +71921,14 @@
           {
             "id": "firestore_thpt_9fdbfbaef987322b1613",
             "name": "(096) THPT Võ Nguyên Giáp"
+          },
+          {
+            "id": "github2026_749b16fe23bc47966de8",
+            "name": "(803) 803-Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_7d7743c20153f83090db",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -69090,6 +72000,10 @@
           {
             "id": "firestore_thpt_195965dcc86d0db44814",
             "name": "(034) THPT Phú Bình"
+          },
+          {
+            "id": "github2026_cc2da60f7697e8a4e7da",
+            "name": "(802) 802-Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -69346,7 +72260,12 @@
       {
         "id": "689ea4ff229a7e0018936465",
         "name": "Xã Sơn Vĩ",
-        "schools": []
+        "schools": [
+          {
+            "id": "github2026_7fd7f143fa20a6a8419c",
+            "name": "(801) Trường THPT - Khu vực 1"
+          }
+        ]
       },
       {
         "id": "689ea4ff229a7e0018936464",
@@ -70853,6 +73772,10 @@
           {
             "id": "firestore_thpt_087d89ff69ab41482db9",
             "name": "(109) THPT Lê Duẩn"
+          },
+          {
+            "id": "github2026_10069c76d3f9b1eb356a",
+            "name": "(070) THPT Tân Hưng (trước 03/4/2026)"
           }
         ]
       },
@@ -71218,6 +74141,22 @@
           {
             "id": "firestore_thpt_53ae6bb558adf23eb1e8",
             "name": "(249) THPT chuyên Long An"
+          },
+          {
+            "id": "github2026_a1f3ec4e7a1b5b3cb79b",
+            "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "github2026_8e8ee1f592a6f1f2b3e7",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_933a7a969667f391a7b5",
+            "name": "(802) Trường THPT - Khu vực 2NT"
+          },
+          {
+            "id": "github2026_10ba3d343cdfa1992ed2",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -74376,6 +77315,22 @@
           {
             "id": "firestore_thpt_4c6761489c4d1bb38d23",
             "name": "(406) THPT Phạm Hùng"
+          },
+          {
+            "id": "github2026_bf68ed69025ea5e3889a",
+            "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "github2026_b94f005651a4e75ae156",
+            "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "github2026_61ee264ce336cdf6e6c6",
+            "name": "(802) Trường THPT - Khu vực 2NT"
+          },
+          {
+            "id": "github2026_aceb472645ff6cd78144",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -75597,6 +78552,10 @@
           {
             "id": "59cdc4909d2a1700271ca9ee",
             "name": "(662729) Phổ thông Duy Tân"
+          },
+          {
+            "id": "github2026_772811907b69dda324df",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -76163,6 +79122,10 @@
           {
             "id": "firestore_thpt_f29713694a46de5495a3",
             "name": "(519) Trường THPT Nguyễn Thị Minh Khai"
+          },
+          {
+            "id": "github2026_e4060290cb2e526db136",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -77008,6 +79971,10 @@
           {
             "id": "firestore_thpt_c7cb4422cc103d47e52a",
             "name": "(017) Trường THPT Huỳnh Thúc Kháng"
+          },
+          {
+            "id": "github2026_90ba9f915868906cf8ab",
+            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -78279,6 +81246,10 @@
           {
             "id": "firestore_thpt_6ba7151162fe1a2de14d",
             "name": "(213) PTDTNT THPT Bình Phước (Từ ngày 04/6/2021)"
+          },
+          {
+            "id": "github2026_5e861f95f0f84e34b95d",
+            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -78490,6 +81461,10 @@
           {
             "id": "firestore_thpt_c3bf602486f46ad48d92",
             "name": "(248) THPT chuyên Bình Long"
+          },
+          {
+            "id": "github2026_75c7ce1e35020b9022a1",
+            "name": "(246) THPT Nguyễn Huệ A (Trước ngày 04/6/2021)"
           }
         ]
       },
@@ -78698,6 +81673,10 @@
           {
             "id": "firestore_thpt_f4fdd8e1c7682fb821ea",
             "name": "(255) THPT Chu Văn An A (Từ ngày 01/10/2022)"
+          },
+          {
+            "id": "github2026_cd939bc0dc39540a7e1b",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -79086,6 +82065,10 @@
           {
             "id": "firestore_thpt_c6863d12de75357f40ad",
             "name": "(082) TH-THCS-THPT Lê Quý Đôn-Tân Phú"
+          },
+          {
+            "id": "github2026_0f45a87dff36d12bca00",
+            "name": "(182) TH-THCS-THPT Lê Quý Đôn-Tân Phú (Trước 27/02/2026)"
           }
         ]
       },
@@ -79659,6 +82642,10 @@
           {
             "id": "firestore_thpt_2921c2ea146d95363d2b",
             "name": "(618) THPT Nguyễn Đình Chiểu"
+          },
+          {
+            "id": "github2026_02bed27906ad5f4a301e",
+            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -79675,7 +82662,12 @@
       {
         "id": "689ea500229a7e00189367a6",
         "name": "Phường Mỹ Phong",
-        "schools": []
+        "schools": [
+          {
+            "id": "github2026_3f64c513b8d22286c7a4",
+            "name": "(804) Trường THPT - Khu vực 3"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e00189367a8",
@@ -79761,6 +82753,10 @@
           {
             "id": "firestore_thpt_4eb21392cd7926f90552",
             "name": "(611) THPT Huỳnh Văn Sâm"
+          },
+          {
+            "id": "github2026_97042afac912dd1aff4f",
+            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
