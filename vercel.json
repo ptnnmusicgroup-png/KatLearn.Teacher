@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/national-catalog-sync.js": {
+      "maxDuration": 60
+    }
+  },
+  "framework": null
+}
