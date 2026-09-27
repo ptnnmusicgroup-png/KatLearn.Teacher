@@ -3,7 +3,8 @@ name: canonicalize 2026 school codes
 on:
   push:
     paths:
-      - "api/catalog-harvest.js"
+      - "data/national-catalog/full-school-tree.json"
+      - "data/national-catalog/official-ward-list.json"
       - ".github/workflows/canonicalize-school-codes.yml"
   workflow_dispatch:
 
