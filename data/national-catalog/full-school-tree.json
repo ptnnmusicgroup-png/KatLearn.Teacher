@@ -26,14 +26,6 @@
           {
             "id": "firestore_thpt_3f8dff7276a7772dd99c",
             "name": "(079) Trường TH, THCS và THPT Quốc tế Hòa Bình"
-          },
-          {
-            "id": "firestore_thpt_de256086a23598dc0f0e",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_1519072f07a3aa697b55",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -96,14 +88,6 @@
           {
             "id": "firestore_thpt_92f17663322e839e92f7",
             "name": "(076) Trường THCS và THPT Nguyễn Bỉnh Khiêm"
-          },
-          {
-            "id": "firestore_thpt_9d8a0e53a92d0ea89562",
-            "name": "(801) Trường THPT - Khu vực 1"
-          },
-          {
-            "id": "firestore_thpt_cc9860ccbb1f86e7545c",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -222,10 +206,6 @@
           {
             "id": "firestore_thpt_fa9b3f8a917b7e4bc4b1",
             "name": "(004) Trường THCS và THPT Thới Thạnh"
-          },
-          {
-            "id": "firestore_thpt_af3c21507cd2483da5ed",
-            "name": "(482) Trường THPT Lương Định Của (Cần Thơ cũ) (Trước 01/7/2025)"
           }
         ]
       },
@@ -1704,10 +1684,6 @@
           {
             "id": "firestore_thpt_6b0cc1315595fe2dae57",
             "name": "(280) Trường TH, THCS và THPT FPT Sóc Trăng"
-          },
-          {
-            "id": "firestore_thpt_11f5e7de0d977432bec8",
-            "name": "(483) THPT DTNT Huỳnh Cương (trước 01/7/2025)"
           }
         ]
       },
@@ -4476,10 +4452,6 @@
             "name": "(015996) Tiểu học Chu Văn An A"
           },
           {
-            "id": "firestore_thpt_0514a8b8644ec659e373",
-            "name": "(152) THPT Chu Văn An (trước 01/2025)"
-          },
-          {
             "id": "firestore_thpt_9bccb346f36e7bfbc95f",
             "name": "(213) THPT Đông Đô"
           },
@@ -5356,10 +5328,6 @@
           {
             "id": "59cdc4919d2a1700271cab83",
             "name": "(019935) Tiểu học Đoàn Kết"
-          },
-          {
-            "id": "firestore_thpt_44a6189ab0fb385c429a",
-            "name": "(354) THPT Hòa Bình-La Trobe-Hà Nội (trước 9/2025)"
           },
           {
             "id": "firestore_thpt_e8e99f1ac6da9ac87b11",
@@ -7178,10 +7146,6 @@
             "name": "(012232) THCS Phú Diễn A"
           },
           {
-            "id": "firestore_thpt_d3695ecc0aa191a29a37",
-            "name": "(154) THPT Khoa học Giáo dục (trước 01/2025)"
-          },
-          {
             "id": "firestore_thpt_1d3e378822d41e218ec0",
             "name": "(061) THPT Nguyễn Thị Minh Khai"
           }
@@ -7258,10 +7222,6 @@
           {
             "id": "firestore_thpt_aec8bb26371520238d4d",
             "name": "(311) THPT FPT Tây Hà Nội"
-          },
-          {
-            "id": "firestore_thpt_487ff9bd2aa22b96a579",
-            "name": "(355) THPT Tây Hà Nội (trước 9/2025)"
           }
         ]
       },
@@ -9256,10 +9216,6 @@
           {
             "id": "firestore_thpt_4c91152a583729bc4636",
             "name": "(030) THPT Hoài Đức B"
-          },
-          {
-            "id": "firestore_thpt_814cbf7817a9c61e716e",
-            "name": "(353) THCS&THPT Phạm Văn Đồng (trước 01/7/2025)"
           }
         ]
       },
@@ -12524,10 +12480,6 @@
           {
             "id": "firestore_thpt_871380ab50b35630dd79",
             "name": "(236) THPT Sao Đỏ"
-          },
-          {
-            "id": "firestore_thpt_f3475d2842fc8ab39ad8",
-            "name": "(401) THPT Sao Đỏ (Hệ GDTX)"
           }
         ]
       },
@@ -15633,10 +15585,6 @@
           {
             "id": "firestore_thpt_ba2355c3ab344b07fdf3",
             "name": "(435) THPT Dầu Tiếng"
-          },
-          {
-            "id": "firestore_thpt_8ea291778ff19fc81f64",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -15659,10 +15607,6 @@
           {
             "id": "59cdc4399d2a1700271c4116",
             "name": "(799058) Tiểu học Minh Thạnh"
-          },
-          {
-            "id": "firestore_thpt_79a67e857b4dd7853d92",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -17127,10 +17071,6 @@
           {
             "id": "firestore_thpt_cb9bc11fa6cd79900bf5",
             "name": "(071) THPT Trưng Vương"
-          },
-          {
-            "id": "firestore_thpt_59ecd89c8ae742bcf1ab",
-            "name": "(804) Trường THPT - Khu vực 3"
           },
           {
             "id": "firestore_thpt_40225a31fd5bdb0a71ed",
@@ -19789,10 +19729,6 @@
           {
             "id": "firestore_thpt_cc89e0480ec478b8c65a",
             "name": "(112) THCS - THPT Thạnh An"
-          },
-          {
-            "id": "firestore_thpt_ffff78379ddcb16934d4",
-            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       }
@@ -20225,22 +20161,6 @@
           {
             "id": "firestore_thpt_e5ba5e3ab173b14ab782",
             "name": "(007) THPT Ngô Quyền"
-          },
-          {
-            "id": "firestore_thpt_fab5b3dbd4698c2f20d7",
-            "name": "(801) Trường THPT - Khu vực 1"
-          },
-          {
-            "id": "firestore_thpt_d2f4abdd69376ca7fb2c",
-            "name": "(802) Trường THPT - Khu vực 2NT"
-          },
-          {
-            "id": "firestore_thpt_12dbcad4c28b22b6b909",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_18c0f9abbfc0e60a62a9",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -26650,14 +26570,6 @@
           {
             "id": "firestore_thpt_fada342316c0618df9aa",
             "name": "(211) Tiểu học, THCS và THPT FPT Bắc Giang"
-          },
-          {
-            "id": "firestore_thpt_d4e46a43e7e9e95ece85",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_f0d9fb7027992877e34a",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -27708,10 +27620,6 @@
           {
             "id": "firestore_thpt_c357c12a853bbe4a7dab",
             "name": "(206) THPT Lê Hồng Phong"
-          },
-          {
-            "id": "firestore_thpt_e951025f870271a722d5",
-            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -28398,10 +28306,6 @@
           {
             "id": "59cdc4309d2a1700271c3ab0",
             "name": "(278470) THCS Đức Giang"
-          },
-          {
-            "id": "firestore_thpt_1ebe2abaaca32edc56a2",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -31346,10 +31250,6 @@
           {
             "id": "68ded6730c465f00cf9480a5",
             "name": "(969984) Trung tâm GDNN-GDTX Hồng Dân"
-          },
-          {
-            "id": "firestore_thpt_95c1838a97b1526f991a",
-            "name": "(985) THPT Ngan Dừa (GDTX)"
           }
         ]
       },
@@ -31490,10 +31390,6 @@
           {
             "id": "68dee643250ad200985e2e3b",
             "name": "(961231) Trung tâm GDNN và GDTX Phước Long"
-          },
-          {
-            "id": "firestore_thpt_192a2de5c26956f81d50",
-            "name": "(986) THPT Võ Văn Kiệt (GDTX)"
           }
         ]
       },
@@ -31634,10 +31530,6 @@
           {
             "id": "68dee3c453920400f0602e02",
             "name": "(965538) Trung tâm GDNN và GDTX Hoà Bình"
-          },
-          {
-            "id": "firestore_thpt_5d1c05dacaadd5c0323f",
-            "name": "(983) THPT Lê Thị Riêng (GDTX)"
           }
         ]
       },
@@ -31706,10 +31598,6 @@
           {
             "id": "firestore_thpt_34fcc99635ac7dbc5eb7",
             "name": "(518) THPT Lê Văn Đẩu"
-          },
-          {
-            "id": "firestore_thpt_7a502b179499e6055b19",
-            "name": "(984) THPT Lê Văn Đẩu (GDTX)"
           }
         ]
       },
@@ -31882,10 +31770,6 @@
           {
             "id": "68ec70b097b33d00408a16d1",
             "name": "(968225) Tiểu học Phong Thạnh"
-          },
-          {
-            "id": "firestore_thpt_e6e4220670e99cfb19ec",
-            "name": "(982) THPT Giá Rai (GDTX)"
           }
         ]
       },
@@ -32056,10 +31940,6 @@
           {
             "id": "68dedab2469ce40018c46721",
             "name": "(960298) THCS Trần Phú"
-          },
-          {
-            "id": "firestore_thpt_50e82a13f52f5404112c",
-            "name": "(981) THPT Điền Hải (GDTX)"
           }
         ]
       },
@@ -32306,22 +32186,6 @@
           {
             "id": "59cdc4919d2a1700271caadc",
             "name": "(969544) Tiểu học Lạc Long Quân"
-          },
-          {
-            "id": "firestore_thpt_77d271abb1c8d979ac5c",
-            "name": "(801) Trường THPT - Khu vực 1"
-          },
-          {
-            "id": "firestore_thpt_dab10c17c6a6b61e3e18",
-            "name": "(802) Trường THPT - Khu vực 2NT"
-          },
-          {
-            "id": "firestore_thpt_b07dc9da98042997c8c3",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_538a05b00686ce7164da",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -33792,10 +33656,6 @@
           {
             "id": "firestore_thpt_ac748366a69ca55dcc37",
             "name": "(048) Trường THPT Trưng Vương"
-          },
-          {
-            "id": "firestore_thpt_509aee60631a1eb5c145",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -33860,12 +33720,7 @@
       {
         "id": "689ea500229a7e00189364e0",
         "name": "Xã An Toàn",
-        "schools": [
-          {
-            "id": "firestore_thpt_d3496691aacf73e7fc5d",
-            "name": "(801) Trường THPT - Khu vực 1"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea500229a7e00189364dd",
@@ -34060,10 +33915,6 @@
           {
             "id": "firestore_thpt_541b3195cef58aee7248",
             "name": "(033) Trường THPT số 1 Phù Mỹ"
-          },
-          {
-            "id": "firestore_thpt_f8f0a05572c4de27cebf",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -35279,10 +35130,6 @@
           {
             "id": "firestore_thpt_82e0535823368bab032e",
             "name": "(069) Tiểu học, THCS và THPT iSchool Hà Tĩnh"
-          },
-          {
-            "id": "firestore_thpt_31e0182027b19ee54b0c",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -37339,10 +37186,6 @@
           {
             "id": "firestore_thpt_7a2b3add59a467b8c936",
             "name": "(007) Trường THPT Hưng Yên"
-          },
-          {
-            "id": "firestore_thpt_f3225fbbd4d5f42c01c8",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -37746,10 +37589,6 @@
           {
             "id": "firestore_thpt_3268724ac814f2602b26",
             "name": "(042) Trường THPT Đinh Tiên Hoàng"
-          },
-          {
-            "id": "firestore_thpt_a99b0eb24a9b01e29114",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -39653,10 +39492,6 @@
           {
             "id": "firestore_thpt_3e7ffc858bcbd2aa0ce8",
             "name": "(026) Trường TH, THCS và THPT Quốc tế Việt Nam Singapore"
-          },
-          {
-            "id": "firestore_thpt_573211f5618b7132951c",
-            "name": "(070) Trường THPT Hà Huy Tập (Hệ GDTX)"
           }
         ]
       },
@@ -39705,10 +39540,6 @@
           {
             "id": "firestore_thpt_e73a814e546853c489e5",
             "name": "(039) Trường THPT Ngô Gia Tự"
-          },
-          {
-            "id": "firestore_thpt_9673fae5ee44f35300fa",
-            "name": "(071) Trường THPT Ngô Gia Tự (Hệ GDTX)"
           }
         ]
       },
@@ -40524,10 +40355,6 @@
           {
             "id": "firestore_thpt_14e3dcae0243dfe8c86e",
             "name": "(126) Trường Phổ thông dân tộc nội trú Trung học phổ thông Tam Đường"
-          },
-          {
-            "id": "firestore_thpt_fe1ec1a1f15675c09dd8",
-            "name": "(049) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Tam Đường (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40556,22 +40383,6 @@
           {
             "id": "firestore_thpt_f3c8a01ecc07ca3d1edf",
             "name": "(103) Trường Trung học phổ thông Chu Văn An"
-          },
-          {
-            "id": "firestore_thpt_decbbf43a540d04fabfb",
-            "name": "(002) Trường Trung học phổ thông thành phố Lai Châu (Trước ngày 20/8/2025)"
-          },
-          {
-            "id": "firestore_thpt_75459c6449d6ad0ab65d",
-            "name": "(802) Trường Trung học phổ thông - Khu vực 2NT"
-          },
-          {
-            "id": "firestore_thpt_f6924b39a3f02577b4a9",
-            "name": "(803) Trường Trung học phổ thông - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_35cb20205184dab2ce31",
-            "name": "(804) Trường Trung học phổ thông - Khu vực 3"
           }
         ]
       },
@@ -40596,10 +40407,6 @@
           {
             "id": "firestore_thpt_8f1e1418486e3e5a42f6",
             "name": "(122) Trường Phổ thông dân tộc nội trú Trung học phổ thông Mường Tè"
-          },
-          {
-            "id": "firestore_thpt_71efad4840b6ad0c4933",
-            "name": "(055) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Mường Tè (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40630,10 +40437,6 @@
           {
             "id": "firestore_thpt_45db649c8cff1cdeed2b",
             "name": "(123) Trường Phổ thông dân tộc nội trú Trung học phổ thông Nậm Nhùn"
-          },
-          {
-            "id": "firestore_thpt_6bae81fb7b5a7bb8528a",
-            "name": "(054) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Nậm Nhùn (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40652,10 +40455,6 @@
           {
             "id": "firestore_thpt_88d11caaefc737cd4e8b",
             "name": "(121) Trường Phổ thông dân tộc nội trú Trung học phổ thông Ka Lăng"
-          },
-          {
-            "id": "firestore_thpt_568afefda891722958a5",
-            "name": "(048) Trường Phổ thông dân tộc nội trú Trung học Phổ Thông Ka Lăng huyện Mường Tè (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40729,10 +40528,6 @@
           {
             "id": "firestore_thpt_84d7c77b70767e78968c",
             "name": "(125) Trường Phổ thông dân tộc nội trú Trung học phổ thông Sìn Hồ"
-          },
-          {
-            "id": "firestore_thpt_1ad0d920a61dd4c21309",
-            "name": "(053) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Sìn Hồ (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40835,10 +40630,6 @@
           {
             "id": "firestore_thpt_a66f1ea393b048e59b7b",
             "name": "(124) Trường Phổ thông dân tộc nội trú Trung học phổ thông Phong Thổ"
-          },
-          {
-            "id": "firestore_thpt_52a378506be03491cc8b",
-            "name": "(052) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Phong Thổ (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -40897,10 +40688,6 @@
           {
             "id": "firestore_thpt_7112fe9d78c5f989e24e",
             "name": "(128) Trường Phổ thông dân tộc nội trú Trung học phổ thông Than Uyên"
-          },
-          {
-            "id": "firestore_thpt_ea3c699156bc45246653",
-            "name": "(051) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Than Uyên (Trước ngày 18/8/2025)"
           }
         ]
       },
@@ -40943,10 +40730,6 @@
           {
             "id": "firestore_thpt_5bcfdafb79f72b66890b",
             "name": "(127) Trường Phổ thông dân tộc nội trú Trung học phổ thông Tân Uyên"
-          },
-          {
-            "id": "firestore_thpt_7932c7bf0ea1b7884abb",
-            "name": "(050) Trường Phổ thông dân tộc nội trú Trung học phổ thông huyện Tân Uyên (Trước ngày 20/8/2025)"
           }
         ]
       },
@@ -52523,14 +52306,6 @@
           {
             "id": "firestore_thpt_a6ea7aa994a1b8f5af02",
             "name": "(601) THPT Trương Hán Siêu"
-          },
-          {
-            "id": "firestore_thpt_eebb739f40d38dd672ef",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_ee8b3adb15fd170dd60b",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -52849,10 +52624,6 @@
           {
             "id": "firestore_thpt_b42dd283c656e7323901",
             "name": "(504) THPT Dân tộc nội trú Ninh Bình"
-          },
-          {
-            "id": "firestore_thpt_25de5e913806dd0c9b36",
-            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -53247,10 +53018,6 @@
           {
             "id": "firestore_thpt_869decd15caca050c65d",
             "name": "(521) THPT Yên Khánh B"
-          },
-          {
-            "id": "firestore_thpt_db1aab8c73e55c7d74e2",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -55011,22 +54778,6 @@
           {
             "id": "firestore_thpt_a1b130f4fdc3586f1eaf",
             "name": "(416) THPT Trần Phú - Việt Trì"
-          },
-          {
-            "id": "firestore_thpt_2a5bcf982b70aac7fe4c",
-            "name": "(801) Trường THPT - Khu vực 1"
-          },
-          {
-            "id": "firestore_thpt_3bccdd59cee7dbcb1851",
-            "name": "(802) Trường THPT - Khu vực 2NT"
-          },
-          {
-            "id": "firestore_thpt_13c72b8df34a1cdcb379",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_68b5797e703f3a868ba2",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -57327,10 +57078,6 @@
           {
             "id": "firestore_thpt_c9aa935b1ccec7f80555",
             "name": "(012) Trường THPT Lê Trung Đình"
-          },
-          {
-            "id": "firestore_thpt_a0e42de8d6bf18c4cda4",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -57375,10 +57122,6 @@
           {
             "id": "59cdc45f9d2a1700271c6f0a",
             "name": "(510838) TH&THCS Nghĩa Phú"
-          },
-          {
-            "id": "firestore_thpt_8991ef99cd7cdd1040bd",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -58164,12 +57907,7 @@
       {
         "id": "689ea500229a7e001893692e",
         "name": "Xã Ya Ly",
-        "schools": [
-          {
-            "id": "firestore_thpt_95844b847bf4f25b828b",
-            "name": "(801) Trường THPT - Khu vực 1"
-          }
-        ]
+        "schools": []
       }
     ]
   },
@@ -58328,10 +58066,6 @@
           {
             "id": "firestore_thpt_2eedcd134cb8bc30543b",
             "name": "(065) TH,THCS&THPT Quốc tế song ngữ Học Viện Anh Quốc - UK Academy"
-          },
-          {
-            "id": "firestore_thpt_eea1582f4a44311699e4",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -58783,10 +58517,6 @@
           {
             "id": "firestore_thpt_8c962714ce2badc4da94",
             "name": "(024) THPT Hoành Bồ"
-          },
-          {
-            "id": "firestore_thpt_032889e56f10ba7335ca",
-            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -59449,10 +59179,6 @@
             "name": "(040) THPT Lê Hồng Phong"
           },
           {
-            "id": "firestore_thpt_e70ac4f3b3dd394959c0",
-            "name": "(582) THPT Lê Lợi (Quảng Bình cũ trước 7/2026)"
-          },
-          {
             "id": "firestore_thpt_ed0420de2128eafb3000",
             "name": "(082) THPT Số 2 Lê Lợi"
           }
@@ -59878,10 +59604,6 @@
             "name": "(304) TH, THCS và THPT Trưng Vương"
           },
           {
-            "id": "firestore_thpt_cd6d36cfe86430eaf949",
-            "name": "(580) THPT Lê Lợi (Quảng Trị cũ trước 7/2026)"
-          },
-          {
             "id": "firestore_thpt_21287c0d8f82cc80faa2",
             "name": "(080) THPT Số 1 Lê Lợi"
           }
@@ -59922,10 +59644,6 @@
           {
             "id": "firestore_thpt_0e6be0b40ca7486e9540",
             "name": "(202) Phổ thông DTNT THPT Nam Quảng Trị"
-          },
-          {
-            "id": "firestore_thpt_165d5a84915966ec424b",
-            "name": "(576) THPT Thị xã Quảng Trị (trước 2026)"
           },
           {
             "id": "firestore_thpt_c1b8dea3e0bf56f83ec0",
@@ -60225,10 +59943,6 @@
           {
             "id": "firestore_thpt_c69cd59cd84cbb79bf66",
             "name": "(112) THCS và THPT Đakrông"
-          },
-          {
-            "id": "firestore_thpt_b9a1e2918c5706b0be88",
-            "name": "(512) THPT Số 2 Đakrông (trước 24/2/2020)"
           }
         ]
       },
@@ -62251,10 +61965,6 @@
           {
             "id": "firestore_thpt_b2b6fdcc627c3066cd10",
             "name": "(007) THPT Đào Duy Anh"
-          },
-          {
-            "id": "firestore_thpt_ed708a9b663b90d51b22",
-            "name": "(804) Trường THPT - Khu vực 3"
           },
           {
             "id": "firestore_thpt_75f368a94e419b3b41d5",
@@ -68581,10 +68291,6 @@
             "name": "(038) THPT Thái Nguyên"
           },
           {
-            "id": "firestore_thpt_c94c13a6b05e9a3f04c5",
-            "name": "(801) 801-Trường THPT - Khu vực 1"
-          },
-          {
             "id": "firestore_thpt_bc7d350c1d78c7b6c10b",
             "name": "(009) THPT Chuyên Thái Nguyên"
           },
@@ -69311,14 +69017,6 @@
             "name": "(023) THPT Lê Hồng Phong"
           },
           {
-            "id": "firestore_thpt_2fdd0656f179bf89c0e1",
-            "name": "(803) 803-Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_101955fb77bd3e38276c",
-            "name": "(804) Trường THPT - Khu vực 3"
-          },
-          {
             "id": "firestore_thpt_9fdbfbaef987322b1613",
             "name": "(096) THPT Võ Nguyên Giáp"
           }
@@ -69392,10 +69090,6 @@
           {
             "id": "firestore_thpt_195965dcc86d0db44814",
             "name": "(034) THPT Phú Bình"
-          },
-          {
-            "id": "firestore_thpt_e6bd76a8f5852d021c64",
-            "name": "(802) 802-Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -69652,12 +69346,7 @@
       {
         "id": "689ea4ff229a7e0018936465",
         "name": "Xã Sơn Vĩ",
-        "schools": [
-          {
-            "id": "firestore_thpt_4cdf4a77bbe3a91c8607",
-            "name": "(801) Trường THPT - Khu vực 1"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea4ff229a7e0018936464",
@@ -71164,10 +70853,6 @@
           {
             "id": "firestore_thpt_087d89ff69ab41482db9",
             "name": "(109) THPT Lê Duẩn"
-          },
-          {
-            "id": "firestore_thpt_f48aad39c68fa6847b9f",
-            "name": "(070) THPT Tân Hưng (trước 03/4/2026)"
           }
         ]
       },
@@ -71533,22 +71218,6 @@
           {
             "id": "firestore_thpt_53ae6bb558adf23eb1e8",
             "name": "(249) THPT chuyên Long An"
-          },
-          {
-            "id": "firestore_thpt_7f44d08aed4f2b9bcb07",
-            "name": "(801) Trường THPT - Khu vực 1"
-          },
-          {
-            "id": "firestore_thpt_15e10ef842b83f710c2d",
-            "name": "(802) Trường THPT - Khu vực 2NT"
-          },
-          {
-            "id": "firestore_thpt_ca1fd2347a74f38d0cc2",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_d992410c087376151000",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -74707,22 +74376,6 @@
           {
             "id": "firestore_thpt_4c6761489c4d1bb38d23",
             "name": "(406) THPT Phạm Hùng"
-          },
-          {
-            "id": "firestore_thpt_aa436665bd98a1cfe701",
-            "name": "(801) Trường THPT - Khu vực 1"
-          },
-          {
-            "id": "firestore_thpt_03eaf095d6bc1de74207",
-            "name": "(802) Trường THPT - Khu vực 2NT"
-          },
-          {
-            "id": "firestore_thpt_6f56b8ea45f891e14904",
-            "name": "(803) Trường THPT - Khu vực 2"
-          },
-          {
-            "id": "firestore_thpt_f68af7507e2cc6cc622f",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -75944,10 +75597,6 @@
           {
             "id": "59cdc4909d2a1700271ca9ee",
             "name": "(662729) Phổ thông Duy Tân"
-          },
-          {
-            "id": "firestore_thpt_18a7d3d0c1ee8e9836ee",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -76514,10 +76163,6 @@
           {
             "id": "firestore_thpt_f29713694a46de5495a3",
             "name": "(519) Trường THPT Nguyễn Thị Minh Khai"
-          },
-          {
-            "id": "firestore_thpt_74ec859f9ec846dfc730",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
@@ -77363,10 +77008,6 @@
           {
             "id": "firestore_thpt_c7cb4422cc103d47e52a",
             "name": "(017) Trường THPT Huỳnh Thúc Kháng"
-          },
-          {
-            "id": "firestore_thpt_95d30fa01ff856a496d8",
-            "name": "(801) Trường THPT - Khu vực 1"
           }
         ]
       },
@@ -78638,10 +78279,6 @@
           {
             "id": "firestore_thpt_6ba7151162fe1a2de14d",
             "name": "(213) PTDTNT THPT Bình Phước (Từ ngày 04/6/2021)"
-          },
-          {
-            "id": "firestore_thpt_db72837dfb339edfa563",
-            "name": "(804) Trường THPT - Khu vực 3"
           }
         ]
       },
@@ -78849,10 +78486,6 @@
           {
             "id": "firestore_thpt_e5ece0972c40085ac4d2",
             "name": "(245) THPT Bình Long"
-          },
-          {
-            "id": "firestore_thpt_0e2df18787cc775dcd34",
-            "name": "(246) THPT Nguyễn Huệ A (Trước ngày 04/6/2021)"
           },
           {
             "id": "firestore_thpt_c3bf602486f46ad48d92",
@@ -79065,10 +78698,6 @@
           {
             "id": "firestore_thpt_f4fdd8e1c7682fb821ea",
             "name": "(255) THPT Chu Văn An A (Từ ngày 01/10/2022)"
-          },
-          {
-            "id": "firestore_thpt_a0e087eff9463bbfbede",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -79450,10 +79079,6 @@
         "id": "689ea500229a7e0018936611",
         "name": "Xã Phú Lâm",
         "schools": [
-          {
-            "id": "firestore_thpt_bb9385e4acd1953e04f7",
-            "name": "(182) TH-THCS-THPT Lê Quý Đôn-Tân Phú (Trước 27/02/2026)"
-          },
           {
             "id": "firestore_thpt_c0dc907287b1c2342223",
             "name": "(075) THPT Thanh Bình"
@@ -80034,10 +79659,6 @@
           {
             "id": "firestore_thpt_2921c2ea146d95363d2b",
             "name": "(618) THPT Nguyễn Đình Chiểu"
-          },
-          {
-            "id": "firestore_thpt_f8342d9358e06cf7dc1c",
-            "name": "(803) Trường THPT - Khu vực 2"
           }
         ]
       },
@@ -80054,12 +79675,7 @@
       {
         "id": "689ea500229a7e00189367a6",
         "name": "Phường Mỹ Phong",
-        "schools": [
-          {
-            "id": "firestore_thpt_a8373ac5fabb5dc1a57a",
-            "name": "(804) Trường THPT - Khu vực 3"
-          }
-        ]
+        "schools": []
       },
       {
         "id": "689ea500229a7e00189367a8",
@@ -80145,10 +79761,6 @@
           {
             "id": "firestore_thpt_4eb21392cd7926f90552",
             "name": "(611) THPT Huỳnh Văn Sâm"
-          },
-          {
-            "id": "firestore_thpt_503cf1e89475e17cdb1a",
-            "name": "(802) Trường THPT - Khu vực 2NT"
           }
         ]
       },
