@@ -112,13 +112,30 @@ function renderTeachers(rows,limited){
  $("#teacherLimit").textContent=limited?"Đã chạm giới hạn dữ liệu trả về. Dùng tìm kiếm theo nhóm để thu hẹp kết quả.":"";
 }
 function renderUsers(rows,limited){
- const q=$("#userSearch").value.trim().toLowerCase(),f=$("#userFilter").value,list=rows.filter(x=>(f==="all"||String(x.role||"")===f)&&match(x,q,["displayName","name","email","accountCode","schoolName","className"]));
- $("#userTable").innerHTML=list.map(u=>'<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span></td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · ")||"—")+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
+ const q=$("#userSearch").value.trim().toLowerCase(),f=$("#userFilter").value;
+ const list=rows.filter(x=>(f==="all"||String(x.role||"")===f)&&match(x,q,["displayName","name","email","accountCode","schoolName","className"]));
+ $("#userTable").innerHTML=list.map(u=>{
+  const locked=Boolean(u.disabled);
+  const protectedUser=String(u.email||"").toLowerCase()==="katlearn.admin@gmail.com";
+  return '<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span>'+ (locked?'<small class="bad-text">🔒 Đang khóa</small>':'') +'</td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · ")||"—")+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td><td><div class="row-actions">'+
+   (protectedUser?'':'<button class="btn" data-rename-user="'+esc(u.id)+'">Sửa tên</button>'+
+   '<button class="btn" data-reset-user="'+esc(u.id)+'">Reset</button>'+
+   (locked?'<button class="btn good" data-enable-user="'+esc(u.id)+'">Mở khóa</button>':'<button class="btn" data-disable-user="'+esc(u.id)+'">Khóa</button>')+
+   '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>')+
+   '</div></td></tr>'
+ }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
+ $("#userTable [data-rename-user]").forEach(b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
+ $("#userTable [data-reset-user]").forEach(b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
+ $("#userTable [data-disable-user]").forEach(b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
+ $("#userTable [data-enable-user]").forEach(b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
+ $("#userTable [data-delete-user]").forEach(b=>b.onclick=()=>deleteUserAccount(b.dataset.deleteUser));
  $("#userLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderClasses(rows,limited){
  const q=$("#classSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));
- $("#classTable").innerHTML=list.map(c=>'<tr><td><strong>'+esc(c.name||"—")+'</strong><small>Khối '+esc(c.grade||"—")+' · <span class="mono">'+esc(c.id)+'</span></small></td><td>'+esc(c.teacherEmail||c.teacherUid||"—")+'</td><td>'+esc(c.schoolName||"—")+'<small>'+esc([c.province,c.ward].filter(Boolean).join(" · "))+'</small></td><td><span class="badge teacher">'+esc(c.joinCode||"—")+'</span></td><td>'+fmt(c.studentCount)+'</td><td>'+date(c.updatedAt||c.createdAt)+'</td></tr>').join("")||'<tr><td colspan="6"><div class="empty">Không có lớp học.</div></td></tr>';
+ $("#classTable").innerHTML=list.map(cl=>'<tr><td><strong>'+esc(cl.name||"—")+'</strong><small>Khối '+esc(cl.grade||"—")+' · <span class="mono">'+esc(cl.id)+'</span></small></td><td>'+esc(cl.teacherEmail||cl.teacherUid||"—")+'</td><td>'+esc(cl.schoolName||"—")+'<small>'+esc([cl.province,cl.ward].filter(Boolean).join(" · "))+'</small></td><td><span class="badge teacher">'+esc(cl.joinCode||"—")+'</span></td><td>'+fmt(cl.studentCount)+'</td><td>'+date(cl.updatedAt||cl.createdAt)+'</td><td><div class="row-actions"><button class="btn" data-edit-class="'+esc(cl.id)+'">Sửa</button><button class="btn bad" data-delete-class="'+esc(cl.id)+'">Xóa</button></div></td></tr>').join("")||'<tr><td colspan="7"><div class="empty">Không có lớp học.</div></td></tr>';
+ $("#classTable [data-edit-class]").forEach(b=>b.onclick=()=>editClass(list.find(x=>x.id===b.dataset.editClass)));
+ $("#classTable [data-delete-class]").forEach(b=>b.onclick=()=>deleteClassAdmin(b.dataset.deleteClass));
  $("#classLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderPacks(rows,limited){
@@ -128,7 +145,12 @@ function renderPacks(rows,limited){
 }
 function renderSchools(rows,limited){
  const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","province","ward","schoolLevel","source"]));
- $("#schoolTable").innerHTML=list.map(s=>'<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID <span class="mono">'+esc(s.id)+'</span></small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy trường.</div></td></tr>';
+ $("#schoolTable").innerHTML=list.map(s=>{
+  const protectedSchool=String(s.source||"").startsWith("thanhtungct7")||String(s.sourceType||"").includes("national");
+  return '<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID <span class="mono">'+esc(s.id)+'</span></small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td><td><div class="row-actions"><button class="btn" data-edit-school="'+esc(s.id)+'">Sửa</button>'+ (protectedSchool?'':'<button class="btn bad" data-delete-school="'+esc(s.id)+'">Xóa</button>') +'</div></td></tr>'
+ }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy trường.</div></td></tr>';
+ $("#schoolTable [data-edit-school]").forEach(b=>b.onclick=()=>editSchool(list.find(x=>x.id===b.dataset.editSchool)));
+ $("#schoolTable [data-delete-school]").forEach(b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
  $("#schoolLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderActivity(rows){
@@ -199,6 +221,69 @@ async function teacherAction(action,uid){
  try{await apiAction(action==="verify"?"verify-teacher":"reject-teacher",{uid});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.data.teachers=null;state.data.overview=null;await loadPage("overview",true);state.page="overview";clearPageError();renderOverview(state.data.overview||{});$(".page").forEach(x=>x.classList.toggle("active",x.id==="page-overview"));$(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page==="overview"));$("#pageTitle").textContent="Tổng quan";window.scrollTo({top:0,behavior:"smooth"})}catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật giáo viên")}}
 async function inspectTeacher(uid){
  const t=(state.data.teachers?.rows||[]).find(x=>x.id===uid);if(!t)return;const v=t.teacherVerification||{};await dialog("Hồ sơ giáo viên","Tên: "+(t.displayName||t.name||"—")+"\nEmail: "+(t.email||"—")+"\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\nLớp: "+(v.requestedClassName||t.className||"—")+"\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—"),"Đóng","");}
+async function renameUser(uid,currentName){
+ const name=prompt("Tên hiển thị mới:",currentName);
+ if(name===null)return;
+ const clean=String(name).trim();
+ if(!clean)return toast("Tên hiển thị không được để trống.","bad");
+ try{await apiAction("rename-user",{uid,name:clean});toast("✓ Đã cập nhật tài khoản.","good");state.data.users=null;await loadPage("users",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể sửa tài khoản")}
+}
+async function setUserDisabled(uid,disabled){
+ const ok=await dialog(disabled?"Khóa tài khoản?":"Mở khóa tài khoản?","Thao tác này sẽ áp dụng trực tiếp lên Firebase Authentication.","Xác nhận","Hủy");
+ if(!ok)return;
+ try{await apiAction(disabled?"disable-user":"enable-user",{uid});toast(disabled?"✓ Đã khóa tài khoản.":"✓ Đã mở khóa tài khoản.","good");state.data.users=null;await loadPage("users",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật trạng thái tài khoản")}
+}
+async function resetUserStats(uid){
+ const ok=await dialog("Reset chỉ số tài khoản?","Coins, energy, streak và các bộ đếm học tập sẽ được đưa về 0.","Reset","Hủy");
+ if(!ok)return;
+ try{await apiAction("reset-user-stats",{uid});toast("✓ Đã reset chỉ số.","good");state.data.users=null;await loadPage("users",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể reset tài khoản")}
+}
+async function deleteUserAccount(uid){
+ const ok=await dialog("Xóa tài khoản vĩnh viễn?","Firebase Authentication và hồ sơ users sẽ bị xóa. Hành động này không thể hoàn tác.","Xóa vĩnh viễn","Hủy");
+ if(!ok)return;
+ try{await apiAction("delete-user",{uid});toast("✓ Đã xóa tài khoản.","good");state.data.users=null;state.data.overview=null;await loadPage("users",true);await loadPage("overview",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể xóa tài khoản")}
+}
+async function editClass(cl){
+ if(!cl)return;
+ const name=prompt("Tên lớp:",cl.name||"");
+ if(name===null)return;
+ const grade=prompt("Khối/lớp:",cl.grade||"");
+ if(grade===null)return;
+ const description=prompt("Mô tả:",cl.description||"");
+ if(description===null)return;
+ try{await apiAction("update-class",{classId:cl.id,name:name.trim(),grade:grade.trim(),description:description.trim()});toast("✓ Đã cập nhật lớp.","good");state.data.classes=null;await loadPage("classes",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể sửa lớp")}
+}
+async function deleteClassAdmin(classId){
+ const ok=await dialog("Xóa lớp và dữ liệu liên quan?","Thành viên, lời mời và bài giao của lớp sẽ được dọn. Dữ liệu học tập trong hồ sơ học sinh không bị xóa.","Xóa lớp","Hủy");
+ if(!ok)return;
+ try{await apiAction("delete-class",{classId});toast("✓ Đã xóa lớp và dọn dữ liệu liên quan.","good");state.data.classes=null;state.data.overview=null;await loadPage("classes",true);await loadPage("overview",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể xóa lớp")}
+}
+async function editSchool(s){
+ if(!s)return;
+ const name=prompt("Tên trường:",s.name||"");
+ if(name===null)return;
+ const province=prompt("Tỉnh/thành:",s.province||"");
+ if(province===null)return;
+ const ward=prompt("Xã/phường:",s.ward||"");
+ if(ward===null)return;
+ const schoolLevel=prompt("Mức trường (primary/middle/high/combined):",s.schoolLevel||"");
+ if(schoolLevel===null)return;
+ try{await apiAction("update-school",{schoolId:s.id,name:name.trim(),province:province.trim(),ward:ward.trim(),schoolLevel:schoolLevel.trim()});toast("✓ Đã cập nhật trường.","good");state.data.schools=null;await loadPage("schools",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể sửa trường")}
+}
+async function deleteSchoolAdmin(schoolId){
+ const ok=await dialog("Xóa trường?","Chỉ trường không thuộc National Catalog và không còn tài khoản/lớp liên kết mới được xóa.","Xóa trường","Hủy");
+ if(!ok)return;
+ try{await apiAction("delete-school",{schoolId});toast("✓ Đã xóa trường.","good");state.data.schools=null;state.data.overview=null;await loadPage("schools",true);await loadPage("overview",true)}
+ catch(e){toast(e,"bad");pageError(e,"Không thể xóa trường")}
+}
+
 async function deletePack(id){
  const ok=await dialog("Xóa bộ từ?","Bộ từ sẽ bị xóa khỏi publicPacks và assignment liên quan sẽ được dọn bởi backend.","Xóa","Hủy");if(!ok)return;
  try{await apiAction("delete-pack",{packId:id});toast("✓ Đã xóa bộ từ","good");state.data.packs=null;await loadPage("packs",true)}catch(e){toast(e,"bad");pageError(e,"Không thể xóa bộ từ")}}
