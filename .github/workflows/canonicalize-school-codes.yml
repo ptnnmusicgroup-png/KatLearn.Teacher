@@ -28,7 +28,7 @@ jobs:
       - name: Canonicalize codes from 2026 school dataset
         run: |
           python <<'PY'
-          import json, re, unicodedata
+          import hashlib, json, re, unicodedata
           from pathlib import Path
           import requests
 
@@ -97,7 +97,9 @@ jobs:
               target=tree_by_code.get((pname,norm(wname)))
               if not target: continue
               code=str(r.get("Mã Trường","")).zfill(3)
-              item={"id":"su26_"+hash(name+"|"+pname+"|"+wc).__format__("x")[:20],"name":f"({code}) {name}","_catalog_code_source":"2026-SU26-school-dataset"}
+              stable_key=f"{name}|{pname}|{wc}".encode("utf-8")
+              stable_id="su26_"+hashlib.sha256(stable_key).hexdigest()[:20]
+              item={"id":stable_id,"name":f"({code}) {name}","_catalog_code_source":"2026-SU26-school-dataset"}
               target.setdefault("schools",[]).append(item)
               existing_keys.add((pname,wc,norm(name)))
               added+=1
