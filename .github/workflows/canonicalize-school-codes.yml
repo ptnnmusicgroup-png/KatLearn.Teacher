@@ -1,0 +1,120 @@
+name: canonicalize 2026 school codes
+
+on:
+  push:
+    paths:
+      - "api/catalog-harvest.js"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  canonicalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Canonicalize codes from 2026 school dataset
+        run: |
+          python <<'PY'
+          import json, re, unicodedata
+          from pathlib import Path
+          import requests
+
+          TREE=Path("data/national-catalog/full-school-tree.json")
+          WARDS=Path("data/national-catalog/official-ward-list.json")
+          SRC="https://raw.githubusercontent.com/SU26-PRM393/PRM393_Lab03_SE193626_SE184889_SE182280_SE192491/main/schools.json"
+
+          def norm(v):
+              s=str(v or "").strip()
+              s="".join(c for c in unicodedata.normalize("NFD",s) if unicodedata.category(c)!="Mn")
+              s=s.replace("đ","d").replace("Đ","D").lower()
+              return re.sub(r"[^a-z0-9]+"," ",s).strip()
+
+          def base(v):
+              return re.sub(r"^\([^)]*\)\s*","",str(v or "")).strip()
+
+          tree=json.loads(TREE.read_text(encoding="utf-8"))
+          wards=json.loads(WARDS.read_text(encoding="utf-8"))
+          official_prov={str(p["code"]).zfill(2):p["name"] for p in wards["provinces"]}
+          ward_by_name={(p["name"],norm(w["name"])):str(w["id"]).zfill(5) for p in wards["provinces"] for w in p.get("wards",[])}
+
+          rows=requests.get(SRC,timeout=90,headers={"User-Agent":"KatLearn-Code-Canonicalizer/2026"}).json()
+
+          exact={}
+          for r in rows:
+              p=str(r.get("Mã Tỉnh/TP","")).zfill(2)
+              wc=str(r.get("Mã Xã/ Phường","")).zfill(5)
+              name=str(r.get("Tên Trường","")).strip()
+              low=norm(name)
+              if not re.search(r"(^| )thpt( |$)|trung hoc pho thong|(^| )thcs( |$)|trung hoc co so|(^| )th( |$)|tieu hoc",low):
+                  continue
+              pname=official_prov.get(p)
+              if not pname or not re.fullmatch(r"\d{5}",wc): continue
+              key=(pname,wc,norm(name))
+              exact[key]=str(r.get("Mã Trường","")).zfill(3)
+
+          updated=added=0
+          existing_keys=set()
+          for p in tree:
+              for w in p.get("wards",[]):
+                  wc=ward_by_name.get((p["name"],norm(w["name"])))
+                  if not wc: continue
+                  for s in w.get("schools",[]):
+                      existing_keys.add((p["name"],wc,norm(base(s.get("name","")))))
+                      key=(p["name"],wc,norm(base(s.get("name",""))))
+                      code=exact.get(key)
+                      if code:
+                          clean=base(s.get("name",""))
+                          s["name"]=f"({code}) {clean}"
+                          s["_catalog_code_source"]="2026-SU26-school-dataset"
+                          updated+=1
+
+          # Add still-missing canonical 2026 K12 rows.
+          tree_by_code={(p["name"],norm(w["name"])):w for p in tree for w in p.get("wards",[])}
+          for r in rows:
+              p=str(r.get("Mã Tỉnh/TP","")).zfill(2)
+              wc=str(r.get("Mã Xã/ Phường","")).zfill(5)
+              name=str(r.get("Tên Trường","")).strip()
+              low=norm(name)
+              if not re.search(r"(^| )thpt( |$)|trung hoc pho thong|(^| )thcs( |$)|trung hoc co so|(^| )th( |$)|tieu hoc",low):
+                  continue
+              pname=official_prov.get(p)
+              wname=str(r.get("Tên Xã/Phường","")).strip()
+              if not pname or not wc or (pname,wc,norm(name)) in existing_keys:
+                  continue
+              target=tree_by_code.get((pname,norm(wname)))
+              if not target: continue
+              code=str(r.get("Mã Trường","")).zfill(3)
+              item={"id":"su26_"+hash(name+"|"+pname+"|"+wc).__format__("x")[:20],"name":f"({code}) {name}","_catalog_code_source":"2026-SU26-school-dataset"}
+              target.setdefault("schools",[]).append(item)
+              existing_keys.add((pname,wc,norm(name)))
+              added+=1
+
+          TREE.write_text(json.dumps(tree,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          stats={
+              "canonicalRows":len(exact),
+              "updated":updated,
+              "added":added,
+              "schoolsAfter":sum(len(w.get("schools",[])) for p in tree for w in p.get("wards",[])),
+              "emptyWardsAfter":sum(1 for p in tree for w in p.get("wards",[]) if not w.get("schools")),
+              "formatErrors":sum(1 for p in tree for w in p.get("wards",[]) for s in w.get("schools",[]) if not re.match(r"^\([^)]+\)\s+.+$",str(s.get("name",""))))
+          }
+          print(json.dumps(stats,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit canonical school codes
+        run: |
+          git config user.name "KatLearn Catalog Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/national-catalog/full-school-tree.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(catalog): canonicalize 2026 school codes"
+          git push
