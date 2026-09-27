@@ -134,7 +134,7 @@ jobs:
               source_rows.extend(parse_source(level, url))
 
           # Official 2026 THPT source; rows contain current ward names and school codes.
-          THPT_PDF = "https://tuyensinh.tdmu.edu.vn/img/ckeditor/Files/13-06-2026-3-20-40-CHDanh+sach+tr%C6%B0%E1%BB%9Dng+THPT-9.5.2026.pdf"
+          THPT_PDF = "https://thpthungvuongkna.edu.vn/wp-content/uploads/2026/04/danh-sach-truong-thpt2026-639125955431696152.pdf"
           def parse_official_thpt():
               out = []
               try:
