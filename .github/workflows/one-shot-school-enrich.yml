@@ -22,7 +22,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install parser dependencies
-        run: python -m pip install --disable-pip-version-check requests beautifulsoup4
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4 pdfplumber
 
       - name: Enrich current commune school tree
         env:
@@ -133,6 +133,47 @@ jobs:
           for level, url in SOURCES:
               source_rows.extend(parse_source(level, url))
 
+          # Official 2026 THPT source; rows contain current ward names and school codes.
+          THPT_PDF = "https://tuyensinh.tdmu.edu.vn/img/ckeditor/Files/13-06-2026-3-20-40-CHDanh+sach+tr%C6%B0%E1%BB%9Dng+THPT-9.5.2026.pdf"
+          def parse_official_thpt():
+              out = []
+              try:
+                  import pdfplumber
+                  rr = requests.get(THPT_PDF, timeout=90, headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
+                  if rr.status_code != 200 or not rr.content.startswith(b"%PDF"):
+                      print("official THPT download failed:", rr.status_code)
+                      return out
+                  pdf_path = Path("/tmp/thpt2026.pdf")
+                  pdf_path.write_bytes(rr.content)
+                  with pdfplumber.open(pdf_path) as pdf:
+                      for page in pdf.pages:
+                          for table in page.extract_tables() or []:
+                              for row in table:
+                                  cells = [re.sub(r"\s+"," ",str(x or "")).strip() for x in row]
+                                  if len(cells) < 6: continue
+                                  joined = norm(" ".join(cells))
+                                  if "ma tinh" in joined and "ma truong" in joined: continue
+                                  pidx = next((i for i,x in enumerate(cells) if province_name(x)), None)
+                                  if pidx is None: continue
+                                  pname = province_name(cells[pidx])
+                                  if pname not in PROV_CODE: continue
+                                  widx = next((i for i in range(pidx+1,len(cells)) if re.fullmatch(r"\d{5}", re.sub(r"\D","",cells[i]))), None)
+                                  if widx is None or widx+1 >= len(cells): continue
+                                  wname = re.sub(r"\s*\(trước[^)]*\)", "", cells[widx+1], flags=re.I).strip()
+                                  sidx = next((i for i in range(widx+2,len(cells)) if re.fullmatch(r"\d{1,4}", re.sub(r"\D","",cells[i]))), None)
+                                  if sidx is None or sidx+1 >= len(cells): continue
+                                  sname = cells[sidx+1]
+                                  if not re.search(r"(thpt|trung học phổ thông)", norm(sname)): continue
+                                  scode = re.sub(r"\D","",cells[sidx])
+                                  out.append({"province":pname,"ward":wname,"school_code":scode,"name":sname,"level":"THPT","source":THPT_PDF})
+                  return out
+              except Exception as exc:
+                  print("official THPT parse exception:", exc)
+                  return out
+
+          thpt_rows = parse_official_thpt()
+          print("official THPT rows:", len(thpt_rows))
+
           def school_level(name):
               n = norm(name)
               return ("THPT" if ("thpt" in n or "trung hoc pho thong" in n)
@@ -167,6 +208,43 @@ jobs:
                       if m: all_codes.add(m.group(1))
                       all_names[(p["name"], norm(re.sub(r"^\([^)]*\)\s*", "", s.get("name",""))))] = True
 
+          # Apply official THPT rows first, matching the current ward name from the 2026 PDF.
+          official_thpt_added = 0
+          official_thpt_updated = 0
+          for r in thpt_rows:
+              target = None
+              wanted = norm(r["ward"])
+              for p in data:
+                  if p["name"] != r["province"]: continue
+                  for w in p.get("wards", []):
+                      wn = norm(w.get("name",""))
+                      wb = norm(re.sub(r"^(xa|phuong|dac khu)\s+","",w.get("name",""),flags=re.I))
+                      if wn == wanted or wb == wanted or wn == wanted.replace("xa ","",1).replace("phuong ","",1):
+                          target = w
+                          break
+                  if target: break
+              if not target: continue
+              base_name = r["name"].strip()
+              base_key = norm(base_name)
+              key = (r["province"], target["name"])
+              existing = existing_by_ward.setdefault(key, {})
+              official_code = PROV_CODE[r["province"]] + str(int(r["school_code"])).zfill(4)
+              if base_key in existing:
+                  item = existing[base_key]
+                  stripped = re.sub(r"^\([^)]*\)\s*","",str(item.get("name",""))).strip()
+                  item["name"] = f"({official_code}) {stripped}"
+                  all_codes.add(official_code)
+                  official_thpt_updated += 1
+              else:
+                  sid = "official_thpt_" + hashlib.sha1(f'{r["province"]}|{target["name"]}|{base_name}'.encode("utf-8")).hexdigest()[:20]
+                  item = {"id":sid,"name":f"({official_code}) {base_name}"}
+                  target.setdefault("schools", []).append(item)
+                  existing[base_key] = item
+                  all_names[(r["province"], base_key)] = True
+                  all_codes.add(official_code)
+                  official_thpt_added += 1
+                  added.append({"province":r["province"],"ward":target["name"],"name":item["name"],"level":"THPT"})
+
           added = []
           for r in source_rows:
               ward = find_ward(r["province"], r["address"])
@@ -197,6 +275,9 @@ jobs:
           TREE.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           Path("/tmp/catalog_stats.json").write_text(json.dumps({
               "sourceRows":len(source_rows),
+              "officialTHPTRows":len(thpt_rows),
+              "officialTHPTAdded":official_thpt_added,
+              "officialTHPTUpdated":official_thpt_updated,
               "added":len(added),
               "byLevel":{k:sum(1 for x in added if x["level"]==k) for k in ["TH","THCS","THPT"]},
               "sample":added[:25]
