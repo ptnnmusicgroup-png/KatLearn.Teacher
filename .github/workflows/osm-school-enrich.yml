@@ -29,10 +29,10 @@ jobs:
         run: |
           python <<'PY'
           import hashlib
-                    import json
+          import json
           import re
           import unicodedata
-                    from pathlib import Path
+          from pathlib import Path
 
           import requests
           from shapely.geometry import Point, shape
