@@ -1,4 +1,4 @@
-const{headers,forward}=require("./_admin-proxy");
+import{headers,forward}from"./_admin-proxy.js";
 
 export default async function handler(req,res){
   if(req.method==="OPTIONS")return res.status(204).set({...headers(req),"Content-Length":"0"}).end();
