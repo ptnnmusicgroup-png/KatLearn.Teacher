@@ -149,7 +149,7 @@ import{initializeApp,getApps}from'https://www.gstatic.com/firebasejs/10.14.1/fir
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};
 const ADMIN_EMAIL='katlearn.admin@gmail.com';
-const ADMIN_API_BASE='https://lms-katlearn.vercel.app/api';
+const ADMIN_API_BASE='/api';
 const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG),auth=getAuth(app);
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
