@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260927-6">
+<link rel="stylesheet" href="admin.css?v=20260927-7">
 </head>
 <body>
 <section id="loginGate" class="login-gate">
@@ -95,12 +95,12 @@
 
       <section class="page" id="page-users">
         <div class="hero"><div><p class="eyebrow">ACCOUNT DIRECTORY</p><h1>Tài khoản</h1><p>Danh bạ tài khoản Firebase, tải theo giới hạn an toàn để Admin Hub luôn nhẹ.</p></div><div class="hero-cat">👥</div></div>
-        <section class="card"><div class="toolbar"><input id="userSearch" class="input" placeholder="Tìm tên, email, mã, trường…"><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit"></div></section>
+        <section class="card"><div class="toolbar"><input id="userSearch" class="input" placeholder="Tìm tên, email, mã, trường…"><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th><th>Quản lý</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-classes">
         <div class="hero"><div><p class="eyebrow">CLASS DIRECTORY</p><h1>Lớp học</h1><p>Tra cứu lớp, giáo viên phụ trách, trường và mã tham gia.</p></div><div class="hero-cat">▦</div></div>
-        <section class="card"><div class="toolbar"><input id="classSearch" class="input" placeholder="Tìm lớp, giáo viên, trường, mã…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã</th><th>Sĩ số</th><th>Cập nhật</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit"></div></section>
+        <section class="card"><div class="toolbar"><input id="classSearch" class="input" placeholder="Tìm lớp, giáo viên, trường, mã…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã</th><th>Sĩ số</th><th>Cập nhật</th><th>Quản lý</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-packs">
@@ -110,7 +110,7 @@
 
       <section class="page" id="page-schools">
         <div class="hero"><div><p class="eyebrow">SCHOOL DIRECTORY</p><h1>Trường học</h1><p>Danh sách trường mà ứng dụng đang tham chiếu, gồm cả dữ liệu catalog.</p></div><div class="hero-cat">🏫</div></div>
-        <section class="card"><div class="toolbar"><input id="schoolSearch" class="input" placeholder="Tìm trường, tỉnh/thành, xã/phường…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh / thành</th><th>Xã / phường</th><th>Mức</th><th>Nguồn</th></tr></thead><tbody id="schoolTable"></tbody></table></div><div id="schoolLimit" class="limit"></div></section>
+        <section class="card"><div class="toolbar"><input id="schoolSearch" class="input" placeholder="Tìm trường, tỉnh/thành, xã/phường…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh / thành</th><th>Xã / phường</th><th>Mức</th><th>Nguồn</th><th>Quản lý</th></tr></thead><tbody id="schoolTable"></tbody></table></div><div id="schoolLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-catalog">
@@ -132,6 +132,6 @@
   <div class="modal"><p class="eyebrow">CONFIRM ACTION</p><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div>
 </div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20260927-6"></script>
+<script type="module" src="admin.js?v=20260927-7"></script>
 </body>
 </html>
