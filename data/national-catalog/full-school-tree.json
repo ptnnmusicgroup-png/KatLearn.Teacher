@@ -15487,6 +15487,10 @@
           {
             "id": "firestore_thpt_9a165daa844406ef33d1",
             "name": "(419) THPT Võ Minh Đức"
+          },
+          {
+            "id": "hcm2026_aa5dc652d08d20e87c85",
+            "name": "(74000829) Trường Trung - Tiểu học Pétrus Ký"
           }
         ]
       },
@@ -15529,6 +15533,14 @@
           {
             "id": "directory_school_77c5fcd91aea699b8d58",
             "name": "(79783424) TH Phú Mỹ Hưng"
+          },
+          {
+            "id": "hcm2026_68539123f2e1d1558ee5",
+            "name": "(74000836) Trường Tiểu học, Trung học cơ sở và Trung học phổ thông Việt Anh 3"
+          },
+          {
+            "id": "hcm2026_ad053ace6c27757284b2",
+            "name": "(74000708) Trường THPT Nguyễn Đình Chiểu"
           }
         ]
       },
@@ -15571,6 +15583,18 @@
           {
             "id": "firestore_thpt_3a22f916d892acd3eca6",
             "name": "(591) TH, THCS và THPT Elite"
+          },
+          {
+            "id": "hcm2026_707d0ba18cf5fbe2c511",
+            "name": "(74718800) Trường THCS và THPT Nguyễn Khuyến - Bình Dương"
+          },
+          {
+            "id": "hcm2026_b96d722de9fa2e2c4035",
+            "name": "(74000833) Trường Tiểu học, Trung học cơ sở và Trung học phổ thông Ngô Thời Nhiệm"
+          },
+          {
+            "id": "hcm2026_55e674f4e9983f20a66e",
+            "name": "(74000723) Trường THPT An Mỹ"
           }
         ]
       },
@@ -15589,6 +15613,10 @@
           {
             "id": "firestore_thpt_defd19353196f5cbfe16",
             "name": "(415) THPT Tây Nam"
+          },
+          {
+            "id": "hcm2026_602d75dfb835ff89a2e9",
+            "name": "(74000720) Trường THPT Tây Nam"
           }
         ]
       },
@@ -15615,6 +15643,14 @@
           {
             "id": "firestore_thpt_b243a84a4dd379d36157",
             "name": "(583) TH-THCS-THPT Marie Curie"
+          },
+          {
+            "id": "hcm2026_61aabed872a06ab1d852",
+            "name": "(74000716) Trường THPT Bình Phú - Bình Dương"
+          },
+          {
+            "id": "hcm2026_538da1fbeaa4e4a80bd0",
+            "name": "(7400004002) Trường TH-THCS-THPT Marie Curie"
           }
         ]
       },
@@ -15637,6 +15673,10 @@
           {
             "id": "github2026_525b84378d13366f4f29",
             "name": "(802) Trường THPT - Khu vực 2NT"
+          },
+          {
+            "id": "hcm2026_abcfa5e5121ec780d1cb",
+            "name": "(74000715) Trường THPT Dầu Tiếng"
           }
         ]
       },
@@ -15663,6 +15703,10 @@
           {
             "id": "github2026_5296ab952f8d636b3bd6",
             "name": "(803) Trường THPT - Khu vực 2"
+          },
+          {
+            "id": "hcm2026_218e92a9abf268fb250b",
+            "name": "(74000705) Trường THCS-THPT Minh Hòa"
           }
         ]
       },
@@ -15685,6 +15729,10 @@
           {
             "id": "directory_school_70bf818681799d67a1d3",
             "name": "(79787411) TH Long Thạnh"
+          },
+          {
+            "id": "hcm2026_9356af6e8f352fe5a0d8",
+            "name": "(74000726) Trường THPT Long Hòa"
           }
         ]
       },
@@ -15745,13 +15793,22 @@
           {
             "id": "firestore_thpt_2d4490beff522f72d1ef",
             "name": "(402) THPT Bến Cát"
+          },
+          {
+            "id": "hcm2026_6031cf4c0922643454d4",
+            "name": "(74000714) Trường THPT Bến Cát"
           }
         ]
       },
       {
         "id": "689ea500229a7e0018936cf2",
         "name": "Xã Trừ Văn Thố",
-        "schools": []
+        "schools": [
+          {
+            "id": "hcm2026_5c80fdad1e269d8b439a",
+            "name": "(74721430) TH-THCS-THPT Lương Thế Vinh"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936cf3",
@@ -15764,6 +15821,10 @@
           {
             "id": "firestore_thpt_083bd060895da3f7ced1",
             "name": "(434) THPT Bàu Bàng"
+          },
+          {
+            "id": "hcm2026_f87c0a81b88b02dccde1",
+            "name": "(74000725) Trường THPT Bàu Bàng"
           }
         ]
       },
@@ -15810,6 +15871,10 @@
           {
             "id": "firestore_thpt_b7abb8c9be8c08fd61e5",
             "name": "(440) THPT Thanh Tuyền"
+          },
+          {
+            "id": "hcm2026_8e7d48bb0f70015624ce",
+            "name": "(74000820) Trường THPT Thanh Tuyền"
           }
         ]
       },
@@ -15848,6 +15913,10 @@
           {
             "id": "firestore_thpt_ebc79b53cf92644021d6",
             "name": "(439) THPT Phước Vĩnh"
+          },
+          {
+            "id": "hcm2026_a02c2e786a35b3374632",
+            "name": "(74000713) Trường THPT Phước Vĩnh"
           }
         ]
       },
@@ -15866,6 +15935,10 @@
           {
             "id": "firestore_thpt_db0528bac23f3e3e692d",
             "name": "(432) THCS-THPT Nguyễn Huệ"
+          },
+          {
+            "id": "hcm2026_2fb416484ab6bdc157a9",
+            "name": "(74000719) Trung học cơ sở và Trung học phổ thông Nguyễn Huệ"
           }
         ]
       },
@@ -15888,6 +15961,10 @@
           {
             "id": "directory_school_417af4d6b75ee404f2d3",
             "name": "(79777507) THCSCL Tân Tạo"
+          },
+          {
+            "id": "hcm2026_b966c80bf9b525a72281",
+            "name": "(74000718) Trung học cơ sở và Trung học phổ thông Tây Sơn"
           }
         ]
       },
@@ -15920,6 +15997,10 @@
           {
             "id": "firestore_thpt_bbc5151ce4d76baf621f",
             "name": "(407) THPT Huỳnh Văn Nghệ"
+          },
+          {
+            "id": "hcm2026_d8d303d0292983cf4cb2",
+            "name": "(74000712) Trường THPT Huỳnh Văn Nghệ"
           }
         ]
       },
@@ -15958,6 +16039,14 @@
           {
             "id": "firestore_thpt_d05148f17bdc22def487",
             "name": "(416) THPT Thái Hòa"
+          },
+          {
+            "id": "hcm2026_6415b81d2cfe93dfae99",
+            "name": "(74000722) Trường THPT Thái Hòa"
+          },
+          {
+            "id": "hcm2026_0a98386da6d4397fcff2",
+            "name": "(74000721) Trường THPT Tân Phước Khánh"
           }
         ]
       },
@@ -15984,6 +16073,10 @@
           {
             "id": "firestore_thpt_e1ba0760513289bf922b",
             "name": "(436) THPT Lê Lợi"
+          },
+          {
+            "id": "hcm2026_08d45246891c7ded5b34",
+            "name": "(7400004003) Trường THPT Lê Lợi"
           }
         ]
       },
@@ -15998,6 +16091,10 @@
           {
             "id": "firestore_thpt_9a9eed33ad8f52db274e",
             "name": "(441) THPT Thường Tân"
+          },
+          {
+            "id": "hcm2026_39be512a755d409e205b",
+            "name": "(74000816) Trường THPT Thường Tân"
           }
         ]
       },
@@ -16012,6 +16109,10 @@
           {
             "id": "firestore_thpt_822217f6a7ff8afcf4e3",
             "name": "(413) THPT Tân Bình-Bình Dương"
+          },
+          {
+            "id": "hcm2026_1cc89275620863d1b08f",
+            "name": "(7400004004) Trường THPT Tân Bình - Bình Dương"
           }
         ]
       },
@@ -16078,6 +16179,22 @@
           {
             "id": "firestore_thpt_bb7317ace766c9ad6605",
             "name": "(586) TH-THCS-THPT Việt Anh 2"
+          },
+          {
+            "id": "hcm2026_9bf7db8ca438615f9f59",
+            "name": "(7400832) Trường TH-THCS-THPT Phan Chu Trinh"
+          },
+          {
+            "id": "hcm2026_0568f489e10d326fb375",
+            "name": "(74000834) Trường Tiểu học THCS và THPT Việt Anh 2"
+          },
+          {
+            "id": "hcm2026_082e8611bb194ac76b59",
+            "name": "(74000701) Trường THPT Dĩ An"
+          },
+          {
+            "id": "hcm2026_d9f25b3c361c8b04bee0",
+            "name": "(74000711) Trường THPT Nguyễn An Ninh - Bình Dương"
           }
         ]
       },
@@ -16108,6 +16225,10 @@
           {
             "id": "firestore_thpt_7015091c5385cf351b56",
             "name": "(411) THPT Nguyễn Thị Minh Khai-Bình Dương"
+          },
+          {
+            "id": "hcm2026_b1ecf154b8ab32d84f83",
+            "name": "(74000759) Trường THPT Nguyễn Thị Minh Khai - Bình Dương"
           }
         ]
       },
@@ -16146,6 +16267,14 @@
           {
             "id": "firestore_thpt_dc7f85a9b140cbb91beb",
             "name": "(590) TH, THCS và THPT B.School"
+          },
+          {
+            "id": "hcm2026_6f2d4a49a667585477ea",
+            "name": "(74000706) Trường THPT Bình An"
+          },
+          {
+            "id": "hcm2026_8b1e64893d6c74c2fd9f",
+            "name": "(7472402002) Trường tiểu học, THCS và THPT B.School"
           }
         ]
       },
@@ -16164,6 +16293,10 @@
           {
             "id": "firestore_thpt_09c8f3cf214c825c1d40",
             "name": "(412) THPT Nguyễn Trãi-Bình Dương"
+          },
+          {
+            "id": "hcm2026_d95d8d835e8cca713283",
+            "name": "(74000710) Trường THPT Nguyễn Trãi - Bình Dương"
           }
         ]
       },
@@ -16182,6 +16315,14 @@
           {
             "id": "firestore_thpt_be4c8dd2d8cb3995d6eb",
             "name": "(582) TH-THCS-THPT Đức Trí"
+          },
+          {
+            "id": "hcm2026_f414616ae565923faff4",
+            "name": "(74000831) Trường Tiểu học, THCS và THPT Đức Trí"
+          },
+          {
+            "id": "hcm2026_0a022e09eadd14e02805",
+            "name": "(74000717) Trường THPT Trần Văn Ơn"
           }
         ]
       },
@@ -16230,6 +16371,10 @@
           {
             "id": "firestore_thpt_fd4ca47863f7fea911ad",
             "name": "(418) THPT Trịnh Hoài Đức"
+          },
+          {
+            "id": "hcm2026_3e187e7d17b7a666f181",
+            "name": "(74000709) Trường THPT Trịnh Hoài Đức"
           }
         ]
       },
@@ -16313,6 +16458,10 @@
           {
             "id": "firestore_thpt_623f83d90952503498b6",
             "name": "(817) THCS - THPT Song ngữ Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_c28e2f7715ec084c5668",
+            "name": "(77000813) THPT Đinh Tiên Hoàng"
           }
         ]
       },
@@ -16395,6 +16544,14 @@
           {
             "id": "firestore_thpt_ec4d49611c2656e4f0bd",
             "name": "(813) TH-THCS-THPT Einstein Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_151628290279858b8a31",
+            "name": "(77000814) THPT Trần Nguyên Hãn"
+          },
+          {
+            "id": "hcm2026_8d1e1af3fb8560269720",
+            "name": "(77000702) THPT Vũng Tàu"
           }
         ]
       },
@@ -16449,6 +16606,10 @@
           {
             "id": "firestore_thpt_369132858c2da6bfd5d4",
             "name": "(815) TH-THCS-THPT Nguyễn Thị Minh Khai"
+          },
+          {
+            "id": "hcm2026_cf9852729b18470163d2",
+            "name": "(77000812) Trường THPT Nguyễn Huệ - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16503,6 +16664,14 @@
           {
             "id": "firestore_thpt_b622f6a4151f16b37f52",
             "name": "(708) THPT Nguyễn Khuyến - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_8aa1f383a06a6524b1f0",
+            "name": "(77000F01) Trường THPT Chuyên Lê Quý Đôn"
+          },
+          {
+            "id": "hcm2026_6d5eb22d1adc0d6b970a",
+            "name": "(77000784) Trường THPT Nguyễn Khuyến - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16583,6 +16752,14 @@
           {
             "id": "firestore_thpt_65e011a8625a0de5b451",
             "name": "(812) TH-THCS-THPT Học viện Anh Quốc"
+          },
+          {
+            "id": "hcm2026_fcd7c87a2444c1b68404",
+            "name": "(77000820) Trường THPT Bà Rịa"
+          },
+          {
+            "id": "hcm2026_a68ddecf6b2c9e02d367",
+            "name": "(77000703) THPT Châu Thành"
           }
         ]
       },
@@ -16659,6 +16836,10 @@
           {
             "id": "firestore_thpt_cf9ff562023efbd20909",
             "name": "(706) THPT Nguyễn Bỉnh Khiêm"
+          },
+          {
+            "id": "hcm2026_56bea556c464da318e27",
+            "name": "(77000718) THPT Nguyễn Bỉnh Khiêm"
           }
         ]
       },
@@ -16673,6 +16854,14 @@
           {
             "id": "firestore_thpt_57990f055db3f8889505",
             "name": "(738) THPT Nguyễn Trãi - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_e3052a3cdb67984eead1",
+            "name": "(77000719) Trường THPT Nguyễn Trãi - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_f02fb9ce8fe9dce0a356",
+            "name": "(77000705) Trường THPT Nguyễn Du - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16683,6 +16872,10 @@
           {
             "id": "firestore_thpt_387acb49753874911c83",
             "name": "(739) THPT Nguyễn Văn Cừ - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_84b6c37a938e67a59f91",
+            "name": "(77000722) Trường THPT Nguyễn Văn Cừ - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16712,6 +16905,10 @@
           {
             "id": "firestore_thpt_f8bd27e21398cd9d25ed",
             "name": "(741) THPT Trần Phú - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_e582cf9aaab1c0de9591",
+            "name": "(77000704) Trường THPT Trần Phú - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16726,6 +16923,10 @@
           {
             "id": "firestore_thpt_a9cc7caa9a0329cee864",
             "name": "(736) THPT Ngô Quyền - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_cd9201de7c08a1259008",
+            "name": "(77000815) Trường THPT Ngô Quyền"
           }
         ]
       },
@@ -16744,6 +16945,14 @@
           {
             "id": "firestore_thpt_7a958f7055d34adb1145",
             "name": "(745) THPT Xuyên Mộc"
+          },
+          {
+            "id": "hcm2026_245196078a4fa16d7dcd",
+            "name": "(77000720) Trường THPT Phước Bửu"
+          },
+          {
+            "id": "hcm2026_5133ad376cd6f62a90a2",
+            "name": "(77000706) THPT Xuyên Mộc"
           }
         ]
       },
@@ -16766,6 +16975,10 @@
           {
             "id": "firestore_thpt_329504ac5f37d5a1dc98",
             "name": "(730) THPT Bưng Riềng"
+          },
+          {
+            "id": "hcm2026_3d71fdfddd24457da419",
+            "name": "(77000824) THPT Bưng Riềng"
           }
         ]
       },
@@ -16809,6 +17022,14 @@
           {
             "id": "firestore_thpt_dbb5f65bb510afce90c1",
             "name": "(733) THPT Hòa Hội"
+          },
+          {
+            "id": "hcm2026_fd1025536f06a022c702",
+            "name": "(77000816) THPT Hòa Bình"
+          },
+          {
+            "id": "hcm2026_0ae19eaf432c3454088d",
+            "name": "(77000716) THPT Hòa Hội"
           }
         ]
       },
@@ -16845,6 +17066,10 @@
           {
             "id": "firestore_thpt_af0c76805197abaf521a",
             "name": "(743) THPT Trần Văn Quan"
+          },
+          {
+            "id": "hcm2026_a52fe14ac8224f6ba19e",
+            "name": "(77000710) THPT Trần Văn Quan"
           }
         ]
       },
@@ -16891,6 +17116,18 @@
           {
             "id": "firestore_thpt_dafeaa500613c60b5d73",
             "name": "(742) THPT Trần Quang Khải - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_8587f165cfc626275c3b",
+            "name": "(77000723) THPT Minh Đạm"
+          },
+          {
+            "id": "hcm2026_65fae1d150b6d0481677",
+            "name": "(77000721) THPT Long Hải - Phước Tỉnh"
+          },
+          {
+            "id": "hcm2026_ca52e4422584c1cb88ae",
+            "name": "(77000818) Trường THPT Trần Quang Khải - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16909,6 +17146,10 @@
           {
             "id": "firestore_thpt_da226434b36749266e6f",
             "name": "(744) THPT Võ Thị Sáu - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_09fd9c0bed579865a117",
+            "name": "(77000711) Trường THPT Võ Thị Sáu - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -16919,6 +17160,10 @@
           {
             "id": "firestore_thpt_ec5467eecd54183becb5",
             "name": "(731) THPT Dương Bạch Mai"
+          },
+          {
+            "id": "hcm2026_d933e10a9beb2d91e67e",
+            "name": "(77000819) THPT Dương Bạch Mai"
           }
         ]
       },
@@ -16965,6 +17210,10 @@
           {
             "id": "directory_school_f1942cf56b055df845d5",
             "name": "(79778507) THCS Phạm Hữu Lầu"
+          },
+          {
+            "id": "hcm2026_e1ea26868002622386f4",
+            "name": "(77000707) THPT Phú Mỹ"
           }
         ]
       },
@@ -16991,6 +17240,10 @@
           {
             "id": "firestore_thpt_2f99c54461a9048b9162",
             "name": "(710) THPT Trần Hưng Đạo - Bà Rịa - Vũng Tàu"
+          },
+          {
+            "id": "hcm2026_b37110c64eac248d37d4",
+            "name": "(77000708) Trường THPT Trần Hưng Đạo - Bà Rịa - Vũng Tàu"
           }
         ]
       },
@@ -17051,6 +17304,10 @@
           {
             "id": "directory_school_4f7cdf710b01cf4c3896",
             "name": "(79774601) THCS Văn Lang"
+          },
+          {
+            "id": "hcm2026_2240c9c4e0f0d6baba4d",
+            "name": "(77000709) THPT Hắc Dịch"
           }
         ]
       },
@@ -17083,6 +17340,10 @@
           {
             "id": "firestore_thpt_c75519414aae4c127338",
             "name": "(760) THPT Võ Thị Sáu - Côn Đảo"
+          },
+          {
+            "id": "hcm2026_851765554cc2c5a90871",
+            "name": "(77000817) Trường THPT Võ Thị Sáu - Côn Đảo"
           }
         ]
       },
@@ -17097,6 +17358,14 @@
           {
             "id": "firestore_thpt_157bae27ba3e40ebb00b",
             "name": "(029) THPT Năng Khiếu TDTT"
+          },
+          {
+            "id": "hcm2026_682cd990bab32b496a50",
+            "name": "(79760419) TH, THCS và THPT Quốc tế Á Châu"
+          },
+          {
+            "id": "hcm2026_f820a770b1c74bd0277a",
+            "name": "(79000871) THPT Năng Khiếu TDTT"
           }
         ]
       },
@@ -17139,6 +17408,14 @@
           {
             "id": "github2026_85262611fd1fc456dec6",
             "name": "(804) Trường THPT - Khu vực 3"
+          },
+          {
+            "id": "hcm2026_c57ed168f61390d47830",
+            "name": "(7900004036) THCS và THPT Trần Đại Nghĩa"
+          },
+          {
+            "id": "hcm2026_b8f5fb668df793b8ed9a",
+            "name": "(79000702) THPT Trưng Vương"
           }
         ]
       },
@@ -17153,6 +17430,18 @@
           {
             "id": "firestore_thpt_d96a21648a4fd86384b2",
             "name": "(008) THPT Bùi Thị Xuân"
+          },
+          {
+            "id": "hcm2026_ca217cbce3ebc5364712",
+            "name": "(79000869) THPT Lương Thế Vinh"
+          },
+          {
+            "id": "hcm2026_9da2929c7d56de6a5a05",
+            "name": "(79000742) THPT Ten Lơ Man"
+          },
+          {
+            "id": "hcm2026_7c26120d835da3689d16",
+            "name": "(79000701) THPT Bùi Thị Xuân"
           }
         ]
       },
@@ -17167,6 +17456,10 @@
           {
             "id": "firestore_thpt_8852af400a6dbb913a53",
             "name": "(023) THPT Lương Thế Vinh"
+          },
+          {
+            "id": "hcm2026_3e36a2704726f190ac7d",
+            "name": "(79000809) THCS và THPT Đăng Khoa"
           }
         ]
       },
@@ -17205,6 +17498,18 @@
           {
             "id": "firestore_thpt_630d5c35cf1fa3bdc68b",
             "name": "(062) THPT Thạnh Lộc"
+          },
+          {
+            "id": "hcm2026_5c92fdc60c5062e9a88e",
+            "name": "(79000791) THCS và THPT Phùng Hưng"
+          },
+          {
+            "id": "hcm2026_9b576c7dd9838e07c7f5",
+            "name": "(79000783) THPT Đông Dương"
+          },
+          {
+            "id": "hcm2026_ae04b66bf9572819d06f",
+            "name": "(79000804) THPT Thạnh Lộc"
           }
         ]
       },
@@ -17265,6 +17570,18 @@
           {
             "id": "directory_school_dca08c79015a1e3a25d2",
             "name": "(79761411) TH Lê Văn Thọ"
+          },
+          {
+            "id": "hcm2026_c033a65c8a2a7d6aca6a",
+            "name": "(79000719) THPT Võ Trường Toản"
+          },
+          {
+            "id": "hcm2026_21d616ea3e9f2d2107bd",
+            "name": "(79000771) THPT Việt Âu"
+          },
+          {
+            "id": "hcm2026_3b998e4a9e823e6a20c2",
+            "name": "(7900003003) THCS và THPT Hàn Việt"
           }
         ]
       },
@@ -17303,6 +17620,14 @@
           {
             "id": "firestore_thpt_10ee28bd3bdfde70c9ba",
             "name": "(205) THCS và THPT Lạc Hồng"
+          },
+          {
+            "id": "hcm2026_d06a52e1ff72222a5548",
+            "name": "(79000854) THCS và THPT Lạc Hồng"
+          },
+          {
+            "id": "hcm2026_337f3c07a72b6c09fc04",
+            "name": "(7900004035) THPT Đào Duy Từ"
           }
         ]
       },
@@ -17397,6 +17722,14 @@
           {
             "id": "firestore_thpt_8baff069efc375a6dc8b",
             "name": "(072) THPT Trường Chinh"
+          },
+          {
+            "id": "hcm2026_4536862fbb8316e1f53f",
+            "name": "(79000824) THCS và THPT Bắc Sơn"
+          },
+          {
+            "id": "hcm2026_885b6fceffb1a0a1bb65",
+            "name": "(79000856) THCS và THPT Khai Minh"
           }
         ]
       },
@@ -17437,6 +17770,10 @@
           {
             "id": "firestore_thpt_3f7645797a3836be2493",
             "name": "(056) THPT Tam Phú"
+          },
+          {
+            "id": "hcm2026_8c45203dfc882b8f84eb",
+            "name": "(79000733) THPT Tam Phú"
           }
         ]
       },
@@ -17475,6 +17812,14 @@
           {
             "id": "directory_school_e94c66ccf9462e5ddb04",
             "name": "(79762423) TH Đào Sơn Tây"
+          },
+          {
+            "id": "hcm2026_597cb1168771fdfb256c",
+            "name": "(79000835) THCS và THPT Nguyễn Khuyến"
+          },
+          {
+            "id": "hcm2026_1f4f29a0b0d928bd1c4c",
+            "name": "(79000765) THPT Hiệp Bình"
           }
         ]
       },
@@ -17521,6 +17866,14 @@
           {
             "id": "directory_school_78efb00f7abfd9afc283",
             "name": "(79762515) THCS Trường Thọ"
+          },
+          {
+            "id": "hcm2026_144324da595d8d267b66",
+            "name": "(79000732) THPT Nguyễn Hữu Huân"
+          },
+          {
+            "id": "hcm2026_a171fbea505f25ac667f",
+            "name": "(79000731) THPT Thủ Đức"
           }
         ]
       },
@@ -17601,6 +17954,10 @@
           {
             "id": "directory_school_248c011d0af4e9234669",
             "name": "(79763512) THCS Tăng Nhơn Phú B"
+          },
+          {
+            "id": "hcm2026_d8802dc4593b1a45be22",
+            "name": "(79000873) THCS và THPT Hoa Sen"
           }
         ]
       },
@@ -17639,6 +17996,14 @@
           {
             "id": "directory_school_c31750c9486be723bf62",
             "name": "(79763507) THCS Đặng Tấn Tài"
+          },
+          {
+            "id": "hcm2026_480972a437cab630dc7d",
+            "name": "(79000813) TH, THCS và THPT Ngô Thời Nhiệm"
+          },
+          {
+            "id": "hcm2026_92a55d4de60f92187877",
+            "name": "(79000752) THPT Phước Long"
           }
         ]
       },
@@ -17654,6 +18019,10 @@
           {
             "id": "firestore_thpt_7949fc3f7856f988ddb5",
             "name": "(022) THPT Long Trường"
+          },
+          {
+            "id": "hcm2026_bb4ffb38655f01c2b556",
+            "name": "(79000759) THPT Long Trường"
           }
         ]
       },
@@ -17684,6 +18053,10 @@
           {
             "id": "firestore_thpt_97bfcb2a9da3296aafb8",
             "name": "(065) THPT Trần Hưng Đạo"
+          },
+          {
+            "id": "hcm2026_032f39a9f2c03019ce1b",
+            "name": "(79000764) THPT Trần Hưng Đạo"
           }
         ]
       },
@@ -17694,6 +18067,10 @@
           {
             "id": "firestore_thpt_9f2c28d47628ce56b337",
             "name": "(048) THPT Nguyễn Trung Trực"
+          },
+          {
+            "id": "hcm2026_8f1f9cebf1f28e9dcf90",
+            "name": "(79000748) THPT Nguyễn Trung Trực"
           }
         ]
       },
@@ -17708,6 +18085,14 @@
           {
             "id": "firestore_thpt_094a7971a72eda4d3b46",
             "name": "(187) TH, THCS và THPT Việt Anh"
+          },
+          {
+            "id": "hcm2026_7e77c9d7af151c6c9cd6",
+            "name": "(79000C09) TH, THCS và THPT Nguyễn Tri Phương"
+          },
+          {
+            "id": "hcm2026_249093fc2158e2a0534f",
+            "name": "(79000872) TH, THCS và THPT Việt Anh"
           }
         ]
       },
@@ -17768,6 +18153,18 @@
           {
             "id": "firestore_thpt_150fcce0cfd18ee2c50e",
             "name": "(236) THPT Việt Nhật"
+          },
+          {
+            "id": "hcm2026_435c9607dd965cd5c1bc",
+            "name": "(79000825) THCS và THPT Phạm Ngũ Lão"
+          },
+          {
+            "id": "hcm2026_5f1094c21b055383e6fc",
+            "name": "(79000772) THPT Việt Nhật"
+          },
+          {
+            "id": "hcm2026_d8f66dbeab81a49d9587",
+            "name": "(79000724) THPT Gò Vấp"
           }
         ]
       },
@@ -17786,6 +18183,14 @@
           {
             "id": "firestore_thpt_8a4b0d44ebda6e47b8bc",
             "name": "(034) THPT Nguyễn Công Trứ"
+          },
+          {
+            "id": "hcm2026_522850ac45243f68b993",
+            "name": "(79000810) THCS và THPT Hồng Hà"
+          },
+          {
+            "id": "hcm2026_e5e7221c685747386890",
+            "name": "(79000725) THPT Nguyễn Công Trứ"
           }
         ]
       },
@@ -17808,6 +18213,14 @@
           {
             "id": "firestore_thpt_1bce247a8230f62bb227",
             "name": "(070) THPT Trần Văn Giàu"
+          },
+          {
+            "id": "hcm2026_1a670c7986c0224cbf80",
+            "name": "(79000723) THPT Phan Đăng Lưu"
+          },
+          {
+            "id": "hcm2026_58e0ad2ef24b7bfba991",
+            "name": "(7900004003) TH, THCS và THPT Sài Gòn Gia Định"
           }
         ]
       },
@@ -17874,6 +18287,18 @@
           {
             "id": "firestore_thpt_b81e8c9b9f4d9c62a6ab",
             "name": "(074) THPT Võ Thị Sáu"
+          },
+          {
+            "id": "hcm2026_524dcddc92c2416091df",
+            "name": "(79000721) THPT Võ Thị Sáu"
+          },
+          {
+            "id": "hcm2026_cf4af381c7c982db01b2",
+            "name": "(79000750) THPT Hoàng Hoa Thám"
+          },
+          {
+            "id": "hcm2026_26bfde7a8aabc50f1c80",
+            "name": "(79000C07) TH, THCS và THPT Thái Bình Dương"
           }
         ]
       },
@@ -17912,6 +18337,18 @@
           {
             "id": "firestore_thpt_ef4c864eb9db9b4be08e",
             "name": "(319) THPT Đông Đô"
+          },
+          {
+            "id": "hcm2026_e05e14b58e13a41c4ae1",
+            "name": "(79000874) TH, THCS và THPT Vinschool"
+          },
+          {
+            "id": "hcm2026_fb711bf52200d59a1e81",
+            "name": "(77000826) Tiểu học, THCS và THPT Học viện Anh Quốc"
+          },
+          {
+            "id": "hcm2026_c37de96bae84835f7350",
+            "name": "(79000722) THPT Gia Định"
           }
         ]
       },
@@ -17934,6 +18371,10 @@
           {
             "id": "firestore_thpt_ba8788e1be79e6ef16aa",
             "name": "(046) THPT Nguyễn Thượng Hiền"
+          },
+          {
+            "id": "hcm2026_46ba050be347baf65bcf",
+            "name": "(79000730) THPT Nguyễn Thượng Hiền"
           }
         ]
       },
@@ -17974,6 +18415,18 @@
           {
             "id": "firestore_thpt_6de3c92334a12a02b571",
             "name": "(213) THCS và THPT Thái Bình"
+          },
+          {
+            "id": "hcm2026_5c924a8c0fe5430bee5d",
+            "name": "(79000848) TH, THCS và THPT Việt Mỹ"
+          },
+          {
+            "id": "hcm2026_37ec88d2aea68e75ffa7",
+            "name": "(79000832) TH, THCS và THPT Thanh Bình"
+          },
+          {
+            "id": "hcm2026_9a55c82c5eadb28f8e35",
+            "name": "(79000831) THCS và THPT Thái Bình"
           }
         ]
       },
@@ -18008,6 +18461,10 @@
           {
             "id": "directory_school_e10b042308f5f6e80407",
             "name": "(79775505) THCS Đoàn Kết"
+          },
+          {
+            "id": "hcm2026_5b962410f499617fdf2c",
+            "name": "(79000747) THPT Nguyễn Thái Bình"
           }
         ]
       },
@@ -18058,6 +18515,22 @@
           {
             "id": "directory_school_7dde3b2b3486daab81b0",
             "name": "(79766513) THCS Trần Văn Quang"
+          },
+          {
+            "id": "hcm2026_1c23e8f897b500347f59",
+            "name": "(79000829) THCS và THPT Việt Thanh"
+          },
+          {
+            "id": "hcm2026_5d087208e7a9576e6e58",
+            "name": "(79766514) TH, THCS và THPT Tesla"
+          },
+          {
+            "id": "hcm2026_fa12b23d07e8b0780490",
+            "name": "(79000728) THPT Nguyễn Chí Thanh"
+          },
+          {
+            "id": "hcm2026_c06dd5220c954c7c6463",
+            "name": "(77000830) TRƯỜNG TH-THCS-THPT Việt Mỹ"
           }
         ]
       },
@@ -18098,6 +18571,18 @@
           {
             "id": "firestore_thpt_4c36afc62e0cdc5f2b08",
             "name": "(059) THPT Tây Thạnh"
+          },
+          {
+            "id": "hcm2026_50b9ba06b111d807af84",
+            "name": "(79000822) THCS và THPT Hồng Đức"
+          },
+          {
+            "id": "hcm2026_84b48c24594539d12263",
+            "name": "(79000758) THPT Tây Thạnh"
+          },
+          {
+            "id": "hcm2026_051b95c88a9e651d75af",
+            "name": "(79000868) THCS và THPT Đinh Tiên Hoàng"
           }
         ]
       },
@@ -18140,6 +18625,22 @@
           {
             "id": "firestore_thpt_7843c2894e1a82b76c2a",
             "name": "(057) THPT Tân Bình"
+          },
+          {
+            "id": "hcm2026_e2b71c04e533b8a356e2",
+            "name": "(79000834) THCS và THPT Nhân Văn"
+          },
+          {
+            "id": "hcm2026_b641172199d510473923",
+            "name": "(79000727) THPT Tân Bình"
+          },
+          {
+            "id": "hcm2026_9b18a06aabe244d9f932",
+            "name": "(79000798) THPT Vĩnh Viễn"
+          },
+          {
+            "id": "hcm2026_a91f371b8a5f7ce7768c",
+            "name": "(79000863) THPT Thành Nhân"
           }
         ]
       },
@@ -18166,6 +18667,10 @@
           {
             "id": "firestore_thpt_2dced5aeab34761c4c3e",
             "name": "(068) THPT Trần Phú"
+          },
+          {
+            "id": "hcm2026_897fc969f6eb09abefe6",
+            "name": "(79000729) THPT Trần Phú"
           }
         ]
       },
@@ -18196,6 +18701,10 @@
           {
             "id": "directory_school_044a73823d942a4fc56f",
             "name": "(79767408) TH Võ Thị Sáu"
+          },
+          {
+            "id": "hcm2026_25168ab7beacd3917e72",
+            "name": "(79000799) THCS và THPT Trần Cao Vân"
           }
         ]
       },
@@ -18238,6 +18747,10 @@
           {
             "id": "firestore_thpt_3c1f5c2244ebc812b572",
             "name": "(313) THPT Nhân Việt"
+          },
+          {
+            "id": "hcm2026_7f1c0f9486277074f0d6",
+            "name": "(79000C05) TH, THCS và THPT Quốc tế Canada"
           }
         ]
       },
@@ -18256,6 +18769,10 @@
           {
             "id": "firestore_thpt_de5f1f2a24dd8b6eaf21",
             "name": "(053) THPT Phú Nhuận"
+          },
+          {
+            "id": "hcm2026_5ac53e14c32b4e5e5ada",
+            "name": "(79000726) THPT Phú Nhuận"
           }
         ]
       },
@@ -18283,6 +18800,14 @@
           {
             "id": "directory_school_eadd3e418ee19e9a17ea",
             "name": "(79000872) THCS và THPT Việt Anh"
+          },
+          {
+            "id": "hcm2026_cc6e6c97fd12086f90ae",
+            "name": "(79000828) TH, THCS và THPT Quốc Tế"
+          },
+          {
+            "id": "hcm2026_500862af2db4c8afb479",
+            "name": "(79000749) THPT Hàn Thuyên"
           }
         ]
       },
@@ -18309,6 +18834,10 @@
           {
             "id": "directory_school_4eb39c04f1b89d7ae278",
             "name": "(79760411) TH Trần Khánh Dư"
+          },
+          {
+            "id": "hcm2026_6869bb2a3e9fcaa49f3c",
+            "name": "(79000F02) THPT chuyên Trần Đại Nghĩa"
           }
         ]
       },
@@ -18331,6 +18860,14 @@
           {
             "id": "firestore_thpt_da131a17a97575e6ee0d",
             "name": "(064) THPT Thủ Thiêm"
+          },
+          {
+            "id": "hcm2026_482f05a1e8ab8b709375",
+            "name": "(79000802) THPT Thủ Thiêm"
+          },
+          {
+            "id": "hcm2026_ca306c5e19a80f36a42c",
+            "name": "(79000703) THPT Giồng Ông Tố"
           }
         ]
       },
@@ -18395,6 +18932,22 @@
           {
             "id": "firestore_thpt_67860bdd65a62e73d500",
             "name": "(079) Phân hiệu THPT Lê Thị Hồng Gấm"
+          },
+          {
+            "id": "hcm2026_6eaf878f4e8ba024d5b4",
+            "name": "(79000705) THPT Lê Quý Đôn"
+          },
+          {
+            "id": "hcm2026_8af3004b59ee8df1cd4a",
+            "name": "(79770601) TH, THCS và THPT Tây Úc"
+          },
+          {
+            "id": "hcm2026_251a9c57af1ca4c701e9",
+            "name": "(79000796) THPT Nguyễn Thị Diệu"
+          },
+          {
+            "id": "hcm2026_fdf1482d4af7fef040bc",
+            "name": "(79000704) THPT Nguyễn Thị Minh Khai"
           }
         ]
       },
@@ -18444,6 +18997,18 @@
           {
             "id": "directory_school_b53a07a89377b049f2d8",
             "name": "(79771411) TH Triệu Thị Trinh"
+          },
+          {
+            "id": "hcm2026_71f0cbaa2a8e8af237c7",
+            "name": "(79000818) TH, THCS và THPT VẠN HẠNH"
+          },
+          {
+            "id": "hcm2026_bd3d5a996923e48e0d69",
+            "name": "(79000717) THPT Nguyễn Du"
+          },
+          {
+            "id": "hcm2026_bda79ec4a0ffe6114ebf",
+            "name": "(79000716) THPT Nguyễn Khuyến"
           }
         ]
       },
@@ -18462,6 +19027,14 @@
           {
             "id": "firestore_thpt_4d075ff156a6d352f6ac",
             "name": "(082) THCS và THPT Diên Hồng"
+          },
+          {
+            "id": "hcm2026_0e4cf22cc675cd87d16a",
+            "name": "(79000861) THCS và THPT Diên Hồng"
+          },
+          {
+            "id": "hcm2026_f3083106ca4bd9e9df64",
+            "name": "(79000C03) TH, THCS và THPT Việt Úc"
           }
         ]
       },
@@ -18476,6 +19049,14 @@
           {
             "id": "firestore_thpt_e4c4d5b27bc695043ee8",
             "name": "(083) THCS và THPT Sương Nguyệt Anh"
+          },
+          {
+            "id": "hcm2026_3b9492d6439579249cf3",
+            "name": "(79000860) THCS và THPT Sương Nguyệt Anh"
+          },
+          {
+            "id": "hcm2026_f08dedf7c09fa234aaa0",
+            "name": "(79000745) THPT Nguyễn An Ninh"
           }
         ]
       },
@@ -18506,6 +19087,14 @@
           {
             "id": "directory_school_d9bb0a2ceeb3e42ff5c0",
             "name": "(79772404) TH Hòa Bình"
+          },
+          {
+            "id": "hcm2026_4edf41282cded0f1ca3b",
+            "name": "(79000836) TH, THCS và THPT Trương Vĩnh Ký"
+          },
+          {
+            "id": "hcm2026_693a8bba42d73f3c28ec",
+            "name": "(79000768) THPT Trần Quang Khải"
           }
         ]
       },
@@ -18542,6 +19131,14 @@
           {
             "id": "directory_school_72a7bd0a83d147c07cc5",
             "name": "(79772421) TH Bình Thới"
+          },
+          {
+            "id": "hcm2026_9fdaecb2f0753cf204f4",
+            "name": "(79000779) THPT Trần Quốc Tuấn"
+          },
+          {
+            "id": "hcm2026_3c07ccf5b4f027b4d0b6",
+            "name": "(79000718) THPT Nguyễn Hiền"
           }
         ]
       },
@@ -18568,6 +19165,10 @@
           {
             "id": "directory_school_7a3d019987a303d06e01",
             "name": "(79775501) THCS Nguyễn Đức Cảnh"
+          },
+          {
+            "id": "hcm2026_d58937d007ca67e70a6e",
+            "name": "(79000746) THPT Nam Kỳ Khởi Nghĩa"
           }
         ]
       },
@@ -18586,6 +19187,10 @@
           {
             "id": "directory_school_b93ec9fd14ee7dd4fa30",
             "name": "(79773414) TH Nguyễn Trường Tộ"
+          },
+          {
+            "id": "hcm2026_2dab65135d70e20d8253",
+            "name": "(79000706) THPT Nguyễn Trãi"
           }
         ]
       },
@@ -18632,6 +19237,14 @@
           {
             "id": "firestore_thpt_a1a549026200f1ff6ab4",
             "name": "(067) THPT Trần Khai Nguyên"
+          },
+          {
+            "id": "hcm2026_36ce5836e809e012eabd",
+            "name": "(79000812) THCS và THPT Nguyễn Bỉnh Khiêm"
+          },
+          {
+            "id": "hcm2026_9953dcb04bf58e87c768",
+            "name": "(79000744) THPT Trần Khai Nguyên"
           }
         ]
       },
@@ -18658,6 +19271,22 @@
           {
             "id": "firestore_thpt_a62106ae6ae067019db3",
             "name": "(066) THPT Trần Hữu Trang"
+          },
+          {
+            "id": "hcm2026_bfa52674904ee81c0935",
+            "name": "(77000821) THPT Lê Hồng Phong"
+          },
+          {
+            "id": "hcm2026_5a23a9538c966d612421",
+            "name": "(79774507) THPT Trần Hữu Trang"
+          },
+          {
+            "id": "hcm2026_57a933922e22ff97eb35",
+            "name": "(79000751) THPT Thăng Long"
+          },
+          {
+            "id": "hcm2026_4921d7e9647d3030ebc5",
+            "name": "(79000708) THPT Hùng Vương"
           }
         ]
       },
@@ -18680,6 +19309,10 @@
           {
             "id": "directory_school_7380ddec0fbf45930f71",
             "name": "(79775510) THCS Hoàng Lê Kha"
+          },
+          {
+            "id": "hcm2026_8902de91532e97363699",
+            "name": "(79000709) THPT Mạc Đĩnh Chi"
           }
         ]
       },
@@ -18702,6 +19335,10 @@
           {
             "id": "firestore_thpt_e4d76945f73a5a789522",
             "name": "(006) THPT Bình Phú"
+          },
+          {
+            "id": "hcm2026_d0db12802669811bf458",
+            "name": "(79000710) THPT Bình Phú"
           }
         ]
       },
@@ -18720,6 +19357,10 @@
           {
             "id": "directory_school_9ae7054cf3bbd237fc66",
             "name": "(79775508) THCS Bình Tây"
+          },
+          {
+            "id": "hcm2026_5917dc485f219157c65a",
+            "name": "(79000816) THCS-THPT Phan Bội Châu"
           }
         ]
       },
@@ -18730,6 +19371,10 @@
           {
             "id": "firestore_thpt_2d9b6da021cba801ec85",
             "name": "(051) THPT Phạm Phú Thứ"
+          },
+          {
+            "id": "hcm2026_29382cc89162f63815f4",
+            "name": "(79000875) THPT Phạm Phú Thứ"
           }
         ]
       },
@@ -18748,6 +19393,10 @@
           {
             "id": "firestore_thpt_faa787c1a4b934d5335b",
             "name": "(024) THPT Lương Văn Can"
+          },
+          {
+            "id": "hcm2026_1e09bd7f8bc28c70e19a",
+            "name": "(7700004001) TH-THCS-THPT Khai Nguyên"
           }
         ]
       },
@@ -18782,6 +19431,14 @@
           {
             "id": "directory_school_209b92362dd530e1d2a9",
             "name": "(79776508) THCS Lê Lai"
+          },
+          {
+            "id": "hcm2026_fad681e38dc169b12bf6",
+            "name": "(79000794) THPT Nguyễn Văn Linh"
+          },
+          {
+            "id": "hcm2026_285c765685828f6662f5",
+            "name": "(79000714) THPT Tạ Quang Bửu"
           }
         ]
       },
@@ -18800,6 +19457,10 @@
           {
             "id": "directory_school_66c63bee2fd4e6dffa7d",
             "name": "(79776510) THCS Bình Đông"
+          },
+          {
+            "id": "hcm2026_8fb727211b96f4376688",
+            "name": "(79000713) THPT Ngô Gia Tự"
           }
         ]
       },
@@ -18822,6 +19483,10 @@
           {
             "id": "firestore_thpt_ff75e9372847c7257534",
             "name": "(005) THPT Bình Hưng Hòa"
+          },
+          {
+            "id": "hcm2026_b476b39c8a57fd8100fb",
+            "name": "(79000774) TH, THCS và THPT Chu Văn An"
           }
         ]
       },
@@ -18856,6 +19521,14 @@
           {
             "id": "firestore_thpt_7ffefdcee37914b2b3c7",
             "name": "(073) THPT Vĩnh Lộc"
+          },
+          {
+            "id": "hcm2026_7cf20947c4d0b1f9506b",
+            "name": "(79000877) TH, THCS và THPT Trí Tuệ Việt"
+          },
+          {
+            "id": "hcm2026_fe71425f85ab71eb4f2f",
+            "name": "(79000769) THPT Vĩnh Lộc"
           }
         ]
       },
@@ -18890,6 +19563,14 @@
           {
             "id": "directory_school_cf2c85c2acad7a0305c1",
             "name": "(79777409) TH Bình Trị 2"
+          },
+          {
+            "id": "hcm2026_7706e105cc91f4327479",
+            "name": "(79000793) THPT Nguyễn Hữu Cảnh"
+          },
+          {
+            "id": "hcm2026_2bed84a8655d5c0514aa",
+            "name": "(79000781) THPT Trần Nhân Tông"
           }
         ]
       },
@@ -18904,6 +19585,10 @@
           {
             "id": "directory_school_dc11a873e6251dd47611",
             "name": "(79777415) TH Tân Tạo A"
+          },
+          {
+            "id": "hcm2026_167cbb4809ae60c8ceab",
+            "name": "(7900000005) THPT Hàm Nghi"
           }
         ]
       },
@@ -18942,6 +19627,18 @@
           {
             "id": "directory_school_951c3ef7dbf5e7194db5",
             "name": "(79777505) THCSCL Bình Tân"
+          },
+          {
+            "id": "hcm2026_754f31946a224d46fc2e",
+            "name": "(79000805) THPT An Lạc"
+          },
+          {
+            "id": "hcm2026_6d51f3c3faf85bc9da5e",
+            "name": "(7900000003) THPT Hoàng Thế Thiện"
+          },
+          {
+            "id": "hcm2026_1081a965ca1c4ae91c34",
+            "name": "(79000788) THPT Phú Lâm"
           }
         ]
       },
@@ -18984,6 +19681,22 @@
           {
             "id": "firestore_thpt_3733fe5f75e1536a3b16",
             "name": "(058) THPT Tân Phong"
+          },
+          {
+            "id": "hcm2026_51896c043e4d6223b1dc",
+            "name": "(79000851) THCS và THPT Sao Việt"
+          },
+          {
+            "id": "hcm2026_9d0f8467643a8c09aa92",
+            "name": "(79000754) THPT Tân Phong"
+          },
+          {
+            "id": "hcm2026_39ffb9c430cb895e6bd3",
+            "name": "(79000711) THPT Lê Thánh Tôn"
+          },
+          {
+            "id": "hcm2026_37d710f3b7eb756d85ac",
+            "name": "(79000850) THCS và THPT Đinh Thiện Lý"
           }
         ]
       },
@@ -19050,6 +19763,14 @@
           {
             "id": "firestore_thpt_970a83b99f13a6428d1f",
             "name": "(031) THPT Ngô Quyền"
+          },
+          {
+            "id": "hcm2026_bf2885a7f30fe8fa9b4f",
+            "name": "(79000820) THPT Nam Sài Gòn"
+          },
+          {
+            "id": "hcm2026_514316f072e442a5d32e",
+            "name": "(79000803) THPT Ngô Quyền"
           }
         ]
       },
@@ -19064,6 +19785,10 @@
           {
             "id": "firestore_thpt_db0b8bf62b564c8b9752",
             "name": "(092) THPT Củ Chi"
+          },
+          {
+            "id": "hcm2026_7123c553d45bb2ae0aab",
+            "name": "(79000734) THPT Củ Chi"
           }
         ]
       },
@@ -19074,6 +19799,10 @@
           {
             "id": "firestore_thpt_7e0b9bbf3f5bd5044d44",
             "name": "(087) THPT An Nhơn Tây"
+          },
+          {
+            "id": "hcm2026_705a25e3e70b74591401",
+            "name": "(79000736) THPT An Nhơn Tây"
           }
         ]
       },
@@ -19093,6 +19822,10 @@
           {
             "id": "firestore_thpt_f68066b5ce1b59653b04",
             "name": "(109) THPT Trung Lập"
+          },
+          {
+            "id": "hcm2026_5519e769ce76da5b8145",
+            "name": "(79000735) THPT Quang Trung"
           }
         ]
       },
@@ -19115,6 +19848,14 @@
           {
             "id": "firestore_thpt_afc9772b20771373b3e7",
             "name": "(110) THPT Trung Phú"
+          },
+          {
+            "id": "hcm2026_6582d36d7f67b6fe1e71",
+            "name": "(79000737) THPT Trung Phú"
+          },
+          {
+            "id": "hcm2026_03a526725d9744ea39ac",
+            "name": "(79000756) THPT Phú Hòa"
           }
         ]
       },
@@ -19339,6 +20080,14 @@
           {
             "id": "firestore_thpt_d268e7d9ea3e5669d3f4",
             "name": "(100) THPT Nguyễn Hữu Tiến"
+          },
+          {
+            "id": "hcm2026_bd5567807d5513548831",
+            "name": "(79000761) THPT Nguyễn Hữu Tiến"
+          },
+          {
+            "id": "hcm2026_f7a9f65617c45241bf03",
+            "name": "(79000740) THPT Lý Thường Kiệt"
           }
         ]
       },
@@ -19459,6 +20208,14 @@
           {
             "id": "firestore_thpt_91f4f092dc9af197eecb",
             "name": "(099) THPT Nguyễn Hữu Cầu"
+          },
+          {
+            "id": "hcm2026_e8e8de1a07d3f0b813ff",
+            "name": "(79000760) THPT Nguyễn Văn Cừ"
+          },
+          {
+            "id": "hcm2026_67a602f23f3ad950a2c4",
+            "name": "(79000753) THPT Bà Điểm"
           }
         ]
       },
@@ -19515,6 +20272,10 @@
           {
             "id": "firestore_thpt_5b15e75271d4803a111d",
             "name": "(096) THPT Lê Minh Xuân"
+          },
+          {
+            "id": "hcm2026_01e43d0136fe0a4494f0",
+            "name": "(79000806) THPT Lê Minh Xuân"
           }
         ]
       },
@@ -19541,6 +20302,10 @@
           {
             "id": "directory_school_4d415a0c301efa358233",
             "name": "(79785401) TH Bình Hưng"
+          },
+          {
+            "id": "hcm2026_9bdd1a8d1dfd92e7e429",
+            "name": "(79000C06) TH - THCS - THPT QUỐC TẾ BẮC MỸ"
           }
         ]
       },
@@ -19559,6 +20324,10 @@
           {
             "id": "directory_school_945b3df849a3f8b9d53e",
             "name": "(79785504) THCS Hưng Long"
+          },
+          {
+            "id": "hcm2026_fca910d6b36ad74091ef",
+            "name": "(79000807) THPT Đa Phước"
           }
         ]
       },
@@ -19645,6 +20414,10 @@
           {
             "id": "directory_school_14b4d00c3e40e473958f",
             "name": "(79785517) THCS Đa Phước"
+          },
+          {
+            "id": "hcm2026_fc06f85bab2dadd74449",
+            "name": "(79000741) THPT Bình Chánh"
           }
         ]
       },
@@ -19703,6 +20476,14 @@
           {
             "id": "directory_school_900e2d590808c5b42e4d",
             "name": "(79786507) THCS Lê Thành Công"
+          },
+          {
+            "id": "hcm2026_8e4aaf5f309b0a5416f9",
+            "name": "(79000784) THPT Phước Kiển"
+          },
+          {
+            "id": "hcm2026_3976fb5334cac4514197",
+            "name": "(7900004034) TH, THCS và THPT Khải Hoàn - Nam Sài Gòn"
           }
         ]
       },
@@ -19747,6 +20528,10 @@
           {
             "id": "directory_school_287ae79aa5133bb0295a",
             "name": "(79787507) THCS Cần Thạnh"
+          },
+          {
+            "id": "hcm2026_e8f723543f6224c7eb30",
+            "name": "(79000763) THPT Cần Thạnh"
           }
         ]
       },
@@ -19769,6 +20554,10 @@
           {
             "id": "directory_school_142ec17c1a71cb85a250",
             "name": "(79787506) THCS Bình Khánh"
+          },
+          {
+            "id": "hcm2026_d38a26d84d8d18f92fbc",
+            "name": "(79000762) THPT Bình Khánh"
           }
         ]
       },
@@ -19779,6 +20568,10 @@
           {
             "id": "directory_school_9e72cd09567210527ec3",
             "name": "(79787402) TH An Thới Đông"
+          },
+          {
+            "id": "hcm2026_14f2638c8d301d9fd2ac",
+            "name": "(79000786) THPT An Nghĩa"
           }
         ]
       },
@@ -19793,6 +20586,10 @@
           {
             "id": "github2026_d29b537625d0db69b285",
             "name": "(801) Trường THPT - Khu vực 1"
+          },
+          {
+            "id": "hcm2026_0105169c88d086ee876f",
+            "name": "(79000876) THCS và THPT Thạnh An"
           }
         ]
       }
@@ -83796,4 +84593,4 @@
       }
     ]
   }
-]
+]\n
