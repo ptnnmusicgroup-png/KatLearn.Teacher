@@ -1,0 +1,314 @@
+name: osm school catalog enrichment
+
+on:
+  push:
+    paths:
+      - ".github/workflows/osm-school-enrich.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install geospatial dependencies
+        run: python -m pip install --disable-pip-version-check requests shapely
+
+      - name: Enrich school catalog from 2026 GitHub OSM POIs
+        run: |
+          python <<'PY'
+          import hashlib
+          import io
+          import json
+          import re
+          import unicodedata
+          import zipfile
+          from pathlib import Path
+
+          import requests
+          from shapely.geometry import Point, shape
+          from shapely.strtree import STRtree
+
+          TREE = Path("data/national-catalog/full-school-tree.json")
+          WARDS = Path("data/national-catalog/official-ward-list.json")
+          BOUNDARY_ZIP = "https://raw.githubusercontent.com/thanglequoc/vietnamese-provinces-database/master/dataset-generation-scripts/resources/gis/geojson_11Mar2026.zip"
+          SCHOOL_JSON = "https://raw.githubusercontent.com/phoenixvn/OpenData-Vietnam/main/POI/schools_processed.json"
+          LEGACY_JSON = "https://raw.githubusercontent.com/luancauthu0729/success/main/Backend/truong_thcs_vn.json"
+
+          def get(url, timeout=120):
+              r = requests.get(url, timeout=timeout, headers={"User-Agent":"KatLearn-School-Catalog/2026"})
+              r.raise_for_status()
+              return r.content
+
+          def norm(v):
+              s = str(v or "").replace("&amp;", "&").strip()
+              s = "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
+              s = s.replace("đ","d").replace("Đ","D").lower()
+              return re.sub(r"[^a-z0-9]+", " ", s).strip()
+
+          def strip_code(name):
+              return re.sub(r"^\s*\([^)]*\)\s*", "", str(name or "")).strip()
+
+          def classify(text):
+              n = norm(text)
+              flags = []
+              if re.search(r"\bthpt\b|trung hoc pho thong|high school|upper secondary", n):
+                  flags.append("THPT")
+              if re.search(r"\bthcs\b|trung hoc co so|secondary school|junior high", n):
+                  flags.append("THCS")
+              if re.search(r"\bth\b|tieu hoc|primary school|elementary school", n):
+                  flags.append("TH")
+              if not flags:
+                  return []
+              return flags
+
+          PROVINCE_ALIASES = {
+              "Hà Nội":"Thành phố Hà Nội","Cao Bằng":"Tỉnh Cao Bằng","Tuyên Quang":"Tỉnh Tuyên Quang","Hà Giang":"Tỉnh Tuyên Quang",
+              "Điện Biên":"Tỉnh Điện Biên","Lai Châu":"Tỉnh Lai Châu","Sơn La":"Tỉnh Sơn La","Lào Cai":"Tỉnh Lào Cai","Yên Bái":"Tỉnh Lào Cai",
+              "Thái Nguyên":"Tỉnh Thái Nguyên","Bắc Kạn":"Tỉnh Thái Nguyên","Lạng Sơn":"Tỉnh Lạng Sơn","Quảng Ninh":"Tỉnh Quảng Ninh",
+              "Bắc Ninh":"Tỉnh Bắc Ninh","Bắc Giang":"Tỉnh Bắc Ninh","Phú Thọ":"Tỉnh Phú Thọ","Vĩnh Phúc":"Tỉnh Phú Thọ","Hòa Bình":"Tỉnh Phú Thọ",
+              "Hải Phòng":"Thành phố Hải Phòng","Hải Dương":"Thành phố Hải Phòng","Hưng Yên":"Tỉnh Hưng Yên","Thái Bình":"Tỉnh Hưng Yên",
+              "Ninh Bình":"Tỉnh Ninh Bình","Nam Định":"Tỉnh Ninh Bình","Hà Nam":"Tỉnh Ninh Bình","Thanh Hóa":"Tỉnh Thanh Hóa",
+              "Nghệ An":"Tỉnh Nghệ An","Hà Tĩnh":"Tỉnh Hà Tĩnh","Quảng Trị":"Tỉnh Quảng Trị","Quảng Bình":"Tỉnh Quảng Trị",
+              "Huế":"Thành phố Huế","Thừa Thiên Huế":"Thành phố Huế","Đà Nẵng":"Thành phố Đà Nẵng","Quảng Nam":"Thành phố Đà Nẵng",
+              "Quảng Ngãi":"Tỉnh Quảng Ngãi","Kon Tum":"Tỉnh Quảng Ngãi","Gia Lai":"Tỉnh Gia Lai","Bình Định":"Tỉnh Gia Lai",
+              "Khánh Hòa":"Tỉnh Khánh Hòa","Ninh Thuận":"Tỉnh Khánh Hòa","Đắk Lắk":"Tỉnh Đắk Lắk","Phú Yên":"Tỉnh Đắk Lắk",
+              "Lâm Đồng":"Tỉnh Lâm Đồng","Đắk Nông":"Tỉnh Lâm Đồng","Bình Thuận":"Tỉnh Lâm Đồng","Đồng Nai":"Tỉnh Đồng Nai",
+              "Bình Phước":"Tỉnh Đồng Nai","Thành phố Hồ Chí Minh":"Thành phố Hồ Chí Minh","Hồ Chí Minh":"Thành phố Hồ Chí Minh",
+              "TP.HCM":"Thành phố Hồ Chí Minh","Bình Dương":"Thành phố Hồ Chí Minh","Bà Rịa - Vũng Tàu":"Thành phố Hồ Chí Minh",
+              "Tây Ninh":"Tỉnh Tây Ninh","Long An":"Tỉnh Tây Ninh","Đồng Tháp":"Tỉnh Đồng Tháp","Tiền Giang":"Tỉnh Đồng Tháp",
+              "Vĩnh Long":"Tỉnh Vĩnh Long","Bến Tre":"Tỉnh Vĩnh Long","Trà Vinh":"Tỉnh Vĩnh Long","An Giang":"Tỉnh An Giang",
+              "Kiên Giang":"Tỉnh An Giang","Cần Thơ":"Thành phố Cần Thơ","Hậu Giang":"Thành phố Cần Thơ","Sóc Trăng":"Thành phố Cần Thơ",
+              "Cà Mau":"Tỉnh Cà Mau","Bạc Liêu":"Tỉnh Cà Mau",
+          }
+
+          PROV_CODE = {
+              "Thành phố Hà Nội":"01","Tỉnh Cao Bằng":"04","Tỉnh Tuyên Quang":"08","Tỉnh Điện Biên":"11","Tỉnh Lai Châu":"12",
+              "Tỉnh Sơn La":"14","Tỉnh Lào Cai":"15","Tỉnh Thái Nguyên":"19","Tỉnh Lạng Sơn":"20","Tỉnh Quảng Ninh":"22",
+              "Tỉnh Bắc Ninh":"24","Tỉnh Phú Thọ":"25","Thành phố Hải Phòng":"31","Tỉnh Hưng Yên":"33","Tỉnh Ninh Bình":"37",
+              "Tỉnh Thanh Hóa":"38","Tỉnh Nghệ An":"40","Tỉnh Hà Tĩnh":"42","Tỉnh Quảng Trị":"44","Thành phố Huế":"46",
+              "Thành phố Đà Nẵng":"48","Tỉnh Quảng Ngãi":"51","Tỉnh Gia Lai":"52","Tỉnh Khánh Hòa":"56","Tỉnh Đắk Lắk":"66",
+              "Tỉnh Lâm Đồng":"68","Tỉnh Đồng Nai":"75","Thành phố Hồ Chí Minh":"79","Tỉnh Tây Ninh":"80","Tỉnh Đồng Tháp":"82",
+              "Tỉnh Vĩnh Long":"86","Tỉnh An Giang":"91","Thành phố Cần Thơ":"92","Tỉnh Cà Mau":"96",
+          }
+
+          tree = json.loads(TREE.read_text(encoding="utf-8"))
+          official = json.loads(WARDS.read_text(encoding="utf-8"))
+
+          ward_by_code = {}
+          for p in official.get("provinces", []):
+              for w in p.get("wards", []):
+                  ward_by_code[str(w["id"]).zfill(5)] = (p["name"], w["name"])
+
+          tree_by_code = {}
+          existing_name_keys = set()
+          existing_codes = set()
+          for p in tree:
+              for w in p.get("wards", []):
+                  pc = next((str(pp.get("code")).zfill(2) for pp in official.get("provinces", []) if pp.get("name") == p["name"]), None)
+                  wc = None
+                  for code,(pn,wn) in ward_by_code.items():
+                      if pn == p["name"] and wn == w["name"]:
+                          wc = code
+                          break
+                  if wc:
+                      tree_by_code[(pc,wc)] = (p,w)
+                  for s in w.get("schools", []):
+                      base = strip_code(s.get("name",""))
+                      existing_name_keys.add((p["name"], norm(base)))
+                      m = re.match(r"^\(([^)]+)\)", str(s.get("name","")))
+                      if m:
+                          existing_codes.add(m.group(1))
+
+          # Build a conservative legacy-code index from the 11,391 school records.
+          legacy = {}
+          legacy_raw = json.loads(get(LEGACY_JSON, 90).decode("utf-8"))
+          for old_province, groups in legacy_raw.items():
+              current_province = PROVINCE_ALIASES.get(old_province)
+              if not current_province:
+                  continue
+              for arr in groups.values():
+                  if not isinstance(arr, list):
+                      continue
+                  for raw in arr:
+                      text = str(raw).replace("&amp;","&").strip()
+                      m = re.search(r"\((\d+)\)\s*$", text)
+                      if not m:
+                          continue
+                      name = text[:m.start()].strip()
+                      key = (current_province, norm(name))
+                      code = m.group(1)
+                      if key in legacy and legacy[key] != code:
+                          legacy[key] = None
+                      else:
+                          legacy[key] = code
+
+          print("Downloading 2026 GitHub school POIs…")
+          school_rows = json.loads(get(SCHOOL_JSON, 120).decode("utf-8"))
+
+          print("Downloading current 3,321-ward boundary bundle…")
+          boundary_bytes = get(BOUNDARY_ZIP, 180)
+          zf = zipfile.ZipFile(io.BytesIO(boundary_bytes))
+
+          geometries = []
+          geometry_meta = []
+          for info in zf.infolist():
+              path = info.filename.replace("\\","/")
+              if "/wards/" not in path or not path.endswith(".geojson"):
+                  continue
+              base = Path(path).name
+              code = base.split("_",1)[0]
+              if not re.fullmatch(r"\d{5}", code):
+                  continue
+              raw = json.loads(zf.read(info))
+              feats = raw.get("features") or []
+              if not feats:
+                  continue
+              try:
+                  geom = shape(feats[0]["geometry"])
+                  if geom.is_empty:
+                      continue
+                  pc = code[:2]
+                  geometries.append(geom)
+                  geometry_meta.append((pc,code))
+              except Exception:
+                  continue
+
+          print("Loaded ward polygons:", len(geometries))
+          if len(geometries) < 3000:
+              raise RuntimeError(f"Boundary bundle incomplete: {len(geometries)} wards")
+
+          index = STRtree(geometries)
+
+          # Only use named Vietnamese/K12-looking OSM schools.
+          candidates = []
+          for row in school_rows:
+              if str(row.get("subcategory","")).lower() != "school":
+                  continue
+              lat = row.get("lat")
+              lon = row.get("lon")
+              try:
+                  lat=float(lat); lon=float(lon)
+              except Exception:
+                  continue
+              vi = str(row.get("name_vi") or "").strip()
+              nm = vi or str(row.get("name") or "").strip()
+              en = str(row.get("name_en") or "").strip()
+              text = " ".join([nm,en,str(row.get("address") or "")])
+              levels = classify(text)
+              if not levels:
+                  continue
+              if not nm:
+                  continue
+              candidates.append((Point(lon,lat), row, levels))
+
+          print("Named K12-like POIs:", len(candidates))
+
+          added = 0
+          skipped_outside = 0
+          skipped_duplicate = 0
+          added_by_level = {"TH":0,"THCS":0,"THPT":0}
+          source_matches = 0
+
+          def generated_code(province, ward_code, name, osm_id):
+              prefix = PROV_CODE.get(province, "99")
+              seed = f"{province}|{ward_code}|{name}|{osm_id}"
+              n = int(hashlib.sha1(seed.encode("utf-8")).hexdigest()[:10],16) % 1000000
+              code = prefix + f"{n:06d}"
+              guard = 0
+              while code in existing_codes and guard < 1000000:
+                  n=(n+1)%1000000
+                  code=prefix+f"{n:06d}"
+                  guard+=1
+              return code
+
+          for point,row,levels in candidates:
+              hits = index.query(point)
+              match = None
+              for h in hits:
+                  try:
+                      geom = geometries[int(h)]
+                  except Exception:
+                      geom = h
+                  if geom.covers(point):
+                      match = geometry_meta[geometries.index(geom)] if not isinstance(h,int) else geometry_meta[int(h)]
+                      break
+              if not match:
+                  skipped_outside += 1
+                  continue
+
+              pc,wc = match
+              target = tree_by_code.get((pc,wc))
+              if not target:
+                  continue
+              province,ward = target
+              p_dict,w_dict = province,ward
+
+              display_name = str(row.get("name_vi") or row.get("name") or row.get("name_en") or "").strip()
+              display_name = re.sub(r"\s+"," ",display_name)
+              if not display_name:
+                  continue
+              key=(p_dict["name"],norm(strip_code(display_name)))
+              if key in existing_name_keys:
+                  skipped_duplicate += 1
+                  continue
+
+              code = legacy.get(key)
+              if code:
+                  if code in existing_codes:
+                      # Never reuse a code already attached to another school.
+                      code = generated_code(p_dict["name"],wc,display_name,row.get("osm_id"))
+                  else:
+                      source_matches += 1
+              else:
+                  code = generated_code(p_dict["name"],wc,display_name,row.get("osm_id"))
+
+              sid="osm_school_"+hashlib.sha1(f"{p_dict['name']}|{wc}|{row.get('osm_id')}|{display_name}".encode("utf-8")).hexdigest()[:20]
+              item={"id":sid,"name":f"({code}) {display_name}"}
+              item["_catalog_source"]="OpenStreetMap GitHub POI 2026-04-09"
+              item["_catalog_code_source"]="legacy-code" if legacy.get(key)==code else "katlearn-generated"
+
+              w_dict.setdefault("schools",[]).append(item)
+              existing_name_keys.add(key)
+              existing_codes.add(code)
+              added += 1
+              for level in levels:
+                  added_by_level[level] += 1
+
+          TREE.write_text(json.dumps(tree,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+
+          stats={
+              "osmNamedK12Candidates":len(candidates),
+              "added":added,
+              "addedByLevel":added_by_level,
+              "legacyCodeMatches":source_matches,
+              "skippedOutsideVietnamBoundary":skipped_outside,
+              "skippedDuplicateName":skipped_duplicate,
+              "wardsAfter":sum(1 for p in tree for w in p.get("wards",[])),
+              "schoolsAfter":sum(len(w.get("schools",[])) for p in tree for w in p.get("wards",[])),
+              "emptyWardsAfter":sum(1 for p in tree for w in p.get("wards",[]) if not w.get("schools")),
+              "formatErrors":sum(1 for p in tree for w in p.get("wards",[]) for s in w.get("schools",[]) if not re.match(r"^\([^)]+\)\s+.+$",str(s.get("name",""))))
+          }
+          print(json.dumps(stats,ensure_ascii=False,indent=2))
+          Path("/tmp/osm-school-stats.json").write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding="utf-8")
+          PY
+
+      - name: Commit OSM school enrichment
+        run: |
+          git config user.name "KatLearn Catalog Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/national-catalog/full-school-tree.json
+          git diff --cached --quiet && exit 0
+          git commit -m "data(catalog): enrich K12 schools from 2026 GitHub POIs"
+          git push
