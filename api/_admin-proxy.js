@@ -1,6 +1,19 @@
 const UPSTREAM="https://lms-katlearn.vercel.app/api";
 const UPSTREAM_TIMEOUT_MS=55000;
 
+function errorMessage(error,fallback="Lỗi kết nối Admin backend."){
+  if(error==null)return fallback;
+  if(typeof error==="string"&&error.trim())return error;
+  if(typeof error?.message==="string"&&error.message)return error.message;
+  if(typeof error?.error==="string"&&error.error)return error.error;
+  if(typeof error?.error?.message==="string"&&error.error.message)return error.error.message;
+  try{
+    const json=JSON.stringify(error);
+    if(json&&json!=="{}")return json;
+  }catch(_){}
+  return String(error)||fallback;
+}
+
 export function headers(req){
   const origin=String(req.headers?.origin||"");
   const h={"Content-Type":"application/json","Cache-Control":"no-store"};
@@ -36,3 +49,5 @@ export async function forward(req,res,path,method){
     clearTimeout(timer);
   }
 }
+
+export{errorMessage};
