@@ -147,7 +147,7 @@ function renderSchools(rows,limited){
  const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","province","ward","schoolLevel","source"]));
  $("#schoolTable").innerHTML=list.map(s=>{
   const protectedSchool=String(s.source||"").startsWith("thanhtungct7")||String(s.sourceType||"").includes("national");
-  return '<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID <span class="mono">'+esc(s.id)+'</span></small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td><td><div class="row-actions"><button class="btn" data-edit-school="'+esc(s.id)+'">Sửa</button>'+ (protectedSchool?'':'<button class="btn bad" data-delete-school="'+esc(s.id)+'">Xóa</button>') +'</div></td></tr>'
+  return '<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID <span class="mono">'+esc(s.id)+'</span></small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td><td><div class="row-actions">'+(protectedSchool?'<span class="limit">Catalog-managed</span>':'<button class="btn" data-edit-school="'+esc(s.id)+'">Sửa</button><button class="btn bad" data-delete-school="'+esc(s.id)+'">Xóa</button>')+'</div></td></tr>'
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy trường.</div></td></tr>';
  $("#schoolTable [data-edit-school]").forEach(b=>b.onclick=()=>editSchool(list.find(x=>x.id===b.dataset.editSchool)));
  $("#schoolTable [data-delete-school]").forEach(b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
