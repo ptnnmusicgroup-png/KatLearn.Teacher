@@ -3,9 +3,11 @@ name: admin proxy syntax
 on:
   push:
     paths:
+      - "admin.html"
+      - "admin.css"
+      - "admin.js"
       - "api/_admin-proxy.js"
       - "api/admin-hub.js"
-      - "admin.html"
       - ".github/workflows/admin-proxy-syntax.yml"
   workflow_dispatch:
 
@@ -17,19 +19,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check API syntax
+      - name: Check Admin client syntax
+        run: node --check admin.js
+      - name: Check Admin proxy syntax
         run: |
           node --check api/_admin-proxy.js
-      - name: Check Admin page module syntax
-        run: |
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          const html=fs.readFileSync('admin.html','utf8');
-          const match=html.match(/<script type="module">([\s\S]*?)<\/script>/);
-          if(!match)throw new Error('Admin module script not found');
-          const source=match[1]
-            .replace(/^import.*$/gm,'')
-            .replace(/^export default /gm,'');
-          new Function(source);
-          console.log('Admin module syntax OK');
-          NODE
+          node --check api/admin-hub.js
