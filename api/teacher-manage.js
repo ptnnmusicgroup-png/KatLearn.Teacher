@@ -4,7 +4,7 @@ import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import { createHash } from 'node:crypto';
 
 const allowedOrigins=new Set(['https://teacher-katlearn.vercel.app']);
-function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type';h.vary='Origin'}return h}
+function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type, authorization';h.vary='Origin'}return h}
 function admin(){if(!getApps().length){const raw=process.env.FIREBASE_SERVICE_ACCOUNT_JSON;if(!raw)throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is not configured');initializeApp({credential:cert(JSON.parse(raw))})}return{auth:getAuth(),db:getFirestore()}}
 const clean=(value,max=120)=>String(value??'').trim().slice(0,max);
 async function activeClassProfile(db,ids){
