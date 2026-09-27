@@ -151,21 +151,48 @@ function renderCatalog(){
 async function syncCatalog(){
  if(state.syncing)return;
  if(!state.user)return toast("Phiên Admin không hợp lệ.","bad");
- state.syncing=true;$("#catalogSync").disabled=true;$("#quickSync")?.setAttribute("disabled","disabled");
- const data=state.catalog||await apiGet("catalog");state.catalog=data;
- const p=readProgress();let done=CATALOG.reduce((s,x)=>s+Math.min(x[2],num(p[x[0]])),0);
+ state.syncing=true;
+ const button=$("#catalogSync");
+ button?.setAttribute("disabled","disabled");
+ $("#quickSync")?.setAttribute("disabled","disabled");
  try{
+  const data=state.catalog||await apiGet("catalog");
+  state.catalog=data;
+  const p=readProgress();
+  let done=CATALOG.reduce((s,x)=>s+Math.min(x[2],num(p[x[0]])),0);
   for(const province of CATALOG){
    let offset=Math.min(province[2],num(p[province[0]]));
    while(offset<province[2]){
     const r=await apiAction("catalog-chunk",{provinceCode:province[0],offset,limit:80});
+    const serverTotal=num(r.provinceTotal);
+    if(serverTotal>0&&serverTotal!==province[2]){
+      throw Object.assign(
+       new Error("Dữ liệu Catalog lệch kế hoạch tại "+province[1]+" · giao diện "+fmt(province[2])+" · backend "+fmt(serverTotal)+" trường."),
+       {code:"catalog_plan_mismatch"}
+      );
+    }
     const next=num(r.nextOffset),processed=num(r.processed);
-    if(next<=offset&&processed<=0)throw Object.assign(new Error("Catalog backend không trả thêm bản ghi cho "+province[1]+"."),{code:"catalog_stalled"});
-    done+=Math.max(0,Math.min(province[2],next)-offset);offset=next;p[province[0]]=offset;saveProgress(p);renderCatalog();
+    if(next<=offset&&processed<=0){
+      throw Object.assign(new Error("Catalog backend không trả thêm bản ghi cho "+province[1]+"."),{code:"catalog_stalled"});
+    }
+    done+=Math.max(0,Math.min(province[2],next)-offset);
+    offset=next;
+    p[province[0]]=offset;
+    saveProgress(p);
+    renderCatalog();
    }
   }
   toast("✓ Đã hoàn tất đồng bộ "+fmt(done)+" trường.","good");
- }catch(e){toast(e,"bad");pageError(e,"Đồng bộ catalog dừng lại");}finally{state.syncing=false;$("#catalogSync").disabled=false;$("#catalogSync").textContent="🇻🇳 Đồng bộ toàn bộ";renderCatalog()}
+ }catch(e){
+  toast(e,"bad");
+  pageError(e,"Đồng bộ catalog dừng lại");
+ }finally{
+  state.syncing=false;
+  button?.removeAttribute("disabled");
+  $("#quickSync")?.removeAttribute("disabled");
+  if(button)button.textContent="🇻🇳 Đồng bộ toàn bộ";
+  renderCatalog();
+ }
 }
 async function teacherAction(action,uid){
  const ok=await dialog(action==="verify"?"Duyệt giáo viên":"Từ chối hồ sơ",action==="verify"?"Tài khoản sẽ chuyển sang role teacher và được gắn trường/lớp.":"Tài khoản sẽ chuyển sang teacher_rejected.","Xác nhận");if(!ok)return;
