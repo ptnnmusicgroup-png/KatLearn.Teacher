@@ -522,12 +522,38 @@
       {
         "id": "689ea500229a7e0018936adc",
         "name": "Xã Thới Hưng",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-thoi-hung-truong-tieu-hoc-thoi-hung-1",
+            "name": "Trường Tiểu học Thới Hưng 1"
+          },
+          {
+            "id": "web-can-tho-xa-thoi-hung-truong-tieu-hoc-thoi-hung-2",
+            "name": "Trường Tiểu học Thới Hưng 2"
+          },
+          {
+            "id": "web-can-tho-xa-thoi-hung-truong-thcs-va-thpt-tran-ngoc-hoang",
+            "name": "Trường THCS và THPT Trần Ngọc Hoằng"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936ada",
         "name": "Xã Đông Hiệp",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-ong-hiep-truong-tieu-hoc-xuan-thang",
+            "name": "Trường Tiểu học Xuân Thắng"
+          },
+          {
+            "id": "web-can-tho-xa-ong-hiep-truong-thcs-ong-hiep",
+            "name": "Trường THCS Đông Hiệp"
+          },
+          {
+            "id": "web-can-tho-xa-ong-hiep-truong-mam-non-ong-hiep",
+            "name": "Trường mầm non Đông Hiệp"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936ad6",
@@ -592,12 +618,42 @@
       {
         "id": "689ea500229a7e0018936ad4",
         "name": "Xã Trường Long",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-truong-long-truong-mam-non-truong-long",
+            "name": "Trường Mầm non Trường Long"
+          },
+          {
+            "id": "web-can-tho-xa-truong-long-truong-tieu-hoc-truong-long",
+            "name": "Trường Tiểu học Trường Long"
+          },
+          {
+            "id": "web-can-tho-xa-truong-long-truong-trung-hoc-co-so-truong-long",
+            "name": "Trường Trung học cơ sở Trường Long"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936ad3",
         "name": "Xã Nhơn Ái",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-nhon-ai-truong-mam-non-nhon-ai",
+            "name": "Trường Mầm non Nhơn Ái"
+          },
+          {
+            "id": "web-can-tho-xa-nhon-ai-truong-tieu-hoc-nhon-ai-1",
+            "name": "Trường Tiểu học Nhơn Ái 1"
+          },
+          {
+            "id": "web-can-tho-xa-nhon-ai-truong-tieu-hoc-nhon-ai-2",
+            "name": "Trường Tiểu học Nhơn Ái 2"
+          },
+          {
+            "id": "web-can-tho-xa-nhon-ai-truong-thcs-nhon-ai",
+            "name": "Trường THCS Nhơn Ái"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936ae3",
@@ -1410,7 +1466,20 @@
       {
         "id": "689ea500229a7e0018936b0a",
         "name": "Xã Phong Nẫm",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-phong-nam-truong-mau-giao-phong-nam",
+            "name": "Trường Mẫu giáo Phong Nẫm"
+          },
+          {
+            "id": "web-can-tho-xa-phong-nam-truong-tieu-hoc-phong-nam",
+            "name": "Trường Tiểu học Phong Nẫm"
+          },
+          {
+            "id": "web-can-tho-xa-phong-nam-truong-tieu-hoc-va-trung-hoc-co-so-phong-nam",
+            "name": "Trường Tiểu học và Trung học cơ sở Phong Nẫm"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936b0d",
@@ -1587,7 +1656,20 @@
       {
         "id": "689ea500229a7e0018936b15",
         "name": "Xã Mỹ Phước",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-my-phuoc-truong-thcs-my-phuoc-a",
+            "name": "Trường THCS Mỹ Phước A"
+          },
+          {
+            "id": "web-can-tho-xa-my-phuoc-truong-tieu-hoc-my-phuoc-d",
+            "name": "Trường Tiểu học Mỹ Phước D"
+          },
+          {
+            "id": "web-can-tho-xa-my-phuoc-truong-tieu-hoc-my-phuoc-e",
+            "name": "Trường Tiểu học Mỹ Phước E"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936b27",
@@ -1654,7 +1736,28 @@
       {
         "id": "689ea500229a7e0018936b07",
         "name": "Xã Tân Thạnh",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-tan-thanh-truong-mam-non-tan-thanh",
+            "name": "Trường mầm non Tân Thạnh"
+          },
+          {
+            "id": "web-can-tho-xa-tan-thanh-truong-tieu-hoc-tan-thanh",
+            "name": "Trường tiểu học Tân Thạnh"
+          },
+          {
+            "id": "web-can-tho-xa-tan-thanh-truong-thcs-tan-thanh",
+            "name": "Trường THCS Tân Thạnh"
+          },
+          {
+            "id": "web-can-tho-xa-tan-thanh-truong-thcs-chau-khanh",
+            "name": "Trường THCS Châu Khánh"
+          },
+          {
+            "id": "web-can-tho-xa-tan-thanh-truong-thcs-tan-hung",
+            "name": "Trường THCS Tân Hưng"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936b26",
@@ -1801,7 +1904,16 @@
       {
         "id": "689ea500229a7e0018936b02",
         "name": "Xã Gia Hòa",
-        "schools": []
+        "schools": [
+          {
+            "id": "web-can-tho-xa-gia-hoa-truong-mam-non-gia-hoa",
+            "name": "Trường Mầm non Gia Hòa"
+          },
+          {
+            "id": "web-can-tho-xa-gia-hoa-truong-tieu-hoc-gia-hoa",
+            "name": "Trường Tiểu học Gia Hòa"
+          }
+        ]
       },
       {
         "id": "689ea500229a7e0018936b1d",
