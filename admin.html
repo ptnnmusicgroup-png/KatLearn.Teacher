@@ -261,7 +261,7 @@ async function syncNationalCatalog(){
   if(!btn)return;
   btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
   try{
-    const planResponse=await adminFetch('/national-catalog-sync?action=plan',{
+    const planResponse=await adminFetch('/national-catalog-plan',{
       method:'GET',
       cache:'no-store'
     });
