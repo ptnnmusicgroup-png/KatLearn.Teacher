@@ -16,7 +16,7 @@ function admin(){
 }
 
 function tokenFrom(req){
-  const match=/^Bearer\\s+(.+)$/i.exec(String(req.headers?.authorization||''));
+  const match=/^Bearer\s+(.+)$/i.exec(String(req.headers?.authorization||''));
   if(!match)throw Object.assign(new Error('Bạn cần đăng nhập Admin.'),{status:401});
   return match[1];
 }
