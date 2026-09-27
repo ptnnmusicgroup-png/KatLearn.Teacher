@@ -80,3 +80,5 @@ export default async function handler(req,res){
 // rerun after code-based THPT mapping
 
 // rerun with resilient PDF source fallbacks
+
+// rerun repaired THPT parser
