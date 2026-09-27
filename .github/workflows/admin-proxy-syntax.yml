@@ -6,7 +6,6 @@ on:
       - "admin.html"
       - "admin.css"
       - "admin.js"
-      - "api/_admin-proxy.js"
       - "api/admin-hub.js"
       - ".github/workflows/admin-proxy-syntax.yml"
   workflow_dispatch:
@@ -22,6 +21,4 @@ jobs:
       - name: Check Admin client syntax
         run: node --check admin.js
       - name: Check Admin proxy syntax
-        run: |
-          node --check api/_admin-proxy.js
-          node --check api/admin-hub.js
+        run: node --check api/admin-hub.js
