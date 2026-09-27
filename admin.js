@@ -69,7 +69,7 @@ function bind(){
  $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")};
  $("#logout").onclick=()=>signOut(auth);$("#clearSession").onclick=()=>signOut(auth);
  $("#refresh")?.addEventListener("click",()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{notice(e);toast(e,"bad")}));
- $("#catalogSync").onclick=syncCatalog;
+ $("#catalogSync")?.addEventListener("click",syncCatalog);$("#quickSync")?.addEventListener("click",syncCatalog);
  ["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"].forEach(id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  ["teacherFilter","userFilter"].forEach(id=>$("#"+id)?.addEventListener("change",()=>render("teachers"==state.page||"users"==state.page?state.page:"overview")));
 }
@@ -214,9 +214,9 @@ async function syncCatalog(){
 }
 
 let modalResolve=null;
-function dialog(title,text,ok="Xác nhận",cancel="Hủy"){return new Promise(resolve=>{modalResolve=resolve;$("#modalBackdropTitle").textContent=title;$("#modalBackdropText").textContent=text;$("#modalBackdropOk").textContent=ok;$("#modalBackdropCancel").textContent=cancel;$("#modalBackdropCancel").classList.toggle("hidden",!cancel);$("#modalBackdrop").classList.remove("hidden")})}
+function dialog(title,text,ok="Xác nhận",cancel="Hủy"){return new Promise(resolve=>{modalResolve=resolve;$("#modalTitle").textContent=title;$("#modalText").textContent=text;$("#modalOk").textContent=ok;$("#modalCancel").textContent=cancel;$("#modalCancel").classList.toggle("hidden",!cancel);$("#modalBackdrop").classList.remove("hidden")})}
 function closeDialog(v){$("#modalBackdrop").classList.add("hidden");const r=modalResolve;modalResolve=null;r?.(v)}
-$("#modalBackdropOk").onclick=()=>closeDialog(true);$("#modalBackdropCancel").onclick=()=>closeDialog(false);$("#modalBackdrop").onclick=e=>{if(e.target.id==="modal")closeDialog(false)};
+$("#modalOk").onclick=()=>closeDialog(true);$("#modalCancel").onclick=()=>closeDialog(false);$("#modalBackdrop").onclick=e=>{if(e.target.id==="modalBackdrop")closeDialog(false)};
 
 $("#loginForm").onsubmit=async e=>{e.preventDefault();const b=$("#loginBtn"),m=$("#loginError");b.disabled=true;m.textContent="Đang xác thực…";try{const c=await signInWithEmailAndPassword(auth,ADMIN,$("#password").value);if(String(c.user.email||"").toLowerCase()!==ADMIN){await signOut(auth);throw new Error("Tài khoản không có quyền Admin.")}$("#password").value=""}catch(x){m.textContent=x?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":errText(x);b.disabled=false}};
 onAuthStateChanged(auth,async u=>{state.user=u||null;if(!u){$("#loginGate").classList.remove("hidden");$("#app").classList.add("hidden");health("#healthAuth",false,"Chưa đăng nhập");return}if(String(u.email||"").toLowerCase()!==ADMIN){$("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}$("#loginGate").classList.add("hidden");$("#app").classList.remove("hidden");health("#healthAuth",true,"Đã xác thực");loadOverview(true).catch(e=>{notice("Không thể tải tổng quan: "+errText(e));toast(e,"bad")})});
