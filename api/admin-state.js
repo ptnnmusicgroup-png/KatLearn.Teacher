@@ -54,17 +54,16 @@ export default async function handler(req,res){
       return send(res,403,{ok:false,error:'Tài khoản không có quyền Admin.'});
     }
 
-    const [usersSnap,classesSnap,packsSnap,schoolsSnap,schoolCountSnap]=await Promise.all([
+    const [usersSnap,classesSnap,packsSnap,schoolsSnap]=await Promise.all([
       db.collection('users').get(),
       db.collection('classes').get(),
       db.collection('publicPacks').select('name','createdBy','createdByEmail','createdByUid','createdAt','wordCount').get(),
-      db.collection('schools').select('name','province','ward').limit(500).get(),
-      db.collection('schools').count().get()
+      db.collection('schools').select('name','province','ward').limit(500).get()
     ]);
 
     const users=rows(usersSnap);
     const classes=rows(classesSnap);
-    const schoolTotal=Number(schoolCountSnap.data().count||0);
+    const schoolTotal=schoolsSnap.size;
     const packs=packsSnap.docs.map(d=>{
       const data=d.data()||{},safe=serialize(data);
       return{
@@ -92,7 +91,8 @@ export default async function handler(req,res){
         classes:classes.length,
         packs:packs.length,
         schools:schoolTotal,
-        schoolsReturned:schools.length
+        schoolsReturned:schools.length,
+        schoolsLimited:true
       },
       users,classes,packs,schools,pending,schoolTotal
     });
