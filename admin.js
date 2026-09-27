@@ -19,7 +19,9 @@ function textOf(value,fallback="Lỗi không xác định"){
   try{const json=JSON.stringify(value,null,2);if(json&&json!=="{}")return json}catch(_){}
   return String(value);
 }
-function esc(value){return textOf(value,"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[c]))}
+function esc(value){
+  return textOf(value,"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
 function num(value){const n=Number(value);return Number.isFinite(n)?n:0}
 function displayNum(value,unknown="—"){return value==null?unknown:num(value).toLocaleString("vi-VN")}
 function dateOf(value){const n=Number(value||0);if(!n)return"—";try{return new Date(n).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"})}catch(_){return"—"}}
@@ -159,7 +161,12 @@ function getPath(row,path){return path.split(".").reduce((value,key)=>value?.[ke
 function has(row,q,fields){if(!q)return true;return fields.map(path=>getPath(row,path)).join(" ").toLowerCase().includes(q)}
 function renderSection(section){
   const d=state.cache[section]||{},rows=Array.isArray(d.rows)?d.rows:[];
-  if(section==="teachers")renderTeachers(rows);if(section==="users")renderUsers(rows);if(section==="classes")renderClasses(rows);if(section==="packs")renderPacks(rows);if(section==="schools")renderSchools(rows);if(section==="activity")renderActivity(rows);
+  if(section==="teachers")renderTeachers(rows);
+  if(section==="users")renderUsers(rows);
+  if(section==="classes")renderClasses(rows);
+  if(section==="packs")renderPacks(rows);
+  if(section==="schools")renderSchools(rows);
+  if(section==="activity")renderActivity(rows);
 }
 function renderTeachers(rows){
   const q=$("#teacherSearch").value.trim().toLowerCase(),f=$("#teacherFilter").value;
@@ -184,7 +191,8 @@ function renderClasses(rows){
 function renderPacks(rows){
   const q=$("#packSearch").value.trim().toLowerCase(),list=rows.filter(p=>has(p,q,["name","createdBy","createdByEmail","createdByUid"]));
   $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID '+esc(p.id)+'</small></td><td>'+displayNum(p.wordCount,0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+dateOf(p.createdAt)+'</td><td><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
-  $$("#packTable [data-delete-pack]").forEach(b=>b.onclick=()=>deletePack(b.dataset.deletePack));$("#packLimit").textContent=state.cache.packs?.limited?"Đang hiển thị tối đa 300 bộ từ.":"";
+  $$("#packTable [data-delete-pack]").forEach(b=>b.onclick=()=>deletePack(b.dataset.deletePack));
+  $("#packLimit").textContent=state.cache.packs?.limited?"Đang hiển thị tối đa 300 bộ từ.":"";
 }
 function renderSchools(rows){
   const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(s=>has(s,q,["name","province","ward","schoolLevel","source"]));
@@ -207,7 +215,13 @@ function closeModal(value){
 async function inspectTeacher(uid){
   const list=[...(state.cache.teachers?.rows||[]),...(state.cache.overview?.pending||[])],t=list.find(x=>x.id===uid);if(!t)return;
   const v=t.teacherVerification||{};
-  await openModal("Hồ sơ giáo viên","Email: "+(t.email||"—")+"\nTên: "+(t.displayName||t.name||"—")+"\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\nLớp đăng ký: "+(v.requestedClassName||t.className||"—")+"\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—")+"\nGửi lúc: "+dateOf(v.submittedAt||t.createdAt)+"\nRole: "+roleLabel(t.role),"Đóng","");
+  await openModal("Hồ sơ giáo viên","Email: "+(t.email||"—")+"
+Tên: "+(t.displayName||t.name||"—")+"
+Trường: "+(t.schoolName||v.requestedSchoolName||"—")+"
+Lớp đăng ký: "+(v.requestedClassName||t.className||"—")+"
+Khu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—")+"
+Gửi lúc: "+dateOf(v.submittedAt||t.createdAt)+"
+Role: "+roleLabel(t.role),"Đóng","");
 }
 async function teacherAction(action,uid){
   const verify=action==="verify";
