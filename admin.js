@@ -1,298 +1,218 @@
 import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getFirestore,collection,doc,query,where,limit,getDocs,getDoc,getCountFromServer,setDoc,addDoc,updateDoc,deleteDoc,writeBatch,orderBy}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-const FIREBASE_CONFIG={apiKey:"AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8",authDomain:"elp---katlearn.firebaseapp.com",projectId:"elp---katlearn",storageBucket:"elp---katlearn.firebasestorage.app",messagingSenderId:"344478447672",appId:"1:344478447672:web:4ed109a40303d0b41b0ecd",measurementId:"G-KTW11GD97T"};
-const ADMIN_EMAIL="katlearn.admin@gmail.com";
-const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG);
-const auth=getAuth(app);
+const CONFIG={apiKey:"AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8",authDomain:"elp---katlearn.firebaseapp.com",projectId:"elp---katlearn",storageBucket:"elp---katlearn.firebasestorage.app",messagingSenderId:"344478447672",appId:"1:344478447672:web:4ed109a40303d0b41b0ecd",measurementId:"G-KTW11GD97T"};
+const ADMIN="katlearn.admin@gmail.com",MAX=500,TOTAL_CATALOG=22850;
+const CATALOG=[["01","Thành phố Hà Nội",2828],["04","Tỉnh Cao Bằng",150],["08","Tỉnh Tuyên Quang",300],["11","Tỉnh Điện Biên",182],["12","Tỉnh Lai Châu",137],["14","Tỉnh Sơn La",278],["15","Tỉnh Lào Cai",216],["19","Tỉnh Thái Nguyên",261],["20","Tỉnh Lạng Sơn",200],["22","Tỉnh Quảng Ninh",266],["24","Tỉnh Bắc Ninh",1039],["25","Tỉnh Phú Thọ",759],["31","Thành phố Hải Phòng",1041],["33","Tỉnh Hưng Yên",548],["37","Tỉnh Ninh Bình",1178],["38","Tỉnh Thanh Hóa",2002],["40","Tỉnh Nghệ An",372],["42","Tỉnh Hà Tĩnh",444],["44","Tỉnh Quảng Trị",290],["46","Thành phố Huế",383],["48","Thành phố Đà Nẵng",550],["51","Tỉnh Quảng Ngãi",127],["52","Tỉnh Gia Lai",261],["56","Tỉnh Khánh Hòa",296],["66","Tỉnh Đắk Lắk",616],["68","Tỉnh Lâm Đồng",1021],["75","Tỉnh Đồng Nai",691],["79","Thành phố Hồ Chí Minh",2382],["80","Tỉnh Tây Ninh",406],["82","Tỉnh Đồng Tháp",275],["86","Tỉnh Vĩnh Long",723],["91","Tỉnh An Giang",1322],["92","Thành phố Cần Thơ",713],["96","Tỉnh Cà Mau",593]];
+const app=getApps().length?getApps()[0]:initializeApp(CONFIG),auth=getAuth(app),db=getFirestore(app);
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
-const pageTitles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
-const state={user:null,page:"overview",cache:{},sync:{active:false,done:0,total:0,province:""},modalResolve:null};
+const state={user:null,page:"overview",cache:{},sync:false};
+const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Nhật ký Admin"};
 
-function textOf(value,fallback="Lỗi không xác định"){
-  if(value==null||value==="")return fallback;
-  if(typeof value==="string")return value;
-  if(value instanceof Error&&value.message)return value.message;
-  if(typeof value.message==="string"&&value.message)return value.message;
-  if(typeof value.error==="string")return value.error;
-  if(value.error&&typeof value.error.message==="string")return value.error.message;
-  try{const json=JSON.stringify(value,null,2);if(json&&json!=="{}")return json}catch(_){}
-  return String(value);
+function errText(e,f="Có lỗi xảy ra."){
+ if(e==null)return f;
+ if(typeof e==="string"&&e.trim())return e;
+ if(typeof e?.message==="string"&&e.message)return e.message;
+ if(typeof e?.error==="string"&&e.error)return e.error;
+ if(typeof e?.error?.message==="string"&&e.error.message)return e.error.message;
+ if(typeof e?.code==="string"&&e.code)return e.code;
+ try{const s=JSON.stringify(e);if(s&&s!=="{}")return s}catch(_){}
+ return f;
 }
-function esc(value){
-  return textOf(value,"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-function num(value){const n=Number(value);return Number.isFinite(n)?n:0}
-function displayNum(value,unknown="—"){return value==null?unknown:num(value).toLocaleString("vi-VN")}
-function dateOf(value){const n=Number(value||0);if(!n)return"—";try{return new Date(n).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"})}catch(_){return"—"}}
-function roleLabel(role){return({teacher:"Giáo viên",student:"Học sinh",pending_teacher_verification:"Chờ xác minh",teacher_rejected:"Từ chối",admin:"Admin"}[String(role||"").toLowerCase()]||String(role||"Chưa rõ"))}
-function roleClass(role){const r=String(role||"").toLowerCase();return r==="teacher"?"teacher":r==="student"?"student":r==="pending_teacher_verification"?"pending":r==="teacher_rejected"?"rejected":r==="admin"?"admin":""}
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num=v=>Number.isFinite(Number(v))?Number(v):0;
+const fmt=v=>num(v).toLocaleString("vi-VN");
+const date=v=>{const x=num(v);if(!x)return"—";try{return new Date(x).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"})}catch(_){return"—"}};
+const roleLabel=r=>({teacher:"Giáo viên",student:"Học sinh",pending_teacher_verification:"Chờ xác minh",teacher_rejected:"Từ chối",admin:"Admin"}[String(r||"").toLowerCase()]||String(r||"Chưa rõ"));
+const roleClass=r=>{r=String(r||"").toLowerCase();return r==="teacher"?"teacher":r==="student"?"student":r==="pending_teacher_verification"?"pending":r==="teacher_rejected"?"rejected":r==="admin"?"admin":""};
 
 let toastTimer;
-function toast(message,type=""){
-  const box=$("#toast");box.textContent=textOf(message);box.className="toast show "+type;
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>box.className="toast",4200);
-}
-function setBackendStatus(kind,label){$("#backendStatus").className="backend-status "+kind;$("#backendLabel").textContent=label}
-function showError(message,code="",status="",details=""){
-  $("#pageError").classList.remove("hidden");
-  $("#pageErrorText").textContent=textOf(message);
-  $("#pageErrorCode").textContent=[status?"HTTP "+status:"",code?String(code):""].filter(Boolean).join(" · ");
-  $("#pageErrorDetails").textContent=details?textOf(details):"";
-  $("#pageErrorDetails").classList.toggle("hidden",!details);
-}
-function clearError(){$("#pageError").classList.add("hidden");$("#pageErrorText").textContent="";$("#pageErrorCode").textContent="";$("#pageErrorDetails").textContent="";$("#pageErrorDetails").classList.add("hidden")}
+function toast(m,type=""){const x=$("#toast");x.textContent=errText(m);x.className="toast show "+type;clearTimeout(toastTimer);toastTimer=setTimeout(()=>x.className="toast",4000)}
+function notice(m){const x=$("#globalNotice");x.textContent=errText(m);x.classList.remove("hidden")}
+function clearNotice(){$("#globalNotice").classList.add("hidden")}
+function health(id,ok,text){const x=$(id);x.textContent="● "+text;x.style.color=ok?"var(--good)":"var(--bad)"}
+function rows(s){return s.docs.map(d=>({id:d.id,...(d.data()||{})}))}
 
-async function getToken(){
-  if(!state.user)throw new Error("Phiên Admin không còn hoạt động. Hãy đăng nhập lại.");
-  const token=await state.user.getIdToken();
-  if(!token)throw new Error("Không lấy được token Firebase Admin.");
-  return token;
+async function countCollection(name,filters=[]){
+ try{
+  let q=collection(db,name);
+  for(const f of filters)q=query(q,where(f[0],f[1],f[2]));
+  return Number((await getCountFromServer(q)).data().count||0);
+ }catch(e){console.warn("Admin count",name,e);return null}
 }
-async function api(path="",options={}){
-  const headers={Accept:"application/json"};
-  if(options.auth!==false)headers.Authorization="Bearer "+await getToken();
-  if(options.body!==undefined)headers["Content-Type"]="application/json";
-  let response;
-  try{
-    response=await fetch("/api/admin-hub"+path,{method:options.method||"GET",headers,body:options.body===undefined?undefined:JSON.stringify(options.body),cache:"no-store"});
-  }catch(error){
-    const err=new Error("Không kết nối được Admin Hub. Kiểm tra deployment/proxy của teacher-katlearn.");
-    err.cause=textOf(error);throw err;
-  }
-  const raw=await response.text();
-  let data={};
-  if(raw){
-    try{data=JSON.parse(raw)}catch(_){
-      const err=new Error("Admin backend trả về dữ liệu không hợp lệ (HTTP "+response.status+").");
-      err.status=response.status;err.raw=raw.slice(0,1600);throw err;
-    }
-  }
-  if(response.status===401){
-    await signOut(auth);
-    const err=new Error("Phiên Admin đã hết hạn. Vui lòng đăng nhập lại.");
-    err.status=401;err.code="admin_session_expired";throw err;
-  }
-  if(!response.ok||data.ok===false){
-    const err=new Error(textOf(data.error||data.message||raw,"HTTP "+response.status+" từ Admin Hub"));
-    err.status=response.status;err.code=data.code||"admin_request_failed";err.details=data.details||null;throw err;
-  }
-  setBackendStatus("good","Backend sẵn sàng");
-  return data;
+async function readLimited(name,make){
+ let q=collection(db,name);
+ q=make?make(q):query(q,limit(MAX));
+ return rows(await getDocs(q));
+}
+async function writeAudit(action,target,extra={}){
+ try{await addDoc(collection(db,"adminAudit"),{action,target,adminUid:state.user?.uid||"",adminEmail:ADMIN,at:Date.now(),...extra})}catch(e){console.warn("audit",e)}
 }
 
-function handleError(error,fallback){
-  const message=textOf(error?.message||error,fallback);
-  const details=error?.raw||error?.details||error?.cause||"";
-  setBackendStatus("bad","Có lỗi");showError(message,error?.code||"",error?.status||"",details);toast(message,"bad");
+function showPage(name){
+ state.page=name;
+ $$(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+name));
+ $$("#nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===name));
+ $("#pageTitle").textContent=titles[name]||"Tổng quan";
+ $("#sidebar").classList.remove("open");$("#overlay").classList.remove("show");clearNotice();window.scrollTo({top:0,behavior:"smooth"});
+ loadPage(name,true).catch(e=>{notice(errText(e,"Không tải được dữ liệu."));toast(e,"bad")});
 }
-function safeLoad(task,fallback){Promise.resolve(task).catch(error=>handleError(error,fallback))}
-
-function setPage(name){
-  state.page=name;
-  $$(".page").forEach(x=>x.classList.toggle("active",x.id==="page-"+name));
-  $$(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===name));
-  $$(".mobile-bottom button").forEach(x=>x.classList.toggle("active",x.dataset.go===name));
-  $("#pageTitle").textContent=pageTitles[name]||"Tổng quan";
-  $("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show");
-  window.scrollTo({top:0,behavior:"smooth"});
-  if(name==="overview")safeLoad(loadOverview(),"Không thể tải tổng quan.");
-  else if(name==="catalog")safeLoad(loadCatalog(),"Không thể tải danh mục quốc gia.");
-  else safeLoad(loadSection(name),"Không thể tải khu vực Admin.");
+function bind(){
+ $$("#nav button,[data-page-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.pageGo)));
+ $("#menuBtn").onclick=()=>{$("#sidebar").classList.add("open");$("#overlay").classList.add("show")};
+ $("#overlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#overlay").classList.remove("show")};
+ $("#logout").onclick=()=>signOut(auth);$("#clearSession").onclick=()=>signOut(auth);
+ $("#refreshBtn").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{notice(e);toast(e,"bad")});
+ $("#syncCatalog").onclick=syncCatalog;
+ ["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"].forEach(id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
+ ["teacherFilter","userFilter"].forEach(id=>$("#"+id)?.addEventListener("change",()=>render("teachers"==state.page||"users"==state.page?state.page:"overview")));
 }
-function bindNavigation(){
-  $$(".nav button,[data-go]").forEach(button=>button.addEventListener("click",()=>setPage(button.dataset.page||button.dataset.go)));
-  $("#menuMobile").addEventListener("click",()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show")});
-  $("#mobileOverlay").addEventListener("click",()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")});
-  $("#logout").addEventListener("click",()=>signOut(auth));
-  $("#clearSession").addEventListener("click",()=>signOut(auth));
-  $("#refresh").addEventListener("click",refreshCurrent);
-  $("#modalCancel").addEventListener("click",()=>closeModal(false));
-  $("#modalOk").addEventListener("click",()=>closeModal(true));
-  $("#quickSync").addEventListener("click",runCatalogSync);
-  $("#catalogSync").addEventListener("click",runCatalogSync);
-  ["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"].forEach(id=>$("#"+id).addEventListener("input",()=>renderSection(state.page)));
-  ["teacherFilter","userFilter"].forEach(id=>$("#"+id).addEventListener("change",()=>renderSection(state.page)));
+async function loadPage(page,force=false){
+ if(page==="overview")return loadOverview(force);
+ if(page==="catalog")return loadCatalog(force);
+ if(page==="activity")return loadActivity(force);
+ if(state.cache[page]&&!force){render(page);return}
+ state.cache[page]=await loadSection(page);render(page);
 }
-async function refreshCurrent(){
-  clearError();setBackendStatus("","Đang tải…");state.cache={};
-  try{
-    if(state.page==="overview")await loadOverview(true);
-    else if(state.page==="catalog")await loadCatalog(true);
-    else await loadSection(state.page,true);
-    toast("✓ Đã làm mới","good");
-  }catch(error){handleError(error,"Không thể làm mới Admin Hub.")}
-}
-
 async function loadOverview(force=false){
-  if(state.cache.overview&&!force){renderOverview();return}
-  setBackendStatus("","Đang tải…");
-  const data=await api("?section=overview");
-  state.cache.overview=data;state.cache.catalog=data.catalog||null;renderOverview();
+ if(state.cache.overview&&!force){renderOverview();return}
+ const [users,teachers,students,pending,classes,schools,packs,pendingRows]=await Promise.all([
+  countCollection("users"),countCollection("users",[["role","==","teacher"]]),countCollection("users",[["role","==","student"]]),
+  countCollection("users",[["role","==","pending_teacher_verification"]]),countCollection("classes"),countCollection("schools"),countCollection("publicPacks"),
+  readLimited("users",q=>query(q,where("role","==","pending_teacher_verification"),limit(100)))
+ ]);
+ state.cache.overview={stats:{users,teachers,students,pending,classes,schools,packs},pending:pendingRows};renderOverview();health("#healthFs",true,"Firestore hoạt động");health("#healthAdmin",true,"Admin đã xác thực");health("#healthCatalog",true,"Tách riêng");
 }
 function renderOverview(){
-  const d=state.cache.overview||{},s=d.stats||{};
-  $("#mUsers").textContent=displayNum(s.users);$("#mPending").textContent=displayNum(s.pending);$("#mTeachers").textContent=displayNum(s.teachers);$("#mStudents").textContent=displayNum(s.students);$("#mClasses").textContent=displayNum(s.classes);$("#mSchools").textContent=displayNum(s.schools);
-  const pending=Array.isArray(d.pending)?d.pending:[];
-  $("#pendingList").innerHTML=pending.length?pending.slice(0,6).map(t=>'<div class="list-item"><div class="list-main"><div><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+" · "+esc(t.schoolName||t.teacherVerification?.requestedSchoolName||"Chưa có trường")+'</small></div><span class="badge pending">CHỜ DUYỆT</span></div><div class="list-actions"><button class="btn good" data-action="verify" data-id="'+esc(t.id)+'">✓ Duyệt</button><button class="btn" data-action="inspect" data-id="'+esc(t.id)+'">Xem hồ sơ</button></div></div>').join(""):'<div class="empty">Không có hồ sơ giáo viên đang chờ. 🎉</div>';
-  $$("#pendingList [data-action='verify']").forEach(b=>b.onclick=()=>teacherAction("verify",b.dataset.id));
-  $$("#pendingList [data-action='inspect']").forEach(b=>b.onclick=()=>inspectTeacher(b.dataset.id));
-  const catalog=d.catalog||{};$("#syncText").textContent=displayNum(catalog.totalProvinces,34)+" tỉnh/thành · "+displayNum(catalog.totalSchools,22850)+" trường kế hoạch · đã ghi "+displayNum(s.syncedSchools,0);
-  const warnings=Array.isArray(d.warnings)?d.warnings:[];
-  $("#warningBox").classList.toggle("hidden",warnings.length===0);
-  if(warnings.length)$("#warningBox").textContent="Một số thống kê phụ chưa tải được; Admin Hub vẫn hoạt động. "+warnings.map(x=>textOf(x.label)+": "+textOf(x.message)).join(" | ");
-  renderHealth(d);
+ const s=state.cache.overview?.stats||{};
+ $("#sUsers").textContent=s.users==null?"—":fmt(s.users);$("#sPending").textContent=s.pending==null?"—":fmt(s.pending);$("#sTeachers").textContent=s.teachers==null?"—":fmt(s.teachers);$("#sStudents").textContent=s.students==null?"—":fmt(s.students);$("#sClasses").textContent=s.classes==null?"—":fmt(s.classes);$("#sSchools").textContent=s.schools==null?"—":fmt(s.schools);
+ const p=state.cache.overview?.pending||[];
+ $("#overviewPending").innerHTML=p.length?p.slice(0,6).map(t=>{const v=t.teacherVerification||{};return '<div class="pending-row"><div class="pending-main"><div><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+' · '+esc(t.schoolName||v.requestedSchoolName||"Chưa có trường")+'</small></div><span class="badge pending">CHỜ DUYỆT</span></div><div class="row-actions"><button class="btn good" data-verify="'+esc(t.id)+'">✓ Duyệt</button><button class="btn" data-reject="'+esc(t.id)+'">Từ chối</button></div></div>'}).join(""):'<div class="empty">Không có hồ sơ giáo viên chờ duyệt. 🎉</div>';
+ $$("#overviewPending [data-verify]").forEach(b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));$$(".pending-row [data-reject]").forEach(b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));
 }
-function renderHealth(d){
-  const s=d.stats||{},checks=[
-    ["Phiên Admin",state.user?"Đã xác thực":"Chưa xác thực",!!state.user],
-    ["Backend",d.degraded?"Có cảnh báo":"Sẵn sàng",!d.degraded],
-    ["Catalog nguồn",d.catalog?displayNum(d.catalog.totalSchools,22850)+" trường":"Chưa tải",!!d.catalog],
-    ["Firestore",typeof s.users==="number"?"Đã đọc dữ liệu":"Chưa đủ dữ liệu",typeof s.users==="number"]
-  ];
-  $("#healthList").innerHTML=checks.map(x=>'<div class="health-row"><span>'+esc(x[0])+'</span><b class="'+(x[2]?"dot-good":"dot-warn")+'">● '+esc(x[1])+'</b></div>').join("");
+async function loadSection(section){
+ if(section==="teachers"){
+  const [p,v,r]=await Promise.all([
+   readLimited("users",q=>query(q,where("role","==","pending_teacher_verification"),limit(MAX))),
+   readLimited("users",q=>query(q,where("role","==","teacher"),limit(MAX))),
+   readLimited("users",q=>query(q,where("role","==","teacher_rejected"),limit(MAX)))
+  ]);
+  return{rows:[...p.map(x=>({...x,_status:"pending"})),...v.map(x=>({...x,_status:"verified"})),...r.map(x=>({...x,_status:"rejected"}))]};
+ }
+ const makers={users:q=>query(q,limit(MAX)),classes:q=>query(q,limit(MAX)),packs:q=>query(q,limit(MAX)),schools:q=>query(q,limit(MAX))};
+ if(!makers[section])throw new Error("Khu vực Admin không hợp lệ.");
+ return{rows:await readLimited(section,makers[section])};
 }
-
-async function loadSection(section,force=false){
-  if(state.cache[section]&&!force){renderSection(section);return}
-  const data=await api("?section="+encodeURIComponent(section));state.cache[section]=data;renderSection(section);
-}
-function getPath(row,path){return path.split(".").reduce((value,key)=>value?.[key],row)||""}
-function has(row,q,fields){if(!q)return true;return fields.map(path=>getPath(row,path)).join(" ").toLowerCase().includes(q)}
-function renderSection(section){
-  const d=state.cache[section]||{},rows=Array.isArray(d.rows)?d.rows:[];
-  if(section==="teachers")renderTeachers(rows);
-  if(section==="users")renderUsers(rows);
-  if(section==="classes")renderClasses(rows);
-  if(section==="packs")renderPacks(rows);
-  if(section==="schools")renderSchools(rows);
-  if(section==="activity")renderActivity(rows);
-}
-function renderTeachers(rows){
-  const q=$("#teacherSearch").value.trim().toLowerCase(),f=$("#teacherFilter").value;
-  const list=rows.filter(t=>(f==="all"||(f==="pending"&&t._status==="pending")||(f==="verified"&&t._status==="verified")||(f==="rejected"&&t._status==="rejected"))&&has(t,q,["displayName","name","email","schoolName","province","ward","teacherVerification.requestedSchoolName","teacherVerification.requestedClassName"]));
-  $("#teacherTable").innerHTML=list.map(t=>{
-    const pending=t._status==="pending",rejected=t._status==="rejected";
-    return'<tr><td><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+" · UID "+esc(t.id)+'</small></td><td><span class="badge '+(pending?"pending":rejected?"rejected":"teacher")+'">'+(pending?"CHỜ XÁC MINH":rejected?"ĐÃ TỪ CHỐI":"ĐÃ DUYỆT")+'</span></td><td>'+esc(t.schoolName||t.teacherVerification?.requestedSchoolName||"—")+'<small>'+esc([t.province,t.ward].filter(Boolean).join(" · ")||"Chưa có khu vực")+' · Lớp '+esc(t.teacherVerification?.requestedClassName||t.className||"—")+'</small></td><td>'+dateOf(t.teacherVerification?.submittedAt||t.createdAt)+'</td><td><div class="list-actions">'+(pending?'<button class="btn good" data-action="verify" data-id="'+esc(t.id)+'">✓ Duyệt</button><button class="btn bad" data-action="reject" data-id="'+esc(t.id)+'">Từ chối</button>':'<button class="btn" data-action="inspect" data-id="'+esc(t.id)+'">Xem hồ sơ</button>')+'</div></td></tr>';
-  }).join("")||'<tr><td colspan="5"><div class="empty">Không có giáo viên phù hợp.</div></td></tr>';
-  $$("#teacherTable [data-action]").forEach(b=>b.onclick=()=>b.dataset.action==="inspect"?inspectTeacher(b.dataset.id):teacherAction(b.dataset.action,b.dataset.id));
-}
-function renderUsers(rows){
-  const q=$("#userSearch").value.trim().toLowerCase(),f=$("#userFilter").value;
-  const list=rows.filter(u=>(f==="all"||String(u.role||"")===f)&&has(u,q,["displayName","name","email","accountCode","schoolName","className"]));
-  $("#userTable").innerHTML=list.map(u=>'<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · Mã "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span></td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · "))+'</small></td><td>🪙 '+displayNum(u.coins,0)+' · ⚡ '+displayNum(u.energy,0)+'<small>🔥 streak '+displayNum(u.streak,0)+'</small></td><td>'+dateOf(u.createdAt)+'</td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
-  $("#userLimit").textContent=state.cache.users?.limited?"Đang hiển thị tối đa 300 tài khoản.":"";
-}
-function renderClasses(rows){
-  const q=$("#classSearch").value.trim().toLowerCase(),list=rows.filter(c=>has(c,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));
-  $("#classTable").innerHTML=list.map(c=>'<tr><td><strong>'+esc(c.name||"—")+'</strong><small>Khối '+esc(c.grade||"—")+" · ID "+esc(c.id)+'</small></td><td>'+esc(c.teacherEmail||c.teacherUid||"—")+'</td><td>'+esc(c.schoolName||"—")+'<small>'+esc([c.province,c.ward].filter(Boolean).join(" · "))+'</small></td><td><span class="badge teacher mono">'+esc(c.joinCode||"—")+'</span></td><td>'+displayNum(c.studentCount,0)+'</td><td>'+dateOf(c.updatedAt||c.createdAt)+'</td></tr>').join("")||'<tr><td colspan="6"><div class="empty">Không có lớp học.</div></td></tr>';
-  $("#classLimit").textContent=state.cache.classes?.limited?"Đang hiển thị tối đa 300 lớp.":"";
-}
-function renderPacks(rows){
-  const q=$("#packSearch").value.trim().toLowerCase(),list=rows.filter(p=>has(p,q,["name","createdBy","createdByEmail","createdByUid"]));
-  $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID '+esc(p.id)+'</small></td><td>'+displayNum(p.wordCount,0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+dateOf(p.createdAt)+'</td><td><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
-  $$("#packTable [data-delete-pack]").forEach(b=>b.onclick=()=>deletePack(b.dataset.deletePack));
-  $("#packLimit").textContent=state.cache.packs?.limited?"Đang hiển thị tối đa 300 bộ từ.":"";
-}
-function renderSchools(rows){
-  const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(s=>has(s,q,["name","province","ward","schoolLevel","source"]));
-  $("#schoolTable").innerHTML=list.map(s=>'<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID '+esc(s.id)+'</small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy trường.</div></td></tr>';
-  $("#schoolLimit").textContent=state.cache.schools?.limited?"Đang hiển thị tối đa 300 trường.":"";
-}
-function renderActivity(rows){
-  $("#activityList").innerHTML=rows.map(x=>'<div class="activity-row"><div><b>'+esc(x.action||"Admin action")+'</b><small>'+esc(x.target||"—")+" · "+esc(x.adminEmail||"")+'</small></div><time>'+dateOf(x.at)+'</time></div>').join("")||'<div class="empty">Chưa có hoạt động Admin.</div>';
-}
-
-function openModal(title,message,ok="Đóng",cancel="Hủy"){
-  $("#modalTitle").textContent=textOf(title);$("#modalText").textContent=textOf(message);$("#modalOk").textContent=textOf(ok);$("#modalCancel").textContent=textOf(cancel);
-  $("#modalCancel").classList.toggle("hidden",cancel==="");$("#modalBackdrop").classList.add("open");document.body.classList.add("lock-scroll");
-  return new Promise(resolve=>{state.modalResolve=resolve});
-}
-function closeModal(value){
-  $("#modalBackdrop").classList.remove("open");document.body.classList.remove("lock-scroll");
-  const resolve=state.modalResolve;state.modalResolve=null;resolve?.(value);
+function match(o,q,fields){if(!q)return true;return fields.map(k=>k.split(".").reduce((v,p)=>v?.[p],o)||"").join(" ").toLowerCase().includes(q)}
+function render(section){
+ const data=state.cache[section]?.rows||[];
+ if(section==="teachers"){
+  const q=$("#teacherSearch").value.trim().toLowerCase(),f=$("#teacherFilter").value,list=data.filter(x=>(f==="all"||x._status===f)&&match(x,q,["displayName","name","email","schoolName","province","ward","teacherVerification.requestedSchoolName","teacherVerification.requestedClassName"]));
+  $("#teacherTable").innerHTML=list.map(t=>'<tr><td><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+' · UID '+esc(t.id)+'</small></td><td><span class="badge '+roleClass(t.role)+'">'+(t._status==="pending"?"CHỜ XÁC MINH":t._status==="rejected"?"ĐÃ TỪ CHỐI":"ĐÃ DUYỆT")+'</span></td><td>'+esc(t.schoolName||t.teacherVerification?.requestedSchoolName||"—")+'<small>'+esc([t.province,t.ward].filter(Boolean).join(" · "))+' · Lớp '+esc(t.teacherVerification?.requestedClassName||t.className||"—")+'</small></td><td>'+date(t.teacherVerification?.submittedAt||t.createdAt)+'</td><td><div class="row-actions">'+(t._status==="pending"?'<button class="btn good" data-verify="'+esc(t.id)+'">✓ Duyệt</button><button class="btn bad" data-reject="'+esc(t.id)+'">Từ chối</button>':'<button class="btn" data-inspect="'+esc(t.id)+'">Xem</button>')+'</div></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có giáo viên phù hợp.</div></td></tr>';
+  $$("#teacherTable [data-verify]").forEach(b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));$$("#teacherTable [data-reject]").forEach(b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));$$("#teacherTable [data-inspect]").forEach(b=>b.onclick=()=>inspectTeacher(b.dataset.inspect));return;
+ }
+ if(section==="users"){
+  const q=$("#userSearch").value.trim().toLowerCase(),f=$("#userFilter").value,list=data.filter(x=>(f==="all"||String(x.role||"")===f)&&match(x,q,["displayName","name","email","accountCode","schoolName","className"]));
+  $("#userTable").innerHTML=list.map(u=>'<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span></td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · "))+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';$("#userLimit").textContent=data.length>=MAX?"Đang hiển thị tối đa "+MAX+" hồ sơ.":"";return;
+ }
+ if(section==="classes"){
+  const q=$("#classSearch").value.trim().toLowerCase(),list=data.filter(x=>match(x,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));
+  $("#classTable").innerHTML=list.map(c=>'<tr><td><strong>'+esc(c.name||"—")+'</strong><small>Khối '+esc(c.grade||"—")+' · ID '+esc(c.id)+'</small></td><td>'+esc(c.teacherEmail||c.teacherUid||"—")+'</td><td>'+esc(c.schoolName||"—")+'<small>'+esc([c.province,c.ward].filter(Boolean).join(" · "))+'</small></td><td><span class="badge teacher">'+esc(c.joinCode||"—")+'</span></td><td>'+fmt(c.studentCount)+'</td><td>'+date(c.updatedAt||c.createdAt)+'</td></tr>').join("")||'<tr><td colspan="6"><div class="empty">Không có lớp học.</div></td></tr>';$("#classLimit").textContent=data.length>=MAX?"Đang hiển thị tối đa "+MAX+" lớp.":"";return;
+ }
+ if(section==="packs"){
+  const q=$("#packSearch").value.trim().toLowerCase(),list=data.filter(x=>match(x,q,["name","createdBy","createdByEmail","createdByUid"]));
+  $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID '+esc(p.id)+'</small></td><td>'+fmt(p.wordCount)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+date(p.createdAt)+'</td><td><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';$$("#packTable [data-delete-pack]").forEach(b=>b.onclick=()=>deletePack(b.dataset.deletePack));$("#packLimit").textContent=data.length>=MAX?"Đang hiển thị tối đa "+MAX+" bộ từ.":"";return;
+ }
+ if(section==="schools"){
+  const q=$("#schoolSearch").value.trim().toLowerCase(),list=data.filter(x=>match(x,q,["name","province","ward","schoolLevel","source"]));
+  $("#schoolTable").innerHTML=list.map(s=>'<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID '+esc(s.id)+'</small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy trường.</div></td></tr>';$("#schoolLimit").textContent=data.length>=MAX?"Đang hiển thị tối đa "+MAX+" trường.":"";return;
+ }
 }
 async function inspectTeacher(uid){
-  const list=[...(state.cache.teachers?.rows||[]),...(state.cache.overview?.pending||[])],t=list.find(x=>x.id===uid);if(!t)return;
-  const v=t.teacherVerification||{};
-  await openModal("Hồ sơ giáo viên",`Email: ${t.email||"—"}
-Tên: ${t.displayName||t.name||"—"}
-Trường: ${t.schoolName||v.requestedSchoolName||"—"}
-Lớp đăng ký: ${v.requestedClassName||t.className||"—"}
-Khu vực: ${[t.province,t.ward].filter(Boolean).join(" · ")||"—"}
-Gửi lúc: ${dateOf(v.submittedAt||t.createdAt)}
-Role: ${roleLabel(t.role)}`,"Đóng","");
+ const t=(state.cache.teachers?.rows||[]).find(x=>x.id===uid);if(!t)return;const v=t.teacherVerification||{};
+ await dialog("Hồ sơ giáo viên","Tên: "+(t.displayName||t.name||"—")+"\\nEmail: "+(t.email||"—")+"\\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\\nLớp: "+(v.requestedClassName||t.className||"—")+"\\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—")+"\\nRole: "+roleLabel(t.role),"Đóng","");
 }
 async function teacherAction(action,uid){
-  const verify=action==="verify";
-  if(!(await openModal(verify?"Duyệt giáo viên":"Từ chối hồ sơ",verify?"Tài khoản sẽ chuyển sang role teacher sau khi backend kiểm tra trường/lớp.":"Tài khoản sẽ chuyển sang teacher_rejected.",verify?"Duyệt":"Từ chối")))return;
-  try{
-    await api("",{method:"POST",body:{action:verify?"verify-teacher":"reject-teacher",uid}});
-    toast(verify?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.cache.teachers=null;state.cache.overview=null;
-    await loadOverview(true);if(state.page==="teachers")await loadSection("teachers",true);
-  }catch(error){handleError(error,"Không thể cập nhật hồ sơ giáo viên.")}
+ if(!(await dialog(action==="verify"?"Duyệt giáo viên":"Từ chối hồ sơ",action==="verify"?"Tài khoản sẽ chuyển sang role teacher và được gắn trường/lớp.":"Tài khoản sẽ chuyển sang teacher_rejected.","Xác nhận")))return;
+ try{
+  const ref=doc(db,"users",uid),snap=await getDoc(ref);if(!snap.exists())throw new Error("Không tìm thấy hồ sơ giáo viên.");
+  const p=snap.data()||{},v=p.teacherVerification||{};
+  if(action==="reject"){await updateDoc(ref,{role:"teacher_rejected",teacherVerification:{...v,status:"rejected",rejectedAt:Date.now(),rejectedBy:state.user.uid},updatedAt:Date.now()});await writeAudit("teacher.reject",uid);toast("✓ Đã từ chối hồ sơ","good");state.cache.teachers=null;state.cache.overview=null;return showPage("overview")}
+  let schoolId=String(p.schoolId||"").trim(),schoolName=String(p.schoolName||"").trim(),province=String(p.province||"").trim(),ward=String(p.ward||"").trim(),requestedSchool=String(v.requestedSchoolName||"").trim(),requestedClass=String(v.requestedClassName||"").trim();
+  if(schoolId){const ss=await getDoc(doc(db,"schools",schoolId));if(!ss.exists()||String(ss.data()?.province||"").trim()!==province||String(ss.data()?.ward||"").trim()!==ward)schoolId="";else schoolName=String(ss.data()?.name||schoolName)}
+  if(!schoolId&&requestedSchool){
+   const same=await getDocs(query(collection(db,"schools"),where("name","==",requestedSchool),limit(20)));
+   const found=same.docs.map(d=>({id:d.id,...d.data()})).find(x=>String(x.province||"").trim()===province&&String(x.ward||"").trim()===ward);
+   if(found){schoolId=found.id;schoolName=String(found.name||requestedSchool)}else{const sref=await addDoc(collection(db,"schools"),{name:requestedSchool,province,ward,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});schoolId=sref.id;schoolName=requestedSchool}
+  }
+  if(!schoolId)throw new Error("Hồ sơ chưa có trường hợp lệ.");
+  await setDoc(doc(db,"KatLearn_Teacher_Schools",schoolId),{name:schoolName,schoolId,province,ward,source:"teacher_verification",updatedAt:Date.now()},{merge:true});
+  const ids=Array.isArray(p.classIds)?p.classIds.filter(Boolean).slice(0,20):[],valid=[];
+  for(const id of ids){const cs=await getDoc(doc(db,"schools",schoolId,"classes",id));if(cs.exists())valid.push(id)}
+  if(!valid.length&&requestedClass){
+   const same=await getDocs(query(collection(db,"schools",schoolId,"classes"),where("name","==",requestedClass),limit(5)));
+   if(same.docs[0])valid.push(same.docs[0].id);else{
+    const c=await addDoc(collection(db,"schools",schoolId,"classes"),{name:requestedClass,createdBy:uid,teacherUid:uid,schoolId,schoolName,province,ward,createdAt:Date.now(),updatedAt:Date.now()});
+    valid.push(c.id);await setDoc(doc(db,"classes",c.id),{classId:c.id,name:requestedClass,teacherUid:uid,schoolId,schoolName,province,ward,createdAt:Date.now(),updatedAt:Date.now()},{merge:true});
+   }
+  }
+  if(!valid.length)throw new Error("Hồ sơ chưa có lớp hợp lệ.");
+  const chosen=valid.includes(String(p.catalogClassId||""))?String(p.catalogClassId):valid[0];
+  await setDoc(ref,{role:"teacher",schoolId,schoolName,province,ward,classIds:valid,catalogClassId:chosen,teacherVerification:{...v,status:"verified",verifiedAt:Date.now(),verifiedBy:state.user.uid},updatedAt:Date.now()},{merge:true});
+  for(const id of valid)await setDoc(doc(db,"schools",schoolId,"classes",id),{teacherUid:uid,schoolId,schoolName,province,ward,updatedAt:Date.now()},{merge:true});
+  await writeAudit("teacher.verify",uid,{schoolId,classIds:valid});toast("✓ Đã duyệt giáo viên","good");state.cache.teachers=null;state.cache.overview=null;showPage("overview");
+ }catch(e){toast(errText(e,"Không thể cập nhật hồ sơ."),"bad")}
 }
 async function deletePack(id){
-  if(!(await openModal("Xóa bộ từ?","Bộ từ và các bài giao liên quan sẽ bị xóa. Thao tác này không thể hoàn tác.","Xóa bộ từ")))return;
-  try{await api("",{method:"POST",body:{action:"delete-pack",packId:id}});toast("✓ Đã xóa bộ từ","good");state.cache.packs=null;await loadSection("packs",true)}catch(error){handleError(error,"Không thể xóa bộ từ.")}
+ if(!(await dialog("Xóa bộ từ?","Bộ từ sẽ bị xóa khỏi publicPacks. Assignment liên quan sẽ được dọn theo khả năng Firestore.","Xóa bộ từ")))return;
+ try{
+  const a=await getDocs(query(collection(db,"packAssignments"),where("packId","==",id)));
+  for(let i=0;i<a.docs.length;i+=400){const b=writeBatch(db);a.docs.slice(i,i+400).forEach(d=>b.delete(d.ref));await b.commit()}
+  await deleteDoc(doc(db,"publicPacks",id));await writeAudit("pack.delete",id);toast("✓ Đã xóa bộ từ","good");state.cache.packs=null;render("packs");
+ }catch(e){toast(errText(e,"Không thể xóa bộ từ."),"bad")}
 }
 
+async function loadActivity(force=false){
+ if(state.cache.activity&&!force)return renderActivity();
+ const snap=await getDocs(query(collection(db,"adminAudit"),orderBy("at","desc"),limit(100)));state.cache.activity={rows:rows(snap)};renderActivity();
+}
+function renderActivity(){
+ const a=state.cache.activity?.rows||[];$("#activityList").innerHTML=a.length?a.map(x=>'<div class="activity-row"><div><b>'+esc(x.action||"Admin action")+'</b><small>'+esc(x.target||"—")+' · '+esc(x.adminEmail||"")+'</small></div><time>'+date(x.at)+'</time></div>').join(""):'<div class="empty">Chưa có nhật ký Admin.</div>';
+}
+function renderCatalog(s={}){const sp=n(s.provinces),ss=n(s.schools);$("#catProvinces").textContent=fmt(34);$("#catSchools").textContent=fmt(TOTAL_CATALOG);$("#catSyncedP").textContent=fmt(sp);$("#catSyncedS").textContent=fmt(ss);$("#provinceGrid").innerHTML=CATALOG.map(p=>{const done=n(s[p[0]]),pct=Math.min(100,Math.round(done*100/p[2]));return'<div class="province"><div class="province-head"><div><b>'+esc(p[1])+'</b><small> · '+esc(p[0])+'</small></div><em>'+fmt(p[2])+' trường</em></div><div class="province-track"><i style="width:'+pct+'%"></i></div><div class="province-meta"><span>'+fmt(done)+' đã ghi</span><span>'+pct+'%</span></div></div>'}).join("")}
 async function loadCatalog(force=false){
-  if(state.cache.catalog&&state.cache.overview&&!force){renderCatalog();return}
-  const data=state.cache.overview||await api("?section=overview");state.cache.overview=data;state.cache.catalog=data.catalog||null;renderCatalog();
+ if(state.cache.catalog&&!force)return renderCatalog(state.cache.catalog);
+ const [p,s]=await Promise.all([countCollection("KatLearn_TINHTHANH_1"),countCollection("KatLearn_TRUONGHOC_1")]);state.cache.catalog={provinces:p||0,schools:s||0};renderCatalog(state.cache.catalog);
 }
-function renderCatalog(){
-  const c=state.cache.catalog||{provinces:[],totalProvinces:34,totalSchools:22850},s=state.cache.overview?.stats||{};
-  $("#cTotalP").textContent=displayNum(c.totalProvinces,34);$("#cTotalS").textContent=displayNum(c.totalSchools,22850);$("#cSyncedP").textContent=displayNum(s.syncedProvinces,0);$("#cSyncedS").textContent=displayNum(s.syncedSchools,0);
-  const saved=state.sync.active?state.sync.done:num(s.syncedSchools),ratio=num(c.totalSchools)?Math.min(100,Math.round(saved*100/num(c.totalSchools))):0;
-  $("#catalogGrid").innerHTML=(c.provinces||[]).map(p=>'<div class="province"><div class="province-head"><div><b>'+esc(p.name)+'</b><small> · '+esc(p.code)+'</small></div><em>'+displayNum(p.total,0)+' trường</em></div><div class="progress"><i style="width:'+ratio+'%"></i></div><div class="province-status"><span>'+((state.sync.active&&state.sync.province===p.name)?"Đang xử lý":"Kế hoạch")+'</span><span>'+ratio+"% tổng hệ thống</span></div></div>").join("");
-}
-function setSyncProgress(done,total,label){
-  state.sync.done=done;state.sync.total=total;state.sync.province=label||"";
-  const p=total?Math.min(100,Math.round(done*100/total)):0;$("#syncBar").style.width=p+"%";$("#syncText").textContent="⏳ "+displayNum(done,0)+" / "+displayNum(total,0)+" · "+(label||"đang đồng bộ");renderCatalog();
-}
-async function runCatalogSync(){
-  if(state.sync.active)return;
-  state.sync.active=true;state.sync.done=0;$("#quickSync").disabled=true;$("#catalogSync").disabled=true;setBackendStatus("","Đang đồng bộ…");
-  try{
-    if(!state.cache.catalog){
-      const overview=await api("?section=overview");state.cache.overview=overview;state.cache.catalog=overview.catalog||null;
-    }
-    const plan=state.cache.catalog||{},provinces=Array.isArray(plan.provinces)?plan.provinces:[];
-    if(!provinces.length)throw new Error("Backend không trả về danh sách tỉnh/thành.");
-    const total=num(plan.totalSchools);setSyncProgress(0,total,"bắt đầu");
-    for(const province of provinces){
-      state.sync.province=province.name;let offset=0,guard=0;
-      while(offset<num(province.total)){
-        if(++guard>1000)throw new Error("Luồng sync bị kẹt ở "+province.name);
-        let data=null,last=null;
-        for(let attempt=1;attempt<=3;attempt++){
-          try{data=await api("",{method:"POST",body:{action:"catalog-chunk",provinceCode:province.code,offset,limit:150}});break}catch(error){last=error;if(attempt<3)await new Promise(r=>setTimeout(r,700*attempt))}
-        }
-        if(!data)throw new Error(textOf(last?.message||last)+" · "+province.name+" · offset "+offset);
-        const next=num(data.nextOffset);if(next<=offset&&num(data.processed)===0)throw new Error("Backend không trả về bản ghi mới ở "+province.name);
-        offset=next;state.sync.done+=num(data.processed);setSyncProgress(state.sync.done,total,province.name);
-      }
-    }
-    toast("✓ Đã đồng bộ toàn bộ danh mục quốc gia","good");state.cache.overview=null;state.cache.catalog=null;await loadOverview(true);await loadCatalog(true);
-  }catch(error){handleError(error,"Đồng bộ danh mục thất bại.");$("#syncText").textContent="✕ "+textOf(error?.message||error)}
-  finally{state.sync.active=false;state.sync.province="";$("#quickSync").disabled=false;$("#catalogSync").disabled=false}
+async function syncCatalog(){
+ if(state.sync)return;
+ if(!(await dialog("Đồng bộ danh mục toàn quốc","Tác vụ ghi theo từng tỉnh/thành. Trang Admin vẫn giữ nguyên sau khi đồng bộ xong.","Bắt đầu")))return;
+ state.sync=true;$("#syncCatalog").disabled=true;let done=0;const progress={provinces:0,schools:0};
+ try{
+  const token=await state.user.getIdToken(true),headers={Authorization:"Bearer "+token,"Content-Type":"application/json"};$("#syncText").textContent="⏳ Đang bắt đầu…";
+  for(const p of CATALOG){
+   let offset=0,guard=0;
+   while(offset<p[2]){
+    if(++guard>1000)throw new Error("Luồng sync bị kẹt tại "+p[1]);
+    let response;
+    try{response=await fetch("/api/national-catalog-sync",{method:"POST",headers,body:JSON.stringify({action:"catalog-chunk",provinceCode:p[0],offset,limit:150}),cache:"no-store"})}catch(e){throw new Error("Không kết nối catalog backend: "+errText(e))}
+    const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){throw new Error("Catalog backend trả dữ liệu không hợp lệ · HTTP "+response.status)}
+    if(!response.ok||!data.ok)throw new Error(errText(data.error||data,"HTTP "+response.status+" · "+p[1]));
+    const next=num(data.nextOffset),processed=num(data.processed);if(next<=offset&&processed===0)throw new Error("Backend không trả bản ghi mới · "+p[1]);
+    offset=next;done+=processed;progress[p[0]]=offset;progress.schools=done;$("#syncBar").style.width=Math.min(100,Math.round(done*100/TOTAL_CATALOG))+"%";$("#syncText").textContent="⏳ "+fmt(done)+" / "+fmt(TOTAL_CATALOG)+" trường · "+p[1];renderCatalog(progress);
+   }
+   progress.provinces++;renderCatalog(progress);
+  }
+  state.cache.catalog={provinces:34,schools:done};toast("✓ Đã đồng bộ "+fmt(done)+" trường","good");$("#syncText").textContent="✓ Hoàn tất · "+fmt(done)+" trường";
+ }catch(e){$("#syncText").textContent="✕ "+errText(e);toast(e,"bad")}finally{state.sync=false;$("#syncCatalog").disabled=false}
 }
 
-$("#loginForm").addEventListener("submit",async event=>{
-  event.preventDefault();const button=$("#loginBtn"),errorBox=$("#loginError");button.disabled=true;errorBox.textContent="Đang xác thực…";
-  try{
-    const credential=await signInWithEmailAndPassword(auth,ADMIN_EMAIL,$("#password").value);
-    if(String(credential.user.email||"").toLowerCase()!==ADMIN_EMAIL){await signOut(auth);throw new Error("Tài khoản này không có quyền Admin.")}
-    $("#password").value="";
-  }catch(error){errorBox.textContent=error?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":textOf(error,"Không thể đăng nhập.");button.disabled=false}
-});
+let modalResolve=null;
+function dialog(title,text,ok="Xác nhận",cancel="Hủy"){return new Promise(resolve=>{modalResolve=resolve;$("#modalTitle").textContent=title;$("#modalText").textContent=text;$("#modalOk").textContent=ok;$("#modalCancel").textContent=cancel;$("#modalCancel").classList.toggle("hidden",!cancel);$("#modal").classList.remove("hidden")})}
+function closeDialog(v){$("#modal").classList.add("hidden");const r=modalResolve;modalResolve=null;r?.(v)}
+$("#modalOk").onclick=()=>closeDialog(true);$("#modalCancel").onclick=()=>closeDialog(false);$("#modal").onclick=e=>{if(e.target.id==="modal")closeDialog(false)};
 
-bindNavigation();
-onAuthStateChanged(auth,async user=>{
-  state.user=user||null;
-  if(!user){$("#loginGate").classList.remove("hidden");$("#app").classList.add("hidden");$("#password").value="";$("#loginBtn").disabled=false;setBackendStatus("","Chưa kết nối");return}
-  if(String(user.email||"").toLowerCase()!==ADMIN_EMAIL){$("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}
-  $("#loginGate").classList.add("hidden");$("#app").classList.remove("hidden");setBackendStatus("","Đang tải…");
-  safeLoad(loadOverview(true),"Không tải được Admin Hub.");
-});
+$("#loginForm").onsubmit=async e=>{e.preventDefault();const b=$("#loginBtn"),m=$("#loginError");b.disabled=true;m.textContent="Đang xác thực…";try{const c=await signInWithEmailAndPassword(auth,ADMIN,$("#loginPassword").value);if(String(c.user.email||"").toLowerCase()!==ADMIN){await signOut(auth);throw new Error("Tài khoản không có quyền Admin.")}$("#loginPassword").value=""}catch(x){m.textContent=x?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":errText(x);b.disabled=false}};
+onAuthStateChanged(auth,async u=>{state.user=u||null;if(!u){$("#loginView").classList.remove("hidden");$("#app").classList.add("hidden");health("#healthAuth",false,"Chưa đăng nhập");return}if(String(u.email||"").toLowerCase()!==ADMIN){$("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}$("#loginView").classList.add("hidden");$("#app").classList.remove("hidden");health("#healthAuth",true,"Đã xác thực");loadOverview(true).catch(e=>{notice("Không thể tải tổng quan: "+errText(e));toast(e,"bad")})});
+bind();renderCatalog({});
