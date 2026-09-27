@@ -6,7 +6,7 @@ on:
       - "admin.html"
       - "admin.css"
       - "admin.js"
-      - "api/admin-hub.js"
+      - "api/**"
       - ".github/workflows/admin-proxy-syntax.yml"
   workflow_dispatch:
 
@@ -20,5 +20,11 @@ jobs:
           node-version: "22"
       - name: Check Admin client syntax
         run: node --check admin.js
-      - name: Check Admin proxy syntax
-        run: node --check api/admin-hub.js
+      - name: Check all API syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in api/*.js; do
+            echo "Checking $file"
+            node --check "$file"
+          done
