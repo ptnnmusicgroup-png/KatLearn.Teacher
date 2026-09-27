@@ -3,6 +3,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const ADMIN_EMAIL='katlearn.admin@gmail.com';
+const JSON_HEADERS={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
 
 function admin(){
   if(!getApps().length){
@@ -15,8 +16,8 @@ function admin(){
   return {auth:getAuth(),db:getFirestore()};
 }
 
-function authToken(req){
-  const header=String(req.headers?.authorization||'');
+function authToken(request){
+  const header=String(request.headers.get('authorization')||'');
   const match=/^Bearer\s+(.+)$/i.exec(header);
   if(!match)throw Object.assign(new Error('Bạn cần đăng nhập Admin.'),{status:401});
   return match[1];
@@ -33,17 +34,17 @@ function serialize(value){
   return value;
 }
 
-function rows(snapshot,mapper=(d=>({id:d.id,...serialize(d.data()||{})}))){
-  return snapshot.docs.map(mapper);
+function rows(snapshot){
+  return snapshot.docs.map(d=>({id:d.id,...serialize(d.data()||{})}));
 }
 
-export default async function handler(req,res){
-  if(req.method!=='GET')return res.status(405).json({ok:false,error:'Method not allowed'});
+export default async function handler(request){
+  if(request.method!=='GET')return Response.json({ok:false,error:'Method not allowed'},{status:405,headers:JSON_HEADERS});
   try{
     const {auth,db}=admin();
-    const token=await auth.verifyIdToken(authToken(req),true);
+    const token=await auth.verifyIdToken(authToken(request),true);
     if(String(token.email||'').toLowerCase()!==ADMIN_EMAIL){
-      return res.status(403).json({ok:false,error:'Tài khoản không có quyền Admin.'});
+      return Response.json({ok:false,error:'Tài khoản không có quyền Admin.'},{status:403,headers:JSON_HEADERS});
     }
 
     const [usersSnap,classesSnap,packsSnap,schoolsSnap]=await Promise.all([
@@ -62,9 +63,8 @@ export default async function handler(req,res){
 
     const users=rows(usersSnap);
     const classes=rows(classesSnap);
-    const packs=rows(packsSnap,d=>{
-      const data=d.data()||{};
-      const safe=serialize(data);
+    const packs=packsSnap.docs.map(d=>{
+      const data=d.data()||{},safe=serialize(data);
       return {
         id:d.id,
         name:safe.name,
@@ -82,7 +82,7 @@ export default async function handler(req,res){
       .filter(u=>String(u.role||'').toLowerCase()==='pending_teacher_verification')
       .sort((a,b)=>Number(a.teacherVerification?.submittedAt||a.createdAt||0)-Number(b.teacherVerification?.submittedAt||b.createdAt||0));
 
-    return res.status(200).json({
+    return Response.json({
       ok:true,
       stats:{
         users:users.length,
@@ -98,10 +98,10 @@ export default async function handler(req,res){
       packs,
       schools,
       pending
-    });
+    },{status:200,headers:JSON_HEADERS});
   }catch(error){
     const status=Number(error?.status||error?.statusCode||0)||500;
     console.error('[KatLearn admin state]',error);
-    return res.status(status).json({ok:false,error:error?.message||'Không thể tải dữ liệu quản trị.'});
+    return Response.json({ok:false,error:error?.message||'Không thể tải dữ liệu quản trị.'},{status,headers:JSON_HEADERS});
   }
 }
