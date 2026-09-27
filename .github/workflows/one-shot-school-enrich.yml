@@ -133,39 +133,37 @@ jobs:
           for level, url in SOURCES:
               source_rows.extend(parse_source(level, url))
 
-          # Official 2026 THPT source; rows contain current ward names and school codes.
+          # Official 2026 THPT list. Use Jina Reader because the origin PDF host blocks GitHub runners.
           THPT_PDF = "https://thpthungvuongkna.edu.vn/wp-content/uploads/2026/04/danh-sach-truong-thpt2026-639125955431696152.pdf"
+          THPT_READER = "https://r.jina.ai/" + THPT_PDF
           def parse_official_thpt():
               out = []
               try:
-                  import pdfplumber
-                  rr = requests.get(THPT_PDF, timeout=90, headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
-                  if rr.status_code != 200 or not rr.content.startswith(b"%PDF"):
-                      print("official THPT download failed:", rr.status_code)
+                  rr = requests.get(THPT_READER, timeout=90, headers={"User-Agent":"KatLearn-Catalog-Enricher/1.0"})
+                  if rr.status_code != 200:
+                      print("official THPT reader failed:", rr.status_code)
                       return out
-                  pdf_path = Path("/tmp/thpt2026.pdf")
-                  pdf_path.write_bytes(rr.content)
-                  with pdfplumber.open(pdf_path) as pdf:
-                      for page in pdf.pages:
-                          for table in page.extract_tables() or []:
-                              for row in table:
-                                  cells = [re.sub(r"\s+"," ",str(x or "")).strip() for x in row]
-                                  if len(cells) < 6: continue
-                                  joined = norm(" ".join(cells))
-                                  if "ma tinh" in joined and "ma truong" in joined: continue
-                                  pidx = next((i for i,x in enumerate(cells) if province_name(x)), None)
-                                  if pidx is None: continue
-                                  pname = province_name(cells[pidx])
-                                  if pname not in PROV_CODE: continue
-                                  widx = next((i for i in range(pidx+1,len(cells)) if re.fullmatch(r"\d{5}", re.sub(r"\D","",cells[i]))), None)
-                                  if widx is None or widx+1 >= len(cells): continue
-                                  wname = re.sub(r"\s*\(trước[^)]*\)", "", cells[widx+1], flags=re.I).strip()
-                                  sidx = next((i for i in range(widx+2,len(cells)) if re.fullmatch(r"\d{1,4}", re.sub(r"\D","",cells[i]))), None)
-                                  if sidx is None or sidx+1 >= len(cells): continue
-                                  sname = cells[sidx+1]
-                                  if not re.search(r"(thpt|trung học phổ thông)", norm(sname)): continue
-                                  scode = re.sub(r"\D","",cells[sidx])
-                                  out.append({"province":pname,"ward":wname,"school_code":scode,"name":sname,"level":"THPT","source":THPT_PDF})
+                  txt = re.sub(r"\s+", " ", rr.text)
+                  pat = re.compile(
+                      r"Mã Tỉnh/\s*TP\s+(\d{2})\s+Tên Tỉnh/TP\s+(.+?)\s+"
+                      r"Mã Xã/Phường\s+(\d{5})\s+Tên Xã/Phường\s+(.+?)\s+"
+                      r"Mã Trường\s+(\d{3})\s+Tên Trường\s+(.+?)\s+Điện Thoại",
+                      re.I
+                  )
+                  seen=set()
+                  for m in pat.finditer(txt):
+                      pcode, pname, wcode, wname, scode, sname = [x.strip() for x in m.groups()]
+                      pname = next((p[1] for p in PROV_CODE.items() if p[1] == pcode), None) or next((k for k,v in PROV_CODE.items() if v == pcode), None)
+                      # Normalize province from the official 2026 list.
+                      if pcode not in PROV_CODE.values(): continue
+                      pname = next(k for k,v in PROV_CODE.items() if v == pcode)
+                      sname = re.sub(r"\s+"," ",sname).strip()
+                      wname = re.sub(r"\s+"," ",wname).strip()
+                      if not re.search(r"(thpt|trung học phổ thông)", norm(sname)): continue
+                      key=(pcode,wcode,scode,norm(sname))
+                      if key in seen: continue
+                      seen.add(key)
+                      out.append({"province_code":pcode,"province":pname,"ward_code":wcode,"ward":wname,"school_code":scode,"name":sname,"level":"THPT","source":THPT_PDF})
                   return out
               except Exception as exc:
                   print("official THPT parse exception:", exc)
@@ -208,27 +206,26 @@ jobs:
                       if m: all_codes.add(m.group(1))
                       all_names[(p["name"], norm(re.sub(r"^\([^)]*\)\s*", "", s.get("name",""))))] = True
 
-          # Apply official THPT rows first, matching the current ward name from the 2026 PDF.
+          # Apply official THPT rows using exact 2025 administrative codes from official-ward-list.json.
+          official_wards = json.loads(Path("data/national-catalog/official-ward-list.json").read_text(encoding="utf-8"))
+          ward_target = {}
+          for pp in official_wards.get("provinces", []):
+              for ww in pp.get("wards", []):
+                  ward_target[(pp["code"], ww["id"])] = (pp["name"], ww["name"])
+          tree_ward = {(pp["name"], norm(ww["name"])): ww for pp in data for ww in pp.get("wards", [])}
           official_thpt_added = 0
           official_thpt_updated = 0
           for r in thpt_rows:
-              target = None
-              wanted = norm(r["ward"])
-              for p in data:
-                  if p["name"] != r["province"]: continue
-                  for w in p.get("wards", []):
-                      wn = norm(w.get("name",""))
-                      wb = norm(re.sub(r"^(xa|phuong|dac khu)\s+","",w.get("name",""),flags=re.I))
-                      if wn == wanted or wb == wanted or wn == wanted.replace("xa ","",1).replace("phuong ","",1):
-                          target = w
-                          break
-                  if target: break
+              target_info = ward_target.get((r["province_code"], r["ward_code"]))
+              if not target_info: continue
+              pname, wname = target_info
+              target = tree_ward.get((pname, norm(wname)))
               if not target: continue
               base_name = r["name"].strip()
               base_key = norm(base_name)
-              key = (r["province"], target["name"])
+              key = (pname, target["name"])
               existing = existing_by_ward.setdefault(key, {})
-              official_code = PROV_CODE[r["province"]] + str(int(r["school_code"])).zfill(4)
+              official_code = str(r["school_code"]).zfill(3)
               if base_key in existing:
                   item = existing[base_key]
                   stripped = re.sub(r"^\([^)]*\)\s*","",str(item.get("name",""))).strip()
@@ -236,14 +233,14 @@ jobs:
                   all_codes.add(official_code)
                   official_thpt_updated += 1
               else:
-                  sid = "official_thpt_" + hashlib.sha1(f'{r["province"]}|{target["name"]}|{base_name}'.encode("utf-8")).hexdigest()[:20]
+                  sid = "official_thpt_" + hashlib.sha1(f'{pname}|{r["ward_code"]}|{base_name}'.encode("utf-8")).hexdigest()[:20]
                   item = {"id":sid,"name":f"({official_code}) {base_name}"}
                   target.setdefault("schools", []).append(item)
                   existing[base_key] = item
-                  all_names[(r["province"], base_key)] = True
+                  all_names[(pname, base_key)] = True
                   all_codes.add(official_code)
                   official_thpt_added += 1
-                  added.append({"province":r["province"],"ward":target["name"],"name":item["name"],"level":"THPT"})
+                  added.append({"province":pname,"ward":target["name"],"name":item["name"],"level":"THPT"})
 
           added = []
           for r in source_rows:
