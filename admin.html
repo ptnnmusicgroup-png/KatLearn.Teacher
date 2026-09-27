@@ -1,69 +1,137 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#11131a">
-<title>KatLearn Admin — Control Center</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#11131a">
+<title>KatLearn Admin Control Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260927-4">
+<link rel="stylesheet" href="admin.css?v=20260927-5">
 </head>
 <body>
-<section id="loginGate"><div class="login-shell">
-  <div class="login-brand"><div><div class="brand-mark">🐱</div><h1>KatLearn<br>Admin</h1><p>Một trung tâm quản trị riêng cho toàn bộ hệ thống: giáo viên, tài khoản, lớp học, nội dung và danh mục trường học.</p></div><div class="feature-row"><span class="feature">Firebase Auth</span><span class="feature">Admin API</span><span class="feature">National Catalog</span><span class="feature">Audit Log</span></div></div>
-  <div class="login-card"><div class="kicker">CONTROL CENTER</div><h2>Đăng nhập Admin</h2><p>Chỉ tài khoản quản trị được phép truy cập. Backend sẽ kiểm tra lại quyền sau khi đăng nhập.</p>
-    <form id="loginForm" class="form"><div class="field"><label>Email quản trị</label><input value="katlearn.admin@gmail.com" readonly></div><div class="field"><label>Mật khẩu Firebase</label><input id="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu…" required></div><button id="loginBtn" class="login-primary" type="submit">Vào Admin Control Center →</button><div id="loginError" class="login-error"></div></form>
-    <div class="login-meta"><a href="https://lms-katlearn.vercel.app/login.html">← Về KatLearn</a><button id="clearSession" type="button">Xóa phiên hiện tại</button></div>
+<section id="loginGate" class="login-gate">
+  <div class="login-panel">
+    <div class="login-showcase">
+      <div>
+        <div class="cat-logo">🐱</div>
+        <p class="eyebrow light">KATLEARN · CONTROL CENTER</p>
+        <h1>Quản trị<br>toàn hệ thống.</h1>
+        <p class="showcase-copy">Một Admin Hub riêng để quản lý giáo viên, tài khoản, lớp học, bộ từ, trường học và danh mục toàn quốc.</p>
+      </div>
+      <div class="showcase-badges"><span>🔐 Firebase Auth</span><span>⚙️ Admin SDK</span><span>🇻🇳 National Catalog</span><span>🧾 Audit Log</span></div>
+    </div>
+    <div class="login-card">
+      <p class="eyebrow">ADMIN ACCESS</p>
+      <h2>Đăng nhập</h2>
+      <p>Đăng nhập bằng tài khoản quản trị. Quyền Admin được kiểm tra lại ở backend trước mọi thao tác.</p>
+      <form id="loginForm">
+        <label>Email quản trị<input value="katlearn.admin@gmail.com" readonly></label>
+        <label>Mật khẩu Firebase<input id="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu…" required></label>
+        <button id="loginBtn" class="primary big" type="submit">Vào Control Center <span>→</span></button>
+        <div id="loginError" class="form-error" role="alert"></div>
+      </form>
+      <div class="login-foot"><a href="https://lms-katlearn.vercel.app/login.html">← Về KatLearn</a><button id="clearSession" type="button">Xóa phiên hiện tại</button></div>
+    </div>
   </div>
-</div></section>
+</section>
 
-<div id="app" class="hidden">
+<div id="app" class="app hidden">
   <aside id="sidebar" class="sidebar">
-    <a class="brand" href="admin.html"><span class="brand-cat">🐱</span><span>Kat<em>Learn</em></span></a>
-    <div class="admin-badge"><strong>ADMIN CONTROL CENTER</strong><small>Toàn quyền backend theo tài khoản Admin Firebase.</small></div>
+    <a class="brand" href="admin.html"><span class="brand-icon">🐱</span><span>Kat<em>Learn</em></span></a>
+    <div class="admin-chip"><span>🛡️</span><div><b>ADMIN</b><small>Control Center</small></div></div>
     <nav class="nav">
-      <button class="active" data-page="overview"><span class="nav-ico">⌂</span>Tổng quan</button>
-      <button data-page="teachers"><span class="nav-ico">✓</span>Giáo viên</button>
-      <button data-page="users"><span class="nav-ico">♟</span>Tài khoản</button>
-      <button data-page="classes"><span class="nav-ico">▦</span>Lớp học</button>
-      <button data-page="packs"><span class="nav-ico">▤</span>Bộ từ công khai</button>
-      <button data-page="schools"><span class="nav-ico">🏫</span>Trường học</button>
-      <button data-page="catalog"><span class="nav-ico">🇻🇳</span>Danh mục toàn quốc</button>
-      <button data-page="activity"><span class="nav-ico">◷</span>Hoạt động Admin</button>
+      <button class="active" data-page="overview"><i>⌂</i>Tổng quan</button>
+      <button data-page="teachers"><i>✓</i>Giáo viên</button>
+      <button data-page="users"><i>♟</i>Tài khoản</button>
+      <button data-page="classes"><i>▦</i>Lớp học</button>
+      <button data-page="packs"><i>▤</i>Bộ từ công khai</button>
+      <button data-page="schools"><i>🏫</i>Trường học</button>
+      <button data-page="catalog"><i>🇻🇳</i>Danh mục toàn quốc</button>
+      <button data-page="activity"><i>◷</i>Hoạt động</button>
     </nav>
-    <div class="side-bottom"><a href="https://lms-katlearn.vercel.app/">← Mở KatLearn</a><button id="logout">↪ Đăng xuất</button></div>
+    <div class="side-bottom">
+      <a href="https://lms-katlearn.vercel.app/">↗ Mở KatLearn</a>
+      <button id="logout">↪ Đăng xuất</button>
+    </div>
   </aside>
   <div id="mobileOverlay"></div>
   <main class="main">
-    <header class="topbar"><div class="top-left"><button id="menuMobile" class="menu-mobile">☰</button><div id="pageTitle" class="page-title">Tổng quan</div></div><div class="top-right"><div id="backendStatus" class="backend-status"><span class="status-dot"></span><span id="backendLabel">Chưa kết nối</span></div><button id="refresh" class="refresh-btn">↻ Làm mới</button></div></header>
+    <header class="topbar">
+      <div class="top-left"><button id="menuMobile" class="icon-btn mobile-only">☰</button><div id="pageTitle" class="page-title">Tổng quan</div></div>
+      <div class="top-right"><div id="backendStatus" class="connection"><span class="dot"></span><span id="backendLabel">Đang kiểm tra…</span></div><button id="refresh" class="refresh">↻ Làm mới</button><div class="profile"><span class="avatar">🛡️</span><div><b>Admin</b><small>katlearn.admin@gmail.com</small></div></div></div>
+    </header>
+
     <div class="content">
-      <div id="pageError" class="error-box hidden"><b>Không thể tải dữ liệu khu vực này.</b><div id="pageErrorText"></div><code id="pageErrorCode"></code><code id="pageErrorDetails" class="hidden"></code></div>
+      <div id="pageError" class="alert hidden" role="alert"><b id="pageErrorTitle">Không thể tải dữ liệu</b><p id="pageErrorText"></p><code id="pageErrorCode"></code></div>
+
       <section class="page active" id="page-overview">
-        <div class="hero"><div><div class="kicker">KATLEARN ADMIN</div><h1>Trung tâm điều khiển 🛡️</h1><p>Một nơi duy nhất để kiểm soát các tài khoản, giáo viên, lớp học, nội dung công khai và danh mục trường học.</p></div><div class="hero-art">🐱🛡️</div></div>
-        <div class="metrics"><div class="metric dark"><div class="metric-top">👥<span>ACCOUNTS</span></div><small>Tổng tài khoản</small><strong id="mUsers">—</strong></div><div class="metric"><div class="metric-top">⏳</div><small>Chờ duyệt GV</small><strong id="mPending">—</strong></div><div class="metric"><div class="metric-top">🧑‍🏫</div><small>Giáo viên</small><strong id="mTeachers">—</strong></div><div class="metric"><div class="metric-top">🧑‍🎓</div><small>Học sinh</small><strong id="mStudents">—</strong></div><div class="metric"><div class="metric-top">▦</div><small>Lớp học</small><strong id="mClasses">—</strong></div><div class="metric"><div class="metric-top">🏫</div><small>Trường</small><strong id="mSchools">—</strong></div></div>
-        <div id="warningBox" class="warning-box hidden"></div>
-        <div class="grid-2">
-          <section class="card"><div class="card-head"><div><h2>Giáo viên đang chờ</h2><p>Những hồ sơ cần Admin xử lý.</p></div><button class="small-link" data-go="teachers">Xem tất cả</button></div><div id="pendingList" class="list"><div class="empty">Đang tải…</div></div></section>
-          <section class="card"><div class="card-head"><div><h2>Truy cập nhanh</h2><p>Mở thẳng khu vực thường dùng.</p></div></div><div class="quick-grid">
-            <button class="quick" data-go="teachers"><span class="qico">🧑‍🏫</span><span><b>Duyệt giáo viên</b><small>Kiểm tra và xử lý hồ sơ</small></span></button>
-            <button class="quick" data-go="users"><span class="qico">👥</span><span><b>Tài khoản</b><small>Tra cứu role và thông tin</small></span></button>
-            <button class="quick" data-go="classes"><span class="qico">🏫</span><span><b>Lớp học</b><small>Tra cứu lớp và mã tham gia</small></span></button>
-            <button class="quick" data-go="packs"><span class="qico">📚</span><span><b>Bộ từ công khai</b><small>Kiểm tra và xóa pack</small></span></button>
-          </div><div class="sync"><div class="sync-head"><b>🇻🇳 Đồng bộ danh mục toàn quốc</b><button id="quickSync" class="sync-button">Đồng bộ</button></div><div id="syncText" class="sync-text">34 tỉnh/thành · 22.850 trường kế hoạch</div><div class="progress"><i id="syncBar"></i></div></div></section>
+        <div class="hero hero-main"><div><p class="eyebrow">KATLEARN ADMIN</p><h1>Trung tâm điều khiển 🛡️</h1><p>Quản lý hệ thống từ một nơi, với backend Admin SDK thay vì đọc Firestore trực tiếp từ trình duyệt.</p></div><div class="hero-cat">🐱</div></div>
+        <div class="metric-grid">
+          <article class="metric accent"><span>👥</span><small>Tài khoản</small><strong id="mUsers">—</strong></article>
+          <article class="metric"><span>⏳</span><small>Chờ duyệt GV</small><strong id="mPending">—</strong></article>
+          <article class="metric"><span>🧑‍🏫</span><small>Giáo viên</small><strong id="mTeachers">—</strong></article>
+          <article class="metric"><span>🧑‍🎓</span><small>Học sinh</small><strong id="mStudents">—</strong></article>
+          <article class="metric"><span>▦</span><small>Lớp học</small><strong id="mClasses">—</strong></article>
+          <article class="metric"><span>🏫</span><small>Trường</small><strong id="mSchools">—</strong></article>
         </div>
-        <section class="card" style="margin-top:17px"><div class="card-head"><div><h2>Tình trạng hệ thống</h2><p>Kiểm tra nhanh Auth, backend và catalog.</p></div></div><div id="healthList" class="health" style="margin-top:13px"></div></section>
+        <div class="split">
+          <section class="card"><div class="card-head"><div><p class="eyebrow">ACTION QUEUE</p><h2>Giáo viên đang chờ</h2><p>Các hồ sơ cần Admin xử lý.</p></div><button class="text-btn" data-go="teachers">Xem tất cả →</button></div><div id="pendingList" class="stack"><div class="empty">Đang tải…</div></div></section>
+          <section class="card"><div class="card-head"><div><p class="eyebrow">SHORTCUTS</p><h2>Thao tác nhanh</h2><p>Mở thẳng khu vực thường dùng.</p></div></div><div class="quick-grid">
+            <button class="quick" data-go="teachers"><b>🧑‍🏫</b><span><strong>Duyệt giáo viên</strong><small>Kiểm tra hồ sơ mới</small></span></button>
+            <button class="quick" data-go="users"><b>👥</b><span><strong>Tài khoản</strong><small>Tra cứu role & thông tin</small></span></button>
+            <button class="quick" data-go="packs"><b>📚</b><span><strong>Bộ từ công khai</strong><small>Kiểm tra & xóa pack</small></span></button>
+            <button class="quick" data-go="catalog"><b>🇻🇳</b><span><strong>Danh mục toàn quốc</strong><small>Đồng bộ 34 tỉnh/thành</small></span></button>
+          </div></section>
+        </div>
+        <section class="card system-card"><div class="card-head"><div><p class="eyebrow">SYSTEM HEALTH</p><h2>Tình trạng hệ thống</h2><p>Frontend chỉ giao tiếp với Admin Hub; backend mới là nơi chạm Firestore.</p></div></div><div id="healthList" class="health"><div class="health-row"><span>Firebase Auth</span><b id="healthAuth">Đang kiểm tra…</b></div><div class="health-row"><span>Admin backend</span><b id="healthAdmin">Đang kiểm tra…</b></div><div class="health-row"><span>Firestore qua Admin SDK</span><b id="healthFs">Đang kiểm tra…</b></div><div class="health-row"><span>National Catalog</span><b id="healthCatalog">Sẵn sàng</b></div></div></section>
       </section>
-      <section class="page" id="page-teachers"><div class="hero"><div><div class="kicker">TEACHER VERIFICATION</div><h1>Giáo viên</h1><p>Duyệt hoặc từ chối hồ sơ giáo viên. Mọi thay đổi quan trọng được ghi vào audit log.</p></div><div class="hero-art">🧑‍🏫✅</div></div><section class="card"><div class="toolbar"><input id="teacherSearch" class="search" placeholder="Tìm tên, email, trường, tỉnh…"><select id="teacherFilter" class="select"><option value="all">Tất cả</option><option value="pending">Chờ xác minh</option><option value="verified">Đã duyệt</option><option value="rejected">Đã từ chối</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Giáo viên</th><th>Trạng thái</th><th>Trường / khu vực</th><th>Hồ sơ gửi</th><th>Thao tác</th></tr></thead><tbody id="teacherTable"></tbody></table></div></section></section>
-      <section class="page" id="page-users"><div class="hero"><div><div class="kicker">ACCOUNT DIRECTORY</div><h1>Tài khoản</h1><p>Danh bạ tài khoản trong Firebase, được giới hạn số lượng trả về để giữ trang nhẹ.</p></div><div class="hero-art">👥</div></div><section class="card"><div class="toolbar"><input id="userSearch" class="search" placeholder="Tìm tên, email, mã, trường…"><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit-note"></div></section></section>
-      <section class="page" id="page-classes"><div class="hero"><div><div class="kicker">CLASS DIRECTORY</div><h1>Lớp học</h1><p>Tra cứu lớp, giáo viên phụ trách, trường và mã tham gia.</p></div><div class="hero-art">▦</div></div><section class="card"><div class="toolbar"><input id="classSearch" class="search" placeholder="Tìm lớp, giáo viên, trường, mã…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã tham gia</th><th>Sĩ số</th><th>Cập nhật</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit-note"></div></section></section>
-      <section class="page" id="page-packs"><div class="hero"><div><div class="kicker">PUBLIC CONTENT</div><h1>Bộ từ công khai</h1><p>Theo dõi nội dung công khai và xóa pack khi cần.</p></div><div class="hero-art">📚</div></div><section class="card"><div class="toolbar"><input id="packSearch" class="search" placeholder="Tìm tên pack hoặc người tạo…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div><div id="packLimit" class="limit-note"></div></section></section>
-      <section class="page" id="page-schools"><div class="hero"><div><div class="kicker">SCHOOL DIRECTORY</div><h1>Trường học</h1><p>Danh sách trường mà ứng dụng đang tham chiếu.</p></div><div class="hero-art">🏫</div></div><section class="card"><div class="toolbar"><input id="schoolSearch" class="search" placeholder="Tìm trường, tỉnh/thành, xã/phường…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh / thành</th><th>Xã / phường</th><th>Mức</th><th>Nguồn</th></tr></thead><tbody id="schoolTable"></tbody></table></div><div id="schoolLimit" class="limit-note"></div></section></section>
-      <section class="page" id="page-catalog"><div class="hero"><div><div class="kicker">NATIONAL CATALOG</div><h1>Danh mục toàn quốc 🇻🇳</h1><p>Đồng bộ theo từng tỉnh/thành để không tạo một request khổng lồ.</p></div><div class="hero-art">🇻🇳</div></div><div class="metrics"><div class="metric dark"><div class="metric-top">🏛️</div><small>Tỉnh/thành kế hoạch</small><strong id="cTotalP">34</strong></div><div class="metric"><div class="metric-top">🏫</div><small>Trường kế hoạch</small><strong id="cTotalS">22.850</strong></div><div class="metric"><div class="metric-top">✓</div><small>Tỉnh đã ghi</small><strong id="cSyncedP">0</strong></div><div class="metric"><div class="metric-top">✓</div><small>Trường đã ghi</small><strong id="cSyncedS">0</strong></div></div><section class="card"><div class="card-head"><div><h2>Tiến độ catalog</h2><p id="catalogHint">34 tỉnh/thành · dữ liệu nguồn 2026</p></div><button id="catalogSync" class="btn dark">🇻🇳 Đồng bộ toàn bộ</button></div><div id="catalogGrid" class="catalog-grid" style="margin-top:14px"></div></section></section>
-      <section class="page" id="page-activity"><div class="hero"><div><div class="kicker">AUDIT VIEW</div><h1>Hoạt động Admin</h1><p>Các thao tác quan trọng được backend ghi lại.</p></div><div class="hero-art">◷</div></div><section class="card"><div id="activityList" class="activity"><div class="empty">Đang tải…</div></div></section></section>
+
+      <section class="page" id="page-teachers">
+        <div class="hero"><div><p class="eyebrow">TEACHER VERIFICATION</p><h1>Giáo viên</h1><p>Duyệt hoặc từ chối hồ sơ bằng Admin backend. Không còn thao tác Firestore trực tiếp từ browser.</p></div><div class="hero-cat">🧑‍🏫✅</div></div>
+        <section class="card"><div class="toolbar"><input id="teacherSearch" class="input" placeholder="Tìm tên, email, trường, tỉnh…"><select id="teacherFilter" class="select"><option value="all">Tất cả</option><option value="pending">Chờ xác minh</option><option value="verified">Đã duyệt</option><option value="rejected">Đã từ chối</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Giáo viên</th><th>Trạng thái</th><th>Trường / khu vực</th><th>Gửi lúc</th><th>Thao tác</th></tr></thead><tbody id="teacherTable"></tbody></table></div><div id="teacherLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-users">
+        <div class="hero"><div><p class="eyebrow">ACCOUNT DIRECTORY</p><h1>Tài khoản</h1><p>Danh bạ tài khoản Firebase, tải theo giới hạn an toàn để Admin Hub luôn nhẹ.</p></div><div class="hero-cat">👥</div></div>
+        <section class="card"><div class="toolbar"><input id="userSearch" class="input" placeholder="Tìm tên, email, mã, trường…"><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-classes">
+        <div class="hero"><div><p class="eyebrow">CLASS DIRECTORY</p><h1>Lớp học</h1><p>Tra cứu lớp, giáo viên phụ trách, trường và mã tham gia.</p></div><div class="hero-cat">▦</div></div>
+        <section class="card"><div class="toolbar"><input id="classSearch" class="input" placeholder="Tìm lớp, giáo viên, trường, mã…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã</th><th>Sĩ số</th><th>Cập nhật</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-packs">
+        <div class="hero"><div><p class="eyebrow">PUBLIC CONTENT</p><h1>Bộ từ công khai</h1><p>Nội dung công khai trong hệ thống. Xóa pack qua backend và tự dọn assignment liên quan.</p></div><div class="hero-cat">📚</div></div>
+        <section class="card"><div class="toolbar"><input id="packSearch" class="input" placeholder="Tìm tên pack hoặc người tạo…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div><div id="packLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-schools">
+        <div class="hero"><div><p class="eyebrow">SCHOOL DIRECTORY</p><h1>Trường học</h1><p>Danh sách trường mà ứng dụng đang tham chiếu, gồm cả dữ liệu catalog.</p></div><div class="hero-cat">🏫</div></div>
+        <section class="card"><div class="toolbar"><input id="schoolSearch" class="input" placeholder="Tìm trường, tỉnh/thành, xã/phường…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh / thành</th><th>Xã / phường</th><th>Mức</th><th>Nguồn</th></tr></thead><tbody id="schoolTable"></tbody></table></div><div id="schoolLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-catalog">
+        <div class="hero"><div><p class="eyebrow">NATIONAL CATALOG</p><h1>Danh mục toàn quốc 🇻🇳</h1><p>Đồng bộ từng tỉnh/thành, từng chunk nhỏ. Có thể tiếp tục lại sau khi reload trang.</p></div><div class="hero-cat">🇻🇳</div></div>
+        <div class="catalog-summary"><div class="metric accent"><span>🏛️</span><small>Tỉnh/thành</small><strong id="cTotalP">34</strong></div><div class="metric"><span>🏫</span><small>Trường kế hoạch</small><strong id="cTotalS">22.850</strong></div><div class="metric"><span>✓</span><small>Trường đã xử lý trong phiên</small><strong id="cDoneS">0</strong></div><div class="metric"><span>✓</span><small>Tỉnh đã hoàn tất trong phiên</small><strong id="cDoneP">0</strong></div></div>
+        <section class="card"><div class="card-head"><div><p class="eyebrow">SYNC CONTROL</p><h2>Tiến độ đồng bộ</h2><p id="catalogHint">Đang tải kế hoạch…</p></div><button id="catalogSync" class="btn dark">🇻🇳 Đồng bộ toàn bộ</button></div><div class="global-progress"><span id="globalBar"></span></div><div id="catalogGrid" class="catalog-grid"></div></section>
+      </section>
+
+      <section class="page" id="page-activity">
+        <div class="hero"><div><p class="eyebrow">AUDIT LOG</p><h1>Hoạt động Admin</h1><p>Lịch sử các thao tác quan trọng được backend ghi lại.</p></div><div class="hero-cat">◷</div></div>
+        <section class="card"><div id="activityList" class="activity"><div class="empty">Đang tải…</div></div></section>
+      </section>
     </div>
   </main>
 </div>
-<div class="mobile-bottom"><button data-go="overview">⌂<br>Tổng quan</button><button data-go="teachers">✓<br>GV</button><button data-go="users">♟<br>Tài khoản</button><button data-go="catalog">🇻🇳<br>Catalog</button></div>
-<div id="modalBackdrop" class="modal-backdrop"><div class="modal"><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div></div>
+
+<div class="mobile-nav"><button data-go="overview">⌂<small>Tổng quan</small></button><button data-go="teachers">✓<small>GV</small></button><button data-go="users">♟<small>Tài khoản</small></button><button data-go="catalog">🇻🇳<small>Catalog</small></button></div>
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal"><p class="eyebrow">CONFIRM ACTION</p><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div>
+</div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20260927-4"></script>
-</body></html>
+<script type="module" src="admin.js?v=20260927-5"></script>
+</body>
+</html>
