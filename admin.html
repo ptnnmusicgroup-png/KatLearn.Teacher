@@ -157,7 +157,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const fmtDate=v=>{const n=typeof v?.toMillis==='function'?v.toMillis():Number(v||0);if(!n)return'—';return new Date(n).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'})};
 const roleLabel=r=>({teacher:'Giáo viên',student:'Học sinh',pending_teacher_verification:'Chờ xác minh',teacher_rejected:'Từ chối',admin:'Admin'}[String(r||'').toLowerCase()]||r||'Chưa rõ');
 const roleClass=r=>{r=String(r||'').toLowerCase();return r==='teacher'?'teacher':r==='student'?'student':r==='pending_teacher_verification'?'pending':r==='teacher_rejected'?'rejected':''};
-let user=null,state={users:[],classes:[],packs:[],schools:[],pending:[]};
+let user=null,state={users:[],classes:[],packs:[],schools:[],pending:[],stats:{}};
 
 function showNotice(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(showNotice.timer);showNotice.timer=setTimeout(()=>n.classList.remove('show'),4500)}
 function setPage(name){
@@ -186,11 +186,12 @@ function teacherCards(rows){
   }).join(''):'<div class="empty">Không có hồ sơ giáo viên đang chờ xác minh. 🎉</div>';
 }
 function renderOverview(){
-  $('#metricPending').textContent=state.pending.length;
-  $('#metricTeachers').textContent=state.users.filter(x=>String(x.role).toLowerCase()==='teacher').length;
-  $('#metricStudents').textContent=state.users.filter(x=>String(x.role).toLowerCase()==='student').length;
-  $('#metricClasses').textContent=state.classes.length;
-  $('#metricPacks').textContent=state.packs.length;
+  const s=state.stats||{};
+  $('#metricPending').textContent=Number(s.pending??state.pending.length);
+  $('#metricTeachers').textContent=Number(s.teachers??state.users.filter(x=>String(x.role).toLowerCase()==='teacher').length);
+  $('#metricStudents').textContent=Number(s.students??state.users.filter(x=>String(x.role).toLowerCase()==='student').length);
+  $('#metricClasses').textContent=Number(s.classes??state.classes.length);
+  $('#metricPacks').textContent=Number(s.packs??state.packs.length);
   $('#overviewPending').innerHTML=teacherCards(state.pending.slice(0,5));
   bindVerify($('#overviewPending'));
 }
@@ -216,7 +217,7 @@ function renderClasses(q=''){
 function renderPacks(q=''){
   q=String(q).trim().toLowerCase();
   const rows=state.packs.filter(p=>!q||[p.name,p.createdBy,p.createdByEmail].join(' ').toLowerCase().includes(q));
-  $('#packTable').innerHTML=rows.map(p=>'<tr><td><strong>'+esc(p.name||'Bộ từ chưa đặt tên')+'</strong></td><td>'+Number(Array.isArray(p.words)?p.words.length:0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||'—')+'</td><td>'+fmtDate(p.createdAt)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
+  $('#packTable').innerHTML=rows.map(p=>'<tr><td><strong>'+esc(p.name||'Bộ từ chưa đặt tên')+'</strong></td><td>'+Number(p.wordCount||0)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||'—')+'</td><td>'+fmtDate(p.createdAt)+'</td></tr>').join('')||'<tr><td colspan="4"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
 }
 function renderSchools(q=''){
   q=String(q).trim().toLowerCase();
@@ -277,7 +278,8 @@ async function loadState(){
   if(!token)throw new Error('Không lấy được phiên Admin.');
   const response=await fetch('/api/admin-state',{method:'GET',headers:{Authorization:'Bearer '+token}});
   const data=await response.json().catch(()=>({}));
-  if(!response.ok||!data.ok)throw new Error(data.error||'Không thể tải dữ liệu quản trị.');
+  if(!response.ok||!data.ok)throw new Error(data.error||('HTTP '+response.status+' khi tải dữ liệu quản trị.'));
+  state.stats=data.stats&&typeof data.stats==='object'?data.stats:{};
   state.users=Array.isArray(data.users)?data.users:[];
   state.classes=Array.isArray(data.classes)?data.classes:[];
   state.packs=Array.isArray(data.packs)?data.packs:[];
