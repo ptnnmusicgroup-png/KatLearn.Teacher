@@ -55,7 +55,7 @@ import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/10.14.1/fir
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 const FIREBASE_CONFIG={apiKey:"AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8",authDomain:"elp---katlearn.firebaseapp.com",projectId:"elp---katlearn",storageBucket:"elp---katlearn.firebasestorage.app",messagingSenderId:"344478447672",appId:"1:344478447672:web:4ed109a40303d0b41b0ecd",measurementId:"G-KTW11GD97T"};
 const ADMIN_EMAIL="katlearn.admin@gmail.com",app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG),auth=getAuth(app),qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[c])),fmtDate=v=>{const n=Number(v||0);return n?new Date(n).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"}):"—"};
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",\"":"&quot;","'":"&#39;"}[c])),fmtDate=v=>{const n=Number(v||0);return n?new Date(n).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"}):"—"};
 const roleLabel=r=>({teacher:"Giáo viên",student:"Học sinh",pending_teacher_verification:"Chờ xác minh",teacher_rejected:"Từ chối",admin:"Admin"}[String(r||"").toLowerCase()]||String(r||"Chưa rõ"));
 const roleBadge=r=>{const s=String(r||"").toLowerCase();return s==="teacher"?"b-teacher":s==="student"?"b-student":s==="pending_teacher_verification"?"b-pending":s==="teacher_rejected"?"b-rejected":s==="admin"?"b-admin":""};
 let currentUser=null,page="overview",cache={overview:null,teachers:null,users:null,classes:null,packs:null,schools:null,catalog:null};
