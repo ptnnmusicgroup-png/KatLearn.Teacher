@@ -15,8 +15,8 @@ function admin(){
   return {auth:getAuth(),db:getFirestore()};
 }
 
-function tokenFrom(req){
-  const match=/^Bearer\s+(.+)$/i.exec(String(req.headers?.authorization||''));
+function tokenFrom(request){
+  const match=/^Bearer\s+(.+)$/i.exec(String(request.headers.get('authorization')||''));
   if(!match)throw Object.assign(new Error('Bạn cần đăng nhập Admin.'),{status:401});
   return match[1];
 }
@@ -33,7 +33,7 @@ export default async function handler(request){
     const {auth,db}=admin();
     const token=await auth.verifyIdToken(tokenFrom(request),true);
     if(String(token.email||'').toLowerCase()!==ADMIN_EMAIL){
-      return res.status(403).json({error:'Tài khoản không có quyền Admin.'});
+      return Response.json({ok:false,error:'Tài khoản không có quyền Admin.'},{status:403,headers:JSON_HEADERS});
     }
 
     const body=await request.json().catch(()=>({}));
