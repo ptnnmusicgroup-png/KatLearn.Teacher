@@ -151,6 +151,7 @@ import{getFirestore,collection,getDocs,getDoc,doc,query,where,addDoc,setDoc,upda
 
 const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};
 const ADMIN_EMAIL='katlearn.admin@gmail.com';
+const ADMIN_API_BASE='https://lms-katlearn.vercel.app/api';
 const app=getApps().length?getApps()[0]:initializeApp(FIREBASE_CONFIG),auth=getAuth(app),db=getFirestore(app);
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -233,7 +234,7 @@ async function verifyTeacher(uid){
   if(button){button.disabled=true;button.textContent='⏳ Đang xác minh...'}
   try{
     const token=await user.getIdToken(true);
-    const response=await fetch('/api/admin-verify-teacher',{
+    const response=await fetch(ADMIN_API_BASE+'/admin-verify-teacher',{
       method:'POST',
       headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},
       body:JSON.stringify({uid})
@@ -254,14 +255,41 @@ async function syncNationalCatalog(){
   if(!btn)return;
   btn.disabled=true;btn.innerHTML='<span>⏳</span>Đang đồng bộ danh mục...';status.textContent='Đang tải danh mục và ghi dữ liệu vào Firestore...';status.className='catalog-sync-status';
   try{
-    const token=await user.getIdToken();
-    const response=await fetch('/api/national-catalog-sync',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:'{}'});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok||!data.ok)throw new Error(data.error||'Không thể đồng bộ danh mục.');
-    const s=data.stats||{};
-    status.textContent='✓ '+s.provinces+' tỉnh/thành · '+s.schools+' trường · '+s.classes+' lớp mẫu.';
+    const token=await user.getIdToken(true);
+    const headers={Authorization:'Bearer '+token,'Content-Type':'application/json'};
+
+    const planResponse=await fetch(ADMIN_API_BASE+'/national-catalog-sync',{
+      method:'POST',headers,body:JSON.stringify({action:'plan'})
+    });
+    const plan=await planResponse.json().catch(()=>({}));
+    if(!planResponse.ok||!plan.ok)throw new Error(plan.error||('HTTP '+planResponse.status+' khi lập kế hoạch đồng bộ.'));
+
+    const provinces=Array.isArray(plan.provinces)?plan.provinces:[];
+    let processed=0;
+    const total=Number(plan.totalSchools||0);
+
+    for(const province of provinces){
+      let offset=0;
+      while(offset<Number(province.total||0)){
+        const response=await fetch(ADMIN_API_BASE+'/national-catalog-sync',{
+          method:'POST',headers,body:JSON.stringify({
+            action:'chunk',
+            provinceCode:province.code,
+            offset,
+            limit:150
+          })
+        });
+        const data=await response.json().catch(()=>({}));
+        if(!response.ok||!data.ok)throw new Error(data.error||('HTTP '+response.status+' khi đồng bộ '+province.name+'.'));
+        processed+=Number(data.processed||0);
+        offset=Number(data.nextOffset||offset);
+        status.textContent='⏳ '+processed.toLocaleString('vi-VN')+' / '+total.toLocaleString('vi-VN')+' trường · đang xử lý '+province.name;
+      }
+    }
+
+    status.textContent='✓ '+provinces.length+' tỉnh/thành · '+processed.toLocaleString('vi-VN')+' trường đã đồng bộ.';
     status.className='catalog-sync-status ok';
-    showNotice('✓ Đã đồng bộ danh mục quốc gia vào Firestore.');
+    showNotice('✓ Đã đồng bộ danh mục quốc gia vào Firebase.');
     await loadState();
   }catch(e){
     status.textContent='✕ '+(e?.message||'Đồng bộ thất bại.');
@@ -276,7 +304,7 @@ async function loadState(){
   if(!user)throw new Error('Chưa đăng nhập Admin.');
   const token=await user.getIdToken(true);
   if(!token)throw new Error('Không lấy được phiên Admin.');
-  const response=await fetch('/api/admin-state',{method:'GET',headers:{Authorization:'Bearer '+token}});
+  const response=await fetch(ADMIN_API_BASE+'/admin-state',{method:'GET',headers:{Authorization:'Bearer '+token}});
   const data=await response.json().catch(()=>({}));
   if(!response.ok||!data.ok)throw new Error(data.error||('HTTP '+response.status+' khi tải dữ liệu quản trị.'));
   state.stats=data.stats&&typeof data.stats==='object'?data.stats:{};
