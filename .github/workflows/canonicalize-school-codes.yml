@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "api/catalog-harvest.js"
+      - ".github/workflows/canonicalize-school-codes.yml"
   workflow_dispatch:
 
 permissions:
