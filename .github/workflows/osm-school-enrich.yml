@@ -29,12 +29,10 @@ jobs:
         run: |
           python <<'PY'
           import hashlib
-          import io
-          import json
+                    import json
           import re
           import unicodedata
-          import zipfile
-          from pathlib import Path
+                    from pathlib import Path
 
           import requests
           from shapely.geometry import Point, shape
@@ -42,7 +40,7 @@ jobs:
 
           TREE = Path("data/national-catalog/full-school-tree.json")
           WARDS = Path("data/national-catalog/official-ward-list.json")
-          BOUNDARY_ZIP = "https://raw.githubusercontent.com/thanglequoc/vietnamese-provinces-database/master/dataset-generation-scripts/resources/gis/geojson_11Mar2026.zip"
+          BOUNDARY_ROOT = Path("/tmp/vietnamese-provinces-database/dataset-generation-scripts/resources/gis/geojson_11Mar2026")
           SCHOOL_JSON = "https://raw.githubusercontent.com/phoenixvn/OpenData-Vietnam/main/POI/schools_processed.json"
           LEGACY_JSON = "https://raw.githubusercontent.com/luancauthu0729/success/main/Backend/truong_thcs_vn.json"
 
@@ -157,28 +155,22 @@ jobs:
           print("Downloading 2026 GitHub school POIs…")
           school_rows = json.loads(get(SCHOOL_JSON, 120).decode("utf-8"))
 
-          print("Downloading current 3,321-ward boundary bundle…")
-          boundary_bytes = get(BOUNDARY_ZIP, 180)
-          zf = zipfile.ZipFile(io.BytesIO(boundary_bytes))
+          print("Cloning current 2026 ward boundary repository…")
+          import subprocess
+          subprocess.run(["git","clone","--depth","1","https://github.com/thanglequoc/vietnamese-provinces-database.git","/tmp/vietnamese-provinces-database"],check=True,timeout=240)
 
           geometries = []
           geometry_meta = []
-          for info in zf.infolist():
-              path = info.filename.replace("\\","/")
-              if "/wards/" not in path or not path.endswith(".geojson"):
-                  continue
-              base = Path(path).name
-              code = base.split("_",1)[0]
+          for fp in BOUNDARY_ROOT.glob("*/wards/*.geojson"):
+              code = fp.stem.split("_",1)[0]
               if not re.fullmatch(r"\d{5}", code):
                   continue
-              raw = json.loads(zf.read(info))
-              feats = raw.get("features") or []
-              if not feats:
-                  continue
               try:
+                  raw = json.loads(fp.read_text(encoding="utf-8"))
+                  feats = raw.get("features") or []
+                  if not feats: continue
                   geom = shape(feats[0]["geometry"])
-                  if geom.is_empty:
-                      continue
+                  if geom.is_empty: continue
                   pc = code[:2]
                   geometries.append(geom)
                   geometry_meta.append((pc,code))
@@ -237,12 +229,10 @@ jobs:
               hits = index.query(point)
               match = None
               for h in hits:
-                  try:
-                      geom = geometries[int(h)]
-                  except Exception:
-                      geom = h
+                  idx = int(h) if not hasattr(h, "covers") else None
+                  geom = geometries[idx] if idx is not None else h
                   if geom.covers(point):
-                      match = geometry_meta[geometries.index(geom)] if not isinstance(h,int) else geometry_meta[int(h)]
+                      match = geometry_meta[idx] if idx is not None else next((geometry_meta[i] for i,g in enumerate(geometries) if g.equals(geom)), None)
                       break
               if not match:
                   skipped_outside += 1
