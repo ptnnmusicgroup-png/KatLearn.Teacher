@@ -25,16 +25,18 @@ function clean(value,max=200){
   return String(value??'').trim().slice(0,max);
 }
 
-export default async function handler(req,res){
-  if(req.method!=='POST')return res.status(405).json({error:'Method not allowed'});
+const JSON_HEADERS={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
+
+export default async function handler(request){
+  if(request.method!=='POST')return Response.json({ok:false,error:'Method not allowed'},{status:405,headers:JSON_HEADERS});
   try{
     const {auth,db}=admin();
-    const token=await auth.verifyIdToken(tokenFrom(req),true);
+    const token=await auth.verifyIdToken(tokenFrom(request),true);
     if(String(token.email||'').toLowerCase()!==ADMIN_EMAIL){
       return res.status(403).json({error:'Tài khoản không có quyền Admin.'});
     }
 
-    const body=req.body||{};
+    const body=await request.json().catch(()=>({}));
     const uid=clean(body.uid,160);
     if(!uid)throw Object.assign(new Error('Thiếu tài khoản giáo viên.'),{status:400});
 
@@ -137,7 +139,7 @@ export default async function handler(req,res){
       updatedAt:Date.now()
     },{merge:true});
 
-    return res.status(200).json({
+    return Response.json({
       ok:true,
       uid,
       schoolId,
@@ -146,10 +148,10 @@ export default async function handler(req,res){
       ward,
       classIds:validClassIds,
       catalogClassId
-    });
+    },{status:200,headers:JSON_HEADERS});
   }catch(error){
     const status=Number(error?.status||error?.statusCode||0)||500;
     console.error('[KatLearn admin verify teacher]',error);
-    return res.status(status).json({ok:false,error:error?.message||'Không thể xác minh giáo viên.'});
+    return Response.json({ok:false,error:error?.message||'Không thể xác minh giáo viên.'},{status,headers:JSON_HEADERS});
   }
 }
