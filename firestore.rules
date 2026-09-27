@@ -181,5 +181,13 @@ match /system/{docId} {
           && resource.data.ownerUid == userId;
       }
     }
+    match /adminAudit/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.adminEmail == 'katlearn.admin@gmail.com'
+        && request.resource.data.adminUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
   }
 }
