@@ -4,9 +4,14 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 function credentials(){
   const raw=String(process.env.FIREBASE_SERVICE_ACCOUNT_JSON||'').trim();
+  const encoded=String(process.env.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64||'').trim();
   if(raw){
     try{return JSON.parse(raw)}
     catch(_){throw Object.assign(new Error('FIREBASE_SERVICE_ACCOUNT_JSON is invalid'),{status:503,code:'firebase_credentials_invalid'})}
+  }
+  if(encoded){
+    try{return JSON.parse(Buffer.from(encoded,'base64').toString('utf8'))}
+    catch(_){throw Object.assign(new Error('FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 is invalid'),{status:503,code:'firebase_credentials_invalid'})}
   }
   const projectId=String(process.env.FIREBASE_PROJECT_ID||process.env.FIREBASE_ADMIN_PROJECT_ID||'').trim();
   const clientEmail=String(process.env.FIREBASE_CLIENT_EMAIL||process.env.FIREBASE_ADMIN_CLIENT_EMAIL||'').trim();
