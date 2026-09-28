@@ -81,6 +81,7 @@ async function requireAdmin(request){
 const LIMITS={users:300,teachers:300,classes:300,packs:300,schools:300,pending:100,activity:100};
 const DATA_DIR=new URL("../data/national-catalog/",import.meta.url);
 const CATALOG_FILE=new URL("full-school-tree.json",DATA_DIR);
+const CATALOG_CHUNK_MAX=12;
 let catalogTreeCache=null;
 const TOTAL_SCHOOLS=22850;
 const PROVINCES=[
@@ -968,7 +969,7 @@ export default {
         const provinceCode=clean(body.provinceCode,10);
         const data=readProvince(provinceCode);
         const offset=Math.max(0,Number(body.offset)||0);
-        const limit=Math.max(1,Math.min(180,Number(body.limit)||150));
+        const limit=Math.max(1,Math.min(CATALOG_CHUNK_MAX,Number(body.limit)||CATALOG_CHUNK_MAX));
         const chunk=data.slice(offset,offset+limit);
         const result=await writeCatalogChunk(db,chunk);
         const nextOffset=offset+chunk.length;
