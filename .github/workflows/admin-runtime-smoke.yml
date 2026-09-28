@@ -10,18 +10,26 @@ jobs:
       - name: Check LMS Admin Hub without auth
         run: |
           set -euo pipefail
-          body="$(mktemp)"
-          code="$(curl -sS -o "$body" -w '%{http_code}' --max-time 30 'https://lms-katlearn.vercel.app/api/admin-hub?section=overview')"
-          echo "HTTP $code"
-          cat "$body"
-          test "$code" = "401"
-          grep -q 'missing_admin_token' "$body"
+          ok=0
+          for i in $(seq 1 18); do
+            body="$(mktemp)"
+            code="$(curl -sS -o "$body" -w '%{http_code}' --max-time 20 'https://lms-katlearn.vercel.app/api/admin-hub?section=overview' || true)"
+            echo "Attempt $i: HTTP $code"
+            cat "$body" || true
+            if [ "$code" = "401" ] && grep -q 'missing_admin_token' "$body"; then ok=1; break; fi
+            sleep 10
+          done
+          test "$ok" = "1"
       - name: Check Teacher Admin proxy without auth
         run: |
           set -euo pipefail
-          body="$(mktemp)"
-          code="$(curl -sS -o "$body" -w '%{http_code}' --max-time 30 'https://teacher-katlearn.vercel.app/api/admin-hub?section=overview')"
-          echo "HTTP $code"
-          cat "$body"
-          test "$code" = "401"
-          grep -q 'missing_admin_token' "$body"
+          ok=0
+          for i in $(seq 1 18); do
+            body="$(mktemp)"
+            code="$(curl -sS -o "$body" -w '%{http_code}' --max-time 20 'https://teacher-katlearn.vercel.app/api/admin-hub?section=overview' || true)"
+            echo "Attempt $i: HTTP $code"
+            cat "$body" || true
+            if [ "$code" = "401" ] && grep -q 'missing_admin_token' "$body"; then ok=1; break; fi
+            sleep 10
+          done
+          test "$ok" = "1"
