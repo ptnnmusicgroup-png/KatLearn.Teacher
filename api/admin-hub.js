@@ -81,7 +81,7 @@ async function requireAdmin(request){
 const LIMITS={users:300,teachers:300,classes:300,packs:300,schools:300,pending:100,activity:100};
 const DATA_DIR=new URL("../data/national-catalog/",import.meta.url);
 const CATALOG_FILE=new URL("full-school-tree.json",DATA_DIR);
-const CATALOG_CHUNK_MAX=12;
+const CATALOG_CHUNK_MAX=250;
 let catalogTreeCache=null;
 const TOTAL_SCHOOLS=22850;
 const PROVINCES=[
@@ -262,13 +262,7 @@ function readProvince(code){
 function catalogSchoolId(value){
   return "sch_"+crypto.createHash("sha256").update(String(value)).digest("hex").slice(0,28);
 }
-const gradeTemplates={
-  primary:["1","2","3","4","5"],
-  middle:["6","7","8","9"],
-  high:["10","11","12"],
-  combined:["1","2","3","4","5","6","7","8","9","10","11","12"]
-};
-async function writeCatalogChunk(db,items){
+async function writeCatalogChunk(db,items,{writeProvince=false}={}){
   if(!items.length)return{writes:0,schools:0};
   const writer=db.bulkWriter();
   let writes=0;
@@ -278,7 +272,7 @@ async function writeCatalogChunk(db,items){
     return error.failedAttempts<3;
   });
   const meta=PROVINCE_MAP.get(String(items[0].provinceCode));
-  if(meta)writer.set(db.collection("KatLearn_TINHTHANH_1").doc(meta.code),{
+  if(writeProvince&&meta)writer.set(db.collection("KatLearn_TINHTHANH_1").doc(meta.code),{
     provinceId:meta.code,code:meta.code,name:meta.name,schoolCount:meta.total,
     source:"national_catalog_2026",updatedAt:Date.now()
   },{merge:true});
@@ -288,21 +282,11 @@ async function writeCatalogChunk(db,items){
     const school={
       name:row.name,schoolId:id,province:row.provinceName,provinceId:row.provinceCode,
       ward:row.wardName,wardId:row.wardId,sourceSchoolId:row.sourceSchoolId,
-      schoolLevel:row.level,source:"thanhtungct7/data-school-in-ward",
-      sourceType:"community_national_school_tree",updatedAt:now
+      schoolLevel:row.level,source:"national_catalog_2026",
+      sourceType:"national_catalog",catalogManaged:true,updatedAt:now
     };
     writer.set(db.collection("KatLearn_TRUONGHOC_1").doc(id),school,{merge:true});
-    writer.set(db.collection("schools").doc(id),{...school,createdAt:now},{merge:true});
-    for(const grade of gradeTemplates[row.level]||gradeTemplates.combined){
-      const classId=id+"-"+grade;
-      const cls={
-        classId,name:"Lớp "+grade,grade:String(grade),schoolId:id,schoolName:row.name,
-        province:row.provinceName,provinceId:row.provinceCode,ward:row.wardName,
-        schoolLevel:row.level,isTemplate:true,source:"national_catalog_template",updatedAt:now
-      };
-      writer.set(db.collection("KatLearn_LOPHOC_1").doc(classId),cls,{merge:true});
-      writer.set(db.collection("schools").doc(id).collection("classes").doc(classId),cls,{merge:true});
-    }
+    writer.set(db.collection("schools").doc(id),school,{merge:true});
   }
   try{await writer.close()}
   catch(error){throw fail(error,502,"catalog_write_failed")}
@@ -971,7 +955,7 @@ export default {
         const offset=Math.max(0,Number(body.offset)||0);
         const limit=Math.max(1,Math.min(CATALOG_CHUNK_MAX,Number(body.limit)||CATALOG_CHUNK_MAX));
         const chunk=data.slice(offset,offset+limit);
-        const result=await writeCatalogChunk(db,chunk);
+        const result=await writeCatalogChunk(db,chunk,{writeProvince:offset===0});
         const nextOffset=offset+chunk.length;
         if(offset===0||nextOffset>=data.length){
           await audit(db,decoded,nextOffset>=data.length?"catalog.complete":"catalog.start",provinceCode,{
