@@ -1,0 +1,25 @@
+name: Admin direct probe
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "api/admin-hub.js"
+      - "api/_firebase-admin.js"
+      - ".github/workflows/admin-admin-probe.yml"
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe Teacher Admin endpoint
+        run: |
+          set -euo pipefail
+          body="$(mktemp)"
+          headers="$(mktemp)"
+          code="$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' --http1.1 --connect-timeout 5 --max-time 15 'https://teacher-katlearn.vercel.app/api/admin-hub?section=overview' || true)"
+          echo "HTTP $code"
+          echo "--- headers ---"
+          cat "$headers" || true
+          echo "--- body ---"
+          cat "$body" || true
+          test "$code" = "401"
