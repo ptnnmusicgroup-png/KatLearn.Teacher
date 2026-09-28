@@ -14,61 +14,64 @@ function errorMessage(error){
   }catch(_){}
   return String(error)||"Lỗi kết nối Admin backend.";
 }
-function headers(req){
-  const origin=String(req.headers?.origin||"");
-  const h={
-    "Content-Type":"application/json; charset=utf-8",
-    "Cache-Control":"no-store",
-    "X-KatLearn-Admin-Proxy":"1"
-  };
+
+function responseHeaders(origin,contentType="application/json; charset=utf-8"){
+  const h=new Headers();
+  h.set("Content-Type",contentType);
+  h.set("Cache-Control","no-store");
+  h.set("X-KatLearn-Admin-Proxy","1");
   if(origin===ALLOWED_ORIGIN){
-    h["Access-Control-Allow-Origin"]=origin;
-    h["Access-Control-Allow-Headers"]="authorization,content-type,accept";
-    h["Access-Control-Allow-Methods"]="GET,POST,OPTIONS";
-    h["Vary"]="Origin";
+    h.set("Access-Control-Allow-Origin",origin);
+    h.set("Access-Control-Allow-Headers","authorization,content-type,accept");
+    h.set("Access-Control-Allow-Methods","GET,POST,OPTIONS");
+    h.set("Vary","Origin");
   }
   return h;
 }
-function search(req){
-  try{return new URL(String(req.url||"/"),"http://teacher-katlearn.local").search}catch(_){
-    const raw=String(req.url||"");const i=raw.indexOf("?");
-    return i>=0?raw.slice(i):"";
-  }
+
+function search(request){
+  try{return new URL(request.url).search}catch(_){return""}
 }
-export default async function handler(req,res){
-  const h=headers(req);
-  if(req.method==="OPTIONS")return res.status(204).set({...h,"Content-Length":"0"}).end();
-  if(req.method!=="GET"&&req.method!=="POST"){
-    return res.status(405).set(h).json({ok:false,error:"Method not allowed",code:"method_not_allowed"});
+
+export default async function handler(request){
+  const origin=String(request.headers.get("origin")||"");
+  if(request.method==="OPTIONS")return new Response(null,{status:204,headers:responseHeaders(origin)});
+  if(request.method!=="GET"&&request.method!=="POST"){
+    return Response.json({ok:false,error:"Method not allowed",code:"method_not_allowed"},{status:405,headers:responseHeaders(origin)});
   }
 
-  const auth=String(req.headers?.authorization||"").trim();
-  if(!auth)return res.status(401).set(h).json({ok:false,error:"Bạn cần đăng nhập Admin.",code:"missing_admin_token"});
+  const auth=String(request.headers.get("authorization")||"").trim();
+  if(!auth){
+    return Response.json({ok:false,error:"Bạn cần đăng nhập Admin.",code:"missing_admin_token"},{status:401,headers:responseHeaders(origin)});
+  }
 
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),TIMEOUT_MS);
   try{
-    const requestHeaders={authorization:auth,accept:"application/json"};
-    if(req.method==="POST")requestHeaders["content-type"]=String(req.headers?.["content-type"]||"application/json");
-    const response=await fetch(UPSTREAM+search(req),{
-      method:req.method,
-      headers:requestHeaders,
-      ...(req.method==="POST"?{body:JSON.stringify(req.body&&typeof req.body==="object"?req.body:{})}:{}),
+    const headers={authorization:auth,accept:"application/json"};
+    let body;
+    if(request.method==="POST"){
+      headers["content-type"]=String(request.headers.get("content-type")||"application/json");
+      body=await request.text();
+    }
+    const response=await fetch(UPSTREAM+search(request),{
+      method:request.method,
+      headers,
+      ...(request.method==="POST"?{body}:{}),
       signal:controller.signal
     });
-    const body=await response.text();
-    const contentType=response.headers.get("content-type");
-    if(contentType)h["Content-Type"]=contentType;
-    return res.status(response.status).set(h).send(body);
+    const text=await response.text();
+    const contentType=response.headers.get("content-type")||"application/json; charset=utf-8";
+    return new Response(text,{status:response.status,headers:responseHeaders(origin,contentType)});
   }catch(error){
-    const message=errorMessage(error);
+    const message=error?.name==="AbortError"?"Admin backend phản hồi quá lâu.":errorMessage(error);
     console.error("[KatLearn Admin Hub proxy]",message);
-    return res.status(502).set(h).json({
+    return Response.json({
       ok:false,
       error:"Không kết nối được Admin backend: "+message,
-      code:"admin_upstream_unreachable",
+      code:error?.name==="AbortError"?"admin_upstream_timeout":"admin_upstream_unreachable",
       details:{message}
-    });
+    },{status:502,headers:responseHeaders(origin)});
   }finally{
     clearTimeout(timer);
   }
