@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260928-2">
+<link rel="stylesheet" href="admin.css?v=20260928-3">
 </head>
 <body>
 <section id="loginGate" class="login-gate">
@@ -56,7 +56,6 @@
       <button id="logout">↪ Đăng xuất</button>
     </div>
   </aside>
-  <div id="mobileOverlay"></div>
   <main class="main">
     <header class="topbar">
       <div class="top-left"><button id="menuMobile" class="icon-btn mobile-only">☰</button><div id="pageTitle" class="page-title">Tổng quan</div></div>
@@ -126,12 +125,13 @@
     </div>
   </main>
 </div>
+<div id="mobileOverlay"></div>
 
 <div class="mobile-nav"><button data-go="overview">⌂<small>Tổng quan</small></button><button data-go="teachers">✓<small>GV</small></button><button data-go="users">♟<small>Tài khoản</small></button><button data-go="catalog">🇻🇳<small>Catalog</small></button></div>
 <div id="modalBackdrop" class="modal-backdrop">
   <div class="modal"><p class="eyebrow">CONFIRM ACTION</p><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div>
 </div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20260928-8"></script>
+<script type="module" src="admin.js?v=20260928-9"></script>
 </body>
 </html>
