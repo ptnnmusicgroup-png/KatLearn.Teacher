@@ -132,18 +132,18 @@ function renderUsers(rows,limited){
    '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>')+
    '</div></td></tr>'
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
- $("#userTable [data-rename-user]").forEach(b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
- $("#userTable [data-reset-user]").forEach(b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
- $("#userTable [data-disable-user]").forEach(b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
- $("#userTable [data-enable-user]").forEach(b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
- $("#userTable [data-delete-user]").forEach(b=>b.onclick=()=>deleteUserAccount(b.dataset.deleteUser));
+ each($("#userTable [data-rename-user]"),b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
+ each($("#userTable [data-reset-user]"),b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
+ each($("#userTable [data-disable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
+ each($("#userTable [data-enable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
+ each($("#userTable [data-delete-user]"),b=>b.onclick=()=>deleteUserAccount(b.dataset.deleteUser));
  $("#userLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderClasses(rows,limited){
  const q=$("#classSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));
  $("#classTable").innerHTML=list.map(cl=>'<tr><td><strong>'+esc(cl.name||"—")+'</strong><small>Khối '+esc(cl.grade||"—")+' · <span class="mono">'+esc(cl.id)+'</span></small></td><td>'+esc(cl.teacherEmail||cl.teacherUid||"—")+'</td><td>'+esc(cl.schoolName||"—")+'<small>'+esc([cl.province,cl.ward].filter(Boolean).join(" · "))+'</small></td><td><span class="badge teacher">'+esc(cl.joinCode||"—")+'</span></td><td>'+fmt(cl.studentCount)+'</td><td>'+date(cl.updatedAt||cl.createdAt)+'</td><td><div class="row-actions"><button class="btn" data-edit-class="'+esc(cl.id)+'">Sửa</button><button class="btn bad" data-delete-class="'+esc(cl.id)+'">Xóa</button></div></td></tr>').join("")||'<tr><td colspan="7"><div class="empty">Không có lớp học.</div></td></tr>';
- $("#classTable [data-edit-class]").forEach(b=>b.onclick=()=>editClass(list.find(x=>x.id===b.dataset.editClass)));
- $("#classTable [data-delete-class]").forEach(b=>b.onclick=()=>deleteClassAdmin(b.dataset.deleteClass));
+ each($("#classTable [data-edit-class]"),b=>b.onclick=()=>editClass(list.find(x=>x.id===b.dataset.editClass)));
+ each($("#classTable [data-delete-class]"),b=>b.onclick=()=>deleteClassAdmin(b.dataset.deleteClass));
  $("#classLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderPacks(rows,limited){
@@ -157,8 +157,8 @@ function renderSchools(rows,limited){
   const protectedSchool=String(s.source||"").startsWith("thanhtungct7")||String(s.sourceType||"").includes("national");
   return '<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID <span class="mono">'+esc(s.id)+'</span></small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td><td><div class="row-actions">'+(protectedSchool?'<span class="limit">Catalog-managed</span>':'<button class="btn" data-edit-school="'+esc(s.id)+'">Sửa</button><button class="btn bad" data-delete-school="'+esc(s.id)+'">Xóa</button>')+'</div></td></tr>'
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy trường.</div></td></tr>';
- $("#schoolTable [data-edit-school]").forEach(b=>b.onclick=()=>editSchool(list.find(x=>x.id===b.dataset.editSchool)));
- $("#schoolTable [data-delete-school]").forEach(b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
+ each($("#schoolTable [data-edit-school]"),b=>b.onclick=()=>editSchool(list.find(x=>x.id===b.dataset.editSchool)));
+ each($("#schoolTable [data-delete-school]"),b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
  $("#schoolLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderActivity(rows){
