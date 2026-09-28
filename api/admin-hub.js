@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import { admin } from "./_firebase-admin.js";
 
 
 function header(request,name){
@@ -35,6 +34,7 @@ function writeJson(status,body,origin=""){
 async function requireAdmin(request){
   const match=/^Bearer\s+(.+)$/i.exec(header(request,"authorization").trim());
   if(!match)throw Object.assign(new Error("Bạn cần đăng nhập Admin."),{status:401,code:"missing_admin_token"});
+  const {admin}=await import("./_firebase-admin.js");
   const {auth,db}=admin();
   let decoded;
   try{
