@@ -8,70 +8,105 @@ function errorMessage(error){
   if(typeof error?.message==="string"&&error.message.trim())return error.message.trim();
   if(typeof error?.error==="string"&&error.error.trim())return error.error.trim();
   if(typeof error?.error?.message==="string"&&error.error.message.trim())return error.error.message.trim();
-  try{
-    const value=JSON.stringify(error);
-    if(value&&value!=="{}")return value;
-  }catch(_){}
+  try{const value=JSON.stringify(error);if(value&&value!=="{}")return value}catch(_){}
   return String(error)||"Lỗi kết nối Admin backend.";
 }
 
 function responseHeaders(origin,contentType="application/json; charset=utf-8"){
-  const h=new Headers();
-  h.set("Content-Type",contentType);
-  h.set("Cache-Control","no-store");
-  h.set("X-KatLearn-Admin-Proxy","1");
+  const h={"Content-Type":contentType,"Cache-Control":"no-store","X-KatLearn-Admin-Proxy":"1"};
   if(origin===ALLOWED_ORIGIN){
-    h.set("Access-Control-Allow-Origin",origin);
-    h.set("Access-Control-Allow-Headers","authorization,content-type,accept");
-    h.set("Access-Control-Allow-Methods","GET,POST,OPTIONS");
-    h.set("Vary","Origin");
+    h["Access-Control-Allow-Origin"]=origin;
+    h["Access-Control-Allow-Headers"]="authorization,content-type,accept";
+    h["Access-Control-Allow-Methods"]="GET,POST,OPTIONS";
+    h["Vary"]="Origin";
   }
   return h;
 }
 
-function search(request){
-  try{return new URL(request.url).search}catch(_){return""}
+function writeJson(res,status,body,origin=""){
+  const payload=JSON.stringify(body);
+  const headers=responseHeaders(origin);
+  if(res&&typeof res.setHeader==="function"){
+    for(const[key,value]of Object.entries(headers))res.setHeader(key,value);
+    res.statusCode=Number(status)||200;
+    if(typeof res.end==="function")return res.end(payload);
+  }
+  return new Response(payload,{status:Number(status)||200,headers});
 }
 
-export default async function handler(request){
-  const origin=String(request.headers.get("origin")||"");
-  if(request.method==="OPTIONS")return new Response(null,{status:204,headers:responseHeaders(origin)});
-  if(request.method!=="GET"&&request.method!=="POST"){
-    return Response.json({ok:false,error:"Method not allowed",code:"method_not_allowed"},{status:405,headers:responseHeaders(origin)});
+async function readBody(req){
+  if(req?.body!=null){
+    if(typeof req.body==="string")return req.body;
+    if(Buffer.isBuffer(req.body))return req.body.toString("utf8");
+    if(typeof req.body==="object")return JSON.stringify(req.body);
+  }
+  return await new Promise((resolve,reject)=>{
+    let chunks=[];
+    req.on("data",chunk=>chunks.push(Buffer.isBuffer(chunk)?chunk:Buffer.from(String(chunk))));
+    req.on("end",()=>resolve(Buffer.concat(chunks).toString("utf8")));
+    req.on("error",reject);
+  });
+}
+
+function header(req,name){
+  const key=String(name||"").toLowerCase();
+  const headers=req?.headers;
+  if(headers&&typeof headers.get==="function")return String(headers.get(key)||"");
+  return String(headers?.[key]??"");
+}
+
+function requestQuery(req){
+  try{return new URL(String(req?.url||"/"),"https://teacher-katlearn.vercel.app").search}
+  catch(_){return""}
+}
+
+module.exports=undefined;
+export default async function handler(req,res){
+  const origin=header(req,"origin");
+  if(req.method==="OPTIONS"){
+    const headers=responseHeaders(origin);
+    if(res&&typeof res.setHeader==="function"){
+      for(const[key,value]of Object.entries(headers))res.setHeader(key,value);
+      res.statusCode=204;
+      return typeof res.end==="function"?res.end():new Response(null,{status:204,headers});
+    }
+    return new Response(null,{status:204,headers});
   }
 
-  const auth=String(request.headers.get("authorization")||"").trim();
-  if(!auth){
-    return Response.json({ok:false,error:"Bạn cần đăng nhập Admin.",code:"missing_admin_token"},{status:401,headers:responseHeaders(origin)});
+  const authorization=header(req,"authorization").trim();
+  if(!authorization||!/^Bearer\s+.+$/i.test(authorization)){
+    return writeJson(res,401,{ok:false,error:"Bạn cần đăng nhập Admin.",code:"missing_admin_token"},origin);
+  }
+  if(req.method!=="GET"&&req.method!=="POST"){
+    return writeJson(res,405,{ok:false,error:"Method not allowed",code:"method_not_allowed"},origin);
   }
 
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),TIMEOUT_MS);
   try{
-    const headers={authorization:auth,accept:"application/json"};
+    const headers={authorization,accept:"application/json"};
     let body;
-    if(request.method==="POST"){
-      headers["content-type"]=String(request.headers.get("content-type")||"application/json");
-      body=await request.text();
+    if(req.method==="POST"){
+      headers["content-type"]=header(req,"content-type")||"application/json";
+      body=await readBody(req);
     }
-    const response=await fetch(UPSTREAM+search(request),{
-      method:request.method,
+    const response=await fetch(UPSTREAM+requestQuery(req),{
+      method:req.method,
       headers,
-      ...(request.method==="POST"?{body}:{}),
+      ...(req.method==="POST"?{body}:{}),
       signal:controller.signal
     });
     const text=await response.text();
-    const contentType=response.headers.get("content-type")||"application/json; charset=utf-8";
-    return new Response(text,{status:response.status,headers:responseHeaders(origin,contentType)});
+    return writeJson(res,response.status,JSON.parse(text||"{}"),origin);
   }catch(error){
     const message=error?.name==="AbortError"?"Admin backend phản hồi quá lâu.":errorMessage(error);
     console.error("[KatLearn Admin Hub proxy]",message);
-    return Response.json({
+    return writeJson(res,502,{
       ok:false,
       error:"Không kết nối được Admin backend: "+message,
       code:error?.name==="AbortError"?"admin_upstream_timeout":"admin_upstream_unreachable",
       details:{message}
-    },{status:502,headers:responseHeaders(origin)});
+    },origin);
   }finally{
     clearTimeout(timer);
   }
