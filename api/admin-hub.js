@@ -3,20 +3,31 @@ import fs from "node:fs";
 
 function header(request,name){
   const key=String(name||"").toLowerCase();
-  if(request?.headers?.get)return String(request.headers.get(key)||"");
-  const value=request?.headers?.[key] ?? request?.headers?.[key.replace(/-/g,"_")] ?? "";
-  return String(value||"");
+  const headers=request?.headers;
+  if(headers&&typeof headers.get==="function")return String(headers.get(key)||"");
+  return String(headers?.[key]??"");
 }
 function queryParam(request,key){
   try{return new URL(String(request?.url||"/"),"https://teacher-katlearn.vercel.app").searchParams.get(key)||""}
   catch(_){return""}
 }
 async function readJson(request){
-  if(request?.body&&typeof request.body==="object"&&!request.body?.getReader)return request.body;
-  try{
-    const value=await request.json();
-    return value&&typeof value==="object"?value:{};
-  }catch(_){return{}}
+  if(request?.body!=null){
+    if(typeof request.body==="object")return request.body;
+    if(typeof request.body==="string"){
+      try{const value=JSON.parse(request.body);return value&&typeof value==="object"?value:{}}
+      catch(_){return{}}
+    }
+  }
+  return await new Promise(resolve=>{
+    let chunks=[];
+    request.on?.("data",chunk=>chunks.push(Buffer.isBuffer(chunk)?chunk:Buffer.from(String(chunk))));
+    request.on?.("end",()=>{
+      try{const value=JSON.parse(Buffer.concat(chunks).toString("utf8")||"{}");resolve(value&&typeof value==="object"?value:{})}
+      catch(_){resolve({})}
+    });
+    request.on?.("error",()=>resolve({}));
+  });
 }
 function corsHeaders(origin){
   const h={"Content-Type":"application/json","Cache-Control":"no-store"};
@@ -28,8 +39,12 @@ function corsHeaders(origin){
   }
   return h;
 }
-function writeJson(status,body,origin=""){
-  return Response.json(body,{status:Number(status)||200,headers:corsHeaders(origin)});
+function writeJson(res,status,body,origin=""){
+  const headers=corsHeaders(origin);
+  for(const[key,value]of Object.entries(headers))res.setHeader?.(key,value);
+  if(typeof res.status==="function"&&typeof res.json==="function")return res.status(status).json(body);
+  res.statusCode=Number(status)||200;
+  return typeof res.end==="function"?res.end(JSON.stringify(body)):undefined;
 }
 async function requireAdmin(request){
   const match=/^Bearer\s+(.+)$/i.exec(header(request,"authorization").trim());
@@ -848,32 +863,37 @@ async function section(db,key){
   const data=await list(label,query);
   return{rows:data,limited:data.length>=LIMITS[key]};
 }
-export default async function handler(req){
+export default async function handler(req,res){
   const origin=header(req,"origin");
-  if(req.method==="OPTIONS")return new Response(null,{status:204,headers:corsHeaders(origin)});
+  if(req.method==="OPTIONS"){
+    const headers=corsHeaders(origin);
+    for(const[key,value]of Object.entries(headers))res.setHeader?.(key,value);
+    res.statusCode=204;
+    return typeof res.end==="function"?res.end():undefined;
+  }
   try{
     if(req.method==="GET"){
       const{db}=await requireAdmin(req);
       const value=await section(db,queryParam(req,"section")||"overview");
-      return writeJson(200,{ok:true,...value,limits:LIMITS},origin);
+      return writeJson(res,200,{ok:true,...value,limits:LIMITS},origin);
     }
-    if(req.method!=="POST")return writeJson(405,{ok:false,error:"Method not allowed",code:"method_not_allowed"},origin);
+    if(req.method!=="POST")return writeJson(res,405,{ok:false,error:"Method not allowed",code:"method_not_allowed"},origin);
     const{db,auth,decoded}=await requireAdmin(req);
     const body=await readJson(req);
     const action=clean(body.action,50);
-    if(action==="rename-user")return writeJson(200,{ok:true,...await renameUser(db,auth,decoded,body.uid,body.name)},origin);
-    if(action==="disable-user")return writeJson(200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,true)},origin);
-    if(action==="enable-user")return writeJson(200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,false)},origin);
-    if(action==="reset-user-stats")return writeJson(200,{ok:true,...await resetUserStats(db,decoded,body.uid)},origin);
-    if(action==="delete-user")return writeJson(200,{ok:true,...await deleteUser(db,auth,decoded,body.uid)},origin);
-    if(action==="update-class")return writeJson(200,{ok:true,...await renameClass(db,decoded,body.classId,body.name,body.grade,body.description)},origin);
-    if(action==="delete-class")return writeJson(200,{ok:true,...await deleteClass(db,decoded,body.classId)},origin);
-    if(action==="update-school")return writeJson(200,{ok:true,...await updateSchool(db,decoded,body.schoolId,body.name,body.province,body.ward,body.schoolLevel)},origin);
-    if(action==="delete-school")return writeJson(200,{ok:true,...await deleteSchool(db,decoded,body.schoolId)},origin);
-    if(action==="verify-teacher")return writeJson(200,{ok:true,...await teacherChange(db,decoded,body.uid,"verify")},origin);
-    if(action==="reject-teacher")return writeJson(200,{ok:true,...await teacherChange(db,decoded,body.uid,"reject")},origin);
-    if(action==="delete-pack")return writeJson(200,{ok:true,...await deletePack(db,decoded,body.packId)},origin);
-    if(action==="catalog-plan")return writeJson(200,{ok:true,...plan()},origin);
+    if(action==="rename-user")return writeJson(res,200,{ok:true,...await renameUser(db,auth,decoded,body.uid,body.name)},origin);
+    if(action==="disable-user")return writeJson(res,200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,true)},origin);
+    if(action==="enable-user")return writeJson(res,200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,false)},origin);
+    if(action==="reset-user-stats")return writeJson(res,200,{ok:true,...await resetUserStats(db,decoded,body.uid)},origin);
+    if(action==="delete-user")return writeJson(res,200,{ok:true,...await deleteUser(db,auth,decoded,body.uid)},origin);
+    if(action==="update-class")return writeJson(res,200,{ok:true,...await renameClass(db,decoded,body.classId,body.name,body.grade,body.description)},origin);
+    if(action==="delete-class")return writeJson(res,200,{ok:true,...await deleteClass(db,decoded,body.classId)},origin);
+    if(action==="update-school")return writeJson(res,200,{ok:true,...await updateSchool(db,decoded,body.schoolId,body.name,body.province,body.ward,body.schoolLevel)},origin);
+    if(action==="delete-school")return writeJson(res,200,{ok:true,...await deleteSchool(db,decoded,body.schoolId)},origin);
+    if(action==="verify-teacher")return writeJson(res,200,{ok:true,...await teacherChange(db,decoded,body.uid,"verify")},origin);
+    if(action==="reject-teacher")return writeJson(res,200,{ok:true,...await teacherChange(db,decoded,body.uid,"reject")},origin);
+    if(action==="delete-pack")return writeJson(res,200,{ok:true,...await deletePack(db,decoded,body.packId)},origin);
+    if(action==="catalog-plan")return writeJson(res,200,{ok:true,...plan()},origin);
     if(action==="catalog-chunk"){
       const provinceCode=clean(body.provinceCode,10);
       const data=readProvince(provinceCode);
@@ -887,12 +907,12 @@ export default async function handler(req){
           offset,nextOffset,processed:chunk.length,provinceTotal:data.length
         });
       }
-      return writeJson(200,{
+      return writeJson(res,200,{
         ok:true,provinceCode,provinceTotal:data.length,offset,nextOffset,
         done:nextOffset>=data.length,processed:chunk.length,writes:result.writes
       },origin);
     }
-    return writeJson(400,{ok:false,error:"Action Admin không hợp lệ.",code:"bad_action"},origin);
+    return writeJson(res,400,{ok:false,error:"Action Admin không hợp lệ.",code:"bad_action"},origin);
   }catch(error){
     const status=Math.min(599,Math.max(400,Number(error?.status||error?.statusCode)||500));
     const code=typeof error?.code==="string"?error.code:"admin_hub_error";
@@ -902,6 +922,6 @@ export default async function handler(req){
       ...(error?.details&&typeof error.details==="object"?{details:error.details}:{})
     };
     console.error("[KatLearn admin hub]",{status,code,error:messageOf(error),details});
-    return writeJson(status,{ok:false,error:messageOf(error,"Không thể xử lý Admin."),code,details},origin);
+    return writeJson(res,status,{ok:false,error:messageOf(error,"Không thể xử lý Admin."),code,details},origin);
   }
 }
