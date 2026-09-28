@@ -26,12 +26,12 @@
       <p class="eyebrow">ADMIN ACCESS</p>
       <h2>Đăng nhập</h2>
       <p>Đăng nhập bằng tài khoản quản trị. Quyền Admin được kiểm tra lại ở backend trước mọi thao tác.</p>
-      <form id="loginForm" onsubmit="return false;">
-        <label>Email quản trị<input value="katlearn.admin@gmail.com" readonly></label>
+      <div id="loginForm">
+        <label>Email quản trị<input id="adminEmail" value="katlearn.admin@gmail.com" readonly></label>
         <label>Mật khẩu Firebase<input id="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu…" required></label>
         <button id="loginBtn" class="primary big" type="button">Vào Control Center <span>→</span></button>
         <div id="loginError" class="form-error" role="alert"></div>
-      </form>
+      </div>
       <div class="login-foot"><a href="https://lms-katlearn.vercel.app/login.html">← Về KatLearn</a><button id="clearSession" type="button">Xóa phiên hiện tại</button></div>
     </div>
   </div>
@@ -132,6 +132,6 @@
   <div class="modal"><p class="eyebrow">CONFIRM ACTION</p><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div>
 </div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20260928-16"></script>
+<script type="module" src="admin.js?v=20260928-17"></script>
 </body>
 </html>
