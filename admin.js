@@ -7,6 +7,35 @@ const TOTAL_CATALOG=22850;
 const CATALOG_CHUNK_SIZE=250;
 const CATALOG=[["01","Thành phố Hà Nội",2828],["04","Tỉnh Cao Bằng",150],["08","Tỉnh Tuyên Quang",300],["11","Tỉnh Điện Biên",182],["12","Tỉnh Lai Châu",137],["14","Tỉnh Sơn La",278],["15","Tỉnh Lào Cai",216],["19","Tỉnh Thái Nguyên",261],["20","Tỉnh Lạng Sơn",200],["22","Tỉnh Quảng Ninh",266],["24","Tỉnh Bắc Ninh",1039],["25","Tỉnh Phú Thọ",759],["31","Thành phố Hải Phòng",1041],["33","Tỉnh Hưng Yên",548],["37","Tỉnh Ninh Bình",1178],["38","Tỉnh Thanh Hóa",2002],["40","Tỉnh Nghệ An",372],["42","Tỉnh Hà Tĩnh",444],["44","Tỉnh Quảng Trị",290],["46","Thành phố Huế",383],["48","Thành phố Đà Nẵng",550],["51","Tỉnh Quảng Ngãi",127],["52","Tỉnh Gia Lai",261],["56","Tỉnh Khánh Hòa",296],["66","Tỉnh Đắk Lắk",616],["68","Tỉnh Lâm Đồng",1021],["75","Tỉnh Đồng Nai",691],["79","Thành phố Hồ Chí Minh",2382],["80","Tỉnh Tây Ninh",406],["82","Tỉnh Đồng Tháp",275],["86","Tỉnh Vĩnh Long",723],["91","Tỉnh An Giang",1322],["92","Thành phố Cần Thơ",713],["96","Tỉnh Cà Mau",593]];
 const app=getApps().length?getApps()[0]:initializeApp(CONFIG),auth=getAuth(app);
+async function handleAdminLogin(){
+  const form=$("#loginForm"),button=$("#loginBtn"),message=$("#loginError");
+  if(!form||!button||!message)return;
+  button.disabled=true;
+  message.textContent="Đang xác thực…";
+  try{
+    await setPersistence(auth,browserLocalPersistence);
+    const email=String(form.querySelector('input[type="email"]')?.value||"").trim().toLowerCase()||ADMIN;
+    const password=String($("#password")?.value||"");
+    if(!password)throw Object.assign(new Error("Vui lòng nhập mật khẩu."),{code:"missing_password"});
+    const credential=await signInWithEmailAndPassword(auth,email,password);
+    if(String(credential.user.email||"").toLowerCase()!==ADMIN){
+      await signOut(auth);
+      throw Object.assign(new Error("Tài khoản không có quyền Admin."),{code:"admin_forbidden"});
+    }
+    $("#password").value="";
+    message.textContent="";
+  }catch(error){
+    message.textContent=error?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":errText(error);
+    button.disabled=false;
+  }
+}
+const earlyLoginForm=document.querySelector("#loginForm");
+const earlyLoginButton=document.querySelector("#loginBtn");
+earlyLoginForm?.addEventListener("submit",event=>{event.preventDefault();void handleAdminLogin()});
+earlyLoginButton?.addEventListener("click",event=>{event.preventDefault();void handleAdminLogin()});
+earlyLoginForm?.querySelector("#password")?.addEventListener("keydown",event=>{
+  if(event.key==="Enter"){event.preventDefault();void handleAdminLogin()}
+});
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
 const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
 const state={user:null,page:"overview",data:{},catalog:null,syncing:false};
@@ -299,7 +328,6 @@ async function deletePack(id){
  const ok=await dialog("Xóa bộ từ?","Bộ từ sẽ bị xóa khỏi publicPacks và assignment liên quan sẽ được dọn bởi backend.","Xóa","Hủy");if(!ok)return;
  try{await apiAction("delete-pack",{packId:id});toast("✓ Đã xóa bộ từ","good");state.data.packs=null;await loadPage("packs",true)}catch(e){toast(e,"bad");pageError(e,"Không thể xóa bộ từ")}}
 async function dialog(title,text,yes="Xác nhận",no="Hủy"){return new Promise(resolve=>{const b=$("#modalBackdrop");$("#modalTitle").textContent=title;$("#modalText").textContent=text;$("#modalOk").textContent=yes;$("#modalCancel").textContent=no;$("#modalCancel").classList.toggle("hidden",!no);b.classList.add("open");const finish=v=>{b.classList.remove("open");$("#modalOk").onclick=null;$("#modalCancel").onclick=null;b.onclick=null;resolve(v)};$("#modalOk").onclick=()=>finish(true);$("#modalCancel").onclick=()=>finish(false);b.onclick=e=>{if(e.target===b)finish(false)}})}
-$("#loginForm").addEventListener("submit",async e=>{e.preventDefault();const b=$("#loginBtn"),m=$("#loginError");b.disabled=true;m.textContent="Đang xác thực…";try{await setPersistence(auth,browserLocalPersistence);const c=await signInWithEmailAndPassword(auth,ADMIN,$("#password").value);if(String(c.user.email||"").toLowerCase()!==ADMIN){await signOut(auth);throw new Error("Tài khoản không có quyền Admin.")}$("#password").value="";b.disabled=false}catch(x){m.textContent=x?.code==="auth/invalid-credential"?"Email hoặc mật khẩu không đúng.":errText(x);b.disabled=false}});
 onAuthStateChanged(auth,async u=>{state.user=u||null;if(!u){$("#loginGate").classList.remove("hidden");$("#app").classList.add("hidden");health("#healthAuth",false,"Chưa đăng nhập");setConnection(false,"Chưa kết nối");return}if(String(u.email||"").toLowerCase()!==ADMIN){$("#loginError").textContent="Tài khoản này không có quyền Admin.";await signOut(auth);return}$("#loginGate").classList.add("hidden");$("#app").classList.remove("hidden");health("#healthAuth",true,"Đã xác thực");try{await loadPage("overview",true)}catch(e){health("#healthAdmin",false,"Không phản hồi");health("#healthFs",false,"Không kiểm tra được");setConnection(false,"Lỗi Admin Hub");pageError(e,"Không tải được Admin Hub");toast(e,"bad")}});
 bind();
 renderOverview({stats:{},pending:[]});
