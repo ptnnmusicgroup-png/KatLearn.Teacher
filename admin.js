@@ -68,7 +68,15 @@ function bind(){
  $$(".nav button,[data-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.go)));
  $("#menuMobile").onclick=()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show")};
  $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")};
- $("#logout").onclick=()=>signOut(auth);$("#clearSession").onclick=()=>signOut(auth);
+ async function leaveAdmin(){
+  try{
+    await signOut(auth);
+  }finally{
+    location.replace("https://lms-katlearn.vercel.app/login.html?logout=1");
+  }
+}
+$("#logout").onclick=leaveAdmin;
+$("#clearSession").onclick=leaveAdmin;
  $("#refresh").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{pageError(e);toast(e,"bad")});
  ["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"].forEach(id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  $("#teacherFilter")?.addEventListener("change",()=>render("teachers"));
