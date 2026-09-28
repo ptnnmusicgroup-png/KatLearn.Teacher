@@ -65,7 +65,8 @@ function showPage(name){
  loadPage(name,true).catch(e=>{pageError(e);toast(e,"bad")});
 }
 function bind(){
- each(qsa(".nav button,[data-go]"),b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.go)));
+ $(".brand")?.addEventListener("click",e=>{e.preventDefault();showPage("overview")});
+ each(qsa(".nav button,[data-go]"),b=>b.addEventListener("click",e=>{if(b.matches("[data-go]"))e.preventDefault();showPage(b.dataset.page||b.dataset.go)}));
  $("#menuMobile").onclick=()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show")};
  $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")};
  async function leaveAdmin(){
