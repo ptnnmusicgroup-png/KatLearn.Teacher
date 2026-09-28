@@ -118,8 +118,8 @@ export default async request=>{
       }
       await batchDelete(inviteSnap.docs.map(d=>d.ref),ctx.db);
       await batchDelete(assignmentSnap.docs.map(d=>d.ref),ctx.db);
-      const catalogClassId=String(classData.catalogClassId||'').trim(),ownerUid=String(classData.teacherUid||'').trim();
-      if(catalogClassId&&ownerUid){
+      const ownerUid=String(classData.teacherUid||'').trim();
+      if(ownerUid){
         const ownerRef=students.doc(ownerUid),ownerSnap=await ownerRef.get();
         if(ownerSnap.exists){
           const teacher=ownerSnap.data()||{},ids=Array.isArray(teacher.classIds)?teacher.classIds.filter(id=>id!==classId):[];
