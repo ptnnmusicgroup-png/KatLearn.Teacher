@@ -1,5 +1,9 @@
 import fs from "node:fs";
 
+function clean(value,max=200){
+  return String(value??"").trim().slice(0,max);
+}
+
 
 function header(request,name){
   const key=String(name||"").toLowerCase();
