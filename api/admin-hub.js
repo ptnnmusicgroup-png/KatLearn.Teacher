@@ -262,10 +262,35 @@ function readProvince(code){
 function catalogSchoolId(value){
   return "sch_"+crypto.createHash("sha256").update(String(value)).digest("hex").slice(0,28);
 }
+async function readExistingCatalogRefs(db,rows){
+  const checks=[];
+  for(const row of rows){
+    const id=catalogSchoolId(row.provinceCode+"|"+row.sourceSchoolId+"|"+String(row.name||"").trim().toLowerCase());
+    checks.push({row,id,type:"catalog",ref:db.collection("KatLearn_TRUONGHOC_1").doc(id)});
+    checks.push({row,id,type:"school",ref:db.collection("schools").doc(id)});
+  }
+  const snapshots=[];
+  const batchSize=100;
+  for(let i=0;i<checks.length;i+=batchSize){
+    const batch=checks.slice(i,i+batchSize);
+    const values=await db.getAll(...batch.map(x=>x.ref));
+    for(let j=0;j<values.length;j++)snapshots.push({check:batch[j],snapshot:values[j]});
+  }
+  const existing=new Map();
+  for(const item of snapshots){
+    if(!item.snapshot.exists)continue;
+    const key=item.check.id;
+    const value=existing.get(key)||{catalog:false,school:false};
+    value[item.check.type]=true;
+    existing.set(key,value);
+  }
+  return existing;
+}
 async function writeCatalogChunk(db,items,{writeProvince=false}={}){
-  if(!items.length)return{writes:0,schools:0};
+  if(!items.length)return{writes:0,schools:0,added:0,skipped:0};
+  const existing=await readExistingCatalogRefs(db,items);
   const writer=db.bulkWriter();
-  let writes=0;
+  let writes=0,added=0,skipped=0;
   writer.onWriteResult(()=>{writes++});
   writer.onWriteError(error=>{
     console.error("[KatLearn admin catalog]",error);
@@ -279,18 +304,24 @@ async function writeCatalogChunk(db,items,{writeProvince=false}={}){
   const now=Date.now();
   for(const row of items){
     const id=catalogSchoolId(row.provinceCode+"|"+row.sourceSchoolId+"|"+String(row.name||"").trim().toLowerCase());
+    const found=existing.get(id)||{catalog:false,school:false};
+    if(found.catalog&&found.school){
+      skipped++;
+      continue;
+    }
+    added++;
     const school={
       name:row.name,schoolId:id,province:row.provinceName,provinceId:row.provinceCode,
       ward:row.wardName,wardId:row.wardId,sourceSchoolId:row.sourceSchoolId,
       schoolLevel:row.level,source:"national_catalog_2026",
       sourceType:"national_catalog",catalogManaged:true,updatedAt:now
     };
-    writer.set(db.collection("KatLearn_TRUONGHOC_1").doc(id),school,{merge:true});
-    writer.set(db.collection("schools").doc(id),school,{merge:true});
+    if(!found.catalog)writer.set(db.collection("KatLearn_TRUONGHOC_1").doc(id),school,{merge:true});
+    if(!found.school)writer.set(db.collection("schools").doc(id),school,{merge:true});
   }
   try{await writer.close()}
   catch(error){throw fail(error,502,"catalog_write_failed")}
-  return{writes,schools:items.length};
+  return{writes,schools:items.length,added,skipped};
 }
 async function audit(db,decoded,action,target,extra={}){
   try{
