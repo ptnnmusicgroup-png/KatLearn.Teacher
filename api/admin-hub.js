@@ -59,8 +59,6 @@ function requestQuery(req){
   try{return new URL(String(req?.url||"/"),"https://teacher-katlearn.vercel.app").search}
   catch(_){return""}
 }
-
-module.exports=undefined;
 export default async function handler(req,res){
   const origin=header(req,"origin");
   if(req.method==="OPTIONS"){
