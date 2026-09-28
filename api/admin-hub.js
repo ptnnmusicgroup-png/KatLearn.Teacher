@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import crypto from "node:crypto";
 
 function clean(value,max=200){
   return String(value??"").trim().slice(0,max);
@@ -79,6 +80,8 @@ async function requireAdmin(request){
 
 const LIMITS={users:300,teachers:300,classes:300,packs:300,schools:300,pending:100,activity:100};
 const DATA_DIR=new URL("../data/national-catalog/",import.meta.url);
+const CATALOG_FILE=new URL("full-school-tree.json",DATA_DIR);
+let catalogTreeCache=null;
 const TOTAL_SCHOOLS=22850;
 const PROVINCES=[
   ["01","Thành phố Hà Nội",2828,"province-01.json"],["04","Tỉnh Cao Bằng",150,"province-04.json"],["08","Tỉnh Tuyên Quang",300,"province-08.json"],
@@ -185,14 +188,75 @@ function plan(){
     version:"2026-09-27"
   };
 }
+function normalizeCatalogText(value){
+  return String(value??"").normalize("NFC").replace(/\\s+/g," ").trim();
+}
+function detectSchoolLevel(name){
+  const value=normalizeCatalogText(name).toLowerCase();
+  const primary=/\\btiểu học\\b/.test(value)||/\\bth[-,\\s&/]*thcs?\\b/.test(value)&&!/(thpt|trung học phổ thông)/.test(value);
+  const middle=/\\bthcs\\b|trung học cơ sở/.test(value);
+  const high=/\\bthpt\\b|trung học phổ thông/.test(value);
+  const levels=[primary,middle,high].filter(Boolean).length;
+  if(levels>1)return"combined";
+  if(high)return"high";
+  if(middle)return"middle";
+  if(primary)return"primary";
+  return"combined";
+}
+function readCatalogTree(){
+  if(catalogTreeCache)return catalogTreeCache;
+  try{
+    const value=JSON.parse(fs.readFileSync(CATALOG_FILE,"utf8"));
+    if(!Array.isArray(value))throw new Error("Tệp full-school-tree.json không phải mảng.");
+    catalogTreeCache=value;
+    return value;
+  }catch(error){
+    throw fail(
+      new Error("Không đọc được nguồn catalog quốc gia: "+messageOf(error)),
+      500,
+      "catalog_read_failed"
+    );
+  }
+}
 function readProvince(code){
   const meta=PROVINCE_MAP.get(String(code));
   if(!meta)throw fail(new Error("Mã tỉnh/thành không hợp lệ."),400,"bad_province");
-  try{
-    const value=JSON.parse(fs.readFileSync(new URL(meta.file,DATA_DIR),"utf8"));
-    if(!Array.isArray(value))throw new Error("Tệp danh mục không phải mảng.");
-    return value;
-  }catch(error){throw fail(new Error("Không đọc được danh mục "+meta.name+": "+messageOf(error)),500,"catalog_read_failed")}
+  const tree=readCatalogTree();
+  const province=tree.find(item=>
+    normalizeCatalogText(item?.name).toLowerCase()===normalizeCatalogText(meta.name).toLowerCase()
+  );
+  if(!province)throw fail(
+    new Error("Không tìm thấy tỉnh/thành trong nguồn catalog: "+meta.name),
+    404,
+    "catalog_province_not_found"
+  );
+  const rows=[];
+  for(const ward of Array.isArray(province.wards)?province.wards:[]){
+    const wardName=normalizeCatalogText(ward?.name);
+    const wardId=normalizeCatalogText(ward?.id);
+    for(const school of Array.isArray(ward?.schools)?ward.schools:[]){
+      const schoolId=normalizeCatalogText(school?.id);
+      const name=normalizeCatalogText(school?.name);
+      if(!schoolId||!name)continue;
+      rows.push({
+        provinceCode:meta.code,
+        provinceName:meta.name,
+        wardName,
+        wardId,
+        sourceSchoolId:schoolId,
+        name,
+        level:detectSchoolLevel(name)
+      });
+    }
+  }
+  if(rows.length!==meta.total){
+    throw fail(
+      new Error("Dữ liệu catalog lệch kế hoạch tại "+meta.name+" · kế hoạch "+meta.total+" · nguồn "+rows.length+" trường."),
+      409,
+      "catalog_plan_mismatch"
+    );
+  }
+  return rows;
 }
 function catalogSchoolId(value){
   return "sch_"+crypto.createHash("sha256").update(String(value)).digest("hex").slice(0,28);
