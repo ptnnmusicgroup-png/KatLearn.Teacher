@@ -884,7 +884,7 @@ export default {
       if(action==="delete-school")return writeJson(200,{ok:true,...await deleteSchool(db,decoded,body.schoolId)},origin);
       if(action==="verify-teacher")return writeJson(200,{ok:true,...await teacherChange(db,decoded,body.uid,"verify")},origin);
       if(action==="reject-teacher")return writeJson(200,{ok:true,...await teacherChange(db,decoded,body.uid,"reject")},origin);
-      if(action==="delete-pack")return writeJson(200,{ok:true,...await deletePack(db,auth,decoded,body.packId)},origin);
+      if(action==="delete-pack")return writeJson(200,{ok:true,...await deletePack(db,decoded,body.packId)},origin);
       if(action==="catalog-plan")return writeJson(200,{ok:true,...plan()},origin);
       if(action==="catalog-chunk"){
         const provinceCode=clean(body.provinceCode,10);
