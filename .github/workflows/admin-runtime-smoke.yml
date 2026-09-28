@@ -1,0 +1,27 @@
+name: Admin runtime smoke
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check LMS Admin Hub without auth
+        run: |
+          set -euo pipefail
+          body="$(mktemp)"
+          code="$(curl -sS -o "$body" -w '%{http_code}' --max-time 30 'https://lms-katlearn.vercel.app/api/admin-hub?section=overview')"
+          echo "HTTP $code"
+          cat "$body"
+          test "$code" = "401"
+          grep -q 'missing_admin_token' "$body"
+      - name: Check Teacher Admin proxy without auth
+        run: |
+          set -euo pipefail
+          body="$(mktemp)"
+          code="$(curl -sS -o "$body" -w '%{http_code}' --max-time 30 'https://teacher-katlearn.vercel.app/api/admin-hub?section=overview')"
+          echo "HTTP $code"
+          cat "$body"
+          test "$code" = "401"
+          grep -q 'missing_admin_token' "$body"
