@@ -57,15 +57,15 @@ async function apiAction(action,payload={}){
 
 function showPage(name){
  state.page=name;clearPageError();
- each($(".page"),x=>x.classList.toggle("active",x.id==="page-"+name));
- each($(".nav button"),x=>x.classList.toggle("active",x.dataset.page===name));
+ each(qsa(".page"),x=>x.classList.toggle("active",x.id==="page-"+name));
+ each(qsa(".nav button"),x=>x.classList.toggle("active",x.dataset.page===name));
  $("#pageTitle").textContent=titles[name]||"Tổng quan";
  $("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show");
  window.scrollTo({top:0,behavior:"smooth"});
  loadPage(name,true).catch(e=>{pageError(e);toast(e,"bad")});
 }
 function bind(){
- each($(".nav button,[data-go]"),b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.go)));
+ each(qsa(".nav button,[data-go]"),b=>b.addEventListener("click",()=>showPage(b.dataset.page||b.dataset.go)));
  $("#menuMobile").onclick=()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show")};
  $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")};
  async function leaveAdmin(){
@@ -106,7 +106,7 @@ function renderOverview(d){
  $("#mUsers").textContent=s.users==null?"—":fmt(s.users);$("#mPending").textContent=s.pending==null?"—":fmt(s.pending);$("#mTeachers").textContent=s.teachers==null?"—":fmt(s.teachers);$("#mStudents").textContent=s.students==null?"—":fmt(s.students);$("#mClasses").textContent=s.classes==null?"—":fmt(s.classes);$("#mSchools").textContent=s.schools==null?"—":fmt(s.schools);
  const p=Array.isArray(d.pending)?d.pending:[];
  $("#pendingList").innerHTML=p.length?p.slice(0,6).map(t=>{const v=t.teacherVerification||{};return '<div class="pending"><div class="pending-main"><div><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+' · '+esc(t.schoolName||v.requestedSchoolName||"Chưa có trường")+'</small></div><span class="badge pending">CHỜ DUYỆT</span></div><div class="row-actions"><button class="btn good" data-verify="'+esc(t.id)+'">✓ Duyệt</button><button class="btn bad" data-reject="'+esc(t.id)+'">Từ chối</button></div></div>'}).join(""):'<div class="empty">Không có hồ sơ giáo viên chờ duyệt. 🎉</div>';
- each($("#pendingList [data-verify]"),b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));each($("#pendingList [data-reject]"),b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));
+ each(qsa("#pendingList [data-verify]"),b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));each(qsa("#pendingList [data-reject]"),b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));
  health("#healthAuth",true,"Đã xác thực");health("#healthAdmin",true,"Admin Hub đã xác thực");health("#healthFs",!(d.degraded),d.degraded?"Có cảnh báo": "Đang hoạt động");health("#healthCatalog",true,"Kế hoạch sẵn sàng");
  setConnection(true,"Admin Hub online");
  if(Array.isArray(d.warnings)&&d.warnings.length){pageError({message:"Một số thống kê đang ở chế độ suy giảm.",code:"admin_degraded",details:d.warnings});}
@@ -116,7 +116,7 @@ function renderTeachers(rows,limited){
  const q=$("#teacherSearch").value.trim().toLowerCase(),f=$("#teacherFilter").value;
  const list=rows.filter(t=>(f==="all"||t._status===f)&&match(t,q,["displayName","name","email","schoolName","province","ward","teacherVerification.requestedSchoolName","teacherVerification.requestedClassName"]));
  $("#teacherTable").innerHTML=list.map(t=>'<tr><td><strong>'+esc(t.displayName||t.name||"Giáo viên")+'</strong><small>'+esc(t.email||"")+' · UID <span class="mono">'+esc(t.id)+'</span></small></td><td><span class="badge '+roleClass(t.role)+'">'+esc(t._status==="pending"?"CHỜ XÁC MINH":t._status==="rejected"?"ĐÃ TỪ CHỐI":"ĐÃ DUYỆT")+'</span></td><td>'+esc(t.schoolName||t.teacherVerification?.requestedSchoolName||"—")+'<small>'+esc([t.province,t.ward].filter(Boolean).join(" · ")||"—")+' · Lớp '+esc(t.teacherVerification?.requestedClassName||t.className||"—")+'</small></td><td>'+date(t.teacherVerification?.submittedAt||t.createdAt)+'</td><td><div class="row-actions">'+(t._status==="pending"?'<button class="btn good" data-verify="'+esc(t.id)+'">✓ Duyệt</button><button class="btn bad" data-reject="'+esc(t.id)+'">Từ chối</button>':'<button class="btn" data-inspect="'+esc(t.id)+'">Xem</button>')+'</div></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có giáo viên phù hợp.</div></td></tr>';
- each($("#teacherTable [data-verify]"),b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));each($("#teacherTable [data-reject]"),b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));each($("#teacherTable [data-inspect]"),b=>b.onclick=()=>inspectTeacher(b.dataset.inspect));
+ each(qsa("#teacherTable [data-verify]"),b=>b.onclick=()=>teacherAction("verify",b.dataset.verify));each(qsa("#teacherTable [data-reject]"),b=>b.onclick=()=>teacherAction("reject",b.dataset.reject));each(qsa("#teacherTable [data-inspect]"),b=>b.onclick=()=>inspectTeacher(b.dataset.inspect));
  $("#teacherLimit").textContent=limited?"Đã chạm giới hạn dữ liệu trả về. Dùng tìm kiếm theo nhóm để thu hẹp kết quả.":"";
 }
 function renderUsers(rows,limited){
@@ -132,24 +132,24 @@ function renderUsers(rows,limited){
    '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>')+
    '</div></td></tr>'
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
- each($("#userTable [data-rename-user]"),b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
- each($("#userTable [data-reset-user]"),b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
- each($("#userTable [data-disable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
- each($("#userTable [data-enable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
- each($("#userTable [data-delete-user]"),b=>b.onclick=()=>deleteUserAccount(b.dataset.deleteUser));
+ each(qsa("#userTable [data-rename-user]"),b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
+ each(qsa("#userTable [data-reset-user]"),b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
+ each(qsa("#userTable [data-disable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
+ each(qsa("#userTable [data-enable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
+ each(qsa("#userTable [data-delete-user]"),b=>b.onclick=()=>deleteUserAccount(b.dataset.deleteUser));
  $("#userLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderClasses(rows,limited){
  const q=$("#classSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));
  $("#classTable").innerHTML=list.map(cl=>'<tr><td><strong>'+esc(cl.name||"—")+'</strong><small>Khối '+esc(cl.grade||"—")+' · <span class="mono">'+esc(cl.id)+'</span></small></td><td>'+esc(cl.teacherEmail||cl.teacherUid||"—")+'</td><td>'+esc(cl.schoolName||"—")+'<small>'+esc([cl.province,cl.ward].filter(Boolean).join(" · "))+'</small></td><td><span class="badge teacher">'+esc(cl.joinCode||"—")+'</span></td><td>'+fmt(cl.studentCount)+'</td><td>'+date(cl.updatedAt||cl.createdAt)+'</td><td><div class="row-actions"><button class="btn" data-edit-class="'+esc(cl.id)+'">Sửa</button><button class="btn bad" data-delete-class="'+esc(cl.id)+'">Xóa</button></div></td></tr>').join("")||'<tr><td colspan="7"><div class="empty">Không có lớp học.</div></td></tr>';
- each($("#classTable [data-edit-class]"),b=>b.onclick=()=>editClass(list.find(x=>x.id===b.dataset.editClass)));
- each($("#classTable [data-delete-class]"),b=>b.onclick=()=>deleteClassAdmin(b.dataset.deleteClass));
+ each(qsa("#classTable [data-edit-class]"),b=>b.onclick=()=>editClass(list.find(x=>x.id===b.dataset.editClass)));
+ each(qsa("#classTable [data-delete-class]"),b=>b.onclick=()=>deleteClassAdmin(b.dataset.deleteClass));
  $("#classLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderPacks(rows,limited){
  const q=$("#packSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","createdBy","createdByEmail","createdByUid"]));
  $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+date(p.createdAt)+'</td><td><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
- each($("#packTable [data-delete-pack]"),b=>b.onclick=()=>deletePack(b.dataset.deletePack));$("#packLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
+ each(qsa("#packTable [data-delete-pack]"),b=>b.onclick=()=>deletePack(b.dataset.deletePack));$("#packLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderSchools(rows,limited){
  const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","province","ward","schoolLevel","source"]));
@@ -157,8 +157,8 @@ function renderSchools(rows,limited){
   const protectedSchool=String(s.source||"").startsWith("thanhtungct7")||String(s.sourceType||"").includes("national");
   return '<tr><td><strong>'+esc(s.name||"—")+'</strong><small>ID <span class="mono">'+esc(s.id)+'</span></small></td><td>'+esc(s.province||"—")+'</td><td>'+esc(s.ward||"—")+'</td><td>'+esc(s.schoolLevel||"—")+'</td><td>'+esc(s.source||"local")+'</td><td><div class="row-actions">'+(protectedSchool?'<span class="limit">Catalog-managed</span>':'<button class="btn" data-edit-school="'+esc(s.id)+'">Sửa</button><button class="btn bad" data-delete-school="'+esc(s.id)+'">Xóa</button>')+'</div></td></tr>'
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy trường.</div></td></tr>';
- each($("#schoolTable [data-edit-school]"),b=>b.onclick=()=>editSchool(list.find(x=>x.id===b.dataset.editSchool)));
- each($("#schoolTable [data-delete-school]"),b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
+ each(qsa("#schoolTable [data-edit-school]"),b=>b.onclick=()=>editSchool(list.find(x=>x.id===b.dataset.editSchool)));
+ each(qsa("#schoolTable [data-delete-school]"),b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
  $("#schoolLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
 function renderActivity(rows){
@@ -226,7 +226,7 @@ async function syncCatalog(){
 }
 async function teacherAction(action,uid){
  const ok=await dialog(action==="verify"?"Duyệt giáo viên":"Từ chối hồ sơ",action==="verify"?"Tài khoản sẽ chuyển sang role teacher và được gắn trường/lớp.":"Tài khoản sẽ chuyển sang teacher_rejected.","Xác nhận");if(!ok)return;
- try{await apiAction(action==="verify"?"verify-teacher":"reject-teacher",{uid});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.data.teachers=null;state.data.overview=null;await loadPage("overview",true);state.page="overview";clearPageError();renderOverview(state.data.overview||{});each($(".page"),x=>x.classList.toggle("active",x.id==="page-overview"));each($(".nav button"),x=>x.classList.toggle("active",x.dataset.page==="overview"));$("#pageTitle").textContent="Tổng quan";window.scrollTo({top:0,behavior:"smooth"})}catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật giáo viên")}}
+ try{await apiAction(action==="verify"?"verify-teacher":"reject-teacher",{uid});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.data.teachers=null;state.data.overview=null;await loadPage("overview",true);state.page="overview";clearPageError();renderOverview(state.data.overview||{});each(qsa(".page"),x=>x.classList.toggle("active",x.id==="page-overview"));each(qsa(".nav button"),x=>x.classList.toggle("active",x.dataset.page==="overview"));$("#pageTitle").textContent="Tổng quan";window.scrollTo({top:0,behavior:"smooth"})}catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật giáo viên")}}
 async function inspectTeacher(uid){
  const t=(state.data.teachers?.rows||[]).find(x=>x.id===uid);if(!t)return;const v=t.teacherVerification||{};await dialog("Hồ sơ giáo viên","Tên: "+(t.displayName||t.name||"—")+"\nEmail: "+(t.email||"—")+"\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\nLớp: "+(v.requestedClassName||t.className||"—")+"\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—"),"Đóng","");}
 async function renameUser(uid,currentName){
