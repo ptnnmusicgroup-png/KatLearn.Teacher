@@ -214,10 +214,11 @@ async function syncCatalog(){
     renderCatalog();
    }
   }
-  toast("✓ Đã hoàn tất đồng bộ "+fmt(done)+" trường.","good");
+  toast("✓ Đã kiểm tra và hoàn tất đồng bộ "+fmt(done)+" trường.","good");
  }catch(e){
   toast(e,"bad");
   pageError(e,"Đồng bộ catalog dừng lại");
+  button?.textContent="▶ Tiếp tục đồng bộ";
  }finally{
   state.syncing=false;
   button?.removeAttribute("disabled");
