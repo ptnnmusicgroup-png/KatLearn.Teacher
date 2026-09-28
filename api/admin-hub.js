@@ -39,12 +39,8 @@ function corsHeaders(origin){
   }
   return h;
 }
-function writeJson(res,status,body,origin=""){
-  const headers=corsHeaders(origin);
-  for(const[key,value]of Object.entries(headers))res.setHeader?.(key,value);
-  if(typeof res.status==="function"&&typeof res.json==="function")return res.status(status).json(body);
-  res.statusCode=Number(status)||200;
-  return typeof res.end==="function"?res.end(JSON.stringify(body)):undefined;
+function writeJson(status,body,origin=""){
+  return Response.json(body,{status:Number(status)||200,headers:corsHeaders(origin)});
 }
 async function requireAdmin(request){
   const match=/^Bearer\s+(.+)$/i.exec(header(request,"authorization").trim());
@@ -863,65 +859,62 @@ async function section(db,key){
   const data=await list(label,query);
   return{rows:data,limited:data.length>=LIMITS[key]};
 }
-export default async function handler(req,res){
-  const origin=header(req,"origin");
-  if(req.method==="OPTIONS"){
-    const headers=corsHeaders(origin);
-    for(const[key,value]of Object.entries(headers))res.setHeader?.(key,value);
-    res.statusCode=204;
-    return typeof res.end==="function"?res.end():undefined;
-  }
-  try{
-    if(req.method==="GET"){
-      const{db}=await requireAdmin(req);
-      const value=await section(db,queryParam(req,"section")||"overview");
-      return writeJson(res,200,{ok:true,...value,limits:LIMITS},origin);
-    }
-    if(req.method!=="POST")return writeJson(res,405,{ok:false,error:"Method not allowed",code:"method_not_allowed"},origin);
-    const{db,auth,decoded}=await requireAdmin(req);
-    const body=await readJson(req);
-    const action=clean(body.action,50);
-    if(action==="rename-user")return writeJson(res,200,{ok:true,...await renameUser(db,auth,decoded,body.uid,body.name)},origin);
-    if(action==="disable-user")return writeJson(res,200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,true)},origin);
-    if(action==="enable-user")return writeJson(res,200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,false)},origin);
-    if(action==="reset-user-stats")return writeJson(res,200,{ok:true,...await resetUserStats(db,decoded,body.uid)},origin);
-    if(action==="delete-user")return writeJson(res,200,{ok:true,...await deleteUser(db,auth,decoded,body.uid)},origin);
-    if(action==="update-class")return writeJson(res,200,{ok:true,...await renameClass(db,decoded,body.classId,body.name,body.grade,body.description)},origin);
-    if(action==="delete-class")return writeJson(res,200,{ok:true,...await deleteClass(db,decoded,body.classId)},origin);
-    if(action==="update-school")return writeJson(res,200,{ok:true,...await updateSchool(db,decoded,body.schoolId,body.name,body.province,body.ward,body.schoolLevel)},origin);
-    if(action==="delete-school")return writeJson(res,200,{ok:true,...await deleteSchool(db,decoded,body.schoolId)},origin);
-    if(action==="verify-teacher")return writeJson(res,200,{ok:true,...await teacherChange(db,decoded,body.uid,"verify")},origin);
-    if(action==="reject-teacher")return writeJson(res,200,{ok:true,...await teacherChange(db,decoded,body.uid,"reject")},origin);
-    if(action==="delete-pack")return writeJson(res,200,{ok:true,...await deletePack(db,decoded,body.packId)},origin);
-    if(action==="catalog-plan")return writeJson(res,200,{ok:true,...plan()},origin);
-    if(action==="catalog-chunk"){
-      const provinceCode=clean(body.provinceCode,10);
-      const data=readProvince(provinceCode);
-      const offset=Math.max(0,Number(body.offset)||0);
-      const limit=Math.max(1,Math.min(180,Number(body.limit)||150));
-      const chunk=data.slice(offset,offset+limit);
-      const result=await writeCatalogChunk(db,chunk);
-      const nextOffset=offset+chunk.length;
-      if(offset===0||nextOffset>=data.length){
-        await audit(db,decoded,nextOffset>=data.length?"catalog.complete":"catalog.start",provinceCode,{
-          offset,nextOffset,processed:chunk.length,provinceTotal:data.length
-        });
+export default {
+  async fetch(request){
+    const origin=header(request,"origin");
+    if(request.method==="OPTIONS")return new Response(null,{status:204,headers:corsHeaders(origin)});
+    try{
+      if(request.method==="GET"){
+        const{db}=await requireAdmin(request);
+        const value=await section(db,queryParam(request,"section")||"overview");
+        return writeJson(200,{ok:true,...value,limits:LIMITS},origin);
       }
-      return writeJson(res,200,{
-        ok:true,provinceCode,provinceTotal:data.length,offset,nextOffset,
-        done:nextOffset>=data.length,processed:chunk.length,writes:result.writes
-      },origin);
+      if(request.method!=="POST")return writeJson(405,{ok:false,error:"Method not allowed",code:"method_not_allowed"},origin);
+      const{db,auth,decoded}=await requireAdmin(request);
+      const body=await readJson(request);
+      const action=clean(body.action,50);
+      if(action==="rename-user")return writeJson(200,{ok:true,...await renameUser(db,auth,decoded,body.uid,body.name)},origin);
+      if(action==="disable-user")return writeJson(200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,true)},origin);
+      if(action==="enable-user")return writeJson(200,{ok:true,...await setUserDisabled(db,auth,decoded,body.uid,false)},origin);
+      if(action==="reset-user-stats")return writeJson(200,{ok:true,...await resetUserStats(db,decoded,body.uid)},origin);
+      if(action==="delete-user")return writeJson(200,{ok:true,...await deleteUser(db,auth,decoded,body.uid)},origin);
+      if(action==="update-class")return writeJson(200,{ok:true,...await renameClass(db,decoded,body.classId,body.name,body.grade,body.description)},origin);
+      if(action==="delete-class")return writeJson(200,{ok:true,...await deleteClass(db,decoded,body.classId)},origin);
+      if(action==="update-school")return writeJson(200,{ok:true,...await updateSchool(db,decoded,body.schoolId,body.name,body.province,body.ward,body.schoolLevel)},origin);
+      if(action==="delete-school")return writeJson(200,{ok:true,...await deleteSchool(db,decoded,body.schoolId)},origin);
+      if(action==="verify-teacher")return writeJson(200,{ok:true,...await teacherChange(db,decoded,body.uid,"verify")},origin);
+      if(action==="reject-teacher")return writeJson(200,{ok:true,...await teacherChange(db,decoded,body.uid,"reject")},origin);
+      if(action==="delete-pack")return writeJson(200,{ok:true,...await deletePack(db,auth,decoded,body.packId)},origin);
+      if(action==="catalog-plan")return writeJson(200,{ok:true,...plan()},origin);
+      if(action==="catalog-chunk"){
+        const provinceCode=clean(body.provinceCode,10);
+        const data=readProvince(provinceCode);
+        const offset=Math.max(0,Number(body.offset)||0);
+        const limit=Math.max(1,Math.min(180,Number(body.limit)||150));
+        const chunk=data.slice(offset,offset+limit);
+        const result=await writeCatalogChunk(db,chunk);
+        const nextOffset=offset+chunk.length;
+        if(offset===0||nextOffset>=data.length){
+          await audit(db,decoded,nextOffset>=data.length?"catalog.complete":"catalog.start",provinceCode,{
+            offset,nextOffset,processed:chunk.length,provinceTotal:data.length
+          });
+        }
+        return writeJson(200,{
+          ok:true,provinceCode,provinceTotal:data.length,offset,nextOffset,
+          done:nextOffset>=data.length,processed:chunk.length,writes:result.writes
+        },origin);
+      }
+      return writeJson(400,{ok:false,error:"Action Admin không hợp lệ.",code:"bad_action"},origin);
+    }catch(error){
+      const status=Math.min(599,Math.max(400,Number(error?.status||error?.statusCode)||500));
+      const code=typeof error?.code==="string"?error.code:"admin_hub_error";
+      const details={
+        ...(error?.label?{label:error.label}:{}),
+        ...(error?.credentialEnv?{credentialEnv:error.credentialEnv}:{}),
+        ...(error?.details&&typeof error.details==="object"?{details:error.details}:{})
+      };
+      console.error("[KatLearn admin hub]",{status,code,error:messageOf(error),details});
+      return writeJson(status,{ok:false,error:messageOf(error,"Không thể xử lý Admin."),code,details},origin);
     }
-    return writeJson(res,400,{ok:false,error:"Action Admin không hợp lệ.",code:"bad_action"},origin);
-  }catch(error){
-    const status=Math.min(599,Math.max(400,Number(error?.status||error?.statusCode)||500));
-    const code=typeof error?.code==="string"?error.code:"admin_hub_error";
-    const details={
-      ...(error?.label?{label:error.label}:{}),
-      ...(error?.credentialEnv?{credentialEnv:error.credentialEnv}:{}),
-      ...(error?.details&&typeof error.details==="object"?{details:error.details}:{})
-    };
-    console.error("[KatLearn admin hub]",{status,code,error:messageOf(error),details});
-    return writeJson(res,status,{ok:false,error:messageOf(error,"Không thể xử lý Admin."),code,details},origin);
   }
 }
