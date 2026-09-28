@@ -91,7 +91,6 @@ export default async request=>{
       await ctx.db.runTransaction(async transaction=>{
         const freshClass=await transaction.get(classSnap.ref);
         if(!freshClass.exists)throw Object.assign(new Error('Lớp không còn tồn tại.'),{status:404});
-        if(freshClass.data()?.deletingAt)throw Object.assign(new Error('Lớp đang được xóa.'),{status:409});
         transaction.set(classSnap.ref,{deletingAt:FieldValue.serverTimestamp(),updatedAt:FieldValue.serverTimestamp()},{merge:true});
       });
       const memberSnap=await ctx.db.collection('classes').doc(classId).collection('members').get();
@@ -123,8 +122,12 @@ export default async request=>{
       if(catalogClassId&&ownerUid){
         const ownerRef=students.doc(ownerUid),ownerSnap=await ownerRef.get();
         if(ownerSnap.exists){
-          const ids=Array.isArray(ownerSnap.data()?.classIds)?ownerSnap.data().classIds:[];
-          if(ids.includes(catalogClassId))await ownerRef.set({classIds:ids.filter(id=>id!==catalogClassId),updatedAt:FieldValue.serverTimestamp()},{merge:true});
+          const teacher=ownerSnap.data()||{},ids=Array.isArray(teacher.classIds)?teacher.classIds.filter(id=>id!==classId):[];
+          const currentCatalog=String(teacher.catalogClassId||'').trim();
+          const nextCatalog=currentCatalog===classId?(ids[0]||''):currentCatalog;
+          if(ids.length!==((teacher.classIds||[]).length)||nextCatalog!==currentCatalog){
+            await ownerRef.set({classIds:ids,catalogClassId:nextCatalog,updatedAt:FieldValue.serverTimestamp()},{merge:true});
+          }
         }
       }
       await ctx.db.collection('classes').doc(classId).delete();
