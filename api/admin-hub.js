@@ -5,7 +5,8 @@ import { admin } from "./_firebase-admin.js";
 function header(request,name){
   const key=String(name||"").toLowerCase();
   if(request?.headers?.get)return String(request.headers.get(key)||"");
-  return String(request?.headers?.[key]??request?.headers?.[key.replace(/-/g,"_")]||"");
+  const value=request?.headers?.[key] ?? request?.headers?.[key.replace(/-/g,"_")] ?? "";
+  return String(value||"");
 }
 function queryParam(request,key){
   try{return new URL(String(request?.url||"/"),"https://teacher-katlearn.vercel.app").searchParams.get(key)||""}
