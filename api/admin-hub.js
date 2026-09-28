@@ -84,20 +84,20 @@ const CATALOG_FILE=new URL("full-school-tree.json",DATA_DIR);
 let catalogTreeCache=null;
 const TOTAL_SCHOOLS=22850;
 const PROVINCES=[
-  ["01","Thành phố Hà Nội",2828,"province-01.json"],["04","Tỉnh Cao Bằng",150,"province-04.json"],["08","Tỉnh Tuyên Quang",300,"province-08.json"],
-  ["11","Tỉnh Điện Biên",182,"province-11.json"],["12","Tỉnh Lai Châu",137,"province-12.json"],["14","Tỉnh Sơn La",278,"province-14.json"],
-  ["15","Tỉnh Lào Cai",216,"province-15.json"],["19","Tỉnh Thái Nguyên",261,"province-19.json"],["20","Tỉnh Lạng Sơn",200,"province-20.json"],
-  ["22","Tỉnh Quảng Ninh",266,"province-22.json"],["24","Tỉnh Bắc Ninh",1039,"province-24.json"],["25","Tỉnh Phú Thọ",759,"province-25.json"],
-  ["31","Thành phố Hải Phòng",1041,"province-31.json"],["33","Tỉnh Hưng Yên",548,"province-33.json"],["37","Tỉnh Ninh Bình",1178,"province-37.json"],
-  ["38","Tỉnh Thanh Hóa",2002,"province-38.json"],["40","Tỉnh Nghệ An",372,"province-40.json"],["42","Tỉnh Hà Tĩnh",444,"province-42.json"],
-  ["44","Tỉnh Quảng Trị",290,"province-44.json"],["46","Thành phố Huế",383,"province-46.json"],["48","Thành phố Đà Nẵng",550,"province-48.json"],
-  ["51","Tỉnh Quảng Ngãi",127,"province-51.json"],["52","Tỉnh Gia Lai",261,"province-52.json"],["56","Tỉnh Khánh Hòa",296,"province-56.json"],
-  ["66","Tỉnh Đắk Lắk",616,"province-66.json"],["68","Tỉnh Lâm Đồng",1021,"province-68.json"],["75","Tỉnh Đồng Nai",691,"province-75.json"],
-  ["79","Thành phố Hồ Chí Minh",2382,"province-79.json"],["80","Tỉnh Tây Ninh",406,"province-80.json"],["82","Tỉnh Đồng Tháp",275,"province-82.json"],
-  ["86","Tỉnh Vĩnh Long",723,"province-86.json"],["91","Tỉnh An Giang",1322,"province-91.json"],["92","Thành phố Cần Thơ",713,"province-92.json"],
-  ["96","Tỉnh Cà Mau",593,"province-96.json"]
+  ["01","Thành phố Hà Nội",2828],["04","Tỉnh Cao Bằng",150],["08","Tỉnh Tuyên Quang",300],
+  ["11","Tỉnh Điện Biên",182],["12","Tỉnh Lai Châu",137],["14","Tỉnh Sơn La",278],
+  ["15","Tỉnh Lào Cai",216],["19","Tỉnh Thái Nguyên",261],["20","Tỉnh Lạng Sơn",200],
+  ["22","Tỉnh Quảng Ninh",266],["24","Tỉnh Bắc Ninh",1039],["25","Tỉnh Phú Thọ",759],
+  ["31","Thành phố Hải Phòng",1041],["33","Tỉnh Hưng Yên",548],["37","Tỉnh Ninh Bình",1178],
+  ["38","Tỉnh Thanh Hóa",2002],["40","Tỉnh Nghệ An",372],["42","Tỉnh Hà Tĩnh",444],
+  ["44","Tỉnh Quảng Trị",290],["46","Thành phố Huế",383],["48","Thành phố Đà Nẵng",550],
+  ["51","Tỉnh Quảng Ngãi",127],["52","Tỉnh Gia Lai",261],["56","Tỉnh Khánh Hòa",296],
+  ["66","Tỉnh Đắk Lắk",616],["68","Tỉnh Lâm Đồng",1021],["75","Tỉnh Đồng Nai",691],
+  ["79","Thành phố Hồ Chí Minh",2382],["80","Tỉnh Tây Ninh",406],["82","Tỉnh Đồng Tháp",275],
+  ["86","Tỉnh Vĩnh Long",723],["91","Tỉnh An Giang",1322],["92","Thành phố Cần Thơ",713],
+  ["96","Tỉnh Cà Mau",593]
 ];
-const PROVINCE_MAP=new Map(PROVINCES.map(([code,name,total,file])=>[code,{code,name,total,file}]));
+const PROVINCE_MAP=new Map(PROVINCES.map(([code,name,total])=>[code,{code,name,total}]));
 const USER_FIELDS=["displayName","name","email","role","schoolName","className","accountCode","coins","energy","streak","province","ward","teacherVerification","createdAt","updatedAt","disabled","schoolId","classIds","catalogClassId","studentAccountType"];
 const CLASS_FIELDS=["name","grade","description","teacherEmail","teacherUid","schoolName","schoolId","joinCode","studentCount","createdAt","updatedAt","province","ward","catalogClassId","deletingAt"];
 const PACK_FIELDS=["name","createdBy","createdByEmail","createdByUid","createdAt","updatedAt","wordCount"];
