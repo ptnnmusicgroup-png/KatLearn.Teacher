@@ -16,18 +16,28 @@ function queryParam(request,key){
   catch(_){return""}
 }
 async function readJson(request){
+  if(request&&typeof request.json==="function"){
+    try{
+      const value=await request.json();
+      return value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+    }catch(_){
+      return{};
+    }
+  }
   if(request?.body!=null){
-    if(typeof request.body==="object")return request.body;
     if(typeof request.body==="string"){
-      try{const value=JSON.parse(request.body);return value&&typeof value==="object"?value:{}}
+      try{const value=JSON.parse(request.body);return value&&typeof value==="object"&&!Array.isArray(value)?value:{}}
       catch(_){return{}}
+    }
+    if(typeof request.body==="object"&&!request.body?.getReader){
+      return request.body&&typeof request.body==="object"&&!Array.isArray(request.body)?request.body:{};
     }
   }
   return await new Promise(resolve=>{
     let chunks=[];
     request.on?.("data",chunk=>chunks.push(Buffer.isBuffer(chunk)?chunk:Buffer.from(String(chunk))));
     request.on?.("end",()=>{
-      try{const value=JSON.parse(Buffer.concat(chunks).toString("utf8")||"{}");resolve(value&&typeof value==="object"?value:{})}
+      try{const value=JSON.parse(Buffer.concat(chunks).toString("utf8")||"{}");resolve(value&&typeof value==="object"&&!Array.isArray(value)?value:{})}
       catch(_){resolve({})}
     });
     request.on?.("error",()=>resolve({}));
