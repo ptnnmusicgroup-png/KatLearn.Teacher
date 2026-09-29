@@ -45,7 +45,7 @@ jobs:
                   province=p
                   for w in p.get("wards",[]):
                       key=norm(w.get("name",""))
-                      bare=norm(re.sub(r"^(Phường|Xã|Đặc khu)\\s+","",w.get("name",""),flags=re.I))
+                      bare=norm(re.sub(r"^(Phường|Xã|Đặc khu)\s+","",w.get("name",""),flags=re.I))
                       ward_lookup[key]=w
                       ward_lookup[bare]=w
                   break
@@ -57,7 +57,7 @@ jobs:
           for w in province.get("wards",[]):
               existing_by_ward[w["name"]]={}
               for s in w.get("schools",[]):
-                  clean=re.sub(r"^\\([^)]*\\)\\s*","",str(s.get("name",""))).strip()
+                  clean=re.sub(r"^\([^)]*\)\s*","",str(s.get("name",""))).strip()
                   existing_by_ward[w["name"]][norm(clean)]=s
                   m=re.match(r"^\\(([^)]*)\\)",str(s.get("name","")))
                   if m: code_index[m.group(1)]=s
@@ -78,7 +78,7 @@ jobs:
               if not name or not code or not level(name):
                   skipped+=1
                   continue
-              w=ward_lookup.get(norm(ward_name)) or ward_lookup.get(norm(re.sub(r"^(Phường|Xã|Đặc khu)\\s+","",ward_name,flags=re.I)))
+              w=ward_lookup.get(norm(ward_name)) or ward_lookup.get(norm(re.sub(r"^(Phường|Xã|Đặc khu)\s+","",ward_name,flags=re.I)))
               if not w:
                   skipped+=1
                   continue
@@ -86,7 +86,7 @@ jobs:
               nk=norm(name)
               if nk in ex:
                   item=ex[nk]
-                  clean=re.sub(r"^\\([^)]*\\)\\s*","",str(item.get("name",""))).strip()
+                  clean=re.sub(r"^\([^)]*\)\s*","",str(item.get("name",""))).strip()
                   desired=f"({code}) {clean}"
                   if item.get("name")!=desired:
                       item["name"]=desired
@@ -112,7 +112,7 @@ jobs:
               "skipped":skipped,
               "schoolsAfter":sum(len(w.get("schools",[])) for p in tree for w in p.get("wards",[])),
               "emptyWardsAfter":sum(1 for p in tree for w in p.get("wards",[]) if not w.get("schools")),
-              "formatErrors":sum(1 for p in tree for w in p.get("wards",[]) for s in w.get("schools",[]) if not re.match(r"^\\([^)]*\\)\\s+.+$",str(s.get("name",""))))
+              "formatErrors":sum(1 for p in tree for w in p.get("wards",[]) for s in w.get("schools",[]) if not re.match(r"^\([^)]*\)\s+.+$",str(s.get("name",""))))
           }
           print(json.dumps(stats,ensure_ascii=False,indent=2))
           PY
