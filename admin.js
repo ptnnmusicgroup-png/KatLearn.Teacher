@@ -192,6 +192,8 @@ function bind(){
 }
 $("#logout").onclick=leaveAdmin;
 $("#clearSession").onclick=leaveAdmin;
+
+ $("#password")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();handleAdminLogin()}});
  $("#refresh").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{pageError(e);toast(e,"bad")});
  each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  $("#teacherFilter")?.addEventListener("change",()=>render("teachers"));
