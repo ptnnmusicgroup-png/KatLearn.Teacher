@@ -1,12 +1,11 @@
-name: admin proxy syntax
+name: JavaScript syntax audit
 
 on:
   push:
     paths:
+      - "**/*.js"
       - "admin.html"
       - "admin.css"
-      - "admin.js"
-      - "api/**"
       - ".github/workflows/admin-proxy-syntax.yml"
   workflow_dispatch:
 
@@ -18,13 +17,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check Admin client syntax
-        run: node --check admin.js
-      - name: Check all API syntax
+      - name: Check every JavaScript file
         shell: bash
         run: |
           set -euo pipefail
-          for file in api/*.js; do
+          while IFS= read -r file; do
             echo "Checking $file"
             node --check "$file"
-          done
+          done < <(find . -type f -name '*.js' -not -path './.git/*' | sort)
