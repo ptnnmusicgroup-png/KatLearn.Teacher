@@ -28854,7 +28854,7 @@
           },
           {
             "id": "su26_1b56d0fe5caf5992b9d1",
-            "name": "(946) THPT Đinh Tiên Hoàng",
+            "name": "(77000813) THPT Đinh Tiên Hoàng",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -29102,12 +29102,12 @@
           },
           {
             "id": "su26_d4293b71efde2ca666b2",
-            "name": "(955) THPT Vũng Tàu",
+            "name": "(77000702) THPT Vũng Tàu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "su26_208083a6ed68abc94cfc",
-            "name": "(953) THPT Trần Nguyên Hãn",
+            "name": "(77000814) THPT Trần Nguyên Hãn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -29119,6 +29119,10 @@
             "id": "su26_14fb6b26c895bed02a4c",
             "name": "(958) TH-THCS-THPT Khai Nguyên",
             "_catalog_code_source": "2026-SU26-school-dataset"
+          },
+          {
+            "id": "hcm2026_aa64282349661f16fa17",
+            "name": "(77000831) Tiểu học, THCS và THPT Einstein Vũng Tàu"
           }
         ]
       },
@@ -29649,7 +29653,7 @@
           },
           {
             "id": "su26_18f16b6981f76d097760",
-            "name": "(944) THPT Châu Thành",
+            "name": "(77000703) THPT Châu Thành",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -29839,7 +29843,7 @@
           },
           {
             "id": "su26_e2755984706748c9b3ed",
-            "name": "(948) THPT Nguyễn Bỉnh Khiêm",
+            "name": "(77000718) THPT Nguyễn Bỉnh Khiêm",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -30311,7 +30315,7 @@
           },
           {
             "id": "su26_bb1bafbcb0134026076a",
-            "name": "(980) THPT Xuyên Mộc",
+            "name": "(77000706) THPT Xuyên Mộc",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -30339,7 +30343,7 @@
           },
           {
             "id": "hcm2026_3d71fdfddd24457da419",
-            "name": "(730) THPT Bưng Riềng",
+            "name": "(77000824) THPT Bưng Riềng",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -30547,7 +30551,7 @@
           },
           {
             "id": "su26_1332698ded5a5eda3cad",
-            "name": "(967) THPT Hòa Bình",
+            "name": "(77000816) THPT Hòa Bình",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -30557,7 +30561,7 @@
           },
           {
             "id": "su26_f65520e42fb3d8b6bf9b",
-            "name": "(968) THPT Hòa Hội",
+            "name": "(77000716) THPT Hòa Hội",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -30729,7 +30733,7 @@
           },
           {
             "id": "su26_6d7b130817f7c6a8b2db",
-            "name": "(977) THPT Trần Văn Quan",
+            "name": "(77000710) THPT Trần Văn Quan",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -30902,12 +30906,12 @@
           },
           {
             "id": "su26_3e14d4c87a54a3582296",
-            "name": "(969) THPT Long Hải - Phước Tỉnh",
+            "name": "(77000721) THPT Long Hải - Phước Tỉnh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "su26_18bae0d7f56088475640",
-            "name": "(970) THPT Minh Đạm",
+            "name": "(77000723) THPT Minh Đạm",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -31129,7 +31133,7 @@
           },
           {
             "id": "su26_160c0ea9c00610d0b542",
-            "name": "(966) THPT Dương Bạch Mai",
+            "name": "(77000819) THPT Dương Bạch Mai",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -31237,7 +31241,7 @@
           },
           {
             "id": "su26_f00f36c19ae3ae481638",
-            "name": "(951) THPT Phú Mỹ",
+            "name": "(77000707) THPT Phú Mỹ",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -31452,7 +31456,7 @@
           },
           {
             "id": "su26_5ad78d0575b79517b8f5",
-            "name": "(947) THPT Hắc Dịch",
+            "name": "(77000709) THPT Hắc Dịch",
             "_catalog_code_source": "2026-SU26-school-dataset"
           }
         ]
@@ -31560,12 +31564,12 @@
           },
           {
             "id": "hcm2026_682cd990bab32b496a50",
-            "name": "(174) TH, THCS và THPT Quốc tế Á Châu",
+            "name": "(79760419) TH, THCS và THPT Quốc tế Á Châu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_f820a770b1c74bd0277a",
-            "name": "(029) THPT Năng Khiếu TDTT",
+            "name": "(79000871) THPT Năng Khiếu TDTT",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -31658,12 +31662,12 @@
           },
           {
             "id": "hcm2026_c57ed168f61390d47830",
-            "name": "(084) THCS và THPT Trần Đại Nghĩa",
+            "name": "(7900004036) THCS và THPT Trần Đại Nghĩa",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_b8f5fb668df793b8ed9a",
-            "name": "(071) THPT Trưng Vương",
+            "name": "(79000702) THPT Trưng Vương",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -31712,12 +31716,12 @@
           },
           {
             "id": "hcm2026_9da2929c7d56de6a5a05",
-            "name": "(060) THPT Ten Lơ Man",
+            "name": "(79000742) THPT Ten Lơ Man",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_7c26120d835da3689d16",
-            "name": "(008) THPT Bùi Thị Xuân",
+            "name": "(79000701) THPT Bùi Thị Xuân",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -31774,7 +31778,7 @@
           },
           {
             "id": "hcm2026_3e36a2704726f190ac7d",
-            "name": "(194) THCS và THPT Đăng Khoa",
+            "name": "(79000809) THCS và THPT Đăng Khoa",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -31844,17 +31848,17 @@
           },
           {
             "id": "hcm2026_5c92fdc60c5062e9a88e",
-            "name": "(210) THCS và THPT Phùng Hưng",
+            "name": "(79000791) THCS và THPT Phùng Hưng",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_9b576c7dd9838e07c7f5",
-            "name": "(223) THPT Đông Dương",
+            "name": "(79000783) THPT Đông Dương",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_ae04b66bf9572819d06f",
-            "name": "(062) THPT Thạnh Lộc",
+            "name": "(79000804) THPT Thạnh Lộc",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -31981,12 +31985,12 @@
           },
           {
             "id": "hcm2026_c033a65c8a2a7d6aca6a",
-            "name": "(075) THPT Võ Trường Toản",
+            "name": "(79000719) THPT Võ Trường Toản",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_21d616ea3e9f2d2107bd",
-            "name": "(238) THPT Việt Âu",
+            "name": "(79000771) THPT Việt Âu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -32076,7 +32080,7 @@
           },
           {
             "id": "hcm2026_d06a52e1ff72222a5548",
-            "name": "(205) THCS và THPT Lạc Hồng",
+            "name": "(79000854) THCS và THPT Lạc Hồng",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -32211,12 +32215,12 @@
           },
           {
             "id": "hcm2026_4536862fbb8316e1f53f",
-            "name": "(193) THCS và THPT Bắc Sơn",
+            "name": "(79000824) THCS và THPT Bắc Sơn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_885b6fceffb1a0a1bb65",
-            "name": "(250) THCS và THPT Khai Minh",
+            "name": "(79000856) THCS và THPT Khai Minh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -32433,7 +32437,7 @@
           },
           {
             "id": "hcm2026_8c45203dfc882b8f84eb",
-            "name": "(056) THPT Tam Phú",
+            "name": "(79000733) THPT Tam Phú",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -32546,12 +32550,12 @@
           },
           {
             "id": "hcm2026_597cb1168771fdfb256c",
-            "name": "(207) THCS và THPT Nguyễn Khuyến",
+            "name": "(79000835) THCS và THPT Nguyễn Khuyến",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_1f4f29a0b0d928bd1c4c",
-            "name": "(015) THPT Hiệp Bình",
+            "name": "(79000765) THPT Hiệp Bình",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -32677,12 +32681,12 @@
           },
           {
             "id": "hcm2026_144324da595d8d267b66",
-            "name": "(039) THPT Nguyễn Hữu Huân",
+            "name": "(79000732) THPT Nguyễn Hữu Huân",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_a171fbea505f25ac667f",
-            "name": "(063) THPT Thủ Đức",
+            "name": "(79000731) THPT Thủ Đức",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -32885,7 +32889,7 @@
           },
           {
             "id": "hcm2026_d8802dc4593b1a45be22",
-            "name": "(203) THCS và THPT Hoa Sen",
+            "name": "(79000873) THCS và THPT Hoa Sen",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33008,12 +33012,12 @@
           },
           {
             "id": "hcm2026_480972a437cab630dc7d",
-            "name": "(171) TH, THCS và THPT Ngô Thời Nhiệm",
+            "name": "(79000813) TH, THCS và THPT Ngô Thời Nhiệm",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_92a55d4de60f92187877",
-            "name": "(054) THPT Phước Long",
+            "name": "(79000752) THPT Phước Long",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33088,7 +33092,7 @@
           },
           {
             "id": "hcm2026_bb4ffb38655f01c2b556",
-            "name": "(022) THPT Long Trường",
+            "name": "(79000759) THPT Long Trường",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33156,7 +33160,7 @@
           },
           {
             "id": "hcm2026_032f39a9f2c03019ce1b",
-            "name": "(065) THPT Trần Hưng Đạo",
+            "name": "(79000764) THPT Trần Hưng Đạo",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33184,7 +33188,7 @@
           },
           {
             "id": "hcm2026_8f1f9cebf1f28e9dcf90",
-            "name": "(048) THPT Nguyễn Trung Trực",
+            "name": "(79000748) THPT Nguyễn Trung Trực",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33259,12 +33263,12 @@
           },
           {
             "id": "hcm2026_7e77c9d7af151c6c9cd6",
-            "name": "(172) TH, THCS và THPT Nguyễn Tri Phương",
+            "name": "(79000C09) TH, THCS và THPT Nguyễn Tri Phương",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_249093fc2158e2a0534f",
-            "name": "(187) TH, THCS và THPT Việt Anh",
+            "name": "(79000872) TH, THCS và THPT Việt Anh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33376,17 +33380,17 @@
           },
           {
             "id": "hcm2026_435c9607dd965cd5c1bc",
-            "name": "(209) THCS và THPT Phạm Ngũ Lão",
+            "name": "(79000825) THCS và THPT Phạm Ngũ Lão",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_5f1094c21b055383e6fc",
-            "name": "(236) THPT Việt Nhật",
+            "name": "(79000772) THPT Việt Nhật",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_d8f66dbeab81a49d9587",
-            "name": "(013) THPT Gò Vấp",
+            "name": "(79000724) THPT Gò Vấp",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33480,7 +33484,7 @@
           },
           {
             "id": "hcm2026_e5e7221c685747386890",
-            "name": "(034) THPT Nguyễn Công Trứ",
+            "name": "(79000725) THPT Nguyễn Công Trứ",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33557,7 +33561,7 @@
           },
           {
             "id": "hcm2026_1a670c7986c0224cbf80",
-            "name": "(052) THPT Phan Đăng Lưu",
+            "name": "(79000723) THPT Phan Đăng Lưu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33720,12 +33724,12 @@
           },
           {
             "id": "hcm2026_524dcddc92c2416091df",
-            "name": "(074) THPT Võ Thị Sáu",
+            "name": "(79000721) THPT Võ Thị Sáu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_cf4af381c7c982db01b2",
-            "name": "(016) THPT Hoàng Hoa Thám",
+            "name": "(79000750) THPT Hoàng Hoa Thám",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33808,7 +33812,7 @@
           },
           {
             "id": "hcm2026_e05e14b58e13a41c4ae1",
-            "name": "(189) TH, THCS và THPT Vinschool",
+            "name": "(79000874) TH, THCS và THPT Vinschool",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33817,7 +33821,7 @@
           },
           {
             "id": "hcm2026_c37de96bae84835f7350",
-            "name": "(011) THPT Gia Định",
+            "name": "(79000722) THPT Gia Định",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -33893,7 +33897,7 @@
           },
           {
             "id": "hcm2026_46ba050be347baf65bcf",
-            "name": "(046) THPT Nguyễn Thượng Hiền",
+            "name": "(79000730) THPT Nguyễn Thượng Hiền",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34013,12 +34017,12 @@
           },
           {
             "id": "hcm2026_37ec88d2aea68e75ffa7",
-            "name": "(180) TH, THCS và THPT Thanh Bình",
+            "name": "(79000832) TH, THCS và THPT Thanh Bình",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_9a55c82c5eadb28f8e35",
-            "name": "(213) THCS và THPT Thái Bình",
+            "name": "(79000831) THCS và THPT Thái Bình",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34119,7 +34123,7 @@
           },
           {
             "id": "hcm2026_5b962410f499617fdf2c",
-            "name": "(043) THPT Nguyễn Thái Bình",
+            "name": "(79000747) THPT Nguyễn Thái Bình",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34220,7 +34224,7 @@
           },
           {
             "id": "hcm2026_fa12b23d07e8b0780490",
-            "name": "(033) THPT Nguyễn Chí Thanh",
+            "name": "(79000728) THPT Nguyễn Chí Thanh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34353,17 +34357,17 @@
           },
           {
             "id": "hcm2026_50b9ba06b111d807af84",
-            "name": "(204) THCS và THPT Hồng Đức",
+            "name": "(79000822) THCS và THPT Hồng Đức",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_84b48c24594539d12263",
-            "name": "(059) THPT Tây Thạnh",
+            "name": "(79000758) THPT Tây Thạnh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_051b95c88a9e651d75af",
-            "name": "(197) THCS và THPT Đinh Tiên Hoàng",
+            "name": "(79000868) THCS và THPT Đinh Tiên Hoàng",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34452,22 +34456,22 @@
           },
           {
             "id": "hcm2026_e2b71c04e533b8a356e2",
-            "name": "(208) THCS và THPT Nhân Văn",
+            "name": "(79000834) THCS và THPT Nhân Văn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_b641172199d510473923",
-            "name": "(057) THPT Tân Bình",
+            "name": "(79000727) THPT Tân Bình",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_9b18a06aabe244d9f932",
-            "name": "(239) THPT Vĩnh Viễn",
+            "name": "(79000798) THPT Vĩnh Viễn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_a91f371b8a5f7ce7768c",
-            "name": "(232) THPT Thành Nhân",
+            "name": "(79000863) THPT Thành Nhân",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34572,7 +34576,7 @@
           },
           {
             "id": "hcm2026_897fc969f6eb09abefe6",
-            "name": "(068) THPT Trần Phú",
+            "name": "(79000729) THPT Trần Phú",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34641,7 +34645,7 @@
           },
           {
             "id": "hcm2026_25168ab7beacd3917e72",
-            "name": "(214) THCS và THPT Trần Cao Vân",
+            "name": "(79000799) THCS và THPT Trần Cao Vân",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34807,7 +34811,7 @@
           },
           {
             "id": "hcm2026_5ac53e14c32b4e5e5ada",
-            "name": "(053) THPT Phú Nhuận",
+            "name": "(79000726) THPT Phú Nhuận",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -34908,12 +34912,12 @@
           },
           {
             "id": "hcm2026_cc6e6c97fd12086f90ae",
-            "name": "(173) TH, THCS và THPT Quốc Tế",
+            "name": "(79000828) TH, THCS và THPT Quốc Tế",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_500862af2db4c8afb479",
-            "name": "(014) THPT Hàn Thuyên",
+            "name": "(79000749) THPT Hàn Thuyên",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35011,7 +35015,7 @@
           },
           {
             "id": "hcm2026_6869bb2a3e9fcaa49f3c",
-            "name": "(002) THPT chuyên Trần Đại Nghĩa",
+            "name": "(79000F02) THPT chuyên Trần Đại Nghĩa",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35076,12 +35080,12 @@
           },
           {
             "id": "hcm2026_482f05a1e8ab8b709375",
-            "name": "(064) THPT Thủ Thiêm",
+            "name": "(79000802) THPT Thủ Thiêm",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_ca306c5e19a80f36a42c",
-            "name": "(012) THPT Giồng Ông Tố",
+            "name": "(79000703) THPT Giồng Ông Tố",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35223,22 +35227,22 @@
           },
           {
             "id": "hcm2026_6eaf878f4e8ba024d5b4",
-            "name": "(018) THPT Lê Quý Đôn",
+            "name": "(79000705) THPT Lê Quý Đôn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_8af3004b59ee8df1cd4a",
-            "name": "(178) TH, THCS và THPT Tây Úc",
+            "name": "(79770601) TH, THCS và THPT Tây Úc",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_251a9c57af1ca4c701e9",
-            "name": "(044) THPT Nguyễn Thị Diệu",
+            "name": "(79000796) THPT Nguyễn Thị Diệu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_fdf1482d4af7fef040bc",
-            "name": "(045) THPT Nguyễn Thị Minh Khai",
+            "name": "(79000704) THPT Nguyễn Thị Minh Khai",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35423,17 +35427,17 @@
           },
           {
             "id": "hcm2026_71f0cbaa2a8e8af237c7",
-            "name": "(185) TH, THCS và THPT VẠN HẠNH",
+            "name": "(79000818) TH, THCS và THPT VẠN HẠNH",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_bd3d5a996923e48e0d69",
-            "name": "(035) THPT Nguyễn Du",
+            "name": "(79000717) THPT Nguyễn Du",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_bda79ec4a0ffe6114ebf",
-            "name": "(041) THPT Nguyễn Khuyến",
+            "name": "(79000716) THPT Nguyễn Khuyến",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35530,12 +35534,12 @@
           },
           {
             "id": "hcm2026_0e4cf22cc675cd87d16a",
-            "name": "(082) THCS và THPT Diên Hồng",
+            "name": "(79000861) THCS và THPT Diên Hồng",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_f3083106ca4bd9e9df64",
-            "name": "(188) TH, THCS và THPT Việt Úc",
+            "name": "(79000C03) TH, THCS và THPT Việt Úc",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35610,12 +35614,12 @@
           },
           {
             "id": "hcm2026_3b9492d6439579249cf3",
-            "name": "(083) THCS và THPT Sương Nguyệt Anh",
+            "name": "(79000860) THCS và THPT Sương Nguyệt Anh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_f08dedf7c09fa234aaa0",
-            "name": "(032) THPT Nguyễn An Ninh",
+            "name": "(79000745) THPT Nguyễn An Ninh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35694,12 +35698,12 @@
           },
           {
             "id": "hcm2026_4edf41282cded0f1ca3b",
-            "name": "(183) TH, THCS và THPT Trương Vĩnh Ký",
+            "name": "(79000836) TH, THCS và THPT Trương Vĩnh Ký",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_693a8bba42d73f3c28ec",
-            "name": "(069) THPT Trần Quang Khải",
+            "name": "(79000768) THPT Trần Quang Khải",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35827,12 +35831,12 @@
           },
           {
             "id": "hcm2026_9fdaecb2f0753cf204f4",
-            "name": "(235) THPT Trần Quốc Tuấn",
+            "name": "(79000779) THPT Trần Quốc Tuấn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_3c07ccf5b4f027b4d0b6",
-            "name": "(036) THPT Nguyễn Hiền",
+            "name": "(79000718) THPT Nguyễn Hiền",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35906,7 +35910,7 @@
           },
           {
             "id": "hcm2026_d58937d007ca67e70a6e",
-            "name": "(027) THPT Nam Kỳ Khởi Nghĩa",
+            "name": "(79000746) THPT Nam Kỳ Khởi Nghĩa",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -35973,7 +35977,7 @@
           },
           {
             "id": "hcm2026_2dab65135d70e20d8253",
-            "name": "(047) THPT Nguyễn Trãi",
+            "name": "(79000706) THPT Nguyễn Trãi",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36179,7 +36183,7 @@
           },
           {
             "id": "hcm2026_9953dcb04bf58e87c768",
-            "name": "(067) THPT Trần Khai Nguyên",
+            "name": "(79000744) THPT Trần Khai Nguyên",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36248,17 +36252,17 @@
           },
           {
             "id": "hcm2026_5a23a9538c966d612421",
-            "name": "(066) THPT Trần Hữu Trang",
+            "name": "(79774507) THPT Trần Hữu Trang",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_57a933922e22ff97eb35",
-            "name": "(249) THPT Thăng Long",
+            "name": "(79000751) THPT Thăng Long",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_4921d7e9647d3030ebc5",
-            "name": "(017) THPT Hùng Vương",
+            "name": "(79000708) THPT Hùng Vương",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36342,7 +36346,7 @@
           },
           {
             "id": "hcm2026_8902de91532e97363699",
-            "name": "(025) THPT Mạc Đĩnh Chi",
+            "name": "(79000709) THPT Mạc Đĩnh Chi",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36431,7 +36435,7 @@
           },
           {
             "id": "hcm2026_d0db12802669811bf458",
-            "name": "(006) THPT Bình Phú",
+            "name": "(79000710) THPT Bình Phú",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36491,7 +36495,7 @@
           },
           {
             "id": "hcm2026_5917dc485f219157c65a",
-            "name": "(191) THCS-THPT Phan Bội Châu",
+            "name": "(79000816) THCS-THPT Phan Bội Châu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36555,7 +36559,7 @@
           },
           {
             "id": "hcm2026_29382cc89162f63815f4",
-            "name": "(051) THPT Phạm Phú Thứ",
+            "name": "(79000875) THPT Phạm Phú Thứ",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36781,12 +36785,12 @@
           },
           {
             "id": "hcm2026_fad681e38dc169b12bf6",
-            "name": "(049) THPT Nguyễn Văn Linh",
+            "name": "(79000794) THPT Nguyễn Văn Linh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_285c765685828f6662f5",
-            "name": "(055) THPT Tạ Quang Bửu",
+            "name": "(79000714) THPT Tạ Quang Bửu",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36871,7 +36875,7 @@
           },
           {
             "id": "hcm2026_8fb727211b96f4376688",
-            "name": "(030) THPT Ngô Gia Tự",
+            "name": "(79000713) THPT Ngô Gia Tự",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -36972,7 +36976,7 @@
           },
           {
             "id": "hcm2026_b476b39c8a57fd8100fb",
-            "name": "(161) TH, THCS và THPT Chu Văn An",
+            "name": "(79000774) TH, THCS và THPT Chu Văn An",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37056,12 +37060,12 @@
           },
           {
             "id": "hcm2026_7cf20947c4d0b1f9506b",
-            "name": "(182) TH, THCS và THPT Trí Tuệ Việt",
+            "name": "(79000877) TH, THCS và THPT Trí Tuệ Việt",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_fe71425f85ab71eb4f2f",
-            "name": "(073) THPT Vĩnh Lộc",
+            "name": "(79000769) THPT Vĩnh Lộc",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37156,12 +37160,12 @@
           },
           {
             "id": "hcm2026_7706e105cc91f4327479",
-            "name": "(038) THPT Nguyễn Hữu Cảnh",
+            "name": "(79000793) THPT Nguyễn Hữu Cảnh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_2bed84a8655d5c0514aa",
-            "name": "(234) THPT Trần Nhân Tông",
+            "name": "(79000781) THPT Trần Nhân Tông",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37223,7 +37227,7 @@
           },
           {
             "id": "hcm2026_167cbb4809ae60c8ceab",
-            "name": "(224) THPT Hàm Nghi",
+            "name": "(7900000005) THPT Hàm Nghi",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37288,7 +37292,7 @@
           },
           {
             "id": "hcm2026_754f31946a224d46fc2e",
-            "name": "(003) THPT An Lạc",
+            "name": "(79000805) THPT An Lạc",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37297,7 +37301,7 @@
           },
           {
             "id": "hcm2026_1081a965ca1c4ae91c34",
-            "name": "(229) THPT Phú Lâm",
+            "name": "(79000788) THPT Phú Lâm",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37439,22 +37443,22 @@
           },
           {
             "id": "hcm2026_51896c043e4d6223b1dc",
-            "name": "(212) THCS và THPT Sao Việt",
+            "name": "(79000851) THCS và THPT Sao Việt",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_9d0f8467643a8c09aa92",
-            "name": "(058) THPT Tân Phong",
+            "name": "(79000754) THPT Tân Phong",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_39ffb9c430cb895e6bd3",
-            "name": "(019) THPT Lê Thánh Tôn",
+            "name": "(79000711) THPT Lê Thánh Tôn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_37d710f3b7eb756d85ac",
-            "name": "(196) THCS và THPT Đinh Thiện Lý",
+            "name": "(79000850) THCS và THPT Đinh Thiện Lý",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37626,12 +37630,12 @@
           },
           {
             "id": "hcm2026_bf2885a7f30fe8fa9b4f",
-            "name": "(028) THPT Nam Sài Gòn",
+            "name": "(79000820) THPT Nam Sài Gòn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_514316f072e442a5d32e",
-            "name": "(031) THPT Ngô Quyền",
+            "name": "(79000803) THPT Ngô Quyền",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37688,7 +37692,7 @@
           },
           {
             "id": "hcm2026_7123c553d45bb2ae0aab",
-            "name": "(092) THPT Củ Chi",
+            "name": "(79000734) THPT Củ Chi",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37716,7 +37720,7 @@
           },
           {
             "id": "hcm2026_705a25e3e70b74591401",
-            "name": "(087) THPT An Nhơn Tây",
+            "name": "(79000736) THPT An Nhơn Tây",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37755,7 +37759,7 @@
           },
           {
             "id": "hcm2026_5519e769ce76da5b8145",
-            "name": "(106) THPT Quang Trung",
+            "name": "(79000735) THPT Quang Trung",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -37796,12 +37800,12 @@
           },
           {
             "id": "hcm2026_6582d36d7f67b6fe1e71",
-            "name": "(110) THPT Trung Phú",
+            "name": "(79000737) THPT Trung Phú",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_03a526725d9744ea39ac",
-            "name": "(104) THPT Phú Hòa",
+            "name": "(79000756) THPT Phú Hòa",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -38136,12 +38140,12 @@
           },
           {
             "id": "hcm2026_bd5567807d5513548831",
-            "name": "(100) THPT Nguyễn Hữu Tiến",
+            "name": "(79000761) THPT Nguyễn Hữu Tiến",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_f7a9f65617c45241bf03",
-            "name": "(098) THPT Lý Thường Kiệt",
+            "name": "(79000740) THPT Lý Thường Kiệt",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -38385,12 +38389,12 @@
           },
           {
             "id": "hcm2026_e8e8de1a07d3f0b813ff",
-            "name": "(101) THPT Nguyễn Văn Cừ",
+            "name": "(79000760) THPT Nguyễn Văn Cừ",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_67a602f23f3ad950a2c4",
-            "name": "(088) THPT Bà Điểm",
+            "name": "(79000753) THPT Bà Điểm",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -38646,7 +38650,7 @@
           },
           {
             "id": "hcm2026_01e43d0136fe0a4494f0",
-            "name": "(096) THPT Lê Minh Xuân",
+            "name": "(79000806) THPT Lê Minh Xuân",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -38799,7 +38803,7 @@
           },
           {
             "id": "hcm2026_fca910d6b36ad74091ef",
-            "name": "(093) THPT Đa Phước",
+            "name": "(79000807) THPT Đa Phước",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -38939,7 +38943,7 @@
           },
           {
             "id": "hcm2026_fc06f85bab2dadd74449",
-            "name": "(089) THPT Bình Chánh",
+            "name": "(79000741) THPT Bình Chánh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -39053,12 +39057,12 @@
           },
           {
             "id": "hcm2026_8e4aaf5f309b0a5416f9",
-            "name": "(105) THPT Phước Kiển",
+            "name": "(79000784) THPT Phước Kiển",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
             "id": "hcm2026_3976fb5334cac4514197",
-            "name": "(245) TH, THCS và THPT Khải Hoàn - Nam Sài Gòn",
+            "name": "(7900004034) TH, THCS và THPT Khải Hoàn - Nam Sài Gòn",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -39217,7 +39221,7 @@
           },
           {
             "id": "hcm2026_e8f723543f6224c7eb30",
-            "name": "(091) THPT Cần Thạnh",
+            "name": "(79000763) THPT Cần Thạnh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -39282,7 +39286,7 @@
           },
           {
             "id": "hcm2026_d38a26d84d8d18f92fbc",
-            "name": "(090) THPT Bình Khánh",
+            "name": "(79000762) THPT Bình Khánh",
             "_catalog_code_source": "2026-SU26-school-dataset"
           },
           {
@@ -126321,4 +126325,4 @@
       }
     ]
   }
-]
+]\n
