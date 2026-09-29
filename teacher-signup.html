@@ -108,9 +108,9 @@ async function loadNationalWards(){
     if(!catalog||!Array.isArray(catalog.provinces)||catalog.provinceCount!==34||catalog.totalUnitCount!==3321)throw new Error('Danh sách xã/phường quốc gia không hợp lệ.');
     nationalWardsByProvince.clear();nationalProvinceNames=[];
     for(const province of catalog.provinces){
-      const name=String(province?.name||'').replace(/\\s+/g,' ').trim();if(!name)continue;
+      const name=String(province?.name||'').replace(/\s+/g,' ').trim();if(!name)continue;
       nationalProvinceNames.push(name);
-      nationalWardsByProvince.set(normPlace(name),(province.wards||[]).map(w=>String(w?.name||'').replace(/\\s+/g,' ').trim()).filter(Boolean));
+      nationalWardsByProvince.set(normPlace(name),(province.wards||[]).map(w=>String(w?.name||'').replace(/\s+/g,' ').trim()).filter(Boolean));
     }
   }catch(e){console.warn('[KatLearn Teacher] National ward catalog unavailable:',e)}
 }
