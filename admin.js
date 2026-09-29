@@ -333,7 +333,7 @@ async function syncCatalog(){
  }catch(e){
   toast(e,"bad");
   pageError(e,"Đồng bộ catalog dừng lại");
-  button?.textContent="▶ Tiếp tục đồng bộ";
+  if(button)button.textContent="▶ Tiếp tục đồng bộ";
  }finally{
   state.syncing=false;
   button?.removeAttribute("disabled");
