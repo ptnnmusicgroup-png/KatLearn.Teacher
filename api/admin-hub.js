@@ -953,8 +953,9 @@ async function section(db,key){
   const data=await list(label,query);
   return{rows:data,limited:data.length>=LIMITS[key]};
 }
-export default {
-  async fetch(request){
+export const runtime="nodejs";
+
+export default async function handler(request){
     const origin=header(request,"origin");
     if(request.method==="OPTIONS")return new Response(null,{status:204,headers:corsHeaders(origin)});
     try{
