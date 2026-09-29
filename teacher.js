@@ -3,7 +3,7 @@ const FIREBASE_CONFIG={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDoma
 const LMS_HOME='https://lms-katlearn.vercel.app';
 const TEACHER_HOME='https://teacher-katlearn.vercel.app';
 const SSO_EXCHANGE=TEACHER_HOME+'/api/auth-exchange';
-let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false,accountRole='';
+let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false,accountRole='',authStateReady=null;
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const isTeacher=()=>teacherAccess;
