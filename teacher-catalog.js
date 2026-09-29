@@ -37,7 +37,7 @@
       const catalog=await response.json();
       if(!catalog||!Array.isArray(catalog.provinces)||catalog.provinceCount!==34||catalog.totalUnitCount!==3321)throw new Error('Danh sách xã/phường quốc gia không hợp lệ.');
       officialProvinces=catalog.provinces.filter(x=>x?.code&&x?.name);
-      officialWardsByProvince=new Map(officialProvinces.map(x=>[String(x.code).trim(),(x.wards||[]).map(w=>String(w.name||'').replace(/\\s+/g,' ').trim()).filter(Boolean)]));
+      officialWardsByProvince=new Map(officialProvinces.map(x=>[String(x.code).trim(),(x.wards||[]).map(w=>String(w.name||'').replace(/\s+/g,' ').trim()).filter(Boolean)]));
       p.innerHTML='<option value="">Chọn tỉnh/thành</option>'+officialProvinces.map(x=>'<option value="'+esc(x.name)+'">'+esc(x.name)+'</option>').join('');
     }catch(error){
       const ps=[...new Set(schools.map(s=>s.province).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'vi'));
