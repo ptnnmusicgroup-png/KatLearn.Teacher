@@ -1012,4 +1012,3 @@ export default async function handler(request){
       return writeJson(status,{ok:false,error:messageOf(error,"Không thể xử lý Admin."),code,details},origin);
     }
   }
-}
