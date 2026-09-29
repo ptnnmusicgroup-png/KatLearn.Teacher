@@ -190,13 +190,13 @@ function plan(){
   };
 }
 function normalizeCatalogText(value){
-  return String(value??"").normalize("NFC").replace(/\\s+/g," ").trim();
+  return String(value??"").normalize("NFC").replace(/\s+/g," ").trim();
 }
 function detectSchoolLevel(name){
   const value=normalizeCatalogText(name).toLowerCase();
-  const primary=/\\btiểu học\\b/.test(value)||/\\bth[-,\\s&/]*thcs?\\b/.test(value)&&!/(thpt|trung học phổ thông)/.test(value);
-  const middle=/\\bthcs\\b|trung học cơ sở/.test(value);
-  const high=/\\bthpt\\b|trung học phổ thông/.test(value);
+  const primary=/\btiểu học\b/.test(value)||/\\bth[-,\\s&/]*thcs?\\b/.test(value)&&!/(thpt|trung học phổ thông)/.test(value);
+  const middle=/\bthcs\b|trung học cơ sở/.test(value);
+  const high=/\bthpt\b|trung học phổ thông/.test(value);
   const levels=[primary,middle,high].filter(Boolean).length;
   if(levels>1)return"combined";
   if(high)return"high";
