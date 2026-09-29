@@ -193,6 +193,7 @@ function bind(){
 $("#logout").onclick=leaveAdmin;
 $("#clearSession").onclick=leaveAdmin;
 
+ $("#loginBtn")?.addEventListener("click",e=>{e.preventDefault();void handleAdminLogin()});
  $("#password")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();handleAdminLogin()}});
  $("#refresh").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{pageError(e);toast(e,"bad")});
  each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
