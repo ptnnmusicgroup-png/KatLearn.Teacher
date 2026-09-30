@@ -305,8 +305,11 @@ function renderPacks(rows,limited,data={}){
  setDirectorySyncStatus("codePacks",sync.done?("✓ "+fmt(Number(data.codePackCount)||codePacks.length)+" bộ / "+fmt(Number(data.codeWordCount)||codePacks.reduce((s,p)=>s+num(p.wordCount),0))+" từ đã sync"):"Chưa sync");
 }
 function renderPrivatePacks(rows,total,limited){
- const q=$("#privatePackSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","ownerUid","ownerEmail","ownerDisplayName","id"]));
- $("#privatePackTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ riêng")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+esc(p.ownerDisplayName||"—")+'<small>'+esc(p.ownerEmail||p.ownerUid||"—")+'</small></td><td>'+fmt(p.wordCount)+'</td><td>'+date(p.createdAt)+'</td><td><span class="badge">PERSONAL</span></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy bộ từ riêng.</div></td></tr>';
+ const q=$("#privatePackSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","ownerUid","ownerEmail","ownerDisplayName","accountCode","ownerAccountCode","id"]));
+ $("#privatePackTable").innerHTML=list.map(p=>{
+   const code=p.accountCode||p.ownerAccountCode||"—";
+   return '<tr><td><strong>'+esc(p.name||"Bộ từ riêng")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+esc(p.ownerDisplayName||"—")+'<small>'+esc(p.ownerEmail||p.ownerUid||"—")+'</small><small>Mã tài khoản: <span class="mono">'+esc(code)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td>'+date(p.createdAt)+'</td><td><span class="badge">PERSONAL</span></td></tr>';
+ }).join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy bộ từ riêng.</div></td></tr>';
  $("#privatePackLimit").textContent=Number(total)>list.length||limited?"Đang hiển thị "+fmt(list.length)+" bộ từ riêng trong giới hạn Admin Hub ("+fmt(total)+" tổng).":"";
 }
 function renderSchools(rows,limited){
