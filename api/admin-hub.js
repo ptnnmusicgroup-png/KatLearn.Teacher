@@ -50,7 +50,7 @@ async function proxy(request) {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const timeout = setTimeout(() => controller.abort(), 52000);
 
   try {
     const url = new URL(LMS_ADMIN);
