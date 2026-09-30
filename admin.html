@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260930-1">
+<link rel="stylesheet" href="admin.css?v=20260930-2">
 </head>
 <body>
 <section id="loginGate" class="login-gate">
@@ -85,6 +85,7 @@
           </div></section>
         </div>
         <section class="card system-card"><div class="card-head"><div><p class="eyebrow">SYSTEM HEALTH</p><h2>Tình trạng hệ thống</h2><p>Frontend chỉ giao tiếp với Admin Hub; backend mới là nơi chạm Firestore.</p></div></div><div id="healthList" class="health"><div class="health-row"><span>Firebase Auth</span><b id="healthAuth">Đang kiểm tra…</b></div><div class="health-row"><span>Admin backend</span><b id="healthAdmin">Đang kiểm tra…</b></div><div class="health-row"><span>Firestore qua Admin SDK</span><b id="healthFs">Đang kiểm tra…</b></div><div class="health-row"><span>National Catalog</span><b id="healthCatalog">Sẵn sàng</b></div></div></section>
+        <section class="card sync-card"><div class="card-head"><div><p class="eyebrow">FIREBASE SYNC</p><h2>Đồng bộ dữ liệu hệ thống ☁️</h2><p>Đồng bộ toàn bộ tài khoản, lớp học và bộ từ công khai vào vùng dữ liệu quản trị trong Firebase. Có thể tiếp tục sau khi reload.</p></div><button id="syncAll" class="btn dark">☁️ Đồng bộ tất cả</button></div><div class="sync-grid"><div class="sync-item"><b>👥 Tài khoản</b><span id="syncUsersStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>▦ Lớp học</b><span id="syncClassesStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>📚 Bộ từ công khai</b><span id="syncPacksStatus">Chưa đồng bộ</span></div></div><div id="syncOverall" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-teachers">
@@ -94,17 +95,17 @@
 
       <section class="page" id="page-users">
         <div class="hero"><div><p class="eyebrow">ACCOUNT DIRECTORY</p><h1>Tài khoản</h1><p>Danh bạ tài khoản Firebase, tải theo giới hạn an toàn để Admin Hub luôn nhẹ.</p></div><div class="hero-cat">👥</div></div>
-        <section class="card"><div class="toolbar"><input id="userSearch" class="input" placeholder="Tìm tên, email, mã, trường…"><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th><th>Quản lý</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit"></div></section>
+        <section class="card"><div class="toolbar"><input id="userSearch" class="input" placeholder="Tìm tên, email, mã, trường…"><select id="userFilter" class="select"><option value="all">Tất cả role</option><option value="student">Học sinh</option><option value="teacher">Giáo viên</option><option value="pending_teacher_verification">Chờ xác minh</option><option value="teacher_rejected">Từ chối</option><option value="admin">Admin</option></select><button id="syncUsers" class="btn dark">☁️ Đồng bộ Firebase</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Tài khoản</th><th>Role</th><th>Trường / lớp</th><th>Thống kê</th><th>Ngày tạo</th><th>Quản lý</th></tr></thead><tbody id="userTable"></tbody></table></div><div id="userLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-classes">
         <div class="hero"><div><p class="eyebrow">CLASS DIRECTORY</p><h1>Lớp học</h1><p>Tra cứu lớp, giáo viên phụ trách, trường và mã tham gia.</p></div><div class="hero-cat">▦</div></div>
-        <section class="card"><div class="toolbar"><input id="classSearch" class="input" placeholder="Tìm lớp, giáo viên, trường, mã…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã</th><th>Sĩ số</th><th>Cập nhật</th><th>Quản lý</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit"></div></section>
+        <section class="card"><div class="toolbar"><input id="classSearch" class="input" placeholder="Tìm lớp, giáo viên, trường, mã…"><button id="syncClasses" class="btn dark">☁️ Đồng bộ Firebase</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Lớp</th><th>Giáo viên</th><th>Trường</th><th>Mã</th><th>Sĩ số</th><th>Cập nhật</th><th>Quản lý</th></tr></thead><tbody id="classTable"></tbody></table></div><div id="classLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-packs">
         <div class="hero"><div><p class="eyebrow">PUBLIC CONTENT</p><h1>Bộ từ công khai</h1><p>Nội dung công khai trong hệ thống. Xóa pack qua backend và tự dọn assignment liên quan.</p></div><div class="hero-cat">📚</div></div>
-        <section class="card"><div class="toolbar"><input id="packSearch" class="input" placeholder="Tìm tên pack hoặc người tạo…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div><div id="packLimit" class="limit"></div></section>
+        <section class="card"><div class="toolbar"><input id="packSearch" class="input" placeholder="Tìm tên pack hoặc người tạo…"><button id="syncPacks" class="btn dark">☁️ Đồng bộ Firebase</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div><div id="packLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-schools">
@@ -131,7 +132,18 @@
 <div id="modalBackdrop" class="modal-backdrop">
   <div class="modal"><p class="eyebrow">CONFIRM ACTION</p><h2 id="modalTitle">Xác nhận</h2><p id="modalText"></p><div class="modal-actions"><button id="modalCancel" class="btn">Hủy</button><button id="modalOk" class="btn dark">Xác nhận</button></div></div>
 </div>
+<div id="packEditorBackdrop" class="modal-backdrop">
+  <div class="modal pack-editor-modal">
+    <p class="eyebrow">PUBLIC PACK EDITOR</p>
+    <h2 id="packEditorTitle">Chỉnh sửa bộ từ</h2>
+    <label class="editor-label">Tên bộ từ<input id="packEditName" class="input" maxlength="200"></label>
+    <label class="editor-label">Danh sách từ · JSON<textarea id="packEditWords" class="code-editor" spellcheck="false"></textarea></label>
+    <p class="editor-help">Giữ dạng mảng JSON. Có thể chỉnh <code>word</code>, <code>mean</code>, <code>pron</code>, <code>type</code>, <code>example</code>, <code>note</code> và các trường hiện có.</p>
+    <div id="packEditError" class="editor-error"></div>
+    <div class="modal-actions"><button id="packEditCancel" class="btn">Hủy</button><button id="packEditSave" class="btn dark">💾 Lưu vào Firebase</button></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20260930-1"></script>
+<script type="module" src="admin.js?v=20260930-2"></script>
 </body>
 </html>
