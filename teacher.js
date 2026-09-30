@@ -176,44 +176,48 @@ async function ensureTeacherPackIdentity(name){
   const uid=String(user?.uid||'');if(!uid||!db||!isTeacher())throw new Error('Bạn cần đăng nhập bằng tài khoản giáo viên.');
   const profileSnap=await fb.getDoc(fb.doc(db,'users',uid));
   const profile=profileSnap.exists()?profileSnap.data()||{}:{};
-  let accountCode=String(profile.accountCode||'');
-  if(!accountCode&&window.__katlearnTeacherAccountCode)accountCode=String(window.__katlearnTeacherAccountCode||'');
+  let accountCode=String(profile.accountCode||'').trim();
+  if(!accountCode&&window.__katlearnTeacherAccountCode)accountCode=String(window.__katlearnTeacherAccountCode||'').trim();
+  const login=cleanMemoryPart(String(user.email||'').split('@')[0]||'katlearn','katlearn');
+  const display=cleanMemoryPart(user.displayName||profile.displayName||login,'Teacher');
+
   if(!accountCode){
     const accountSeqRef=fb.doc(db,'system','accountSequence');
     accountCode=await fb.runTransaction(db,async tx=>{
       const seq=await tx.get(accountSeqRef);
-      let n=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
-      const login=cleanMemoryPart(String(user.email||'').split('@')[0]||'katlearn','katlearn');
-      const display=cleanMemoryPart(user.displayName||profile.displayName||login,'Teacher');
-      let code=login+'_'+display+'_'+String(n).padStart(3,'0');
-      let ref=fb.doc(db,'accounts',code),snap=await tx.get(ref);
-      while(snap.exists()){
-        n++;code=login+'_'+display+'_'+String(n).padStart(3,'0');ref=fb.doc(db,'accounts',code);snap=await tx.get(ref);
-      }
-      tx.set(accountSeqRef,{lastIssued:n,updatedAt:Date.now()},{merge:true});
-      tx.set(ref,{accountCode:code,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',loginName:login,createdAt:profile.createdAt||Date.now(),updatedAt:Date.now()},{merge:true});
+      const next=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
+      const code=login+'_'+display+'_'+String(next).padStart(3,'0');
+      const accountRef=fb.doc(db,'accounts',code);
+      // Do not probe accountRef: Firestore rules protect reads of account
+      // documents unless the account already belongs to the current user.
+      // The sequence transaction is the collision-safe allocator.
+      tx.set(accountSeqRef,{lastIssued:next,updatedAt:Date.now()},{merge:true});
+      tx.set(accountRef,{accountCode:code,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',loginName:login,createdAt:profile.createdAt||Date.now(),updatedAt:Date.now()},{merge:true});
       tx.set(fb.doc(db,'accounts',code,'memory','meta'),{accountCode:code,uid,updatedAt:Date.now()},{merge:true});
+      tx.set(fb.doc(db,'users',uid),{accountCode:code,updatedAt:Date.now()},{merge:true});
       return code;
     });
-    if(String(user?.uid||'')!==uid)throw new Error('Tài khoản đã thay đổi, hãy thử lại.');
-    await fb.setDoc(fb.doc(db,'users',uid),{accountCode,updatedAt:Date.now()},{merge:true});
+  }else{
+    // Repair/ensure the namespace without reading a potentially missing
+    // protected account document first.
+    await fb.setDoc(fb.doc(db,'accounts',accountCode),{
+      accountCode,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',
+      loginName:login,createdAt:profile.createdAt||Date.now(),updatedAt:Date.now()
+    },{merge:true});
+    await fb.setDoc(fb.doc(db,'accounts',accountCode,'memory','meta'),{accountCode,uid,updatedAt:Date.now()},{merge:true});
   }
+
+  if(String(user?.uid||'')!==uid)throw new Error('Tài khoản đã thay đổi, hãy thử lại.');
   const seqRef=fb.doc(db,'system','packSequence');
-  const displayName=user.displayName||profile.displayName||user.email?.split('@')[0]||'Teacher';
   const result=await fb.runTransaction(db,async tx=>{
     const seq=await tx.get(seqRef);
-    let next=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
-    let docId=makeMemoryPackDocId(next,name,displayName);
-    let ref=fb.doc(db,'accounts',accountCode,'memory',docId);
-    let snap=await tx.get(ref);
-    while(snap.exists()){
-      next++;docId=makeMemoryPackDocId(next,name,displayName);ref=fb.doc(db,'accounts',accountCode,'memory',docId);snap=await tx.get(ref);
-    }
+    const next=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
+    const docId=makeMemoryPackDocId(next,name,display);
     tx.set(seqRef,{lastIssued:next,updatedAt:Date.now()},{merge:true});
     return {packCode:String(next).padStart(5,'0'),docId};
   });
   if(String(user?.uid||'')!==uid)throw new Error('Tài khoản đã thay đổi, hãy thử lại.');
-  return {accountCode,displayName,packCode:result.packCode,docId:result.docId};
+  return {accountCode,displayName:display,packCode:result.packCode,docId:result.docId};
 }
 async function mirrorTeacherPackToMemory(packDocId,data){
   if(!packDocId||!user?.uid)return;
