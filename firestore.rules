@@ -39,10 +39,19 @@ match /system/{docId} {
         && request.resource.data.accountCode == accountCode;
       allow delete: if false;
       match /memory/{memoryDoc} {
-        allow read, write: if signedIn()
+        allow read: if signedIn()
+          && get(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
+        // getAfter() sees an account created atomically in the same transaction/batch.
+        allow create, update: if signedIn()
+          && getAfter(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
+        allow delete: if signedIn()
           && get(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
         match /{subCollection}/{subDoc} {
-          allow read, write: if signedIn()
+          allow read: if signedIn()
+            && get(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
+          allow create, update: if signedIn()
+            && getAfter(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
+          allow delete: if signedIn()
             && get(/databases/$(database)/documents/accounts/$(accountCode)).data.uid == request.auth.uid;
         }
       }
