@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 
 const allowedOrigins=new Set(['https://teacher-katlearn.vercel.app']);
 function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type, authorization';h.vary='Origin'}return h}
+const jsonResponse=(body,init={})=>new Response(JSON.stringify(body),init);
 
 const clean=(value,max=120)=>String(value??'').trim().slice(0,max);
 async function activeClassProfile(db,ids){
@@ -68,8 +69,8 @@ async function batchSet(changes,db){for(let i=0;i<changes.length;i+=400){const b
 export default async request=>{
   const origin=request.headers.get('origin')||'';
   if(request.method==='OPTIONS')return new Response('',{status:204,headers:headers(origin)});
-  if(request.method!=='POST')return Response.json({error:'Method not allowed'},{status:405,headers:headers(origin)});
-  if(!allowedOrigins.has(origin))return Response.json({error:'Origin not allowed'},{status:403,headers:headers(origin)});
+  if(request.method!=='POST')return jsonResponse({error:'Method not allowed'},{status:405,headers:headers(origin)});
+  if(!allowedOrigins.has(origin))return jsonResponse({error:'Origin not allowed'},{status:403,headers:headers(origin)});
   try{
     const body=await request.json(),action=clean(body?.action,40),classId=clean(body?.classId,120),ctx=await teacherContext(request);
     if(action==='delete-pack'){
@@ -81,7 +82,7 @@ export default async request=>{
       let batch=ctx.db.batch(),ops=0;
       for(const d of assignmentsSnap.docs){batch.delete(d.ref);ops++;if(ops>=450){await batch.commit();batch=ctx.db.batch();ops=0}}
       batch.delete(packRef);await batch.commit();
-      return Response.json({ok:true,message:'Đã xóa bộ từ và các bài giao liên quan.'},{headers:headers(origin)});
+      return jsonResponse({ok:true,message:'Đã xóa bộ từ và các bài giao liên quan.'},{headers:headers(origin)});
     }
 
     if(!classId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
@@ -131,7 +132,7 @@ export default async request=>{
         }
       }
       await ctx.db.collection('classes').doc(classId).delete();
-      return Response.json({ok:true,message:'Đã xóa lớp và dọn dữ liệu liên quan.'},{headers:headers(origin)});
+      return jsonResponse({ok:true,message:'Đã xóa lớp và dọn dữ liệu liên quan.'},{headers:headers(origin)});
     }
 
     if(action==='invite'){
@@ -198,7 +199,7 @@ export default async request=>{
         await batch.commit();
       }
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-      return Response.json({ok:true,message:'Đã thêm học sinh vào lớp.'},{headers:headers(origin)});
+      return jsonResponse({ok:true,message:'Đã thêm học sinh vào lớp.'},{headers:headers(origin)});
     }
 
     if(action==='assign-pack'){
@@ -207,7 +208,7 @@ export default async request=>{
       if(!ctx.admin&&packSnap.data().createdByUid!==ctx.uid)throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
       const existingAssignments=await ctx.db.collection('packAssignments').where('classId','==',classId).get();
       const existing=existingAssignments.docs.find(d=>String(d.data()?.packId||'')===packId);
-      if(existing)return Response.json({ok:true,assignmentId:existing.id,studentCount:Number(existing.data()?.studentCount||0),alreadyAssigned:true},{headers:headers(origin)});
+      if(existing)return jsonResponse({ok:true,assignmentId:existing.id,studentCount:Number(existing.data()?.studentCount||0),alreadyAssigned:true},{headers:headers(origin)});
       const assignmentId='assignment-'+createHash('sha256').update(classId+'\\0'+packId).digest('hex').slice(0,32);
       const assignmentRef=ctx.db.collection('packAssignments').doc(assignmentId);
       const result=await ctx.db.runTransaction(async transaction=>{
@@ -221,7 +222,7 @@ export default async request=>{
         transaction.create(assignmentRef,data);
         return{assignmentId:assignmentRef.id,studentCount:membersSnap.size,alreadyAssigned:false};
       });
-      return Response.json({ok:true,...result},{headers:headers(origin)});
+      return jsonResponse({ok:true,...result},{headers:headers(origin)});
     }
     if(action==='pack-achievements'){
       const packId=clean(body?.packId,160);if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
@@ -243,7 +244,7 @@ export default async request=>{
         return{uid,displayName:String(profile.displayName||m.data().displayName||'KatLearn Student'),email:String(profile.email||m.data().email||''),attempts,correct,accuracy:attempts?Math.round(correct*100/attempts):0};
       }));
       rows.sort((a,b)=>b.correct-a.correct||b.accuracy-a.accuracy||a.displayName.localeCompare(b.displayName));
-      return Response.json({ok:true,rows},{headers:headers(origin)});
+      return jsonResponse({ok:true,rows},{headers:headers(origin)});
     }
     const studentUid=clean(body?.studentUid,160);
     if(!studentUid)throw Object.assign(new Error('Thiếu học sinh.'),{status:400});
@@ -269,7 +270,7 @@ export default async request=>{
         await batch.commit();
       }
       await classSnap.ref.set({studentCount:count,updatedAt:FieldValue.serverTimestamp()},{merge:true});
-      return Response.json({ok:true,message:'Đã xóa học sinh khỏi lớp.'},{headers:headers(origin)});
+      return jsonResponse({ok:true,message:'Đã xóa học sinh khỏi lớp.'},{headers:headers(origin)});
     }
     if(action==='update-student'){
       const targetSnap=await students.doc(studentUid).get();
@@ -280,8 +281,8 @@ export default async request=>{
       const authChanges={};if(displayName)authChanges.displayName=displayName;if(password)authChanges.password=password;
       if(Object.keys(authChanges).length)await ctx.auth.updateUser(studentUid,authChanges);
       if(displayName){await students.doc(studentUid).set({displayName,updatedAt:FieldValue.serverTimestamp()},{merge:true});await memberRef.set({displayName},{merge:true})}
-      return Response.json({ok:true,message:'Đã cập nhật tài khoản học sinh.'},{headers:headers(origin)});
+      return jsonResponse({ok:true,message:'Đã cập nhật tài khoản học sinh.'},{headers:headers(origin)});
     }
     throw Object.assign(new Error('Thao tác không được hỗ trợ.'),{status:400});
-  }catch(error){console.error('[KatLearn teacher manage]',error);return Response.json({error:error.message||'Server error'},{status:error.status||500,headers:headers(origin)})}
+  }catch(error){console.error('[KatLearn teacher manage]',error);return jsonResponse({error:error.message||'Server error'},{status:error.status||500,headers:headers(origin)})}
 };
