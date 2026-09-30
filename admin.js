@@ -345,7 +345,7 @@ function renderDirectorySyncSummary(){
  const summary=$("#syncOverall");
  if(summary){
   const completed=Object.keys(DIRECTORY_SYNC_CONFIG).filter(e=>all?.[e]?.done).length;
-  summary.textContent=completed===3?"✓ Tất cả dữ liệu Admin đã được đồng bộ vào Firebase.":completed+" / 3 nhóm dữ liệu đã hoàn tất đồng bộ.";
+  summary.textContent=completed===4?"✓ Tất cả dữ liệu Admin đã được đồng bộ vào Firebase.":completed+" / 4 nhóm dữ liệu đã hoàn tất đồng bộ.";
  }
 }
 async function runDirectorySync(entity){
