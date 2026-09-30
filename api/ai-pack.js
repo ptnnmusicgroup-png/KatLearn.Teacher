@@ -1,19 +1,6 @@
-import { getApps, initializeApp, cert } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { admin } from './_firebase-admin.js';
 
 const STUDENT_AI_URL='https://lms-katlearn.vercel.app/api/ai-pack';
-
-function admin(){
-  if(!getApps().length){
-    const raw=String(process.env.FIREBASE_SERVICE_ACCOUNT_JSON||'').trim();
-    if(!raw)throw Object.assign(new Error('FIREBASE_SERVICE_ACCOUNT_JSON is not configured'),{status:503,code:'firebase_credentials_missing'});
-    let credentials;
-    try{credentials=JSON.parse(raw)}catch(_){throw Object.assign(new Error('FIREBASE_SERVICE_ACCOUNT_JSON is invalid'),{status:503,code:'firebase_credentials_invalid'})}
-    initializeApp({credential:cert(credentials)});
-  }
-  return{auth:getAuth(),db:getFirestore()};
-}
 
 function headers(){
   return{'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
