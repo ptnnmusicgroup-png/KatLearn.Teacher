@@ -122,8 +122,14 @@ async function restoreAdminSession(user){
 
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
 const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
-const state={user:null,page:"overview",data:{},catalog:null,syncing:false};
+const state={user:null,page:"overview",data:{},catalog:null,syncing:false,syncingDirectory:{},packEditId:""};
 const syncKey="katlearn.admin.catalog.v2";
+const directorySyncKey="katlearn.admin.directory-sync.v1";
+const DIRECTORY_SYNC_CONFIG={
+  users:{label:"Tài khoản",limit:200,status:"#syncUsersStatus",button:"#syncUsers"},
+  classes:{label:"Lớp học",limit:200,status:"#syncClassesStatus",button:"#syncClasses"},
+  packs:{label:"Bộ từ công khai",limit:20,status:"#syncPacksStatus",button:"#syncPacks"}
+};
 
 function errText(e,fallback="Có lỗi xảy ra."){
  if(e==null)return fallback;
@@ -150,14 +156,19 @@ function health(id,ok,text){const x=$(id);x.textContent=text;x.classList.toggle(
 function setConnection(ok,text){const x=$("#backendStatus");x.classList.toggle("good",ok===true);x.classList.toggle("bad",ok===false);$("#backendLabel").textContent=text}
 
 async function token(){if(!state.user)throw new Error("Chưa đăng nhập Admin.");const t=await state.user.getIdToken(true);if(!t)throw new Error("Không lấy được phiên Admin.");return t}
-async function apiGet(section){
+async function apiGet(section,params={}){
  const t=await token();
  let response;
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),12000);
- try{response=await fetch("/api/admin-hub?section="+encodeURIComponent(section),{method:"GET",cache:"no-store",headers:{Authorization:"Bearer "+t,Accept:"application/json"},signal:controller.signal})}
- catch(e){if(e?.name==="AbortError")throw Object.assign(new Error("Admin Hub phản hồi quá lâu (12 giây)."),{code:"admin_fetch_timeout",cause:e});throw Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_fetch_failed",cause:e})}
- finally{clearTimeout(timeout)}
+ try{
+  const query=new URLSearchParams({section:String(section||"overview")});
+  Object.entries(params||{}).forEach(([key,value])=>{if(value!==undefined&&value!==null&&String(value)!=="")query.set(key,String(value))});
+  response=await fetch("/api/admin-hub?"+query.toString(),{method:"GET",cache:"no-store",headers:{Authorization:"Bearer "+t,Accept:"application/json"},signal:controller.signal})
+ }catch(e){
+  if(e?.name==="AbortError")throw Object.assign(new Error("Admin Hub phản hồi quá lâu (12 giây)."),{code:"admin_fetch_timeout",cause:e});
+  throw Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_fetch_failed",cause:e})
+ }finally{clearTimeout(timeout)}
  const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){throw Object.assign(new Error("Admin Hub trả dữ liệu không hợp lệ · HTTP "+response.status),{code:"admin_invalid_json",details:raw.slice(0,800)})}
  if(!response.ok||data.ok!==true)throw Object.assign(new Error(errText(data.error,"HTTP "+response.status+" · Admin Hub thất bại")),{code:data.code||"admin_http_"+response.status,details:data.details})
  return data
@@ -202,7 +213,14 @@ $("#clearSession").onclick=leaveAdmin;
  each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  $("#teacherFilter")?.addEventListener("change",()=>render("teachers"));
  $("#userFilter")?.addEventListener("change",()=>render("users"));
- $("#catalogSync")?.addEventListener("click",syncCatalog);
+  $("#catalogSync")?.addEventListener("click",syncCatalog);
+ $("#syncAll")?.addEventListener("click",()=>runDirectorySyncAll());
+ $("#syncUsers")?.addEventListener("click",()=>runDirectorySync("users"));
+ $("#syncClasses")?.addEventListener("click",()=>runDirectorySync("classes"));
+ $("#syncPacks")?.addEventListener("click",()=>runDirectorySync("packs"));
+ $("#packEditCancel")?.addEventListener("click",closePackEditor);
+ $("#packEditSave")?.addEventListener("click",saveEditedPack);
+ $("#packEditorBackdrop")?.addEventListener("click",e=>{if(e.target.id==="packEditorBackdrop")closePackEditor()});
 }
 async function loadPage(page,force=false){
  if(!force&&state.data[page]){render(page);return}
@@ -269,8 +287,10 @@ function renderClasses(rows,limited){
 }
 function renderPacks(rows,limited){
  const q=$("#packSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","createdBy","createdByEmail","createdByUid"]));
- $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+date(p.createdAt)+'</td><td><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
- each(qsa("#packTable [data-delete-pack]"),b=>b.onclick=()=>deletePack(b.dataset.deletePack));$("#packLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
+ $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+date(p.createdAt)+'</td><td><div class="row-actions"><button class="btn" data-edit-pack="'+esc(p.id)+'">Sửa</button><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></div></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
+ each(qsa("#packTable [data-edit-pack]"),b=>b.onclick=()=>openPackEditor(b.dataset.editPack));
+ each(qsa("#packTable [data-delete-pack]"),b=>b.onclick=()=>deletePack(b.dataset.deletePack));
+ $("#packLimit").textContent=limited?"Admin chỉ hiển thị tối đa 300 pack trong bảng; nút đồng bộ Firebase xử lý toàn bộ.":"";
 }
 function renderSchools(rows,limited){
  const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","province","ward","schoolLevel","source"]));
@@ -282,6 +302,124 @@ function renderSchools(rows,limited){
  each(qsa("#schoolTable [data-delete-school]"),b=>b.onclick=()=>deleteSchoolAdmin(b.dataset.deleteSchool));
  $("#schoolLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
+function readDirectorySync(){
+ try{const value=JSON.parse(localStorage.getItem(directorySyncKey)||"{}");return value&&typeof value==="object"?value:{}}catch(_){return{}}
+}
+function saveDirectorySync(value){try{localStorage.setItem(directorySyncKey,JSON.stringify(value))}catch(_){}}
+function directorySyncStatus(entity){
+ const value=readDirectorySync()?.[entity]||{};
+ return{cursor:String(value.cursor||""),processed:num(value.processed),total:num(value.total),done:Boolean(value.done)}
+}
+function setDirectorySyncStatus(entity,textValue){
+ const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg)return;
+ const el=$(cfg.status);if(el)el.textContent=textValue;
+}
+function setDirectorySyncButton(entity,busy){
+ const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg)return;
+ const el=$(cfg.button);if(el){el.disabled=busy;el.textContent=busy?"⏳ Đang đồng bộ…":"☁️ Đồng bộ Firebase"}
+}
+function renderDirectorySyncSummary(){
+ const all=readDirectorySync();
+ for(const entity of Object.keys(DIRECTORY_SYNC_CONFIG)){
+  const p=all?.[entity]||{};
+  const total=num(p.total),processed=Math.min(total,num(p.processed));
+  setDirectorySyncStatus(entity,p.done&&total?("✓ "+fmt(total)+" đã đồng bộ"):total?(fmt(processed)+" / "+fmt(total)):"Chưa đồng bộ");
+ }
+ const summary=$("#syncOverall");
+ if(summary){
+  const completed=Object.keys(DIRECTORY_SYNC_CONFIG).filter(e=>all?.[e]?.done).length;
+  summary.textContent=completed===3?"✓ Tất cả dữ liệu Admin đã được đồng bộ vào Firebase.":completed+" / 3 nhóm dữ liệu đã hoàn tất đồng bộ.";
+ }
+}
+async function runDirectorySync(entity){
+ const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg||state.syncingDirectory[entity])return;
+ state.syncingDirectory[entity]=true;
+ setDirectorySyncButton(entity,true);
+ try{
+  let saved=directorySyncStatus(entity);
+  if(saved.done){saved={cursor:"",processed:0,total:0,done:false};}
+  let cursor=saved.cursor,total=saved.total,processed=saved.processed;
+  setDirectorySyncStatus(entity,total?("⏳ "+fmt(processed)+" / "+fmt(total)):"⏳ Đang chuẩn bị…");
+  for(let guard=0;guard<1000;guard++){
+   const before=cursor;
+   const result=await apiAction("sync-directory-chunk",{entity,cursor,limit:cfg.limit});
+   total=num(result.total)||total;
+   processed=Math.min(total,processed+num(result.processed));
+   cursor=String(result.nextCursor||"");
+   const next={cursor,processed,total,done:Boolean(result.done)};
+   saveDirectorySync({...readDirectorySync(),[entity]:next});
+   renderDirectorySyncSummary();
+   setDirectorySyncStatus(entity,next.done?"✓ "+fmt(total)+" đã đồng bộ":"⏳ "+fmt(processed)+" / "+fmt(total));
+   if(next.done)break;
+   if(!result.processed&&cursor===before)throw Object.assign(new Error("Đồng bộ "+cfg.label+" không tiến thêm được."),{code:"sync_stalled"});
+  }
+  const final=directorySyncStatus(entity);
+  if(!final.done)throw Object.assign(new Error("Đồng bộ "+cfg.label+" vượt quá giới hạn an toàn của phiên."),{code:"sync_guard_limit"});
+  toast("✓ Đã đồng bộ toàn bộ "+cfg.label+" vào Firebase.","good");
+ }catch(e){
+  setDirectorySyncStatus(entity,"❌ "+errText(e));
+  toast(e,"bad");
+ }finally{
+  state.syncingDirectory[entity]=false;
+  setDirectorySyncButton(entity,false);
+  renderDirectorySyncSummary();
+ }
+}
+async function runDirectorySyncAll(){
+ if(Object.values(state.syncingDirectory).some(Boolean))return;
+ const button=$("#syncAll");if(button){button.disabled=true;button.textContent="⏳ Đang đồng bộ tất cả…";}
+ try{
+  for(const entity of Object.keys(DIRECTORY_SYNC_CONFIG)){
+   await runDirectorySync(entity);
+   if(!directorySyncStatus(entity).done)break;
+  }
+  const done=Object.keys(DIRECTORY_SYNC_CONFIG).every(e=>directorySyncStatus(e).done);
+  toast(done?"✓ Đã đồng bộ tài khoản, lớp học và bộ từ công khai vào Firebase.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
+ }catch(e){toast(e,"bad")}
+ finally{if(button){button.disabled=false;button.textContent="☁️ Đồng bộ tất cả"}renderDirectorySyncSummary()}
+}
+
+async function openPackEditor(packId){
+ try{
+  const data=await apiGet("pack",{id:packId}),pack=data.pack||{};
+  state.packEditId=packId;
+  $("#packEditName").value=String(pack.name||"");
+  $("#packEditWords").value=JSON.stringify(Array.isArray(pack.words)?pack.words:[],null,2);
+  $("#packEditError").textContent="";
+  $("#packEditorTitle").textContent="Chỉnh sửa · "+String(pack.name||"Bộ từ");
+  $("#packEditorBackdrop").classList.add("open");
+  $("#packEditName").focus();
+ }catch(e){toast(e,"bad");pageError(e,"Không thể mở bộ từ")}
+}
+function closePackEditor(){
+ state.packEditId="";
+ $("#packEditorBackdrop")?.classList.remove("open");
+}
+async function saveEditedPack(){
+ const id=state.packEditId;if(!id)return;
+ const name=String($("#packEditName")?.value||"").trim();
+ const raw=String($("#packEditWords")?.value||"").trim();
+ const errorEl=$("#packEditError");
+ if(!name){if(errorEl)errorEl.textContent="Tên bộ từ không được để trống.";return}
+ let words;
+ try{words=raw?JSON.parse(raw):[]}catch(e){if(errorEl)errorEl.textContent="JSON không hợp lệ: "+String(e.message||"hãy kiểm tra lại dấu ngoặc/dấu phẩy.");return}
+ if(!Array.isArray(words)){if(errorEl)errorEl.textContent="Danh sách từ phải là một mảng JSON.";return}
+ const button=$("#packEditSave");if(button){button.disabled=true;button.textContent="⏳ Đang lưu…";}
+ if(errorEl)errorEl.textContent="";
+ try{
+  await apiAction("update-pack",{packId:id,name,words});
+  toast("✓ Đã cập nhật bộ từ và lưu vào Firebase.","good");
+  closePackEditor();
+  state.data.packs=null;
+  await loadPage("packs",true);
+ }catch(e){
+  if(errorEl)errorEl.textContent=errText(e);
+  toast(e,"bad");
+ }finally{
+  if(button){button.disabled=false;button.textContent="💾 Lưu vào Firebase";}
+ }
+}
+
 function renderActivity(rows){
  $("#activityList").innerHTML=rows.length?rows.map(x=>'<div class="activity-row"><div><strong>'+esc(x.action||"admin.action")+'</strong><small>'+esc(x.target||"—")+(x.adminEmail?" · "+esc(x.adminEmail):"")+'</small></div><time>'+date(x.at)+'</time></div>').join(""):'<div class="empty">Chưa có audit log.</div>';
 }
@@ -433,4 +571,5 @@ onAuthStateChanged(auth,async user=>{
 });
 
 bind();
+renderDirectorySyncSummary();
 renderOverview({stats:{},pending:[]});
