@@ -114,7 +114,7 @@ async function restoreAdminSession(user){
     console.error("[KatLearn Admin] session restore failed",error);
     state.user=null;
     await signOut(auth).catch(()=>{});
-    showLogin("Phiên Admin đã hết hạn hoặc Admin Hub chưa xác nhận được phiên này.");
+    showLogin(errText(error,"Phiên Admin đã hết hạn hoặc Admin Hub chưa xác nhận được phiên này."));
   }finally{
     authBusy=false;
   }
@@ -149,7 +149,7 @@ function pageError(error,title="Không thể tải dữ liệu"){const x=$("#pag
 function health(id,ok,text){const x=$(id);x.textContent=text;x.classList.toggle("good-text",ok===true);x.classList.toggle("bad-text",ok===false)}
 function setConnection(ok,text){const x=$("#backendStatus");x.classList.toggle("good",ok===true);x.classList.toggle("bad",ok===false);$("#backendLabel").textContent=text}
 
-async function token(){if(!state.user)throw new Error("Chưa đăng nhập Admin.");const t=await state.user.getIdToken();if(!t)throw new Error("Không lấy được phiên Admin.");return t}
+async function token(){if(!state.user)throw new Error("Chưa đăng nhập Admin.");const t=await state.user.getIdToken(true);if(!t)throw new Error("Không lấy được phiên Admin.");return t}
 async function apiGet(section){
  const t=await token();
  let response;
