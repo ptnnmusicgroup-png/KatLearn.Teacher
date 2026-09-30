@@ -121,14 +121,15 @@ async function restoreAdminSession(user){
 }
 
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
-const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
+const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai","private-packs":"Bộ từ riêng",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
 const state={user:null,page:"overview",data:{},catalog:null,syncing:false,syncingDirectory:{},packEditId:""};
 const syncKey="katlearn.admin.catalog.v2";
 const directorySyncKey="katlearn.admin.directory-sync.v1";
 const DIRECTORY_SYNC_CONFIG={
   users:{label:"Tài khoản",limit:200,status:"#syncUsersStatus",button:"#syncUsers"},
   classes:{label:"Lớp học",limit:200,status:"#syncClassesStatus",button:"#syncClasses"},
-  packs:{label:"Bộ từ công khai",limit:20,status:"#syncPacksStatus",button:"#syncPacks"}
+  packs:{label:"Bộ từ công khai",limit:20,status:"#syncPacksStatus",button:"#syncPacks"},
+  codePacks:{label:"Bộ từ từ code",limit:1,status:"#syncCodePacksStatus",button:"#syncCodePacks"}
 };
 
 function errText(e,fallback="Có lỗi xảy ra."){
@@ -210,7 +211,7 @@ $("#clearSession").onclick=leaveAdmin;
  $("#loginBtn")?.addEventListener("click",e=>{e.preventDefault();void handleAdminLogin()});
  $("#password")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();handleAdminLogin()}});
  $("#refresh").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{pageError(e);toast(e,"bad")});
- each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
+ each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch","privatePackSearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  $("#teacherFilter")?.addEventListener("change",()=>render("teachers"));
  $("#userFilter")?.addEventListener("change",()=>render("users"));
   $("#catalogSync")?.addEventListener("click",syncCatalog);
@@ -218,6 +219,8 @@ $("#clearSession").onclick=leaveAdmin;
  $("#syncUsers")?.addEventListener("click",()=>runDirectorySync("users"));
  $("#syncClasses")?.addEventListener("click",()=>runDirectorySync("classes"));
  $("#syncPacks")?.addEventListener("click",()=>runDirectorySync("packs"));
+ $("#syncCodePacks")?.addEventListener("click",()=>runDirectorySync("codePacks"));
+ $("#refreshPrivatePacks")?.addEventListener("click",()=>loadPage("private-packs",true).catch(e=>{pageError(e);toast(e,"bad")}));
  $("#packEditCancel")?.addEventListener("click",closePackEditor);
  $("#packEditSave")?.addEventListener("click",saveEditedPack);
  $("#packEditorBackdrop")?.addEventListener("click",e=>{if(e.target.id==="packEditorBackdrop")closePackEditor()});
@@ -236,7 +239,8 @@ function render(section){
  if(section==="teachers")return renderTeachers(rows,d.limited);
  if(section==="users")return renderUsers(rows,d.limited);
  if(section==="classes")return renderClasses(rows,d.limited);
- if(section==="packs")return renderPacks(rows,d.limited);
+ if(section==="packs")return renderPacks(rows,d.limited,d);
+ if(section==="private-packs")return renderPrivatePacks(rows,d.total,d.limited);
  if(section==="schools")return renderSchools(rows,d.limited);
  if(section==="activity")return renderActivity(rows);
 }
@@ -285,12 +289,25 @@ function renderClasses(rows,limited){
  each(qsa("#classTable [data-delete-class]"),b=>b.onclick=()=>deleteClassAdmin(b.dataset.deleteClass));
  $("#classLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
 }
-function renderPacks(rows,limited){
+function renderPacks(rows,limited,data={}){
  const q=$("#packSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","createdBy","createdByEmail","createdByUid"]));
- $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+date(p.createdAt)+'</td><td><div class="row-actions"><button class="btn" data-edit-pack="'+esc(p.id)+'">Sửa</button><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></div></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có bộ từ công khai.</div></td></tr>';
+ const codePacks=Array.isArray(data.codePacks)?data.codePacks:[];
+ $("#codePackCount").textContent=fmt(Number(data.codePackCount)||codePacks.length);
+ $("#codeWordCount").textContent=fmt(Number(data.codeWordCount)||codePacks.reduce((s,p)=>s+num(p.wordCount),0));
+ $("#firebasePackCount").textContent=fmt(rows.length);
+ const codeList=codePacks.filter(x=>match(x,q,["name","sourceId","sourceFile"]));
+ $("#codePackTable").innerHTML=codeList.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ code")+'</strong><small>ID <span class="mono">'+esc(p.sourceId||p.id)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td><span class="mono">'+esc(p.sourceFile||"data/vocabulary/*.json")+'</span></td><td><span class="badge teacher">SOURCE CODE</span></td></tr>').join("")||'<tr><td colspan="4"><div class="empty">Không có bộ từ trong source code.</div></td></tr>';
+ $("#packTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ chưa đặt tên")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+fmt(p.wordCount)+'</td><td>'+esc(p.createdByEmail||p.createdBy||p.createdByUid||"—")+'</td><td>'+date(p.createdAt)+'</td><td><div class="row-actions"><button class="btn" data-edit-pack="'+esc(p.id)+'">Sửa</button><button class="btn bad" data-delete-pack="'+esc(p.id)+'">Xóa</button></div></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không có pack công khai Firebase.</div></td></tr>';
  each(qsa("#packTable [data-edit-pack]"),b=>b.onclick=()=>openPackEditor(b.dataset.editPack));
  each(qsa("#packTable [data-delete-pack]"),b=>b.onclick=()=>deletePack(b.dataset.deletePack));
- $("#packLimit").textContent=limited?"Admin chỉ hiển thị tối đa 300 pack trong bảng; nút đồng bộ Firebase xử lý toàn bộ.":"";
+ $("#packLimit").textContent=limited?"Admin chỉ hiển thị tối đa 300 pack Firebase trong bảng; source code vẫn hiển thị đầy đủ.":"";
+ const sync=directorySyncStatus("codePacks");
+ setDirectorySyncStatus("codePacks",sync.done?("✓ "+fmt(Number(data.codePackCount)||codePacks.length)+" bộ / "+fmt(Number(data.codeWordCount)||codePacks.reduce((s,p)=>s+num(p.wordCount),0))+" từ đã sync"):"Chưa sync");
+}
+function renderPrivatePacks(rows,total,limited){
+ const q=$("#privatePackSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","ownerUid","ownerEmail","ownerDisplayName","id"]));
+ $("#privatePackTable").innerHTML=list.map(p=>'<tr><td><strong>'+esc(p.name||"Bộ từ riêng")+'</strong><small>ID <span class="mono">'+esc(p.id)+'</span></small></td><td>'+esc(p.ownerDisplayName||"—")+'<small>'+esc(p.ownerEmail||p.ownerUid||"—")+'</small></td><td>'+fmt(p.wordCount)+'</td><td>'+date(p.createdAt)+'</td><td><span class="badge">PERSONAL</span></td></tr>').join("")||'<tr><td colspan="5"><div class="empty">Không tìm thấy bộ từ riêng.</div></td></tr>';
+ $("#privatePackLimit").textContent=Number(total)>list.length||limited?"Đang hiển thị "+fmt(list.length)+" bộ từ riêng trong giới hạn Admin Hub ("+fmt(total)+" tổng).":"";
 }
 function renderSchools(rows,limited){
  const q=$("#schoolSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","province","ward","schoolLevel","source"]));
@@ -336,6 +353,19 @@ async function runDirectorySync(entity){
  state.syncingDirectory[entity]=true;
  setDirectorySyncButton(entity,true);
  try{
+  if(entity==="codePacks"){
+   setDirectorySyncStatus(entity,"⏳ Đang đọc toàn bộ data/vocabulary/*.json…");
+   const result=await apiAction("sync-code-public-packs");
+   const next={cursor:"",processed:num(result.processed),total:num(result.total),done:Boolean(result.done)};
+   saveDirectorySync({...readDirectorySync(),[entity]:next});
+   renderDirectorySyncSummary();
+   setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.total)+" bộ / "+fmt(num(result.totalWords))+" từ đã đồng bộ":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+   if(!next.done)throw Object.assign(new Error("Đồng bộ kho từ code chưa hoàn tất."),{code:"code_pack_sync_incomplete"});
+   state.data.packs=null;
+   await loadPage("packs",true);
+   toast("✓ Đã đưa toàn bộ bộ từ trong source code vào Firebase mirror.","good");
+   return;
+  }
   let saved=directorySyncStatus(entity);
   if(saved.done){saved={cursor:"",processed:0,total:0,done:false};}
   let cursor=saved.cursor,total=saved.total,processed=saved.processed;
@@ -374,7 +404,7 @@ async function runDirectorySyncAll(){
    if(!directorySyncStatus(entity).done)break;
   }
   const done=Object.keys(DIRECTORY_SYNC_CONFIG).every(e=>directorySyncStatus(e).done);
-  toast(done?"✓ Đã đồng bộ tài khoản, lớp học và bộ từ công khai vào Firebase.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
+  toast(done?"✓ Đã đồng bộ tài khoản, lớp học, bộ từ công khai và toàn bộ bộ từ từ code.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
  }catch(e){toast(e,"bad")}
  finally{if(button){button.disabled=false;button.textContent="☁️ Đồng bộ tất cả"}renderDirectorySyncSummary()}
 }
