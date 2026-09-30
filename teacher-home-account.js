@@ -32,40 +32,40 @@
       const profileSnap=await fb.getDoc(fb.doc(db,'users',uid));
       if(!profileSnap.exists()||String(user?.uid||'')!==uid)return;
       const profile=profileSnap.data()||{};
-      if(profile.accountCode){
-        const code=String(profile.accountCode);
-        const accountRef=fb.doc(db,'accounts',code);
-        const accountSnap=await fb.getDoc(accountRef);
-        if(!accountSnap.exists()){
-          await fb.setDoc(accountRef,{accountCode:code,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',loginName:String(user.email||'').split('@')[0]||'katlearn',createdAt:profile.createdAt||Date.now(),updatedAt:Date.now()},{merge:false});
-        }
-        await fb.setDoc(fb.doc(db,'accounts',code,'memory','meta'),{accountCode:code,uid,updatedAt:Date.now()},{merge:true});
-        return;
-      }
-      const {runTransaction}=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
       const strip=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
       const login=strip(String(user.email||'').split('@')[0]||'katlearn').replace(/[^a-zA-Z0-9.@_-]+/g,'')||'katlearn';
       const display=strip(String(user.displayName||profile.displayName||login||'teacher')).replace(/[^a-zA-Z0-9]+/g,'')||'Teacher';
+      const existing=String(profile.accountCode||'').trim();
+
+      if(existing){
+        await fb.setDoc(fb.doc(db,'accounts',existing),{
+          accountCode:existing,uid,email:user.email||'',
+          displayName:user.displayName||profile.displayName||'',loginName:login,
+          createdAt:profile.createdAt||Date.now(),updatedAt:Date.now()
+        },{merge:true});
+        if(String(user?.uid||'')!==uid)return;
+        await fb.setDoc(fb.doc(db,'accounts',existing,'memory','meta'),{accountCode:existing,uid,updatedAt:Date.now()},{merge:true});
+        return;
+      }
+
+      const {runTransaction}=await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js');
       const seqRef=fb.doc(db,'system','accountSequence');
       const code=await runTransaction(db,async tx=>{
         const seq=await tx.get(seqRef);
-        let next=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
-        let code=login+'_'+display+'_'+String(next).padStart(3,'0');
-        let ref=fb.doc(db,'accounts',code);
-        let snap=await tx.get(ref);
-        while(snap.exists()){
-          next++;
-          code=login+'_'+display+'_'+String(next).padStart(3,'0');
-          ref=fb.doc(db,'accounts',code);
-          snap=await tx.get(ref);
-        }
+        const next=Number(seq.exists()?seq.data()?.lastIssued:0)+1;
+        const nextCode=login+'_'+display+'_'+String(next).padStart(3,'0');
+        const accountRef=fb.doc(db,'accounts',nextCode);
+        // Do not probe a newly allocated account document: missing account
+        // reads are protected by Firestore rules. accountSequence is the
+        // atomic collision-safe allocator.
         tx.set(seqRef,{lastIssued:next,updatedAt:Date.now()},{merge:true});
-        tx.set(ref,{accountCode:code,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',loginName:login,createdAt:Date.now(),updatedAt:Date.now()},{merge:false});
-        tx.set(fb.doc(db,'accounts',code,'memory','meta'),{accountCode:code,uid,createdAt:Date.now(),updatedAt:Date.now()},{merge:true});
-        return code;
+        tx.set(accountRef,{accountCode:nextCode,uid,email:user.email||'',displayName:user.displayName||profile.displayName||'',loginName:login,createdAt:Date.now(),updatedAt:Date.now()},{merge:true});
+        tx.set(fb.doc(db,'accounts',nextCode,'memory','meta'),{accountCode:nextCode,uid,createdAt:Date.now(),updatedAt:Date.now()},{merge:true});
+        tx.set(fb.doc(db,'users',uid),{accountCode:nextCode,updatedAt:Date.now()},{merge:true});
+        return nextCode;
       });
       if(String(user?.uid||'')!==uid)return;
-      await fb.setDoc(fb.doc(db,'users',uid),{accountCode:code,updatedAt:Date.now()},{merge:true});
+      return code;
     }catch(e){console.warn('[KatLearn] Account namespace provisioning:',e)}
   }
   async function hydrateProfile(){try{const uid=String(user?.uid||'');if(!db||!fb||!uid||(!teacherAccess&&!isAdminUser())||hydratedUid===uid)return;const snap=await fb.getDoc(fb.doc(db,'users',uid));if(!snap.exists()||String(user?.uid||'')!==uid)return;const p=snap.data();let label='🐾 Giáo viên';if(p.schoolName)label+=' · '+String(p.schoolName);else if(p.schoolId){const ss=await fb.getDoc(fb.doc(db,'schools',p.schoolId));if(String(user?.uid||'')!==uid)return;if(ss.exists())label+=' · '+ss.data().name}const names=[];if(p.schoolId&&Array.isArray(p.classIds))for(const id of p.classIds.slice(0,8)){const cs=await fb.getDoc(fb.doc(db,'schools',p.schoolId,'classes',id));if(String(user?.uid||'')!==uid)return;if(cs.exists())names.push(cs.data().name)}if(String(user?.uid||'')!==uid)return;if(names.length)label+=' · '+names.join(', ');profileLabel=label;hydratedUid=uid;mount()}catch(e){if(String(user?.uid||''))console.warn('[Teacher profile]',e)}}
