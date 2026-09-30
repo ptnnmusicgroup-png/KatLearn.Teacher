@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20261001-1">
+<link rel="stylesheet" href="admin.css?v=20261001-2">
 </head>
 <body>
 <section id="loginGate" class="login-gate">
@@ -46,6 +46,7 @@
       <button data-page="teachers"><i>✓</i>Giáo viên</button>
       <button data-page="users"><i>♟</i>Tài khoản</button>
       <button data-page="classes"><i>▦</i>Lớp học</button>
+      <div class="nav-label">KHO BỘ TỪ</div>
       <button data-page="packs"><i>▤</i>Bộ từ công khai</button>
       <button data-page="private-packs"><i>🔒</i>Bộ từ riêng</button>
       <button data-page="schools"><i>🏫</i>Trường học</button>
@@ -112,7 +113,7 @@
       </section>
 
       <section class="page" id="page-private-packs">
-        <div class="hero"><div><p class="eyebrow">PRIVATE CONTENT</p><h1>Bộ từ riêng</h1><p>Các bộ từ cá nhân đang nằm dưới `users/{uid}/personalPacks`; chỉ Admin Hub đọc để quản trị toàn hệ thống.</p></div><div class="hero-cat">🔒</div></div>
+        <div class="hero"><div><p class="eyebrow">PRIVATE CONTENT</p><h1>🔒 Bộ từ riêng</h1><p>Các bộ từ cá nhân đang nằm dưới `users/{uid}/personalPacks`; chỉ Admin Hub đọc để quản trị toàn hệ thống.</p></div><div class="hero-cat">🔒</div></div>
         <section class="card"><div class="toolbar"><input id="privatePackSearch" class="input" placeholder="Tìm tên bộ từ, UID, email…"><button id="refreshPrivatePacks" class="btn">↻ Làm mới</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Chủ sở hữu</th><th>Số từ</th><th>Ngày tạo</th><th>Nguồn</th></tr></thead><tbody id="privatePackTable"></tbody></table></div><div id="privatePackLimit" class="limit"></div></section>
       </section>
 
@@ -152,6 +153,6 @@
   </div>
 </div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20261001-1"></script>
+<script type="module" src="admin.js?v=20261001-2"></script>
 </body>
 </html>
