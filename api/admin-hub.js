@@ -55,7 +55,7 @@ function corsHeaders(origin){
   return h;
 }
 function writeJson(status,body,origin=""){
-  return Response.json(body,{status:Number(status)||200,headers:corsHeaders(origin)});
+  return new Response(JSON.stringify(body),{status:Number(status)||200,headers:corsHeaders(origin)});
 }
 async function requireAdmin(request){
   const match=/^Bearer\s+(.+)$/i.exec(header(request,"authorization").trim());
