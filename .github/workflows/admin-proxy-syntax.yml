@@ -25,3 +25,18 @@ jobs:
             echo "Checking $file"
             node --check "$file"
           done < <(find . -type f -name '*.js' -not -path './.git/*' | sort)
+
+      - name: Reject Node-incompatible Response.json usage
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE --include='*.js' 'Response[[:space:]]*\.[[:space:]]*json[[:space:]]*\(' api; then
+            echo "::error::Use new Response(JSON.stringify(...), ...) or a local JSON helper in Node functions."
+            exit 1
+          fi
+
+      - name: Verify Node runtime target
+        shell: bash
+        run: |
+          set -euo pipefail
+          node -e "const p=require('./package.json'); const v=p.engines?.node||''; if(!/>=?[[:space:]]*22/.test(v)){throw new Error('package.json must target Node >=22 for Vercel Functions. Got: '+v)}"
