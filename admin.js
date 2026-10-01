@@ -274,13 +274,15 @@ function renderUsers(rows,limited){
   const actionHtml=protectedUser?"":profileMissing
     ?'<small class="bad-text">⚠️ Chưa có users/{uid} · chỉ quản lý sau khi hồ sơ được tạo</small>'
     :'<button class="btn" data-rename-user="'+esc(u.id)+'">Sửa tên</button>'+
+      '<button class="btn" data-migrate-uid="'+esc(u.id)+'">Sửa UID / Sync</button>'+
       '<button class="btn" data-reset-user="'+esc(u.id)+'">Reset</button>'+
       (locked?'<button class="btn good" data-enable-user="'+esc(u.id)+'">Mở khóa</button>':'<button class="btn" data-disable-user="'+esc(u.id)+'">Khóa</button>')+
       '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>';
-  return '<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleBadge+'">'+esc(roleText)+'</span>'+ (locked?'<small class="bad-text">🔒 Đang khóa</small>':'') +'</td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · ")||"—")+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td><td><div class="row-actions">'+actionHtml+
+  return '<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small><small>UID: <span class="mono">'+esc(u.uid||u.id||"—")+'</span></small></td><td><span class="badge '+roleBadge+'">'+esc(roleText)+'</span>'+ (locked?'<small class="bad-text">🔒 Đang khóa</small>':'') +'</td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · ")||"—")+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td><td><div class="row-actions">'+actionHtml+
    '</div></td></tr>';
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
  each(qsa("#userTable [data-rename-user]"),b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
+ each(qsa("#userTable [data-migrate-uid]"),b=>b.onclick=()=>migrateUserUid(b.dataset.migrateUid));
  each(qsa("#userTable [data-reset-user]"),b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
  each(qsa("#userTable [data-disable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
  each(qsa("#userTable [data-enable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
@@ -527,6 +529,26 @@ async function teacherAction(action,uid){
  try{await apiAction(action==="verify"?"verify-teacher":"reject-teacher",{uid});toast(action==="verify"?"✓ Đã duyệt giáo viên":"✓ Đã từ chối hồ sơ","good");state.data.teachers=null;state.data.overview=null;await loadPage("overview",true);state.page="overview";clearPageError();renderOverview(state.data.overview||{});each(qsa(".page"),x=>x.classList.toggle("active",x.id==="page-overview"));each(qsa(".nav button"),x=>x.classList.toggle("active",x.dataset.page==="overview"));$("#pageTitle").textContent="Tổng quan";window.scrollTo({top:0,behavior:"smooth"})}catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật giáo viên")}}
 async function inspectTeacher(uid){
  const t=(state.data.teachers?.rows||[]).find(x=>x.id===uid);if(!t)return;const v=t.teacherVerification||{};await dialog("Hồ sơ giáo viên","Tên: "+(t.displayName||t.name||"—")+"\nEmail: "+(t.email||"—")+"\nTrường: "+(t.schoolName||v.requestedSchoolName||"—")+"\nLớp: "+(v.requestedClassName||t.className||"—")+"\nKhu vực: "+([t.province,t.ward].filter(Boolean).join(" · ")||"—"),"Đóng","");}
+async function migrateUserUid(oldUid){
+ const row=(state.data.users?.rows||[]).find(x=>x.id===oldUid);
+ const currentUid=String(row?.uid||oldUid||"").trim();
+ const newUid=prompt("Nhập UID Firebase Auth mới (UID đích phải tồn tại trong Firebase):", "");
+ if(newUid===null)return;
+ const cleanUid=String(newUid).trim();
+ if(!cleanUid)return toast("UID mới không được để trống.","bad");
+ if(cleanUid===currentUid)return toast("UID mới trùng UID hiện tại.");
+ const detail="Hệ thống sẽ kiểm tra email của UID đích rồi chuyển hồ sơ users/{uid} và các liên kết lớp, assignment, pack, account namespace, leaderboard sang UID này. Firebase Auth UID không bị đổi trực tiếp.";
+ const ok=await dialog("Sửa UID và đồng bộ Firebase?",detail,"Cấp UID & Sync","Hủy");
+ if(!ok)return;
+ try{
+  const result=await apiAction("migrate-user-uid",{oldUid:currentUid,newUid:cleanUid});
+  toast("✓ Đã đồng bộ UID "+cleanUid+" vào Firebase.","good");
+  state.data.users=null;state.data.overview=null;
+  await loadPage("users",true);
+  await loadPage("overview",true);
+  if(result?.members)toast("✓ UID đã đổi và "+fmt(result.members)+" thành viên lớp đã cập nhật.","good");
+ }catch(e){toast(e,"bad");pageError(e,"Không thể đồng bộ UID")}
+}
 async function renameUser(uid,currentName){
  const name=prompt("Tên hiển thị mới:",currentName);
  if(name===null)return;
