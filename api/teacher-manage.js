@@ -123,9 +123,10 @@ export default async request=>{
       if(ownerUid){
         const ownerRef=students.doc(ownerUid),ownerSnap=await ownerRef.get();
         if(ownerSnap.exists){
-          const teacher=ownerSnap.data()||{},ids=Array.isArray(teacher.classIds)?teacher.classIds.filter(id=>id!==classId):[];
+          const teacher=ownerSnap.data()||{},catalogClassId=String(classData.catalogClassId||'').trim();
+          const ids=Array.isArray(teacher.classIds)?teacher.classIds.filter(id=>id!==classId&&(!catalogClassId||id!==catalogClassId)):[];
           const currentCatalog=String(teacher.catalogClassId||'').trim();
-          const nextCatalog=currentCatalog===classId?(ids[0]||''):currentCatalog;
+          const nextCatalog=(currentCatalog===classId||!!catalogClassId&&currentCatalog===catalogClassId)?(ids[0]||''):currentCatalog;
           if(ids.length!==((teacher.classIds||[]).length)||nextCatalog!==currentCatalog){
             await ownerRef.set({classIds:ids,catalogClassId:nextCatalog,updatedAt:FieldValue.serverTimestamp()},{merge:true});
           }
