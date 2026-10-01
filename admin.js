@@ -161,7 +161,7 @@ async function apiGet(section,params={}){
  const t=await token();
  let response;
  const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),12000);
+ const timeout=setTimeout(()=>controller.abort(),section==="users"?45000:12000);
  try{
   const query=new URLSearchParams({section:String(section||"overview")});
   Object.entries(params||{}).forEach(([key,value])=>{if(value!==undefined&&value!==null&&String(value)!=="")query.set(key,String(value))});
@@ -268,19 +268,24 @@ function renderUsers(rows,limited){
  $("#userTable").innerHTML=list.map(u=>{
   const locked=Boolean(u.disabled);
   const protectedUser=String(u.email||"").toLowerCase()==="katlearn.admin@gmail.com";
-  return '<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleClass(u.role)+'">'+esc(roleLabel(u.role))+'</span>'+ (locked?'<small class="bad-text">🔒 Đang khóa</small>':'') +'</td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · ")||"—")+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td><td><div class="row-actions">'+
-   (protectedUser?'':'<button class="btn" data-rename-user="'+esc(u.id)+'">Sửa tên</button>'+
-   '<button class="btn" data-reset-user="'+esc(u.id)+'">Reset</button>'+
-   (locked?'<button class="btn good" data-enable-user="'+esc(u.id)+'">Mở khóa</button>':'<button class="btn" data-disable-user="'+esc(u.id)+'">Khóa</button>')+
-   '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>')+
-   '</div></td></tr>'
+  const profileMissing=u.profileExists===false;
+  const roleText=profileMissing?"Chưa có hồ sơ":roleLabel(u.role);
+  const roleBadge=profileMissing?"pending":roleClass(u.role);
+  const actionHtml=protectedUser?"":profileMissing
+    ?'<small class="bad-text">⚠️ Chưa có users/{uid} · chỉ quản lý sau khi hồ sơ được tạo</small>'
+    :'<button class="btn" data-rename-user="'+esc(u.id)+'">Sửa tên</button>'+
+      '<button class="btn" data-reset-user="'+esc(u.id)+'">Reset</button>'+
+      (locked?'<button class="btn good" data-enable-user="'+esc(u.id)+'">Mở khóa</button>':'<button class="btn" data-disable-user="'+esc(u.id)+'">Khóa</button>')+
+      '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>';
+  return '<tr><td><strong>'+esc(u.displayName||u.name||"KatLearn User")+'</strong><small>'+esc(u.email||"")+(u.accountCode?" · "+esc(u.accountCode):"")+'</small></td><td><span class="badge '+roleBadge+'">'+esc(roleText)+'</span>'+ (locked?'<small class="bad-text">🔒 Đang khóa</small>':'') +'</td><td>'+esc([u.schoolName,u.className].filter(Boolean).join(" · ")||"—")+'<small>'+esc([u.province,u.ward].filter(Boolean).join(" · ")||"—")+'</small></td><td>🪙 '+fmt(u.coins)+' · ⚡ '+fmt(u.energy)+'<small>🔥 streak '+fmt(u.streak)+'</small></td><td>'+date(u.createdAt)+'</td><td><div class="row-actions">'+actionHtml+
+   '</div></td></tr>';
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
  each(qsa("#userTable [data-rename-user]"),b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
  each(qsa("#userTable [data-reset-user]"),b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
  each(qsa("#userTable [data-disable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
  each(qsa("#userTable [data-enable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
  each(qsa("#userTable [data-delete-user]"),b=>b.onclick=()=>deleteUserAccount(b.dataset.deleteUser));
- $("#userLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"";
+ $("#userLimit").textContent=limited?"Đang hiển thị tối đa dữ liệu an toàn từ Admin Hub.":"Đã tải toàn bộ "+fmt(rows.length)+" tài khoản từ Firebase Auth."+(rows.some(x=>x.profileExists===false)?" Một số tài khoản chưa có hồ sơ Firestore.":"");
 }
 function renderClasses(rows,limited){
  const q=$("#classSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","grade","teacherEmail","teacherUid","schoolName","joinCode","province","ward"]));
