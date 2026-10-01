@@ -5,5 +5,11 @@
       "maxDuration": 300
     }
   },
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/favicon.ico",
+      "destination": "/favicon.svg"
+    }
+  ]
 }
