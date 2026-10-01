@@ -161,13 +161,13 @@ async function apiGet(section,params={}){
  const t=await token();
  let response;
  const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),section==="users"?45000:12000);
+ const timeoutMs=section==="users"?45000:12000; const timeout=setTimeout(()=>controller.abort(),timeoutMs);
  try{
   const query=new URLSearchParams({section:String(section||"overview")});
   Object.entries(params||{}).forEach(([key,value])=>{if(value!==undefined&&value!==null&&String(value)!=="")query.set(key,String(value))});
   response=await fetch("/api/admin-hub?"+query.toString(),{method:"GET",cache:"no-store",headers:{Authorization:"Bearer "+t,Accept:"application/json"},signal:controller.signal})
  }catch(e){
-  if(e?.name==="AbortError")throw Object.assign(new Error("Admin Hub phản hồi quá lâu (12 giây)."),{code:"admin_fetch_timeout",cause:e});
+  if(e?.name==="AbortError"){const seconds=Math.round(timeoutMs/1000);throw Object.assign(new Error("Admin Hub phản hồi quá lâu ("+seconds+" giây)."),{code:"admin_fetch_timeout",cause:e});}
   throw Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_fetch_failed",cause:e})
  }finally{clearTimeout(timeout)}
  const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){throw Object.assign(new Error("Admin Hub trả dữ liệu không hợp lệ · HTTP "+response.status),{code:"admin_invalid_json",details:raw.slice(0,800)})}
