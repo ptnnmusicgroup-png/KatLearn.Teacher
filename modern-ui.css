@@ -1,3 +1,4 @@
+@import url("katlearn-blue-theme.css?v=20261001-1");
 /* KatLearn Teacher modern UI refresh — presentation layer only. */
 :root{--kt-bg:#f6f7fb;--kt-surface:#fff;--kt-ink:#25232b;--kt-muted:#7d7a86;--kt-line:#e8e8ef;--kt-accent:#6b5ce7;--kt-accent-2:#8a79f4;--kt-soft:#f0edff;--kt-shadow:0 18px 55px rgba(45,38,74,.08);--kt-shadow-sm:0 8px 26px rgba(45,38,74,.06)}
 body{background-color:var(--kt-bg);color:var(--kt-ink);font-family:'Be Vietnam Pro',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
