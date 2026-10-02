@@ -126,7 +126,7 @@ const state={user:null,page:"overview",data:{},catalog:null,syncing:false,syncin
 const syncKey="katlearn.admin.catalog.v2";
 const directorySyncKey="katlearn.admin.directory-sync.v1";
 const DIRECTORY_SYNC_CONFIG={
-  users:{label:"Tài khoản",limit:200,status:"#syncUsersStatus",button:"#syncUsers"},
+  users:{label:"Tài khoản + UID",limit:1,status:"#syncUsersStatus",button:"#syncUsers",specialAction:"sync-auth-accounts"},
   classes:{label:"Lớp học",limit:200,status:"#syncClassesStatus",button:"#syncClasses"},
   packs:{label:"Bộ từ công khai",limit:20,status:"#syncPacksStatus",button:"#syncPacks"},
   personalPacks:{label:"Bộ từ riêng / tài khoản",limit:1,status:"#syncPersonalPacksStatus",button:null,specialAction:"sync-all-personal-packs"},
@@ -351,7 +351,9 @@ function renderDirectorySyncSummary(){
  for(const entity of Object.keys(DIRECTORY_SYNC_CONFIG)){
   const p=all?.[entity]||{};
   const total=num(p.total),processed=Math.min(total,num(p.processed));
-  if(entity==="personalPacks"&&p.done){
+  if(entity==="users"&&p.done){
+    setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" tài khoản · "+fmt(num(p.uidsRepaired))+" UID sửa · "+fmt(num(p.accountsCreated))+" account tạo");
+  }else if(entity==="personalPacks"&&p.done){
     setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" lượt mirror đã xử lý · "+fmt(num(p.reverseRepaired))+" pack cũ phục hồi");
   }else{
     setDirectorySyncStatus(entity,p.done&&total?("✓ "+fmt(total)+" đã đồng bộ"):total?(fmt(processed)+" / "+fmt(total)):"Chưa đồng bộ");
@@ -380,6 +382,23 @@ async function runDirectorySync(entity){
    state.data["private-packs"]=null;
    await loadPage("private-packs",true);
    toast("✓ Đã sync toàn bộ bộ từ cá nhân vào từng tài khoản Firebase.","good");
+   return;
+  }
+  if(cfg.specialAction){
+   setDirectorySyncStatus(entity,entity==="users"?"⏳ Đang đối chiếu Firebase Auth UID với users/accounts…":"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
+   const result=await apiAction(cfg.specialAction);
+   const next={cursor:"",processed:num(result.processed),total:num(result.total),reverseRepaired:num(result.reverseRepaired),uidsRepaired:num(result.uidsRepaired),accountsCreated:num(result.accountsCreated),done:Boolean(result.done)};
+   saveDirectorySync({...readDirectorySync(),[entity]:next});
+   renderDirectorySyncSummary();
+   if(entity==="users"){
+    setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.processed)+" tài khoản · "+fmt(next.uidsRepaired)+" UID sửa · "+fmt(next.accountsCreated)+" account tạo":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+    state.data.users=null;await loadPage("users",true);
+    toast("✓ Đã sync UID Firebase Auth về users + accounts + Admin mirror.","good");
+   }else{
+    setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.processed)+" lượt mirror · "+fmt(next.reverseRepaired)+" pack cũ phục hồi":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+    state.data["private-packs"]=null;await loadPage("private-packs",true);
+    toast("✓ Đã sync toàn bộ bộ từ cá nhân vào từng tài khoản Firebase.","good");
+   }
    return;
   }
   if(entity==="codePacks"){
