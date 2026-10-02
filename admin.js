@@ -129,6 +129,7 @@ const DIRECTORY_SYNC_CONFIG={
   users:{label:"Tài khoản",limit:200,status:"#syncUsersStatus",button:"#syncUsers"},
   classes:{label:"Lớp học",limit:200,status:"#syncClassesStatus",button:"#syncClasses"},
   packs:{label:"Bộ từ công khai",limit:20,status:"#syncPacksStatus",button:"#syncPacks"},
+  personalPacks:{label:"Bộ từ riêng / tài khoản",limit:1,status:"#syncPersonalPacksStatus",button:null,specialAction:"sync-all-personal-packs"},
   codePacks:{label:"Bộ từ từ code",limit:1,status:"#syncCodePacksStatus",button:"#syncCodePacks"}
 };
 
@@ -342,7 +343,7 @@ function setDirectorySyncStatus(entity,textValue){
  const el=$(cfg.status);if(el)el.textContent=textValue;
 }
 function setDirectorySyncButton(entity,busy){
- const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg)return;
+ const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg||!cfg.button)return;
  const el=$(cfg.button);if(el){el.disabled=busy;el.textContent=busy?"⏳ Đang đồng bộ…":"☁️ Đồng bộ Firebase"}
 }
 function renderDirectorySyncSummary(){
@@ -350,12 +351,17 @@ function renderDirectorySyncSummary(){
  for(const entity of Object.keys(DIRECTORY_SYNC_CONFIG)){
   const p=all?.[entity]||{};
   const total=num(p.total),processed=Math.min(total,num(p.processed));
-  setDirectorySyncStatus(entity,p.done&&total?("✓ "+fmt(total)+" đã đồng bộ"):total?(fmt(processed)+" / "+fmt(total)):"Chưa đồng bộ");
+  if(entity==="personalPacks"&&p.done){
+    setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" lượt mirror đã xử lý · "+fmt(num(p.reverseRepaired))+" pack cũ phục hồi");
+  }else{
+    setDirectorySyncStatus(entity,p.done&&total?("✓ "+fmt(total)+" đã đồng bộ"):total?(fmt(processed)+" / "+fmt(total)):"Chưa đồng bộ");
+  }
  }
  const summary=$("#syncOverall");
  if(summary){
   const completed=Object.keys(DIRECTORY_SYNC_CONFIG).filter(e=>all?.[e]?.done).length;
-  summary.textContent=completed===4?"✓ Tất cả dữ liệu Admin đã được đồng bộ vào Firebase.":completed+" / 4 nhóm dữ liệu đã hoàn tất đồng bộ.";
+  const totalGroups=Object.keys(DIRECTORY_SYNC_CONFIG).length;
+  summary.textContent=completed===totalGroups?"✓ Tất cả dữ liệu Admin đã được đồng bộ vào Firebase.":completed+" / "+totalGroups+" nhóm dữ liệu đã hoàn tất đồng bộ.";
  }
 }
 async function runDirectorySync(entity){
@@ -363,6 +369,19 @@ async function runDirectorySync(entity){
  state.syncingDirectory[entity]=true;
  setDirectorySyncButton(entity,true);
  try{
+  if(cfg.specialAction){
+   setDirectorySyncStatus(entity,"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
+   const result=await apiAction(cfg.specialAction);
+   const next={cursor:"",processed:num(result.processed),total:num(result.total),reverseRepaired:num(result.reverseRepaired),done:Boolean(result.done)};
+   saveDirectorySync({...readDirectorySync(),[entity]:next});
+   renderDirectorySyncSummary();
+   setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.processed)+" lượt mirror · "+fmt(next.reverseRepaired)+" pack cũ phục hồi":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+   if(!next.done)throw Object.assign(new Error("Đồng bộ "+cfg.label+" chưa hoàn tất."),{code:"personal_pack_sync_incomplete"});
+   state.data["private-packs"]=null;
+   await loadPage("private-packs",true);
+   toast("✓ Đã sync toàn bộ bộ từ cá nhân vào từng tài khoản Firebase.","good");
+   return;
+  }
   if(entity==="codePacks"){
    setDirectorySyncStatus(entity,"⏳ Đang đọc toàn bộ data/vocabulary/*.json…");
    const result=await apiAction("sync-code-public-packs");
