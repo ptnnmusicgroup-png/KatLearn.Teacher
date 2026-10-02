@@ -372,31 +372,35 @@ async function runDirectorySync(entity){
  setDirectorySyncButton(entity,true);
  try{
   if(cfg.specialAction){
-   setDirectorySyncStatus(entity,"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
+   const isUsers=entity==="users";
+   setDirectorySyncStatus(entity,isUsers
+    ?"⏳ Đang đối chiếu Firebase Auth UID với users/accounts…"
+    :"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
    const result=await apiAction(cfg.specialAction);
-   const next={cursor:"",processed:num(result.processed),total:num(result.total),reverseRepaired:num(result.reverseRepaired),done:Boolean(result.done)};
+   const next={
+     cursor:"",
+     processed:num(result.processed),
+     total:num(result.total),
+     reverseRepaired:num(result.reverseRepaired),
+     uidsRepaired:num(result.uidsRepaired),
+     accountsCreated:num(result.accountsCreated),
+     done:Boolean(result.done)
+   };
    saveDirectorySync({...readDirectorySync(),[entity]:next});
    renderDirectorySyncSummary();
-   setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.processed)+" lượt mirror · "+fmt(next.reverseRepaired)+" pack cũ phục hồi":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
-   if(!next.done)throw Object.assign(new Error("Đồng bộ "+cfg.label+" chưa hoàn tất."),{code:"personal_pack_sync_incomplete"});
-   state.data["private-packs"]=null;
-   await loadPage("private-packs",true);
-   toast("✓ Đã sync toàn bộ bộ từ cá nhân vào từng tài khoản Firebase.","good");
-   return;
-  }
-  if(cfg.specialAction){
-   setDirectorySyncStatus(entity,entity==="users"?"⏳ Đang đối chiếu Firebase Auth UID với users/accounts…":"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
-   const result=await apiAction(cfg.specialAction);
-   const next={cursor:"",processed:num(result.processed),total:num(result.total),reverseRepaired:num(result.reverseRepaired),uidsRepaired:num(result.uidsRepaired),accountsCreated:num(result.accountsCreated),done:Boolean(result.done)};
-   saveDirectorySync({...readDirectorySync(),[entity]:next});
-   renderDirectorySyncSummary();
-   if(entity==="users"){
-    setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.processed)+" tài khoản · "+fmt(next.uidsRepaired)+" UID sửa · "+fmt(next.accountsCreated)+" account tạo":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
-    state.data.users=null;await loadPage("users",true);
+   if(isUsers){
+    setDirectorySyncStatus(entity,next.done
+      ?"✓ "+fmt(next.processed)+" tài khoản · "+fmt(next.uidsRepaired)+" UID sửa · "+fmt(next.accountsCreated)+" account tạo"
+      :"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+    state.data.users=null;
+    await loadPage("users",true);
     toast("✓ Đã sync UID Firebase Auth về users + accounts + Admin mirror.","good");
    }else{
-    setDirectorySyncStatus(entity,next.done?"✓ "+fmt(next.processed)+" lượt mirror · "+fmt(next.reverseRepaired)+" pack cũ phục hồi":"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
-    state.data["private-packs"]=null;await loadPage("private-packs",true);
+    setDirectorySyncStatus(entity,next.done
+      ?"✓ "+fmt(next.processed)+" lượt mirror · "+fmt(next.reverseRepaired)+" pack cũ phục hồi"
+      :"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+    state.data["private-packs"]=null;
+    await loadPage("private-packs",true);
     toast("✓ Đã sync toàn bộ bộ từ cá nhân vào từng tài khoản Firebase.","good");
    }
    return;
