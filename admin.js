@@ -329,7 +329,8 @@ function renderLibraryTreeNode(node,depth=0){
 function renderLibraries(rows,data={}){
  const q=$("#librarySearch").value.trim().toLowerCase();
  const list=rows.filter(x=>match(x,q,["name","sourceId","sourceFile","relativePath","group","description","curation","categories"]));
- $("#libraryGroupCount").textContent=fmt(Array.isArray(data.groups)?data.groups.length:0);
+ const tree=Array.isArray(data.tree)?data.tree:[];
+ $("#libraryGroupCount").textContent=fmt(tree.length||Number(data.groups)||0);
  $("#libraryPackCount").textContent=fmt(Number(data.total)||rows.length);
  $("#libraryWordCount").textContent=fmt(Number(data.totalWords)||rows.reduce((s,x)=>s+num(x.wordCount),0));
  $("#libraryVersion").textContent=String(data.version||"—");
@@ -338,7 +339,6 @@ function renderLibraries(rows,data={}){
  $("#libraryModel").textContent=data.model?("Mô hình: "+String(data.model)):"";
  const curated=Array.isArray(data.katlearnPacks)?data.katlearnPacks:[];
  $("#libraryCuratedPacks").innerHTML=curated.map(name=>'<div class="quick"><b>📚</b><span><strong>'+esc(name)+'</strong><small>KatLearn curated pack</small></span></div>').join("")||'<div class="empty">Manifest chưa khai báo pack curated.</div>';
- const tree=Array.isArray(data.tree)?data.tree:[];
  $("#libraryTree").innerHTML=tree.length?tree.map(node=>renderLibraryTreeNode(node)).join(""):'<div class="empty">Chưa có cấu trúc thư viện.</div>';
  $("#libraryTable").innerHTML=list.map(p=>{
    const type=p.sourceFile?.includes("/Everyday Topics/")?"Everyday Topics":p.sourceFile?.includes("/IELTS Vocabulary/")?"IELTS":p.group==="KatLearn Library"?"KatLearn Library":"Public Library";
