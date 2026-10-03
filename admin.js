@@ -315,6 +315,17 @@ function renderPacks(rows,limited,data={}){
  const sync=directorySyncStatus("codePacks");
  setDirectorySyncStatus("codePacks",sync.done?("✓ "+fmt(Number(data.codePackCount)||codePacks.length)+" bộ / "+fmt(Number(data.codeWordCount)||codePacks.reduce((s,p)=>s+num(p.wordCount),0))+" từ đã sync"):"Chưa sync");
 }
+function renderLibraryTreeNode(node,depth=0){
+ const children=Array.isArray(node.children)?node.children:[];
+ const icon=esc(node.icon||"📁"),name=esc(node.name||"Mục thư viện");
+ const count=fmt(num(node.wordCount));
+ const meta=children.length?(children.length+" mục con · "+count+" từ"):(count+" từ");
+ if(children.length){
+   return '<details class="library-tree-node library-tree-branch" '+(depth<1?'open':'')+'><summary><span class="library-tree-icon">'+icon+'</span><span class="library-tree-copy"><b>'+name+'</b><small>'+esc(meta)+'</small></span><span class="library-tree-chevron">›</span></summary><div class="library-tree-children">'+children.map(child=>renderLibraryTreeNode(child,depth+1)).join("")+'</div></details>';
+ }
+ return '<div class="library-tree-node library-tree-leaf"><span class="library-tree-icon">'+icon+'</span><span class="library-tree-copy"><b>'+name+'</b><small>'+esc(meta)+(node.packId?' · Pack '+esc(node.packId):"")+'</small></span></div>';
+}
+
 function renderLibraries(rows,data={}){
  const q=$("#librarySearch").value.trim().toLowerCase();
  const list=rows.filter(x=>match(x,q,["name","sourceId","sourceFile","relativePath","group","description","curation","categories"]));
@@ -327,6 +338,8 @@ function renderLibraries(rows,data={}){
  $("#libraryModel").textContent=data.model?("Mô hình: "+String(data.model)):"";
  const curated=Array.isArray(data.katlearnPacks)?data.katlearnPacks:[];
  $("#libraryCuratedPacks").innerHTML=curated.map(name=>'<div class="quick"><b>📚</b><span><strong>'+esc(name)+'</strong><small>KatLearn curated pack</small></span></div>').join("")||'<div class="empty">Manifest chưa khai báo pack curated.</div>';
+ const tree=Array.isArray(data.tree)?data.tree:[];
+ $("#libraryTree").innerHTML=tree.length?tree.map(node=>renderLibraryTreeNode(node)).join(""):'<div class="empty">Chưa có cấu trúc thư viện.</div>';
  $("#libraryTable").innerHTML=list.map(p=>{
    const type=p.sourceFile?.includes("/Everyday Topics/")?"Everyday Topics":p.sourceFile?.includes("/IELTS Vocabulary/")?"IELTS":p.group==="KatLearn Library"?"KatLearn Library":"Public Library";
    const hash=String(p.sourceHash||"");
@@ -337,6 +350,8 @@ function renderLibraries(rows,data={}){
  setDirectorySyncStatus("libraries",sync.done
    ?"✓ "+fmt(sync.processed)+" tệp / "+fmt(Number(data.totalWords)||rows.reduce((s,x)=>s+num(x.wordCount),0))+" từ đã sync"
    :"Chưa sync");
+ const overview=$("#syncLibrariesStatusOverview");
+ if(overview&&sync.done)overview.textContent="✓ "+fmt(sync.processed)+" tệp · "+fmt(sync.totalWords)+" từ · "+fmt(sync.groups)+" nhóm";
 }
 
 function renderPrivatePacks(rows,total,limited){
