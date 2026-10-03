@@ -383,7 +383,10 @@ function renderDirectorySyncSummary(){
   }else if(entity==="personalPacks"&&p.done){
     setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" lượt mirror đã xử lý · "+fmt(num(p.reverseRepaired))+" pack cũ phục hồi");
   }else if(entity==="libraries"&&p.done){
-    setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" tệp · "+fmt(num(p.totalWords))+" từ · "+fmt(num(p.groups))+" nhóm");
+    const status="✓ "+fmt(num(p.processed))+" tệp · "+fmt(num(p.totalWords))+" từ · "+fmt(num(p.groups))+" nhóm";
+    setDirectorySyncStatus(entity,status);
+    const overview=$("#syncLibrariesStatusOverview");
+    if(overview)overview.textContent=status;
   }else{
     setDirectorySyncStatus(entity,p.done&&total?("✓ "+fmt(total)+" đã đồng bộ"):total?(fmt(processed)+" / "+fmt(total)):"Chưa đồng bộ");
   }
@@ -499,7 +502,7 @@ async function runDirectorySyncAll(){
    if(!directorySyncStatus(entity).done)break;
   }
   const done=Object.keys(DIRECTORY_SYNC_CONFIG).every(e=>directorySyncStatus(e).done);
-  toast(done?"✓ Đã đồng bộ tài khoản, lớp học, bộ từ công khai và toàn bộ bộ từ từ code.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
+  toast(done?"✓ Đã đồng bộ tài khoản, lớp học, bộ từ, Public Library và kho từ từ code.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
  }catch(e){toast(e,"bad")}
  finally{if(button){button.disabled=false;button.textContent="☁️ Đồng bộ tất cả"}renderDirectorySyncSummary()}
 }
