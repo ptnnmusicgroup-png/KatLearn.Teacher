@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="admin.css?v=20261001-3">
-<link rel="stylesheet" href="katlearn-blue-admin.css?v=20261001-1"><link rel="stylesheet" href="admin-system-ui-v3.css?v=20261003-1"></head>
+<link rel="stylesheet" href="katlearn-blue-admin.css?v=20261001-1"><link rel="stylesheet" href="admin-system-ui-v3.css?v=20261003-2"></head>
 <body><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div>
 <section id="loginGate" class="login-gate">
   <div class="login-panel">
@@ -119,6 +119,8 @@
         <div class="metric-grid"><article class="metric accent"><span>🗂️</span><small>Nhóm thư viện</small><strong id="libraryGroupCount">—</strong></article><article class="metric"><span>📚</span><small>Tệp thư viện</small><strong id="libraryPackCount">—</strong></article><article class="metric"><span>🔤</span><small>Tổng từ</small><strong id="libraryWordCount">—</strong></article><article class="metric"><span>◷</span><small>Phiên bản manifest</small><strong id="libraryVersion">—</strong></article></div>
         <section class="card sync-card"><div class="card-head"><div><p class="eyebrow">SOURCE → ADMIN MIRROR</p><h2>Đồng bộ thư viện ☁️</h2><p>Admin đọc trực tiếp từ <code>data/vocabulary/TOPICs_KatLearn</code> và có thể lưu một bản mirror vào <code>KatLearn_ADMIN_SYNC_1/publicLibraries</code>.</p></div><button id="syncLibraries" class="btn dark">🗂️ Đồng bộ thư viện</button></div><div id="syncLibrariesStatus" class="limit">Chưa đồng bộ</div></section>
         <section class="card"><div class="card-head"><div><p class="eyebrow">KATLEARN CURATION</p><h2 id="libraryName">KatLearn Vocabulary Library</h2><p id="libraryModel">—</p></div></div><div id="libraryCuratedPacks" class="quick-grid"></div></section>
+        <section class="card"><div class="card-head"><div><p class="eyebrow">LMS LIBRARY MAP</p><h2>Cấu trúc thư viện</h2><p>Cây thư viện này bám theo Public Library trên LMS, gồm nhóm lớn, pack và các mục con chọn lọc.</p></div></div><div id="libraryTree" class="library-tree"></div></section>
+
         <section class="card"><div class="toolbar"><input id="librarySearch" class="input" placeholder="Tìm thư viện, pack, nhóm, file nguồn…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Thư viện / pack</th><th>Nhóm</th><th>Số từ</th><th>Loại dữ liệu</th><th>File nguồn</th><th>Hash</th></tr></thead><tbody id="libraryTable"></tbody></table></div><div id="libraryLimit" class="limit"></div></section>
       </section>
 
