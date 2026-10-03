@@ -1,0 +1,106 @@
+/* KatLearn Admin Control Center UI v3 — presentation layer only. */
+:root{
+  --ka-bg:#eef3f9;--ka-panel:rgba(255,255,255,.76);--ka-line:rgba(28,58,84,.11);
+  --ka-ink:#13273a;--ka-muted:#6e7e8d;--ka-accent:#4867de;--ka-accent2:#73a4ff;
+  --ka-dark:#0d1620;--ka-shadow:0 24px 70px rgba(19,43,66,.10)
+}
+html,body{background:var(--ka-bg)!important;color:var(--ka-ink)!important}
+body{
+  background:
+    radial-gradient(circle at 7% 5%,rgba(72,103,222,.12),transparent 25rem),
+    radial-gradient(circle at 94% 14%,rgba(97,188,238,.10),transparent 22rem),
+    linear-gradient(145deg,#f4f7fb,#eef3f9 52%,#f7f9fc)!important;
+}
+.login-gate{background:transparent!important}
+.login-panel{
+  border:1px solid rgba(255,255,255,.82)!important;
+  box-shadow:0 34px 100px rgba(20,43,66,.15)!important;
+  background:rgba(255,255,255,.72)!important;
+  backdrop-filter:blur(25px)!important;-webkit-backdrop-filter:blur(25px)!important;
+}
+.login-showcase{
+  background:
+    radial-gradient(circle at 90% 15%,rgba(115,164,255,.18),transparent 18rem),
+    linear-gradient(145deg,#0b1722,#15293a 58%,#203b53)!important;
+}
+.login-card{
+  background:rgba(255,255,255,.42)!important;
+  backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;
+}
+.login-card input{
+  background:rgba(255,255,255,.72)!important;border-color:rgba(30,63,91,.10)!important;
+}
+.primary{
+  background:linear-gradient(135deg,#294c85,#4867de)!important;
+  box-shadow:0 13px 28px rgba(48,82,148,.18)!important;
+}
+.app{
+  background:transparent!important;
+}
+.app>.sidebar{
+  background:rgba(10,20,30,.90)!important;
+  border-right:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:16px 0 50px rgba(9,19,29,.12)!important;
+  backdrop-filter:blur(26px)!important;-webkit-backdrop-filter:blur(26px)!important;
+}
+.app>.sidebar .brand{
+  background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.08)!important;
+}
+.app>.sidebar .nav button:hover{background:rgba(255,255,255,.07)!important;transform:translateX(2px)}
+.app>.sidebar .nav button.active{
+  background:linear-gradient(90deg,rgba(72,103,222,.28),rgba(115,164,255,.10))!important;
+  box-shadow:inset 3px 0 0 #729eff!important;
+}
+.main{min-width:0!important}
+.topbar{
+  background:rgba(245,248,252,.68)!important;
+  border-bottom-color:rgba(255,255,255,.76)!important;
+  backdrop-filter:blur(24px)!important;-webkit-backdrop-filter:blur(24px)!important;
+}
+.content{background:transparent!important}
+.hero,.metric,.panel,.card,.table-card,.section-card,.admin-card{
+  border:1px solid rgba(255,255,255,.80)!important;
+  background:rgba(255,255,255,.70)!important;
+  box-shadow:var(--ka-shadow)!important;
+  backdrop-filter:blur(19px)!important;-webkit-backdrop-filter:blur(19px)!important;
+}
+.hero-main{
+  border-radius:26px!important;
+  background:
+    radial-gradient(circle at 86% 12%,rgba(115,164,255,.20),transparent 19rem),
+    linear-gradient(135deg,rgba(255,255,255,.82),rgba(244,248,255,.69))!important;
+}
+.metric{border-radius:18px!important}
+.metric:hover{transform:translateY(-3px)!important;box-shadow:0 25px 62px rgba(31,66,97,.10)!important}
+.connection,.refresh,.profile{
+  border:1px solid rgba(255,255,255,.72)!important;
+  background:rgba(255,255,255,.56)!important;
+  border-radius:12px!important;
+}
+table{border-collapse:separate!important;border-spacing:0!important}
+.data-table,.table-wrap{
+  border:1px solid rgba(255,255,255,.82)!important;border-radius:18px!important;overflow:hidden!important;
+  box-shadow:var(--ka-shadow)!important;background:rgba(255,255,255,.68)!important;
+}
+.data-table thead th{background:rgba(242,246,252,.76)!important}
+.data-table tbody tr:hover{background:rgba(243,247,255,.74)!important}
+.alert{
+  border:1px solid rgba(242,197,112,.26)!important;
+  border-radius:16px!important;
+  box-shadow:0 12px 30px rgba(103,75,25,.05)!important;
+}
+button,input,select,textarea{border-radius:11px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(72,103,222,.18)!important;outline-offset:2px!important;
+}
+@media(max-width:820px){
+  .app{grid-template-columns:1fr!important}
+  .app>.sidebar{box-shadow:12px 0 45px rgba(9,19,29,.18)!important}
+}
+@media(max-width:620px){
+  .login-panel{border-radius:22px!important}
+  .login-showcase,.login-card{padding:28px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition:none!important}
+}
