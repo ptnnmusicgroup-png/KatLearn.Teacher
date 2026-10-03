@@ -48,6 +48,7 @@
       <button data-page="classes"><i>▦</i>Lớp học</button>
       <div class="nav-label">KHO BỘ TỪ</div>
       <button data-page="packs"><i>▤</i><span>Bộ từ công khai</span></button>
+      <button data-page="libraries"><i>▥</i><span>Thư viện công khai</span></button>
       <button data-page="private-packs" class="private-nav-item" title="Mở kho bộ từ riêng của người dùng"><i>🔒</i><span>Bộ từ riêng</span><b class="nav-new-badge">RIÊNG</b></button>
       <button data-page="schools"><i>🏫</i>Trường học</button>
       <button data-page="catalog"><i>🇻🇳</i>Danh mục toàn quốc</button>
@@ -83,11 +84,12 @@
             <button class="quick" data-go="teachers"><b>🧑‍🏫</b><span><strong>Duyệt giáo viên</strong><small>Kiểm tra hồ sơ mới</small></span></button>
             <button class="quick" data-go="users"><b>👥</b><span><strong>Tài khoản</strong><small>Tra cứu role & thông tin</small></span></button>
             <button class="quick" data-go="packs"><b>📚</b><span><strong>Bộ từ công khai</strong><small>Kiểm tra & xóa pack</small></span></button>
+            <button class="quick" data-go="libraries"><b>🗂️</b><span><strong>Thư viện công khai</strong><small>Kho TOPICs_KatLearn</small></span></button>
             <button class="quick" data-go="catalog"><b>🇻🇳</b><span><strong>Danh mục toàn quốc</strong><small>Đồng bộ 34 tỉnh/thành</small></span></button>
           </div></section>
         </div>
         <section class="card system-card"><div class="card-head"><div><p class="eyebrow">SYSTEM HEALTH</p><h2>Tình trạng hệ thống</h2><p>Frontend chỉ giao tiếp với Admin Hub; backend mới là nơi chạm Firestore.</p></div></div><div id="healthList" class="health"><div class="health-row"><span>Firebase Auth</span><b id="healthAuth">Đang kiểm tra…</b></div><div class="health-row"><span>Admin backend</span><b id="healthAdmin">Đang kiểm tra…</b></div><div class="health-row"><span>Firestore qua Admin SDK</span><b id="healthFs">Đang kiểm tra…</b></div><div class="health-row"><span>National Catalog</span><b id="healthCatalog">Sẵn sàng</b></div></div></section>
-        <section class="card sync-card"><div class="card-head"><div><p class="eyebrow">FIREBASE SYNC</p><h2>Đồng bộ dữ liệu hệ thống ☁️</h2><p>Đồng bộ tài khoản, lớp học, bộ từ công khai, bộ từ cá nhân theo từng tài khoản và toàn bộ kho bộ từ từ source code vào Firebase.</p></div><button id="syncAll" class="btn dark">☁️ Đồng bộ tất cả</button></div><div class="sync-grid"><div class="sync-item"><b>👥 Tài khoản</b><span id="syncUsersStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>▦ Lớp học</b><span id="syncClassesStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>📚 Bộ từ công khai</b><span id="syncPacksStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>🔒 Bộ từ riêng / tài khoản</b><span id="syncPersonalPacksStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>🧠 Bộ từ từ code</b><span id="syncCodePacksStatus">Chưa đồng bộ</span></div></div><div id="syncOverall" class="limit"></div></section>
+        <section class="card sync-card"><div class="card-head"><div><p class="eyebrow">FIREBASE SYNC</p><h2>Đồng bộ dữ liệu hệ thống ☁️</h2><p>Đồng bộ tài khoản, lớp học, bộ từ công khai, bộ từ cá nhân theo từng tài khoản và toàn bộ kho bộ từ từ source code vào Firebase.</p></div><button id="syncAll" class="btn dark">☁️ Đồng bộ tất cả</button></div><div class="sync-grid"><div class="sync-item"><b>👥 Tài khoản</b><span id="syncUsersStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>▦ Lớp học</b><span id="syncClassesStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>📚 Bộ từ công khai</b><span id="syncPacksStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>🔒 Bộ từ riêng / tài khoản</b><span id="syncPersonalPacksStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>🧠 Bộ từ từ code</b><span id="syncCodePacksStatus">Chưa đồng bộ</span></div><div class="sync-item"><b>🗂️ Thư viện công khai</b><span id="syncLibrariesStatusOverview">Chưa đồng bộ</span></div></div><div id="syncOverall" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-teachers">
@@ -110,6 +112,14 @@
         <div class="metric-grid"><article class="metric accent"><span>🧠</span><small>Bộ từ từ code</small><strong id="codePackCount">—</strong></article><article class="metric"><span>🔤</span><small>Tổng từ từ code</small><strong id="codeWordCount">—</strong></article><article class="metric"><span>☁️</span><small>Pack công khai Firebase</small><strong id="firebasePackCount">—</strong></article></div>
         <section class="card sync-card"><div class="card-head"><div><p class="eyebrow">CODE SOURCE</p><h2>Kho bộ từ trong source code</h2><p>Admin đọc trực tiếp `data/vocabulary/*.json`; không cần copy tay. Sync sẽ ghi full metadata + toàn bộ danh sách từ vào Firebase mirror.</p></div><button id="syncCodePacks" class="btn dark">🧠 Đồng bộ từ code</button></div><div id="syncCodePacksStatus" class="limit">Chưa đồng bộ</div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ</th><th>Số từ</th><th>File nguồn</th><th>Trạng thái</th></tr></thead><tbody id="codePackTable"></tbody></table></div></section>
         <section class="card"><div class="toolbar"><input id="packSearch" class="input" placeholder="Tìm pack Firebase hoặc người tạo…"><button id="syncPacks" class="btn dark">☁️ Đồng bộ Firebase</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Bộ từ Firebase</th><th>Số từ</th><th>Người tạo</th><th>Ngày tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div><div id="packLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-libraries">
+        <div class="hero"><div><p class="eyebrow">PUBLIC LIBRARY</p><h1>Thư viện công khai 🗂️</h1><p id="libraryDescription">Kho <code>TOPICs_KatLearn</code> được quản lý từ source code, gồm manifest, taxonomy và toàn bộ các pack công khai.</p></div><div class="hero-cat">🗂️</div></div>
+        <div class="metric-grid"><article class="metric accent"><span>🗂️</span><small>Nhóm thư viện</small><strong id="libraryGroupCount">—</strong></article><article class="metric"><span>📚</span><small>Tệp thư viện</small><strong id="libraryPackCount">—</strong></article><article class="metric"><span>🔤</span><small>Tổng từ</small><strong id="libraryWordCount">—</strong></article><article class="metric"><span>◷</span><small>Phiên bản manifest</small><strong id="libraryVersion">—</strong></article></div>
+        <section class="card sync-card"><div class="card-head"><div><p class="eyebrow">SOURCE → ADMIN MIRROR</p><h2>Đồng bộ thư viện ☁️</h2><p>Admin đọc trực tiếp từ <code>data/vocabulary/TOPICs_KatLearn</code> và có thể lưu một bản mirror vào <code>KatLearn_ADMIN_SYNC_1/publicLibraries</code>.</p></div><button id="syncLibraries" class="btn dark">🗂️ Đồng bộ thư viện</button></div><div id="syncLibrariesStatus" class="limit">Chưa đồng bộ</div></section>
+        <section class="card"><div class="card-head"><div><p class="eyebrow">KATLEARN CURATION</p><h2 id="libraryName">KatLearn Vocabulary Library</h2><p id="libraryModel">—</p></div></div><div id="libraryCuratedPacks" class="quick-grid"></div></section>
+        <section class="card"><div class="toolbar"><input id="librarySearch" class="input" placeholder="Tìm thư viện, pack, nhóm, file nguồn…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Thư viện / pack</th><th>Nhóm</th><th>Số từ</th><th>Loại dữ liệu</th><th>File nguồn</th><th>Hash</th></tr></thead><tbody id="libraryTable"></tbody></table></div><div id="libraryLimit" class="limit"></div></section>
       </section>
 
       <section class="page" id="page-private-packs">
@@ -153,6 +163,6 @@
   </div>
 </div>
 <div id="toast" class="toast"></div>
-<script type="module" src="admin.js?v=20261001-3"></script>
+<script type="module" src="admin.js?v=20261003-4"></script>
 </body>
 </html>

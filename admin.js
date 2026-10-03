@@ -121,7 +121,7 @@ async function restoreAdminSession(user){
 }
 
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
-const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai","private-packs":"Bộ từ riêng",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
+const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",libraries:"Thư viện công khai","private-packs":"Bộ từ riêng",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
 const state={user:null,page:"overview",data:{},catalog:null,syncing:false,syncingDirectory:{},packEditId:""};
 const syncKey="katlearn.admin.catalog.v2";
 const directorySyncKey="katlearn.admin.directory-sync.v1";
@@ -130,7 +130,8 @@ const DIRECTORY_SYNC_CONFIG={
   classes:{label:"Lớp học",limit:200,status:"#syncClassesStatus",button:"#syncClasses"},
   packs:{label:"Bộ từ công khai",limit:20,status:"#syncPacksStatus",button:"#syncPacks"},
   personalPacks:{label:"Bộ từ riêng / tài khoản",limit:1,status:"#syncPersonalPacksStatus",button:null,specialAction:"sync-all-personal-packs"},
-  codePacks:{label:"Bộ từ từ code",limit:1,status:"#syncCodePacksStatus",button:"#syncCodePacks"}
+  codePacks:{label:"Bộ từ từ code",limit:1,status:"#syncCodePacksStatus",button:"#syncCodePacks"},
+  libraries:{label:"Thư viện công khai",limit:1,status:"#syncLibrariesStatus",button:"#syncLibraries",specialAction:"sync-code-public-libraries"}
 };
 
 function errText(e,fallback="Có lỗi xảy ra."){
@@ -212,7 +213,7 @@ $("#clearSession").onclick=leaveAdmin;
  $("#loginBtn")?.addEventListener("click",e=>{e.preventDefault();void handleAdminLogin()});
  $("#password")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();handleAdminLogin()}});
  $("#refresh").onclick=()=>loadPage(state.page,true).then(()=>toast("✓ Đã làm mới","good")).catch(e=>{pageError(e);toast(e,"bad")});
- each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch","privatePackSearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
+ each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch","privatePackSearch","librarySearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  $("#teacherFilter")?.addEventListener("change",()=>render("teachers"));
  $("#userFilter")?.addEventListener("change",()=>render("users"));
   $("#catalogSync")?.addEventListener("click",syncCatalog);
@@ -221,6 +222,7 @@ $("#clearSession").onclick=leaveAdmin;
  $("#syncClasses")?.addEventListener("click",()=>runDirectorySync("classes"));
  $("#syncPacks")?.addEventListener("click",()=>runDirectorySync("packs"));
  $("#syncCodePacks")?.addEventListener("click",()=>runDirectorySync("codePacks"));
+ $("#syncLibraries")?.addEventListener("click",()=>runDirectorySync("libraries"));
  $("#refreshPrivatePacks")?.addEventListener("click",()=>loadPage("private-packs",true).catch(e=>{pageError(e);toast(e,"bad")}));
  $("#packEditCancel")?.addEventListener("click",closePackEditor);
  $("#packEditSave")?.addEventListener("click",saveEditedPack);
@@ -241,6 +243,7 @@ function render(section){
  if(section==="users")return renderUsers(rows,d.limited);
  if(section==="classes")return renderClasses(rows,d.limited);
  if(section==="packs")return renderPacks(rows,d.limited,d);
+ if(section==="libraries")return renderLibraries(rows,d);
  if(section==="private-packs")return renderPrivatePacks(rows,d.total,d.limited);
  if(section==="schools")return renderSchools(rows,d.limited);
  if(section==="activity")return renderActivity(rows);
@@ -312,6 +315,30 @@ function renderPacks(rows,limited,data={}){
  const sync=directorySyncStatus("codePacks");
  setDirectorySyncStatus("codePacks",sync.done?("✓ "+fmt(Number(data.codePackCount)||codePacks.length)+" bộ / "+fmt(Number(data.codeWordCount)||codePacks.reduce((s,p)=>s+num(p.wordCount),0))+" từ đã sync"):"Chưa sync");
 }
+function renderLibraries(rows,data={}){
+ const q=$("#librarySearch").value.trim().toLowerCase();
+ const list=rows.filter(x=>match(x,q,["name","sourceId","sourceFile","relativePath","group","description","curation","categories"]));
+ $("#libraryGroupCount").textContent=fmt(Array.isArray(data.groups)?data.groups.length:0);
+ $("#libraryPackCount").textContent=fmt(Number(data.total)||rows.length);
+ $("#libraryWordCount").textContent=fmt(Number(data.totalWords)||rows.reduce((s,x)=>s+num(x.wordCount),0));
+ $("#libraryVersion").textContent=String(data.version||"—");
+ $("#libraryDescription").textContent=String(data.description||"Kho TOPICs_KatLearn được quản lý từ source code.");
+ $("#libraryName").textContent=String(data.libraryName||"KatLearn Vocabulary Library");
+ $("#libraryModel").textContent=data.model?("Mô hình: "+String(data.model)):"";
+ const curated=Array.isArray(data.katlearnPacks)?data.katlearnPacks:[];
+ $("#libraryCuratedPacks").innerHTML=curated.map(name=>'<div class="quick"><b>📚</b><span><strong>'+esc(name)+'</strong><small>KatLearn curated pack</small></span></div>').join("")||'<div class="empty">Manifest chưa khai báo pack curated.</div>';
+ $("#libraryTable").innerHTML=list.map(p=>{
+   const type=p.sourceFile?.includes("/Everyday Topics/")?"Everyday Topics":p.sourceFile?.includes("/IELTS Vocabulary/")?"IELTS":p.group==="KatLearn Library"?"KatLearn Library":"Public Library";
+   const hash=String(p.sourceHash||"");
+   return '<tr><td><strong>'+esc(p.name||p.sourceId||"Library pack")+'</strong><small>ID <span class="mono">'+esc(p.sourceId||p.id)+'</span></small></td><td><span class="badge teacher">'+esc(p.group||"—")+'</span><small>'+esc((Array.isArray(p.categories)?p.categories.slice(0,4).join(" · "):"")||"—")+'</small></td><td>'+fmt(p.wordCount)+'</td><td><span class="badge">'+esc(type)+'</span></td><td><span class="mono">'+esc(p.sourceFile||"—")+'</span></td><td><span class="mono">'+esc(hash?hash.slice(0,12)+"…":"—")+'</span></td></tr>';
+ }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy thư viện phù hợp.</div></td></tr>';
+ $("#libraryLimit").textContent="Nguồn hiện có "+fmt(Number(data.total)||rows.length)+" tệp thư viện · "+fmt(Number(data.totalWords)||rows.reduce((s,x)=>s+num(x.wordCount),0))+" từ.";
+ const sync=directorySyncStatus("libraries");
+ setDirectorySyncStatus("libraries",sync.done
+   ?"✓ "+fmt(sync.processed)+" tệp / "+fmt(Number(data.totalWords)||rows.reduce((s,x)=>s+num(x.wordCount),0))+" từ đã sync"
+   :"Chưa sync");
+}
+
 function renderPrivatePacks(rows,total,limited){
  const q=$("#privatePackSearch").value.trim().toLowerCase(),list=rows.filter(x=>match(x,q,["name","ownerUid","ownerEmail","ownerDisplayName","accountCode","ownerAccountCode","id"]));
  $("#privatePackTable").innerHTML=list.map(p=>{
@@ -355,6 +382,11 @@ function renderDirectorySyncSummary(){
     setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" tài khoản · "+fmt(num(p.uidsRepaired))+" UID sửa · "+fmt(num(p.accountsCreated))+" account tạo");
   }else if(entity==="personalPacks"&&p.done){
     setDirectorySyncStatus(entity,"✓ "+fmt(num(p.processed))+" lượt mirror đã xử lý · "+fmt(num(p.reverseRepaired))+" pack cũ phục hồi");
+  }else if(entity==="libraries"&&p.done){
+    const status="✓ "+fmt(num(p.processed))+" tệp · "+fmt(num(p.totalWords))+" từ · "+fmt(num(p.groups))+" nhóm";
+    setDirectorySyncStatus(entity,status);
+    const overview=$("#syncLibrariesStatusOverview");
+    if(overview)overview.textContent=status;
   }else{
     setDirectorySyncStatus(entity,p.done&&total?("✓ "+fmt(total)+" đã đồng bộ"):total?(fmt(processed)+" / "+fmt(total)):"Chưa đồng bộ");
   }
@@ -373,9 +405,13 @@ async function runDirectorySync(entity){
  try{
   if(cfg.specialAction){
    const isUsers=entity==="users";
-   setDirectorySyncStatus(entity,isUsers
-    ?"⏳ Đang đối chiếu Firebase Auth UID với users/accounts…"
-    :"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
+   const isLibraries=entity==="libraries";
+   setDirectorySyncStatus(entity,
+    isUsers
+      ?"⏳ Đang đối chiếu Firebase Auth UID với users/accounts…"
+      :isLibraries
+        ?"⏳ Đang đọc toàn bộ TOPICs_KatLearn…"
+        :"⏳ Đang quét toàn bộ bộ từ cá nhân của tất cả tài khoản…");
    const result=await apiAction(cfg.specialAction);
    const next={
      cursor:"",
@@ -384,6 +420,9 @@ async function runDirectorySync(entity){
      reverseRepaired:num(result.reverseRepaired),
      uidsRepaired:num(result.uidsRepaired),
      accountsCreated:num(result.accountsCreated),
+     totalWords:num(result.totalWords),
+     groups:num(result.groups),
+     removed:num(result.removed),
      done:Boolean(result.done)
    };
    saveDirectorySync({...readDirectorySync(),[entity]:next});
@@ -395,6 +434,13 @@ async function runDirectorySync(entity){
     state.data.users=null;
     await loadPage("users",true);
     toast("✓ Đã sync UID Firebase Auth về users + accounts + Admin mirror.","good");
+   }else if(isLibraries){
+    setDirectorySyncStatus(entity,next.done
+      ?"✓ "+fmt(next.processed)+" tệp · "+fmt(next.totalWords)+" từ · "+fmt(next.groups)+" nhóm đã sync"
+      :"⏳ "+fmt(next.processed)+" / "+fmt(next.total));
+    state.data.libraries=null;
+    await loadPage("libraries",true);
+    toast("✓ Đã đồng bộ Public Library vào Admin mirror.","good");
    }else{
     setDirectorySyncStatus(entity,next.done
       ?"✓ "+fmt(next.processed)+" lượt mirror · "+fmt(next.reverseRepaired)+" pack cũ phục hồi"
@@ -456,7 +502,7 @@ async function runDirectorySyncAll(){
    if(!directorySyncStatus(entity).done)break;
   }
   const done=Object.keys(DIRECTORY_SYNC_CONFIG).every(e=>directorySyncStatus(e).done);
-  toast(done?"✓ Đã đồng bộ tài khoản, lớp học, bộ từ công khai và toàn bộ bộ từ từ code.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
+  toast(done?"✓ Đã đồng bộ tài khoản, lớp học, bộ từ, Public Library và kho từ từ code.":"Đã dừng ở nhóm chưa hoàn tất.",""+(done?"good":"bad"));
  }catch(e){toast(e,"bad")}
  finally{if(button){button.disabled=false;button.textContent="☁️ Đồng bộ tất cả"}renderDirectorySyncSummary()}
 }
