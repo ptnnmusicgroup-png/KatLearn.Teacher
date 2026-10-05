@@ -383,6 +383,9 @@ function directorySyncStatus(entity){
 function setDirectorySyncStatus(entity,textValue){
  const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg)return;
  const el=$(cfg.status);if(el)el.textContent=textValue;
+ if(entity==="codePacks"){
+  const panel=$("#syncCodePacksPanelStatus");if(panel)panel.textContent=textValue;
+ }
 }
 function setDirectorySyncButton(entity,busy){
  const cfg=DIRECTORY_SYNC_CONFIG[entity];if(!cfg||!cfg.button)return;
