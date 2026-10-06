@@ -279,6 +279,7 @@ function renderUsers(rows,limited){
     ?'<small class="bad-text">⚠️ Chưa có users/{uid} · chỉ quản lý sau khi hồ sơ được tạo</small>'
     :'<button class="btn" data-rename-user="'+esc(u.id)+'">Sửa tên</button>'+
       '<button class="btn" data-migrate-uid="'+esc(u.id)+'">Sửa UID / Sync</button>'+
+      '<button class="btn" data-add-coins="'+esc(u.id)+'">🪙 + Xu</button>'+
       '<button class="btn" data-reset-user="'+esc(u.id)+'">Reset</button>'+
       (locked?'<button class="btn good" data-enable-user="'+esc(u.id)+'">Mở khóa</button>':'<button class="btn" data-disable-user="'+esc(u.id)+'">Khóa</button>')+
       '<button class="btn bad" data-delete-user="'+esc(u.id)+'">Xóa</button>';
@@ -287,6 +288,7 @@ function renderUsers(rows,limited){
  }).join("")||'<tr><td colspan="6"><div class="empty">Không tìm thấy tài khoản.</div></td></tr>';
  each(qsa("#userTable [data-rename-user]"),b=>b.onclick=()=>renameUser(b.dataset.renameUser,list.find(x=>x.id===b.dataset.renameUser)?.displayName||list.find(x=>x.id===b.dataset.renameUser)?.name||""));
  each(qsa("#userTable [data-migrate-uid]"),b=>b.onclick=()=>migrateUserUid(b.dataset.migrateUid));
+ each(qsa("#userTable [data-add-coins]"),b=>b.onclick=()=>addCoinsToUser(b.dataset.addCoins,list.find(x=>x.id===b.dataset.addCoins)||{}));
  each(qsa("#userTable [data-reset-user]"),b=>b.onclick=()=>resetUserStats(b.dataset.resetUser));
  each(qsa("#userTable [data-disable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.disableUser,true));
  each(qsa("#userTable [data-enable-user]"),b=>b.onclick=()=>setUserDisabled(b.dataset.enableUser,false));
@@ -668,6 +670,26 @@ async function setUserDisabled(uid,disabled){
  if(!ok)return;
  try{await apiAction(disabled?"disable-user":"enable-user",{uid});toast(disabled?"✓ Đã khóa tài khoản.":"✓ Đã mở khóa tài khoản.","good");state.data.users=null;await loadPage("users",true)}
  catch(e){toast(e,"bad");pageError(e,"Không thể cập nhật trạng thái tài khoản")}
+}
+async function addCoinsToUser(uid,user){
+ const current=Math.max(0,num(user?.coins));
+ const raw=prompt("Nhập số KatCoin muốn cộng cho tài khoản này.\nSố dư hiện tại: "+fmt(current)+" KatCoin\n\nGiới hạn mỗi lần: 1.000.000.000 KatCoin.","100");
+ if(raw===null)return;
+ const value=String(raw).trim().replace(/^\+/,"");
+ if(!/^\d+$/.test(value))return toast("Số KatCoin phải là số nguyên dương.","bad");
+ const amount=Number(value);
+ if(!Number.isSafeInteger(amount)||amount<=0||amount>1000000000)return toast("Số KatCoin không hợp lệ. Tối đa 1.000.000.000 xu mỗi lần.","bad");
+ const reasonRaw=prompt("Ghi chú cho lần cộng xu (tùy chọn):","Admin grant");
+ if(reasonRaw===null)return;
+ const reason=String(reasonRaw).trim().slice(0,300);
+ const ok=await dialog("Cộng KatCoin cho tài khoản?","Số dư hiện tại: "+fmt(current)+"\nCộng thêm: +"+fmt(amount)+" KatCoin\nSau khi cộng: khoảng "+fmt(current+amount)+" KatCoin\n"+(reason?"Lý do: "+reason:""),"🪙 Cộng xu","Hủy");
+ if(!ok)return;
+ try{
+  const result=await apiAction("grant-coins",{uid,amount,reason});
+  toast("✓ Đã cộng +"+fmt(result.added)+" KatCoin · số dư mới "+fmt(result.coins)+" xu.","good");
+  state.data.users=null;
+  await loadPage("users",true);
+ }catch(e){toast(e,"bad");pageError(e,"Không thể cộng KatCoin")}
 }
 async function resetUserStats(uid){
  const ok=await dialog("Reset chỉ số tài khoản?","Coins, energy, streak và các bộ đếm học tập sẽ được đưa về 0.","Reset","Hủy");
