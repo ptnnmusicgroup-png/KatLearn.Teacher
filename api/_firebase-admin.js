@@ -46,7 +46,19 @@ function credentials(){
   throw Object.assign(new Error('Firebase Admin credentials are not configured'),{status:503,code:'firebase_credentials_missing'});
 }
 
+const EXPECTED_FIREBASE_PROJECT_ID='elp---katlearn';
+
 export function admin(){
-  if(!getApps().length)initializeApp({credential:cert(credentials())});
+  if(!getApps().length){
+    const serviceAccount=credentials();
+    const actualProjectId=String(serviceAccount?.project_id||'').trim();
+    if(actualProjectId!==EXPECTED_FIREBASE_PROJECT_ID){
+      throw Object.assign(
+        new Error('Firebase Admin credentials belong to project '+(actualProjectId||'(missing project_id)')+', but KatLearn uses '+EXPECTED_FIREBASE_PROJECT_ID+'.'),
+        {status:503,code:actualProjectId?'firebase_project_mismatch':'firebase_project_id_missing'}
+      );
+    }
+    initializeApp({credential:cert(serviceAccount)});
+  }
   return{auth:getAuth(),db:getFirestore()};
 }
