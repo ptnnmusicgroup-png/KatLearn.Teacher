@@ -299,3 +299,17 @@ button:not(.nav button):not(.primary):not(.login-btn):not(.primary-btn):not(.cre
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Stagger dashboard cards without locking the transform used by hover states. */
+@media (prefers-reduced-motion: no-preference) {
+  .activity-grid > *,
+  .dashboard-grid > *,
+  .teacher-grid > * {
+    animation: klm-card-enter 540ms var(--klm-ease) both;
+  }
+}
+@keyframes klm-card-enter {
+  from { opacity: 0; translate: 0 12px; }
+  to { opacity: 1; translate: 0 0; }
+}
