@@ -386,22 +386,13 @@ button:not(.nav button):not(.primary):not(.login-btn):not(.primary-btn):not(.cre
     transition-timing-function: var(--klm-motion-enter-ease);
   }
 
-  /* Hover-only polish: never lift controls on touch devices. */
-  @media (hover: hover) and (pointer: fine) {
-    :where(a:not(.brand), button:not(:disabled), [role="button"]):hover {
-      text-decoration-thickness: from-font;
-    }
-  }
-
   /* Use opacity/transform for transient feedback; no animated dimensions. */
   :where(.toast, .toast-message, .notification-panel, .popover, .tooltip) {
     backface-visibility: hidden;
   }
 
-  :where(.flashcard, .flashcard-inner, .flip-card, .flip-card-inner) {
+  :where(.flashcard-inner, .flip-card-inner) {
     transform-style: preserve-3d;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
   }
 
   :where(.learn-progress-track > i, .progress-fill, .progress-bar,
