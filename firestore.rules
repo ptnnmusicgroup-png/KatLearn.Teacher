@@ -178,7 +178,10 @@ match /system/{docId} {
         function canUsePersonalPacks() {
           return signedIn()
             && request.auth.uid == userId
-            && get(/databases/$(database)/documents/users/$(userId)).data.get('studentAccountType', 'free') != 'class';
+            && (
+              !exists(/databases/$(database)/documents/users/$(userId))
+              || get(/databases/$(database)/documents/users/$(userId)).data.get('studentAccountType', 'free') != 'class'
+            );
         }
         allow read: if canUsePersonalPacks();
         allow create: if canUsePersonalPacks()
