@@ -189,10 +189,7 @@ button:not(.nav button):not(.primary):not(.login-btn):not(.primary-btn):not(.cre
 
   .hero-card,
   .teacher-hero {
-    background-size: 140% 140%;
-    animation:
-      klm-rise-in 620ms var(--klm-ease) both,
-      klm-soft-gradient 14s ease-in-out 700ms infinite alternate;
+    animation: klm-rise-in 620ms var(--klm-ease) both;
   }
 
   .hero-card .blob,
@@ -278,10 +275,6 @@ button:not(.nav button):not(.primary):not(.login-btn):not(.primary-btn):not(.cre
 @keyframes klm-drift {
   from { translate: -3px 0; rotate: -2deg; }
   to { translate: 5px -5px; rotate: 2deg; }
-}
-@keyframes klm-soft-gradient {
-  from { background-position: 0% 50%; }
-  to { background-position: 100% 50%; }
 }
 @keyframes klm-shimmer {
   from { background-position: 100% 0; }
