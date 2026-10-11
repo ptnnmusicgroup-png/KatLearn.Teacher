@@ -60,7 +60,6 @@ const siteConfig = {
   teacherUrl: process.env.KATLEARN_TEACHER_URL || process.env.URL || "https://teacher-katlearn.vercel.app",
   lmsUrl: process.env.KATLEARN_LMS_URL || "https://lms-katlearn.vercel.app",
 };
-
 await writeFile(
   path.join(publishDir, "site-config.js"),
   "window.KATLEARN_CONFIG = Object.freeze(" + JSON.stringify(siteConfig) + ");\n",
