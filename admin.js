@@ -204,7 +204,7 @@ function bind(){
   try{
     await signOut(auth);
   }finally{
-    location.replace("https://lms-katlearn.vercel.app/login.html?logout=1");
+    location.replace(String(window.KATLEARN_DEPLOYMENT_CONFIG?.lmsUrl||"https://lms-katlearn.vercel.app").replace(/\\/+$/,"")+"/login.html?logout=1");
   }
 }
 $("#logout").onclick=leaveAdmin;
