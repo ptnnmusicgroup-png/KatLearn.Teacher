@@ -121,6 +121,10 @@ async function restoreAdminSession(user){
 }
 
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
+const lmsBase=String(window.KATLEARN_CONFIG?.lmsUrl||"https://lms-katlearn.vercel.app").replace(/\\/+$/,"");
+const returnLmsLoginLink=$("#returnLmsLoginLink"),openLmsLink=$("#openLmsLink");
+if(returnLmsLoginLink)returnLmsLoginLink.href=lmsBase+"/login.html";
+if(openLmsLink)openLmsLink.href=lmsBase+"/";
 const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",libraries:"Thư viện công khai","private-packs":"Bộ từ riêng",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
 const state={user:null,page:"overview",data:{},catalog:null,syncing:false,syncingDirectory:{},packEditId:""};
 const syncKey="katlearn.admin.catalog.v2";
