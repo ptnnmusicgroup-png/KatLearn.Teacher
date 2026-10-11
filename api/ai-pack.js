@@ -1,6 +1,9 @@
 import { admin } from './_firebase-admin.js';
 
-const STUDENT_AI_URL=String(process.env.LMS_AI_PACK_URL||((String(process.env.KATLEARN_LMS_URL||'https://lms-katlearn.vercel.app').replace(/\\/+$/,''))+'/api/ai-pack'));
+const STUDENT_AI_URL = String(
+  process.env.LMS_AI_PACK_URL ||
+  (String(process.env.KATLEARN_LMS_URL || "https://lms-katlearn.vercel.app").replace(/\/+$/, "") + "/api/ai-pack")
+);
 
 function headers(){
   return{'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
