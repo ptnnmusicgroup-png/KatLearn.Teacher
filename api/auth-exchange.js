@@ -4,9 +4,9 @@ const allowedOrigins = new Set([
  'https://teacher-katlearn.vercel.app',
  'https://lms-katlearn.vercel.app',
  ...String(process.env.KATLEARN_ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
- ...(process.env.KATLEARN_LMS_SITE_URL?[String(process.env.KATLEARN_LMS_SITE_URL).replace(/\\/+$/,'')]:[]),
- ...(process.env.KATLEARN_TEACHER_SITE_URL?[String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\\/+$/,'')]:[]),
- ...(process.env.URL?[String(process.env.URL).replace(/\\/+$/,'')]:[])
+ ...(process.env.KATLEARN_LMS_SITE_URL?[String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/,'')]:[]),
+ ...(process.env.KATLEARN_TEACHER_SITE_URL?[String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/,'')]:[]),
+ ...(process.env.URL?[String(process.env.URL).replace(/\/+$/,'')]:[])
 ]);
 function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type';h['vary']='Origin'}return h}
 const jsonResponse=(body,init={})=>new Response(JSON.stringify(body),init);
