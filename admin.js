@@ -121,7 +121,7 @@ async function restoreAdminSession(user){
 }
 
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
-const lmsBase=String(window.KATLEARN_CONFIG?.lmsUrl||"https://lms-katlearn.vercel.app").replace(/\\/+$/,"");
+const lmsBase=String(window.KATLEARN_CONFIG?.lmsUrl||"https://lms-katlearn.vercel.app").replace(/\/+$/,"");
 const returnLmsLoginLink=$("#returnLmsLoginLink"),openLmsLink=$("#openLmsLink");
 if(returnLmsLoginLink)returnLmsLoginLink.href=lmsBase+"/login.html";
 if(openLmsLink)openLmsLink.href=lmsBase+"/";
