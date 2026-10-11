@@ -1,6 +1,6 @@
 import { admin } from './_firebase-admin.js';
 
-const LMS_BASE_URL=String(process.env.KATLEARN_LMS_SITE_URL||'https://lms-katlearn.vercel.app').replace(/\\/+$/,'');
+const LMS_BASE_URL=String(process.env.KATLEARN_LMS_SITE_URL||'https://lms-katlearn.vercel.app').replace(/\/+$/,'');
 const STUDENT_AI_URL=LMS_BASE_URL+'/api/ai-pack';
 
 function headers(){
