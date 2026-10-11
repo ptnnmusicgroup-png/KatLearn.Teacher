@@ -60,9 +60,10 @@ const siteConfig = {
   teacherUrl: process.env.KATLEARN_TEACHER_URL || process.env.URL || "https://teacher-katlearn.vercel.app",
   lmsUrl: process.env.KATLEARN_LMS_URL || "https://lms-katlearn.vercel.app",
 };
+
 await writeFile(
   path.join(publishDir, "site-config.js"),
-  "window.KATLEARN_CONFIG = Object.freeze(" + JSON.stringify(siteConfig) + ");\\n",
+  "window.KATLEARN_CONFIG = Object.freeze(" + JSON.stringify(siteConfig) + ");\n",
   "utf8",
 );
 
@@ -73,12 +74,12 @@ async function injectSiteConfig(directory) {
       await injectSiteConfig(target);
       continue;
     }
-    if (!entry.isFile() || !/\\.html?$/i.test(entry.name)) continue;
+    if (!entry.isFile() || !/\.html?$/i.test(entry.name)) continue;
     let html = await readFile(target, "utf8");
     if (html.includes('src="/site-config.js"')) continue;
     const tag = '<script src="/site-config.js"></script>';
-    if (/<\\/head>/i.test(html)) html = html.replace(/<\\/head>/i, tag + "</head>");
-    else if (/<body\\b/i.test(html)) html = html.replace(/<body\\b/i, tag + "<body");
+    if (/<\/head>/i.test(html)) html = html.replace(/<\/head>/i, tag + "</head>");
+    else if (/<body\b/i.test(html)) html = html.replace(/<body\b/i, tag + "<body");
     else html = tag + html;
     await writeFile(target, html, "utf8");
   }
