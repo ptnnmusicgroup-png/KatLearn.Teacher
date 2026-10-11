@@ -1,10 +1,15 @@
-const LMS_ADMIN = "https://lms-katlearn.vercel.app/api/admin-hub";
+const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-katlearn.vercel.app").replace(/\\/+$/, "");
+const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
 const ALLOWED_ORIGINS = new Set([
   "https://teacher-katlearn.vercel.app",
   "https://lms-katlearn.vercel.app",
   "http://localhost:3000",
   "http://localhost:5173",
+  ...String(process.env.KATLEARN_ALLOWED_ORIGINS || "").split(",").map((value) => value.trim()).filter(Boolean),
+  ...(process.env.KATLEARN_LMS_SITE_URL ? [String(process.env.KATLEARN_LMS_SITE_URL).replace(/\\/+$/, "")] : []),
+  ...(process.env.KATLEARN_TEACHER_SITE_URL ? [String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\\/+$/, "")] : []),
+  ...(process.env.URL ? [String(process.env.URL).replace(/\\/+$/, "")] : []),
 ]);
 
 function corsHeaders(origin) {
