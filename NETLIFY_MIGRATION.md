@@ -25,7 +25,7 @@ Configure variables in Netlify's dashboard, never in the repository.
 - `KATLEARN_ALLOWED_ORIGINS`: comma-separated exact HTTPS origins allowed by the Teacher SSO and teacher-management APIs. Include both the Netlify Teacher origin and Netlify LMS origin.
 - Firebase Admin credentials: use the existing production service-account variable, preferably `FIREBASE_SERVICE_ACCOUNT_JSON`. Supported alternatives are implemented in `api/_firebase-admin.js`.
 
-The Teacher portal should continue using the existing Firebase project, so current accounts, school/class records, roles, and teacher applications are not migrated or recreated.
+The Teacher portal should continue using the existing Firebase project, so current accounts, school/class records, roles, and teacher applications are not migrated or recreated. In Firebase Authentication settings, add both final Netlify hostnames (and any custom domains) to Authorized domains before testing popup/SSO login.
 
 ## Netlify Functions
 
