@@ -10,7 +10,7 @@ const app=getApps().length?getApps()[0]:initializeApp(config),auth=getAuth(app),
   const uid=u.uid;
   const role=await getRole(u);
   if(auth.currentUser?.uid!==uid)return true;
-  if(String(role||'').toLowerCase()==='teacher'){location.replace(String(window.KATLEARN_CONFIG?.teacherUrl||'https://teacher-katlearn.vercel.app').replace(/\/+$/,'')+'/');return true}
+  if(String(role||'').toLowerCase()==='teacher'){location.replace(String(window.KATLEARN_CONFIG?.teacherUrl||'https://teacher-katlearn.netlify.app').replace(/\/+$/,'')+'/');return true}
   if(String(role||'').toLowerCase()==='pending_teacher_verification'){location.replace('teacher-pending.html');return true}
   await signOut(auth).catch(()=>{});
   location.replace(String(window.KATLEARN_CONFIG?.lmsUrl||'https://lms-katlearn.vercel.app').replace(/\/+$/,'')+'/login.html?from=teacher');
