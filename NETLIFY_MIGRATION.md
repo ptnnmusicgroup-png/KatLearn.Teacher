@@ -16,13 +16,13 @@ The build publishes the public Teacher UI and catalog files. It excludes server-
 Configure variables in Netlify's dashboard, never in the repository.
 
 **Build-time site URLs**
-- `KATLEARN_TEACHER_URL`: this Teacher site's final HTTPS origin.
-- `KATLEARN_LMS_URL`: the LMS site's final HTTPS origin.
+- `KATLEARN_TEACHER_URL`: `https://teacher-katlearn.netlify.app`.
+- `KATLEARN_LMS_URL`: `https://lms-katlearn.netlify.app`.
 
 **Functions/runtime variables**
-- `LMS_ADMIN_URL`: the LMS site's final origin followed by `/api/admin-hub`.
-- `LMS_AI_PACK_URL`: the LMS site's final origin followed by `/api/ai-pack`.
-- `KATLEARN_ALLOWED_ORIGINS`: comma-separated exact HTTPS origins allowed by the Teacher SSO and teacher-management APIs. Include both the Netlify Teacher origin and Netlify LMS origin.
+- `LMS_ADMIN_URL`: `https://lms-katlearn.netlify.app/api/admin-hub`.
+- `LMS_AI_PACK_URL`: `https://lms-katlearn.netlify.app/api/ai-pack`.
+- `KATLEARN_ALLOWED_ORIGINS`: comma-separated exact HTTPS origins allowed by the Teacher SSO and teacher-management APIs. Include `https://teacher-katlearn.netlify.app` and `https://lms-katlearn.netlify.app`.
 - Firebase Admin credentials: use the existing production service-account variable, preferably `FIREBASE_SERVICE_ACCOUNT_JSON`. Supported alternatives are implemented in `api/_firebase-admin.js`.
 
 The Teacher portal should continue using the existing Firebase project, so current accounts, school/class records, roles, and teacher applications are not migrated or recreated. In Firebase Authentication settings, add both final Netlify hostnames (and any custom domains) to Authorized domains before testing popup/SSO login.
