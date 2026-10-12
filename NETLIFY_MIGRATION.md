@@ -1,6 +1,6 @@
 # KatLearn Teacher — Netlify migration
 
-This branch prepares the Teacher portal for Netlify hosting while leaving the current Vercel deployment available for rollback.
+This branch prepares the Teacher portal for Netlify hosting. Production is not switched until the migration pull request is merged and the new portal passes end-to-end checks.
 
 ## Build and publish
 
@@ -9,7 +9,7 @@ This branch prepares the Teacher portal for Netlify hosting while leaving the cu
 - Functions directory: `netlify/functions`
 - Node.js: `22`
 
-The build publishes the public Teacher UI and catalog files. It excludes server-side API code, function sources, Git/Vercel metadata, dependency folders, and credential-looking files. It injects `site-config.js` into published HTML to select the matching LMS and Teacher origins.
+The build publishes the public Teacher UI and catalog files. It excludes server-side API code, function sources, Git metadata, dependency folders, and credential-looking files. It injects `site-config.js` into published HTML to select the matching LMS and Teacher origins.
 
 ## Netlify environment variables
 
@@ -42,7 +42,7 @@ The original `/api/*` URL shape is preserved through Netlify rewrites.
 1. Deploy this branch to a new Netlify site and set the environment variables above.
 2. Confirm the Teacher pages load and that `site-config.js` contains the intended LMS and Teacher URLs.
 3. Verify email/Google/Apple sign-in flows as supported, teacher registration and pending verification, catalog loading, class management, assigned packs, Admin actions, and Kat AI pack generation.
-4. Verify both sites share the existing Firebase project and the Teacher's server-side proxy points to the LMS Netlify site rather than Vercel.
-5. Only after both sites pass end-to-end testing, configure custom domains/DNS. Keep Vercel available for rollback until the new deployment is stable.
+4. Verify both sites share the existing Firebase project and the Teacher's server-side proxy points to `https://lms-katlearn.netlify.app`.
+5. Only after both sites pass end-to-end testing, configure custom domains/DNS. Keep the previous production deployment available for rollback until the new deployment is stable.
 
 No Firebase data migration is required for a hosting-only move.
