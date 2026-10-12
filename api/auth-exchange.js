@@ -1,6 +1,6 @@
 import { admin } from './_firebase-admin.js';
 
-const BUILTIN_ALLOWED_ORIGINS = new Set(['https://teacher-katlearn.netlify.app','https://lms-katlearn.netlify.app','https://teacher-katlearn.vercel.app','https://lms-katlearn.vercel.app']);
+const BUILTIN_ALLOWED_ORIGINS = new Set(['https://teacher-katlearn.netlify.app','https://lms-katlearn.netlify.app']);
 const allowedOrigins = new Set([
   ...BUILTIN_ALLOWED_ORIGINS,
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean),
