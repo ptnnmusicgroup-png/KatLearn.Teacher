@@ -10,7 +10,6 @@ const excludedTopLevel = new Set([
   ".git",
   ".github",
   ".netlify",
-  ".vercel",
   "api",
   "dist",
   "netlify",
@@ -26,7 +25,6 @@ const excludedFiles = new Set([
   "pnpm-lock.yaml",
   "yarn.lock",
   "README.md",
-  "vercel.json",
 ]);
 
 function shouldCopy(source) {
