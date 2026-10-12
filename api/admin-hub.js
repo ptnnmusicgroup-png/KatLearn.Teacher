@@ -131,7 +131,7 @@ async function proxy(request) {
   }
 }
 
-// Vercel Node.js Functions use the Web Handler export shape for /api functions.
+// Netlify Functions adapt the Web Handler export shape for /api functions.
 // Keep this as a fetch handler instead of a legacy default(request) signature.
 export default {
   fetch: proxy,
