@@ -34,6 +34,17 @@ jobs:
         run: node scripts/check-inline-scripts.mjs
       - name: Run Netlify static build
         run: node scripts/netlify-build.mjs
+      - name: Verify every API handler has a Netlify adapter
+        shell: bash
+        run: |
+          set -euo pipefail
+          for api_file in api/*.js; do
+            endpoint="$(basename "$api_file" .js)"
+            if [[ "$endpoint" == _* ]]; then
+              continue
+            fi
+            test -f "netlify/functions/${endpoint}.mjs"
+          done
       - name: Verify publish output and API source isolation
         shell: bash
         run: |
