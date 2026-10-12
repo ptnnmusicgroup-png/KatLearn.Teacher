@@ -13,7 +13,7 @@ async function walk(directory) {
     const full = path.join(directory, entry.name);
     if (entry.isDirectory()) {
       await walk(full);
-    } else if (entry.isFile() && /\\.html?$/i.test(entry.name)) {
+    } else if (entry.isFile() && /\.html?$/i.test(entry.name)) {
       htmlFiles.push(full);
     }
   }
@@ -27,7 +27,7 @@ const errors = [];
 try {
   for (const file of htmlFiles) {
     const html = await readFile(file, "utf8");
-    const scriptTag = /<script\\b([^>]*)>([\\s\\S]*?)<\\/script\\s*>/gi;
+    const scriptTag = /<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
     let match;
     let scriptIndex = 0;
 
@@ -35,9 +35,9 @@ try {
       const attributes = match[1] || "";
       const source = match[2] || "";
       scriptIndex += 1;
-      if (!source.trim() || /\\bsrc\\s*=/i.test(attributes)) continue;
+      if (!source.trim() || /\bsrc\s*=/i.test(attributes)) continue;
 
-      const typeMatch = attributes.match(/\\btype\\s*=\\s*(?:"([^"]+)"|'([^']+)'|([^\\s>]+))/i);
+      const typeMatch = attributes.match(/\btype\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s>]+))/i);
       const type = String(typeMatch?.[1] || typeMatch?.[2] || typeMatch?.[3] || "")
         .trim()
         .toLowerCase();
@@ -47,12 +47,12 @@ try {
       }
 
       checked += 1;
-      const tempFile = path.join(temp, `inline-${checked}.${isModule ? "mjs" : "cjs"}`);
+      const tempFile = path.join(temp, "inline-" + checked + "." + (isModule ? "mjs" : "cjs"));
       await writeFile(tempFile, source, "utf8");
       const result = spawnSync(process.execPath, ["--check", tempFile], { encoding: "utf8" });
       if (result.status !== 0) {
         errors.push({
-          file: path.relative(root, file).replaceAll("\\\\", "/"),
+          file: path.relative(root, file).replaceAll("\\", "/"),
           scriptIndex,
           output: String(result.stderr || result.stdout || "Node syntax check failed").trim(),
         });
@@ -65,10 +65,10 @@ try {
 
 if (errors.length) {
   for (const error of errors) {
-    console.error(`\\n[Inline JavaScript] ${error.file} (script #${error.scriptIndex})\\n${error.output}`);
+    console.error("\n[Inline JavaScript] " + error.file + " (script #" + error.scriptIndex + ")\n" + error.output);
   }
-  console.error(`\\nFailed: ${errors.length} inline script(s). Checked ${checked} script(s) in ${htmlFiles.length} HTML file(s).`);
+  console.error("\nFailed: " + errors.length + " inline script(s). Checked " + checked + " script(s) in " + htmlFiles.length + " HTML file(s).");
   process.exitCode = 1;
 } else {
-  console.log(`Inline JavaScript syntax OK: checked ${checked} script(s) in ${htmlFiles.length} HTML file(s).`);
+  console.log("Inline JavaScript syntax OK: checked " + checked + " script(s) in " + htmlFiles.length + " HTML file(s).");
 }
