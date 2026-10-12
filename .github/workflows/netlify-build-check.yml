@@ -30,6 +30,8 @@ jobs:
           set -euo pipefail
           find api netlify/functions scripts -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \) -print0 | while IFS= read -r -d '' file; do node --check "$file"; done
           find . -maxdepth 1 -type f -name '*.js' -print0 | while IFS= read -r -d '' file; do node --check "$file"; done
+      - name: Check inline JavaScript in HTML pages
+        run: node scripts/check-inline-scripts.mjs
       - name: Run Netlify static build
         run: node scripts/netlify-build.mjs
       - name: Verify publish output and API source isolation
@@ -39,5 +41,11 @@ jobs:
           test -f dist/site-config.js
           test -f dist/index.html
           grep -q 'src="/site-config.js"' dist/index.html
+          test -f dist/katlearn-transition.js
+          grep -q 'src="/katlearn-transition.js"' dist/index.html
           test ! -d dist/api
           test ! -d dist/netlify
+          if grep -R -n -E 'https?://(lms|teacher)-katlearn\\.vercel\\.app' --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist .; then
+            echo 'Stale KatLearn Vercel URLs remain in repository files.' >&2
+            exit 1
+          fi
