@@ -3,8 +3,6 @@ const DEFAULT_LMS_ADMIN = "https://lms-katlearn.netlify.app/api/admin-hub";
 const BUILTIN_ALLOWED_ORIGINS = new Set([
   "https://teacher-katlearn.netlify.app",
   "https://lms-katlearn.netlify.app",
-  "https://teacher-katlearn.vercel.app",
-  "https://lms-katlearn.vercel.app",
   "http://localhost:3000",
   "http://localhost:5173",
 ]);
