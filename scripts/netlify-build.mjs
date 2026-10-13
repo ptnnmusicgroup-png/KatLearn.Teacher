@@ -74,6 +74,7 @@ async function injectSiteConfig(directory) {
     if (!entry.isFile() || !/\.html?$/i.test(entry.name)) continue;
     let html = await readFile(target, "utf8");
     const tags = [];
+    if (!html.includes('href="/katlearn-polish.css')) tags.push('<link rel="stylesheet" href="/katlearn-polish.css?v=20261013-1">');
     if (!html.includes('src="/site-config.js"')) tags.push('<script src="/site-config.js"></script>');
     if (!html.includes('src="/katlearn-transition.js"')) tags.push('<script src="/katlearn-transition.js" defer></script>');
     if (!tags.length) continue;
