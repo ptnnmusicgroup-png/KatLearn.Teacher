@@ -202,8 +202,8 @@ function showPage(name){
 function bind(){
  $(".brand")?.addEventListener("click",e=>{e.preventDefault();showPage("overview")});
  each(qsa(".nav button,[data-go]"),b=>b.addEventListener("click",e=>{if(b.matches("[data-go]"))e.preventDefault();showPage(b.dataset.page||b.dataset.go)}));
- $("#menuMobile").onclick=()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show")};
- $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show")};
+ $("#menuMobile").onclick=()=>{$("#sidebar").classList.add("open");$("#mobileOverlay").classList.add("show");$("#menuMobile").setAttribute("aria-expanded","true")};
+ $("#mobileOverlay").onclick=()=>{$("#sidebar").classList.remove("open");$("#mobileOverlay").classList.remove("show");$("#menuMobile").setAttribute("aria-expanded","false")};
  async function leaveAdmin(){
   try{
     await signOut(auth);
