@@ -61,7 +61,7 @@ jobs:
             grep -q 'src="/site-config.js"' "$html"
             grep -q 'src="/katlearn-transition.js"' "$html"
           done < <(find dist -type f -name '*.html' -print0)
-          if grep -R -n -E 'https?://[^[:space:]]*vercel\.(app|com)' --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist .; then
+          if grep -R -n -i -E 'vercel|\\.vercel' --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude=netlify-build-check.yml .; then
             echo 'Stale Vercel URLs remain in repository files.' >&2
             exit 1
           fi
