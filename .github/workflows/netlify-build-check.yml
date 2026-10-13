@@ -53,6 +53,7 @@ jobs:
           test -f dist/site-config.js
           test -f dist/index.html
           test -f dist/katlearn-transition.js
+          test -f dist/katlearn-polish.css
           grep -q 'src="/site-config.js"' dist/index.html
           grep -q 'src="/katlearn-transition.js"' dist/index.html
           test ! -d dist/api
@@ -60,6 +61,7 @@ jobs:
           while IFS= read -r -d '' html; do
             grep -q 'src="/site-config.js"' "$html"
             grep -q 'src="/katlearn-transition.js"' "$html"
+            grep -q 'href="/katlearn-polish.css' "$html"
           done < <(find dist -type f -name '*.html' -print0)
           if grep -R -n -i -E 'vercel|\\.vercel' --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude=netlify-build-check.yml .; then
             echo 'Stale Vercel URLs remain in repository files.' >&2
