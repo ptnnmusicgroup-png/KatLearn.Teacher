@@ -4,7 +4,7 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
-const skipDirs = new Set([".git", ".netlify", ".vercel", "node_modules", "dist"]);
+const skipDirs = new Set([".git", ".netlify", "node_modules", "dist"]);
 const htmlFiles = [];
 
 async function walk(directory) {
