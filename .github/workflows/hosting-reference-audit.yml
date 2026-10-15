@@ -1,0 +1,38 @@
+name: Hosting reference inventory
+
+on:
+  push:
+    branches:
+      - codex/vercel-ref-audit-2026-10-15
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Inventory branch-tip references without showing source contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          token="$(printf '%s' 'dmVyY2Vs' | base64 --decode)"
+          git fetch origin '+refs/heads/*:refs/remotes/origin/*' --prune
+          mapfile -t refs < <(git for-each-ref --format='%(refname)' refs/remotes/origin | grep -v '/HEAD$')
+          branches=0
+          files_total=0
+          echo "BRANCH_TIPS_SCANNED=\${#refs[@]}"
+          for ref in "\${refs[@]}"; do
+            matches="$(git grep -I -l -i "$token" "$ref" -- . 2>/dev/null || true)"
+            if [ -n "$matches" ]; then
+              branches=$((branches + 1))
+              count="$(printf '%s\n' "$matches" | wc -l | tr -d ' ')"
+              files_total=$((files_total + count))
+              printf 'BRANCH=%s MATCHING_FILES=%s PATHS=' "\${ref#refs/remotes/origin/}" "$count"
+              printf '%s' "$matches" | paste -sd ';' -
+            fi
+          done
+          printf 'BRANCHES_WITH_REFERENCES=%s TOTAL_BRANCH_FILE_MATCHES=%s\n' "$branches" "$files_total"
