@@ -1,0 +1,46 @@
+name: Cloudflare Pages build check
+
+on:
+  push:
+    branches: [migration/cloudflare-pages]
+  pull_request:
+    branches: [main]
+    paths:
+      - "functions/**"
+      - "scripts/cloudflare-pages-build.mjs"
+      - "wrangler.toml"
+      - ".github/workflows/cloudflare-pages-build-check.yml"
+      - "netlify.toml"
+      - "api/**"
+      - "teacher.js"
+      - "login.html"
+      - "signup.html"
+      - "sso-bridge.html"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build Cloudflare Pages static output
+        env:
+          KATLEARN_LMS_URL: https://lms-preview.invalid
+          KATLEARN_TEACHER_URL: https://teacher-preview.invalid
+        run: node scripts/cloudflare-pages-build.mjs
+      - name: Verify API bridge syntax
+        run: node --input-type=module --check < functions/_middleware.js
+      - name: Verify static config and secret exclusions
+        run: |
+          test -f dist/index.html
+          test -f dist/site-config.js
+          test ! -e dist/api
+          test ! -e dist/netlify
+          test ! -e dist/functions
+          ! find dist -type f \( -name '*.pem' -o -name '*.key' -o -name '.env*' -o -name '*service-account*.json' \) | grep .
+          grep -q 'teacher-preview.invalid' dist/site-config.js
