@@ -1,4 +1,4 @@
-name: Cloudflare Pages build check
+name: Cloudflare Pages and API build check
 
 on:
   push:
@@ -9,13 +9,20 @@ on:
       - "functions/**"
       - "scripts/cloudflare-pages-build.mjs"
       - "wrangler.toml"
+      - "wrangler-api.toml"
+      - "Dockerfile.cloudflare-api"
+      - ".dockerignore"
+      - "cloudflare-api/**"
       - ".github/workflows/cloudflare-pages-build-check.yml"
       - "netlify.toml"
       - "api/**"
-      - "teacher.js"
+      - "data/**"
+      - "package.json"
       - "login.html"
       - "signup.html"
+      - "firebase-service.js"
       - "sso-bridge.html"
+      - "teacher.js"
 
 permissions:
   contents: read
@@ -33,8 +40,14 @@ jobs:
           KATLEARN_LMS_URL: https://lms-preview.invalid
           KATLEARN_TEACHER_URL: https://teacher-preview.invalid
         run: node scripts/cloudflare-pages-build.mjs
-      - name: Verify API bridge syntax
-        run: node --input-type=module --check < functions/_middleware.js
+      - name: Verify Cloudflare runtime source syntax
+        run: |
+          node --input-type=module --check < functions/_middleware.js
+          node --check cloudflare-api/server.mjs
+          node --input-type=module --check < cloudflare-api/src/index.js
+          node --check cloudflare-api/legacy-handler.cjs
+      - name: Build Node API container
+        run: docker build --pull -f Dockerfile.cloudflare-api -t katlearn-teacher-api:ci .
       - name: Verify static config and secret exclusions
         run: |
           test -f dist/index.html
