@@ -1,13 +1,21 @@
 # KatLearn Teacher
 
-Teacher portal for KatLearn.
+Teacher and administrator portal for KatLearn.
 
-## Firebase Admin production configuration
+## Cloudflare deployment
 
-The Teacher portal server APIs use Firebase Admin SDK. Configure the following Netlify Functions environment variable(s):
+- Teacher Pages project: `katlearn-teacher` (use the actual assigned URL in the Pages build variable)
+- LMS Pages project: `katlearn-lms` (use the actual assigned URL in the Pages build variable)
+- API runtime: Cloudflare Workers Containers, using Node.js 22 and the existing Firebase Admin API handlers.
+- Data/auth: Firebase project `elp---katlearn`.
 
-- Preferred: `FIREBASE_SERVICE_ACCOUNT_JSON` = the complete Firebase service-account JSON.
-- Alternative: `FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` = Base64 of the complete service-account JSON.
-- Or the three fields: `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`.
+See [CLOUDFLARE_PAGES_MIGRATION.md](CLOUDFLARE_PAGES_MIGRATION.md) for the deployment order, Worker secrets and Pages settings. Keep all Firebase service-account credentials in Cloudflare Worker secrets, never in Git.
 
-Never commit a service-account JSON/private key to GitHub. After changing Netlify environment variables, redeploy the site.
+## Build
+
+Cloudflare Pages build command: `node scripts/cloudflare-pages-build.mjs`
+Build output: `dist`
+API Worker config: `wrangler-api.toml`
+Pages config: `wrangler.toml`
+
+Cloudflare Workers Containers require the Workers Paid plan and are billed by usage. Do not switch production domains until the Pages preview and authenticated API smoke tests pass.

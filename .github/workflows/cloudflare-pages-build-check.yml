@@ -1,0 +1,64 @@
+name: Cloudflare Pages and API build check
+
+on:
+  push:
+    branches: [migration/cloudflare-pages]
+  pull_request:
+    branches: [main]
+    paths:
+      - "functions/**"
+      - "scripts/cloudflare-pages-build.mjs"
+      - "wrangler.toml"
+      - "wrangler-api.toml"
+      - "Dockerfile.cloudflare-api"
+      - ".dockerignore"
+      - "cloudflare-api/**"
+      - ".github/workflows/cloudflare-pages-build-check.yml"
+      - "api/**"
+      - "data/**"
+      - "package.json"
+      - "login.html"
+      - "signup.html"
+      - "firebase-service.js"
+      - "sso-bridge.html"
+      - "site-footer.js"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build Cloudflare Pages static output
+        env:
+          KATLEARN_LMS_URL: https://lms-preview.invalid
+          KATLEARN_TEACHER_URL: https://teacher-preview.invalid
+        run: node scripts/cloudflare-pages-build.mjs
+      - name: Verify Cloudflare runtime source syntax
+        run: |
+          node --input-type=module --check < functions/_middleware.js
+          node --check cloudflare-api/server.mjs
+          node --input-type=module --check < cloudflare-api/src/index.js
+          node --check cloudflare-api/legacy-handler.cjs
+      - name: Build Node API container
+        run: docker build --pull -f Dockerfile.cloudflare-api -t katlearn-teacher-api:ci .
+      - name: Verify static config, route exclusions, and secret exclusions
+        run: |
+          test -f dist/index.html
+          test -f dist/site-config.js
+          test -f dist/_routes.json
+          grep -Fq '"/api/*"' dist/_routes.json
+          test ! -e dist/api
+          test ! -e dist/netlify
+          test ! -e dist/functions
+          ! find dist -type f -name '*.pem' | grep .
+          ! find dist -type f -name '*.key' | grep .
+          ! find dist -type f -name '.env*' | grep .
+          ! find dist -type f -name '*service-account*.json' | grep .
+          grep -q 'teacher-preview.invalid' dist/site-config.js
+          ! grep -RniF -e 'netlify.app' -e 'vercel.app' -e 'Deploy bởi Netlify' -e 'Deploy bởi Vercel' dist
