@@ -56,6 +56,9 @@ jobs:
           test ! -e dist/api
           test ! -e dist/netlify
           test ! -e dist/functions
-          ! find dist -type f \\( -name '*.pem' -o -name '*.key' -o -name '.env*' -o -name '*service-account*.json' \\) | grep .
+          ! find dist -type f -name '*.pem' | grep .
+          ! find dist -type f -name '*.key' | grep .
+          ! find dist -type f -name '.env*' | grep .
+          ! find dist -type f -name '*service-account*.json' | grep .
           grep -q 'teacher-preview.invalid' dist/site-config.js
           ! grep -RniF -e 'netlify.app' -e 'vercel.app' -e 'Deploy bởi Netlify' -e 'Deploy bởi Vercel' dist
