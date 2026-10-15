@@ -1,3 +1,7 @@
-# Cloudflare Pages project configuration for KatLearn Teacher.
+name = "katlearn-teacher"
 pages_build_output_dir = "./dist"
 compatibility_date = "2026-10-15"
+
+[[services]]
+binding = "KATLEARN_API"
+service = "katlearn-teacher-api"

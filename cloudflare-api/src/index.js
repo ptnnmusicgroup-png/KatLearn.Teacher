@@ -58,7 +58,7 @@ export class KatLearnApi extends DurableObject {
     if (!container.running) {
       container.start({
         image: container.images.base,
-        instance: "basic",
+        instance: "lite",
         enableInternet: true,
         env: containerEnvironment(this.env),
       });

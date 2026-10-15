@@ -1,42 +1,38 @@
 # KatLearn Teacher — Cloudflare Pages + Workers Containers
 
-This branch prepares the Teacher static frontend for Cloudflare Pages and moves its API runtime into a Cloudflare Workers Container running Node 22 and the existing Firebase Admin handlers. The Pages Functions middleware forwards /api/* to that Cloudflare Worker API origin; there is no Netlify runtime dependency in the target deployment.
+This branch prepares the Teacher static frontend for Cloudflare Pages and the API runtime for a Cloudflare Worker backed by a Node.js 22 Container. Pages serves static files and routes API requests through a Pages Function service binding to katlearn-teacher-api. The target deployment uses Cloudflare for both frontend and API runtime.
 
-## 1. Create the API Worker
+## Deployment order
 
-From the repository root, deploy the API Worker after signing into Wrangler:
-- npx wrangler deploy --config wrangler-api.toml
+### 1. Deploy the API Worker first
 
-The initial deploy builds a Docker image and may take several minutes to become ready. Workers Containers require the Cloudflare Workers Paid plan and are billed by usage.
+From this repository root, sign into Wrangler and deploy:
+npx wrangler deploy --config wrangler-api.toml
 
-Set these Worker secrets with Wrangler (do not commit them):
-- FIREBASE_SERVICE_ACCOUNT_JSON (recommended; service-account JSON for Firebase project elp---katlearn), or supported alternative credential variables
+The Worker starts a Node.js 22 container that runs the existing Teacher/Admin API handlers and Firebase Admin SDK. Containers require the Workers Paid plan and incur usage-based charges.
 
-Set non-secret Worker variables as appropriate:
-- KATLEARN_ALLOWED_ORIGINS: comma-separated exact production Pages origins
-- KATLEARN_LMS_SITE_URL: production LMS Pages URL
-- KATLEARN_TEACHER_SITE_URL: production Teacher Pages URL
+Set the Worker secret value using npx wrangler secret put FIREBASE_SERVICE_ACCOUNT_JSON (service-account JSON for Firebase project elp---katlearn).
 
-## 2. Create Cloudflare Pages for the static frontend
+Set non-secret Worker variables using npx wrangler vars set NAME VALUE:
+- KATLEARN_ALLOWED_ORIGINS — comma-separated exact production LMS/Teacher origins
+- KATLEARN_LMS_SITE_URL — actual production LMS URL
+- KATLEARN_TEACHER_SITE_URL — actual production Teacher URL
 
-- Framework preset: None
-- Root directory: repository root
+Never commit these secret values to Git.
+
+### 2. Create the Pages projects
+
+Use the repository root with Framework preset None:
 - Build command: node scripts/cloudflare-pages-build.mjs
 - Build output directory: dist
-- Production build variables:
-  - KATLEARN_TEACHER_URL: actual production URL assigned to the Teacher Pages project
-  - KATLEARN_LMS_URL: actual production URL assigned to the LMS Pages project
-- Pages Functions runtime variables:
-  - KATLEARN_API_ORIGIN: deployed Cloudflare Teacher API Worker origin
-  - KATLEARN_ALLOWED_ORIGINS: comma-separated exact production LMS and Teacher Pages origins
+- Build variable KATLEARN_TEACHER_URL: actual URL assigned to the Teacher Pages project
+- Build variable KATLEARN_LMS_URL: actual URL assigned to the LMS Pages project
+- Pages runtime variable KATLEARN_ALLOWED_ORIGINS: comma-separated exact LMS/Teacher origins
 
-Use the actual Pages and Worker URLs assigned by Cloudflare. Set these runtime variables in both Pages projects, with each KATLEARN_API_ORIGIN pointing to its corresponding API Worker.
+The Pages Wrangler file binds KATLEARN_API to the katlearn-teacher-api Worker. The Worker must be deployed before the Pages project. Configure production and preview settings separately where the Cloudflare dashboard supports environment-specific values.
 
-## 3. Validate before changing domains
+### 3. Verify before moving production traffic
 
-1. Deploy Worker API previews and confirm GET /health and /api/* routes work.
-2. Deploy Pages previews for both repos.
-3. Smoke-test login/signup, LMS↔Teacher SSO, teacher management, AI-pack generation, and Admin/catalog flows.
-4. Switch custom domains only after the smoke tests pass.
+Verify teacher sign-in, LMS↔Teacher SSO, class and assignment management, Teacher AI pack generation, and Admin/catalog flows on the Cloudflare deployments. Use designated test accounts and review the Firestore effects of each smoke test.
 
-Cloudflare Pages and Workers are prepared by these source changes, but deployment still requires access to your Cloudflare account, the actual project URLs, and secret values. Existing production deployments are not changed by this branch.
+Update Firebase Authentication authorized domains for the actual Pages/custom domains. Switch custom domains only after both LMS and Teacher pass their smoke tests. This branch does not deploy projects, add secrets, or alter production DNS by itself.

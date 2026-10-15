@@ -42,32 +42,18 @@ export async function onRequest({ request, env, next }) {
   const cors = corsHeaders(origin && (sameOrigin || allowed.has(origin)) ? origin : "");
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
-  const configuredApiOrigin = normalizeOrigin(env.KATLEARN_API_ORIGIN);
-  if (!configuredApiOrigin) {
+  const api = env.KATLEARN_API;
+  if (!api || typeof api.fetch !== "function") {
     return Response.json(
-      { ok: false, error: "Cloudflare Pages API bridge is not configured. Set KATLEARN_API_ORIGIN." },
+      { ok: false, error: "Cloudflare API service binding KATLEARN_API is not configured." },
       { status: 503, headers: cors },
     );
   }
 
-  let apiBase;
+  const target = new URL(incoming.pathname + incoming.search, "https://katlearn-api.internal");
+  const forwarded = new Request(target, request);
   try {
-    apiBase = new URL(configuredApiOrigin);
-  } catch {
-    return Response.json({ ok: false, error: "KATLEARN_API_ORIGIN is invalid." }, { status: 500, headers: cors });
-  }
-  if (apiBase.protocol !== "https:" && apiBase.hostname !== "localhost") {
-    return Response.json({ ok: false, error: "KATLEARN_API_ORIGIN must use HTTPS." }, { status: 500, headers: cors });
-  }
-
-  const target = new URL(incoming.pathname + incoming.search, apiBase.origin);
-  const forwardedHeaders = new Headers(request.headers);
-  forwardedHeaders.delete("host");
-  const init = { method: request.method, headers: forwardedHeaders, redirect: "manual" };
-  if (request.method !== "GET" && request.method !== "HEAD") init.body = request.body;
-
-  try {
-    const upstream = await fetch(new Request(target, init));
+    const upstream = await api.fetch(forwarded);
     const headers = new Headers(upstream.headers);
     headers.delete("access-control-allow-origin");
     headers.delete("access-control-allow-credentials");
@@ -80,7 +66,7 @@ export async function onRequest({ request, env, next }) {
     });
   } catch {
     return Response.json(
-      { ok: false, error: "API server is temporarily unreachable." },
+      { ok: false, error: "Cloudflare API Worker is temporarily unavailable." },
       { status: 502, headers: cors },
     );
   }

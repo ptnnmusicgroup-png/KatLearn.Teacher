@@ -5,14 +5,14 @@ import { fileURLToPath } from "node:url";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, "..");
 const publishDir = path.join(projectRoot, "dist");
-
 const excludedTopLevel = new Set([
   ".git", ".github", ".netlify", ".wrangler", "api", "dist", "functions",
-  "netlify", "node_modules", "scripts",
+  "netlify", "node_modules", "scripts", "cloudflare-api",
 ]);
 const excludedFiles = new Set([
-  ".gitignore", "README.md", "CLOUDFLARE_PAGES_MIGRATION.md", "netlify.toml",
-  "wrangler.toml", "package.json", "package-lock.json", "pnpm-lock.yaml", "yarn.lock",
+  ".gitignore", "README.md", "CLOUDFLARE_PAGES_MIGRATION.md", "NETLIFY_MIGRATION.md",
+  "netlify.toml", "wrangler.toml", "wrangler-api.toml", "package.json",
+  "package-lock.json", "pnpm-lock.yaml", "yarn.lock", ".env.example",
 ]);
 
 function shouldCopy(source) {
@@ -37,9 +37,13 @@ function requiredUrl(name) {
 }
 
 const siteConfig = {
-  teacherUrl: requiredUrl("KATLEARN_TEACHER_URL"),
   lmsUrl: requiredUrl("KATLEARN_LMS_URL"),
+  teacherUrl: requiredUrl("KATLEARN_TEACHER_URL"),
 };
+const oldOrigins = [
+  [/https:\/\/(?:lms-katlearn\.(?:netlify|vercel)\.app|katlearn-lms\.pages\.dev)/gi, siteConfig.lmsUrl],
+  [/https:\/\/(?:teacher-katlearn\.(?:netlify|vercel)\.app|teacher\.katlearn\.vercel\.app|katlearn-teacher\.pages\.dev)/gi, siteConfig.teacherUrl],
+];
 
 await rm(publishDir, { recursive: true, force: true });
 await mkdir(publishDir, { recursive: true });
@@ -50,11 +54,33 @@ for (const entry of await readdir(projectRoot, { withFileTypes: true })) {
     recursive: true, force: true, filter: shouldCopy,
   });
 }
+
+async function rewritePlatformOrigins(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      await rewritePlatformOrigins(target);
+      continue;
+    }
+    if (!entry.isFile() || !/\.(?:html?|js|mjs|css|json|svg|xml|txt)$/i.test(entry.name)) continue;
+    let content = await readFile(target, "utf8");
+    const original = content;
+    for (const [pattern, replacement] of oldOrigins) content = content.replace(pattern, replacement);
+    if (content !== original) await writeFile(target, content, "utf8");
+  }
+}
+
 await writeFile(
   path.join(publishDir, "site-config.js"),
   "window.KATLEARN_CONFIG = Object.freeze(" + JSON.stringify(siteConfig) + ");\n",
   "utf8",
 );
+await writeFile(
+  path.join(publishDir, "_routes.json"),
+  JSON.stringify({ version: 1, include: ["/api/*"], exclude: [] }, null, 2) + "\n",
+  "utf8",
+);
+await rewritePlatformOrigins(publishDir);
 
 async function injectSiteConfig(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -78,4 +104,19 @@ async function injectSiteConfig(directory) {
   }
 }
 await injectSiteConfig(publishDir);
-console.log("Cloudflare Pages Teacher static output prepared at dist/. API routes are handled by Pages Functions.");
+
+const forbidden = /https:\/\/[^\s"'<>]*(?:netlify\.app|vercel\.app)/i;
+async function assertNoLegacyHostingUrls(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      await assertNoLegacyHostingUrls(target);
+      continue;
+    }
+    if (!entry.isFile() || !/\.(?:html?|js|mjs|css|json|svg|xml|txt)$/i.test(entry.name)) continue;
+    const content = await readFile(target, "utf8");
+    if (forbidden.test(content)) throw new Error("Legacy hosting URL remains in published asset: " + path.relative(publishDir, target));
+  }
+}
+await assertNoLegacyHostingUrls(publishDir);
+console.log("Cloudflare Pages output prepared at dist/; API routes use Pages Functions and a Cloudflare Worker service binding.");
