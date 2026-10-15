@@ -9,7 +9,7 @@ const skippedDirectories = new Set([
   "api", "netlify", "scripts"
 ]);
 const skippedRootFiles = new Set([
-  ".gitignore", "README.md", "package.json", "vercel.json",
+  ".gitignore", "README.md", "package.json",
   "firestore.rules", "netlify.toml"
 ]);
 
@@ -60,11 +60,11 @@ const productionUrl = process.env.CONTEXT === "production"
   : (process.env.DEPLOY_PRIME_URL || process.env.URL);
 const lmsUrl = cleanUrl(
   process.env.KATLEARN_LMS_SITE_URL,
-  "https://lms-katlearn.vercel.app"
+  "https://lms-katlearn.netlify.app"
 );
 const teacherUrl = cleanUrl(
   process.env.KATLEARN_TEACHER_SITE_URL || productionUrl,
-  "https://teacher-katlearn.vercel.app"
+  "https://teacher-katlearn.netlify.app"
 );
 fs.writeFileSync(
   path.join(output, "deployment-config.js"),
