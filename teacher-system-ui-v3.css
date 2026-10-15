@@ -91,3 +91,39 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(prefers-reduced-motion:reduce){
   *{scroll-behavior:auto!important;transition:none!important}
 }
+
+/* ===== Teacher UI audit pass · 2026-10-15 ===== */
+/* Keep the dashboard interactions consistent and usable on touch devices. */
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid rgba(113,96,223,.55)!important;outline-offset:3px!important
+}
+:where(button,a){-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:disabled,[aria-disabled="true"]{
+  cursor:not-allowed!important;opacity:.62;transform:none!important;box-shadow:none!important
+}
+:where(input,select,textarea){min-width:0;max-width:100%}
+:where(input,select,textarea)[aria-invalid="true"]{
+  border-color:#d95d71!important;box-shadow:0 0 0 3px rgba(217,93,113,.12)!important
+}
+.modal,.modal-overlay{overscroll-behavior:contain}
+.modal-card,.modal-content,.modal-box{
+  max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);
+  overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch
+}
+@media(hover:hover) and (pointer:fine){
+  .metric,.teacher-card-panel{transition:transform .2s ease,box-shadow .2s ease}
+  .metric:hover,.teacher-card-panel:hover{transform:translateY(-2px);box-shadow:0 18px 42px rgba(45,38,74,.09)!important}
+}
+@media(max-width:620px){
+  .app-shell,main,.page,.teacher-grid{min-width:0}
+  .page-intro{flex-wrap:wrap;gap:12px}
+  .page-intro h1,.teacher-hero h1{overflow-wrap:anywhere;text-wrap:balance}
+  .dashboard-grid{gap:10px!important}
+  .metric{padding:14px!important;min-width:0}
+  .metric strong{font-size:clamp(24px,7vw,31px)!important}
+  .modal-card,.modal-content,.modal-box{width:min(620px,calc(100vw - 24px));margin:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

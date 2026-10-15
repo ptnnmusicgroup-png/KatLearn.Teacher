@@ -138,3 +138,43 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:620px){
   .library-tree-children{padding-left:12px}
 }
+
+/* ===== Admin UI audit pass · 2026-10-15 ===== */
+/* Improve keyboard clarity, disabled states, data-table scrolling, and small screens. */
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid rgba(72,103,222,.55)!important;outline-offset:3px!important
+}
+:where(button,a){-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:disabled,[aria-disabled="true"]{
+  cursor:not-allowed!important;opacity:.62;transform:none!important;box-shadow:none!important
+}
+:where(input,select,textarea){min-width:0;max-width:100%}
+:where(input,select,textarea)[aria-invalid="true"]{
+  border-color:#d95d71!important;box-shadow:0 0 0 3px rgba(217,93,113,.12)!important
+}
+.app,.main,.content,.panel,.table-card,.section-card{min-width:0;max-width:100%}
+.table-wrap{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.modal,.modal-overlay{overscroll-behavior:contain}
+.modal-card,.modal-content,.modal-box{
+  max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);
+  overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch
+}
+@media(hover:hover) and (pointer:fine){
+  .metric,.panel,.card,.section-card,.table-card{
+    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease
+  }
+  .metric:hover,.panel:hover,.card:hover,.section-card:hover,.table-card:hover{
+    box-shadow:0 18px 42px rgba(19,43,66,.10)
+  }
+}
+@media(max-width:620px){
+  .content{padding-inline:12px!important}
+  .hero,.metric,.panel,.card,.table-card,.section-card{min-width:0;overflow-wrap:anywhere}
+  .library-tree-copy{min-width:0}
+  .library-tree-copy b,.library-tree-copy small{overflow-wrap:anywhere}
+  .library-tree-children{padding-inline:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
