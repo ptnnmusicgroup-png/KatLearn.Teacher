@@ -1,9 +1,9 @@
-const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-katlearn.vercel.app").replace(/\/+$/, "");
+const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-katlearn.netlify.app").replace(/\/+$/, "");
 const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
 const ALLOWED_ORIGINS = new Set([
-  "https://teacher-katlearn.vercel.app",
-  "https://lms-katlearn.vercel.app",
+  "https://teacher-katlearn.netlify.app",
+  "https://lms-katlearn.netlify.app",
   "http://localhost:3000",
   "http://localhost:5173",
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || "").split(",").map((value) => value.trim()).filter(Boolean),
@@ -117,7 +117,7 @@ async function proxy(request) {
   }
 }
 
-// Vercel Node.js Functions use the Web Handler export shape for /api functions.
+// Netlify Node.js Functions use the Web Handler export shape for /api functions.
 // Keep this as a fetch handler instead of a legacy default(request) signature.
 export default {
   fetch: proxy,
