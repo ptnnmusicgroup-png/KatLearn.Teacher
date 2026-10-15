@@ -32,7 +32,7 @@
         <button id="loginBtn" class="primary big" type="button">Vào Control Center <span>→</span></button>
         <div id="loginError" class="form-error" role="alert"></div>
       </div>
-      <div class="login-foot"><a href="https://lms-katlearn.vercel.app/login.html">← Về KatLearn</a><button id="clearSession" type="button">Xóa phiên & về KatLearn</button></div>
+      <div class="login-foot"><a href="#" id="returnLmsLoginLink">← Về KatLearn</a><button id="clearSession" type="button">Xóa phiên & về KatLearn</button></div>
     </div>
   </div>
 </section>
@@ -55,13 +55,13 @@
       <button data-page="activity"><i>◷</i>Hoạt động</button>
     </nav>
     <div class="side-bottom">
-      <a href="https://lms-katlearn.vercel.app/">↗ Mở KatLearn</a>
+      <a href="#" id="openLmsLink">↗ Mở KatLearn</a>
       <button id="logout">↪ Đăng xuất</button>
     </div>
   </aside>
   <main class="main">
     <header class="topbar">
-      <div class="top-left"><button id="menuMobile" class="icon-btn mobile-only">☰</button><div id="pageTitle" class="page-title">Tổng quan</div></div>
+      <div class="top-left"><button id="menuMobile" class="icon-btn mobile-only" type="button" aria-label="Mở menu điều hướng" aria-controls="sidebar" aria-expanded="false" title="Mở menu">☰</button><div id="pageTitle" class="page-title">Tổng quan</div></div>
       <div class="top-right"><div id="backendStatus" class="connection"><span class="dot"></span><span id="backendLabel">Đang kiểm tra…</span></div><button id="refresh" class="refresh">↻ Làm mới</button><div class="profile"><span class="avatar">🛡️</span><div><b>Admin</b><small>katlearn.admin@gmail.com</small></div></div></div>
     </header>
 

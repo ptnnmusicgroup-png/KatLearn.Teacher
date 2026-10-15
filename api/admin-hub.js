@@ -1,11 +1,28 @@
-const LMS_ADMIN = "https://lms-katlearn.vercel.app/api/admin-hub";
+const DEFAULT_LMS_ADMIN = "https://lms-katlearn.netlify.app/api/admin-hub";
 
-const ALLOWED_ORIGINS = new Set([
-  "https://teacher-katlearn.vercel.app",
-  "https://lms-katlearn.vercel.app",
+const BUILTIN_ALLOWED_ORIGINS = new Set([
+  "https://teacher-katlearn.netlify.app",
+  "https://lms-katlearn.netlify.app",
   "http://localhost:3000",
   "http://localhost:5173",
 ]);
+
+function getLmsAdminUrl() {
+  const value = String(process.env.LMS_ADMIN_URL || DEFAULT_LMS_ADMIN).trim();
+  const url = new URL(value);
+  if (url.protocol !== "https:" && !(url.protocol === "http:" && ["localhost", "127.0.0.1"].includes(url.hostname))) {
+    throw new Error("LMS_ADMIN_URL must use HTTPS.");
+  }
+  return url.toString();
+}
+
+function isAllowedOrigin(origin) {
+  const configured = String(process.env.KATLEARN_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  return BUILTIN_ALLOWED_ORIGINS.has(origin) || configured.includes(origin);
+}
 
 function corsHeaders(origin) {
   const headers = {
@@ -13,7 +30,7 @@ function corsHeaders(origin) {
     "Cache-Control": "no-store",
   };
 
-  if (ALLOWED_ORIGINS.has(origin)) {
+  if (isAllowedOrigin(origin)) {
     headers["Access-Control-Allow-Origin"] = origin;
     headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
     headers["Access-Control-Allow-Headers"] = "authorization, content-type, accept";
@@ -53,7 +70,7 @@ async function proxy(request) {
   const timeout = setTimeout(() => controller.abort(), 52000);
 
   try {
-    const url = new URL(LMS_ADMIN);
+    const url = new URL(getLmsAdminUrl());
     const incomingUrl = new URL(request.url);
 
     for (const [key, value] of incomingUrl.searchParams) {
@@ -112,7 +129,7 @@ async function proxy(request) {
   }
 }
 
-// Vercel Node.js Functions use the Web Handler export shape for /api functions.
+// Netlify Functions adapt the Web Handler export shape for /api functions.
 // Keep this as a fetch handler instead of a legacy default(request) signature.
 export default {
   fetch: proxy,

@@ -1,0 +1,80 @@
+name: Netlify migration build check
+
+on:
+  push:
+    branches: [migration/netlify]
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/netlify-build-check.yml"
+      - "netlify.toml"
+      - "netlify/**"
+      - "scripts/**"
+      - "api/**"
+      - "*.js"
+      - "*.html"
+      - "*.css"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-syntax-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Check server and client JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          find api netlify/functions scripts -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \) -print0 | while IFS= read -r -d '' file; do node --check "$file"; done
+          find . -maxdepth 1 -type f -name '*.js' -print0 | while IFS= read -r -d '' file; do node --check "$file"; done
+      - name: Check inline JavaScript in HTML pages
+        run: node scripts/check-inline-scripts.mjs
+      - name: Run Netlify static build
+        run: node scripts/netlify-build.mjs
+      - name: Verify every API handler has a Netlify adapter
+        shell: bash
+        run: |
+          set -euo pipefail
+          for api_file in api/*.js; do
+            endpoint="$(basename "$api_file" .js)"
+            if [[ "$endpoint" == _* ]]; then
+              continue
+            fi
+            test -f "netlify/functions/${endpoint}.mjs"
+          done
+      - name: Verify cross-app SSO uses configured Netlify origins
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Both sides of the SSO exchange must use the generated Netlify URLs.
+          grep -Fq 'window.KATLEARN_CONFIG?.lmsUrl' teacher.js
+          grep -Fq 'window.KATLEARN_CONFIG?.teacherUrl' teacher.js
+          grep -Fq 'window.KATLEARN_CONFIG?.teacherUrl' login.html
+          grep -Fq 'window.KATLEARN_CONFIG?.lmsUrl' login.html
+      - name: Verify publish output and legacy URL cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/site-config.js
+          test -f dist/index.html
+          test -f dist/katlearn-transition.js
+          test -f dist/katlearn-polish.css
+          grep -q 'src="/site-config.js"' dist/index.html
+          grep -q 'src="/katlearn-transition.js"' dist/index.html
+          test ! -d dist/api
+          test ! -d dist/netlify
+          while IFS= read -r -d '' html; do
+            grep -q 'src="/site-config.js"' "$html"
+            grep -q 'src="/katlearn-transition.js"' "$html"
+            grep -q 'href="/katlearn-polish.css' "$html"
+          done < <(find dist -type f -name '*.html' -print0)
+          provider_needle='ver''cel'
+          if grep -R -n -i -F "$provider_needle" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist .; then
+            echo 'Legacy hosting references remain in repository files.' >&2
+            exit 1
+          fi
