@@ -73,7 +73,8 @@ jobs:
             grep -q 'src="/katlearn-transition.js"' "$html"
             grep -q 'href="/katlearn-polish.css' "$html"
           done < <(find dist -type f -name '*.html' -print0)
-          if grep -R -n -i -E 'vercel|\\.vercel' --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude=netlify-build-check.yml .; then
-            echo 'Stale Vercel URLs remain in repository files.' >&2
+          provider_needle='ver''cel'
+          if grep -R -n -i -F "$provider_needle" --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist .; then
+            echo 'Legacy hosting references remain in repository files.' >&2
             exit 1
           fi
