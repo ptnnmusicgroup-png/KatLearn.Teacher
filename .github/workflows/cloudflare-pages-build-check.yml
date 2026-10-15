@@ -1,13 +1,14 @@
-name: Cloudflare Pages and API build check
+name: Cloudflare Workers build and API checks
 
 on:
   push:
-    branches: [migration/cloudflare-pages]
+    branches: [migration/cloudflare-workers]
   pull_request:
     branches: [main]
     paths:
+      - "cloudflare-worker.js"
       - "functions/**"
-      - "scripts/cloudflare-pages-build.mjs"
+      - "scripts/cloudflare-workers-build.mjs"
       - "wrangler.toml"
       - "wrangler-api.toml"
       - "Dockerfile.cloudflare-api"
@@ -22,6 +23,8 @@ on:
       - "firebase-service.js"
       - "sso-bridge.html"
       - "site-footer.js"
+      - "CLOUDFLARE_WORKERS_MIGRATION.md"
+      - "README.md"
 
 permissions:
   contents: read
@@ -34,25 +37,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Build Cloudflare Pages static output
+      - name: Build Cloudflare Workers static assets
         env:
           KATLEARN_LMS_URL: https://lms-preview.invalid
           KATLEARN_TEACHER_URL: https://teacher-preview.invalid
-        run: node scripts/cloudflare-pages-build.mjs
-      - name: Verify Cloudflare runtime source syntax
+        run: node scripts/cloudflare-workers-build.mjs
+      - name: Verify frontend and API Worker source syntax
         run: |
-          node --input-type=module --check < functions/_middleware.js
+          node --input-type=module --check < cloudflare-worker.js
           node --check cloudflare-api/server.mjs
           node --input-type=module --check < cloudflare-api/src/index.js
           node --check cloudflare-api/legacy-handler.cjs
+      - name: Validate frontend Worker config and bundle
+        run: npx --yes wrangler@4.151.0 deploy --dry-run
       - name: Build Node API container
-        run: docker build --pull -f Dockerfile.cloudflare-api -t katlearn-teacher-api:ci .
-      - name: Verify static config, route exclusions, and secret exclusions
+        run: docker build --pull -f Dockerfile.cloudflare-api -t katlearn-api:ci .
+      - name: Verify static config, route selection, and secret exclusions
         run: |
           test -f dist/index.html
           test -f dist/site-config.js
-          test -f dist/_routes.json
-          grep -Fq '"/api/*"' dist/_routes.json
+          test ! -e dist/_routes.json
+          test ! -e dist/cloudflare-worker.js
+          test ! -e dist/Dockerfile.cloudflare-api
           test ! -e dist/api
           test ! -e dist/netlify
           test ! -e dist/functions
@@ -60,5 +66,5 @@ jobs:
           ! find dist -type f -name '*.key' | grep .
           ! find dist -type f -name '.env*' | grep .
           ! find dist -type f -name '*service-account*.json' | grep .
-          grep -q 'teacher-preview.invalid' dist/site-config.js
+          grep -q 'lms-preview.invalid' dist/site-config.js
           ! grep -RniF -e 'netlify.app' -e 'vercel.app' -e 'Deploy bởi Netlify' -e 'Deploy bởi Vercel' dist

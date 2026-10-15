@@ -2,20 +2,21 @@
 
 Teacher and administrator portal for KatLearn.
 
-## Cloudflare deployment
+## Cloudflare Workers deployment
 
-- Teacher Pages project: `katlearn-teacher` (use the actual assigned URL in the Pages build variable)
-- LMS Pages project: `katlearn-lms` (use the actual assigned URL in the Pages build variable)
-- API runtime: Cloudflare Workers Containers, using Node.js 22 and the existing Firebase Admin API handlers.
-- Data/auth: Firebase project `elp---katlearn`.
+- Frontend Worker: teacher-katlearn
+- Other frontend Worker: lms-katlearn
+- API Worker: katlearn-teacher-api, using Cloudflare Workers Containers with Node.js 22 and the existing Firebase Admin API handlers.
+- Data/auth: Firebase project elp---katlearn.
 
-See [CLOUDFLARE_PAGES_MIGRATION.md](CLOUDFLARE_PAGES_MIGRATION.md) for the deployment order, Worker secrets and Pages settings. Keep all Firebase service-account credentials in Cloudflare Worker secrets, never in Git.
+See CLOUDFLARE_WORKERS_MIGRATION.md for build settings, API deployment, secrets and smoke tests. Keep all service-account credentials and API keys in Cloudflare Worker secrets, never in Git.
 
-## Build
+## Build and deploy
 
-Cloudflare Pages build command: `node scripts/cloudflare-pages-build.mjs`
-Build output: `dist`
-API Worker config: `wrangler-api.toml`
-Pages config: `wrangler.toml`
+Build command: node scripts/cloudflare-workers-build.mjs
+Deploy command: npx wrangler deploy
+Static assets output: dist
+Frontend Worker config: wrangler.toml
+API Worker config: wrangler-api.toml
 
-Cloudflare Workers Containers require the Workers Paid plan and are billed by usage. Do not switch production domains until the Pages preview and authenticated API smoke tests pass.
+Workers Containers require the Workers Paid plan and incur usage-based charges. Deploy the API Worker before deploying the frontend Worker because the frontend's KATLEARN_API service binding targets the API Worker. Do not switch production domains until both frontend Workers and authenticated API smoke tests pass.

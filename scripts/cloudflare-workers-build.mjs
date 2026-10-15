@@ -10,9 +10,10 @@ const excludedTopLevel = new Set([
   "netlify", "node_modules", "scripts", "cloudflare-api",
 ]);
 const excludedFiles = new Set([
-  ".gitignore", "README.md", "CLOUDFLARE_PAGES_MIGRATION.md", "NETLIFY_MIGRATION.md",
-  "netlify.toml", "wrangler.toml", "wrangler-api.toml", "package.json",
-  "package-lock.json", "pnpm-lock.yaml", "yarn.lock", ".env.example",
+  ".gitignore", "README.md", "CLOUDFLARE_WORKERS_MIGRATION.md", "CLOUDFLARE_PAGES_MIGRATION.md",
+  "NETLIFY_MIGRATION.md", "netlify.toml", "wrangler.toml", "wrangler-api.toml",
+  "package.json", "package-lock.json", "pnpm-lock.yaml", "yarn.lock", ".env.example",
+  "cloudflare-worker.js", "Dockerfile.cloudflare-api",
 ]);
 
 function shouldCopy(source) {
@@ -30,7 +31,7 @@ function shouldCopy(source) {
 
 function requiredUrl(name) {
   const value = String(process.env[name] || "").trim().replace(/\/+$/, "");
-  if (!value) throw new Error("Missing required Cloudflare Pages build variable: " + name);
+  if (!value) throw new Error("Missing required Cloudflare Workers build variable: " + name);
   const url = new URL(value);
   if (url.protocol !== "https:") throw new Error(name + " must be an HTTPS URL.");
   return value;
@@ -75,11 +76,6 @@ await writeFile(
   "window.KATLEARN_CONFIG = Object.freeze(" + JSON.stringify(siteConfig) + ");\n",
   "utf8",
 );
-await writeFile(
-  path.join(publishDir, "_routes.json"),
-  JSON.stringify({ version: 1, include: ["/api/*"], exclude: [] }, null, 2) + "\n",
-  "utf8",
-);
 await rewritePlatformOrigins(publishDir);
 
 async function injectSiteConfig(directory) {
@@ -119,4 +115,4 @@ async function assertNoLegacyHostingUrls(directory) {
   }
 }
 await assertNoLegacyHostingUrls(publishDir);
-console.log("Cloudflare Pages output prepared at dist/; API routes use Pages Functions and a Cloudflare Worker service binding.");
+console.log("Cloudflare Workers static assets prepared at dist/; /api routes use the KATLEARN_API service binding.");
