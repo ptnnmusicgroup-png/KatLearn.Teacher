@@ -43,10 +43,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -RInEi \
-            --exclude-dir=.git --exclude-dir=dist --exclude-dir=node_modules --exclude-dir=.netlify \
-            --exclude=netlify-build-check.yml \
-            '(vercel|cloudflare|pages[.]dev|workers[.]dev|wrangler)' .; then
-            echo "::error::Unexpected reference to a retired hosting platform remains in the repository."
+          # Compose forbidden signatures from fragments so this guard does not
+          # leave complete retired-provider names embedded in the repository.
+          retired_hosting_pattern="$(printf '%s%s|%s%s|%s[.]%s|%s[.]%s|%s%s' \
+            'ver' 'cel' 'cloud' 'flare' 'pages' 'dev' 'workers' 'dev' 'wran' 'gler')"
+          legacy_teacher_host="$(printf '%s%s' 'https://teacher-katlearn' '.netlify.app')"
+          scan_args=(--exclude-dir=.git --exclude-dir=dist --exclude-dir=node_modules --exclude-dir=.netlify)
+          if grep -RInEi "${scan_args[@]}" "$retired_hosting_pattern" .; then
+            echo "::error::Retired-hosting reference found in source."
+            exit 1
+          fi
+          if grep -RInF "${scan_args[@]}" "$legacy_teacher_host" .; then
+            echo "::error::Stale Teacher hostname found in source."
+            exit 1
+          fi
+          if grep -RInF "$legacy_teacher_host" dist; then
+            echo "::error::Stale Teacher hostname leaked into the published output."
             exit 1
           fi
