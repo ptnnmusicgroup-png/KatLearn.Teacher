@@ -8,7 +8,7 @@ The repository defines:
 - Functions directory: `netlify/functions`
 - Node.js version: `22`
 
-The Teacher/Admin API remains exposed at its existing `/api/*` routes through Netlify Functions.
+The Teacher/Admin API remains exposed at its existing `/api/*` routes through Netlify Functions. During each build, the required linked text `This site is powered by Netlify` is injected into every published HTML page, including login/admin pages.
 
 ## Environment variables
 Set these on the Teacher site:
