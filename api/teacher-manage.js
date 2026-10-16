@@ -5,6 +5,8 @@ import { createHash } from 'node:crypto';
 const allowedOrigins=new Set([
   'https://katlearn-teacher.pages.dev',
   'https://katlearn-lms.pages.dev',
+  'https://teacher-katlearn.netlify.app',
+  'https://lms-katlearn.netlify.app',
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean)
 ]);
 function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type, authorization';h.vary='Origin'}return h}
