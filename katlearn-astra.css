@@ -900,3 +900,199 @@ html body .vn-ui-motif { opacity: .13; pointer-events: none; }
   html body .teacher-hero h1,
   html body .login-showcase h1 { animation: none !important; }
 }
+
+
+/* Page-specific dark surfaces for standalone pages that do not use .app-shell. */
+html body .settings-page,
+html body .settings-layout,
+html body .cp-page,
+html body .cp-workspace,
+html body .test-page,
+html body .test-wrap,
+html body .teacher-content,
+html body .teacher-grid,
+html body .dashboard-grid,
+html body .activity-grid {
+  color: var(--kl-astra-text) !important;
+  background: transparent !important;
+}
+html body .settings-top,
+html body .test-top,
+html body .cp-top {
+  color: var(--kl-astra-text) !important;
+  background: rgba(12, 10, 28, .82) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .13) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+html body .settings-hero,
+html body .locked-card,
+html body .profile-preview,
+html body .test-hero,
+html body .test-card,
+html body .test-run,
+html body .test-hud,
+html body .test-question-card,
+html body .test-run-note,
+html body .result-card,
+html body .result-stat,
+html body .result-review,
+html body .wrong-row,
+html body .cp-controls,
+html body .cp-mode-panel,
+html body .cp-table,
+html body .cp-row,
+html body .cp-loading-card,
+html body .cp-locked-card {
+  color: var(--kl-astra-text) !important;
+  background: var(--kl-astra-surface) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: var(--kl-astra-shadow) !important;
+}
+html body .settings-hero,
+html body .test-hero,
+html body .cp-hero {
+  background:
+    radial-gradient(ellipse at 88% 10%, rgba(6, 182, 212, .09), transparent 22rem),
+    radial-gradient(ellipse at 12% 10%, rgba(139, 92, 246, .20), transparent 26rem),
+    transparent !important;
+}
+html body .settings-hero h1,
+html body .test-title,
+html body .test-card h2,
+html body .test-question-label,
+html body .test-word,
+html body .result-card h2,
+html body .cp-hero h1,
+html body .cp-card-title h2,
+html body .cp-editor-head h2,
+html body .locked-card h2 {
+  color: var(--kl-astra-text-bright) !important;
+}
+html body .settings-hero p,
+html body .profile-preview small,
+html body .locked-card p,
+html body .test-subtitle,
+html body .test-card > p,
+html body .test-hint,
+html body .test-run-note,
+html body .test-foot,
+html body .result-stat span,
+html body .wrong-row span,
+html body .cp-hero p,
+html body .cp-card-title p,
+html body .cp-helper,
+html body .cp-name-wrap small,
+html body .cp-loading-card small {
+  color: var(--kl-astra-text-muted) !important;
+}
+html body .settings-save,
+html body .test-start,
+html body .test-submit,
+html body .test-next,
+html body .result-actions .primary,
+html body .cp-btn.primary,
+html body .study-primary {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo)) !important;
+  border-color: rgba(216, 205, 255, .20) !important;
+}
+html body .test-sidebar {
+  color: var(--kl-astra-text) !important;
+  background: linear-gradient(180deg, rgba(16, 13, 36, .97), rgba(9, 8, 23, .97)) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: 12px 0 38px rgba(0, 0, 0, .22) !important;
+}
+html body .test-sidebar nav a,
+html body .test-top-actions a,
+html body .ghost-btn,
+html body .test-hint a {
+  color: #cbd5e1 !important;
+}
+html body .test-sidebar nav a:hover,
+html body .test-sidebar nav a.active {
+  color: #f5f3ff !important;
+  background: rgba(139, 92, 246, .18) !important;
+  border-color: rgba(167, 139, 250, .22) !important;
+}
+html body .test-option {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, .045) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .test-option.selected {
+  color: #f5f3ff !important;
+  background: rgba(139, 92, 246, .17) !important;
+  border-color: rgba(167, 139, 250, .40) !important;
+}
+html body .test-option.correct {
+  color: #d1fae5 !important;
+  background: rgba(16, 185, 129, .14) !important;
+  border-color: rgba(52, 211, 153, .40) !important;
+}
+html body .test-option.wrong {
+  color: #ffe4e6 !important;
+  background: rgba(244, 63, 94, .13) !important;
+  border-color: rgba(251, 113, 133, .40) !important;
+}
+html body .test-progress,
+html body .test-progress-wrap {
+  background: rgba(255, 255, 255, .10) !important;
+}
+html body .test-progress {
+  background: linear-gradient(90deg, var(--kl-astra-violet), var(--kl-astra-cyan)) !important;
+}
+html body .cp-mode-tab {
+  color: #cbd5e1 !important;
+  background: rgba(255, 255, 255, .045) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .cp-mode-tab.active {
+  color: #f5f3ff !important;
+  background: rgba(139, 92, 246, .19) !important;
+  border-color: rgba(167, 139, 250, .34) !important;
+}
+html body .cp-table-head {
+  color: #ddd6fe !important;
+  background: rgba(139, 92, 246, .12) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .cp-row:nth-child(even) {
+  background: rgba(255, 255, 255, .025) !important;
+}
+html body .cp-input,
+html body .cp-select {
+  color: #f8fafc !important;
+  background: rgba(8, 7, 20, .78) !important;
+  border-color: rgba(216, 205, 255, .17) !important;
+}
+html body .study-content-block,
+html body .study-output-head,
+html body .study-calendar,
+html body .study-calendar-empty,
+html body .study-option,
+html body .study-response-form {
+  color: var(--kl-astra-text) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .study-option.correct {
+  background: rgba(16, 185, 129, .14) !important;
+  border-color: rgba(52, 211, 153, .40) !important;
+}
+html body .study-option.wrong {
+  background: rgba(244, 63, 94, .13) !important;
+  border-color: rgba(251, 113, 133, .40) !important;
+}
+html body .settings-status,
+html body .test-feedback,
+html body .study-feedback,
+html body .cp-alert {
+  color: var(--kl-astra-text) !important;
+}
+html body .test-toast,
+html body .settings-toast {
+  color: #f8fafc !important;
+  background: rgba(18, 16, 38, .97) !important;
+  border: 1px solid var(--kl-astra-border) !important;
+}
