@@ -1920,3 +1920,27 @@ html body .badge.admin {
   color: #ddd6fe !important;
   background: rgba(99, 102, 241, .17) !important;
 }
+
+
+/* Active dialogs receive the conic border even before pointer hover. */
+html body .modal.show .modal-card,
+html body .modal.open .modal-card,
+html body .modal[aria-hidden="false"] .modal-card,
+html body .modal-overlay.show .modal-card,
+html body .modal-backdrop.show .modal-card {
+  border: 1px solid transparent !important;
+  background:
+    linear-gradient(145deg, rgba(20, 17, 40, .98), rgba(12, 10, 27, .99)) padding-box,
+    conic-gradient(from var(--kl-astra-card-angle), rgba(139, 92, 246, .22), #8b5cf6, #06b6d4, #ec4899, rgba(139, 92, 246, .22)) border-box !important;
+  background-clip: padding-box, border-box !important;
+  animation: klAstraCardBorderSpin 5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .modal.show .modal-card,
+  html body .modal.open .modal-card,
+  html body .modal[aria-hidden="false"] .modal-card,
+  html body .modal-overlay.show .modal-card,
+  html body .modal-backdrop.show .modal-card {
+    animation: none !important;
+  }
+}
