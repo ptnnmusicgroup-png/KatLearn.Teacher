@@ -2,21 +2,15 @@
 
 Teacher and administrator portal for KatLearn.
 
-## Cloudflare Workers deployment
+## Deployment target: Netlify
 
-- Frontend Worker: teacher-katlearn
-- Other frontend Worker: lms-katlearn
-- API Worker: katlearn-teacher-api, using Cloudflare Workers Containers with Node.js 22 and the existing Firebase Admin API handlers.
-- Data/auth: Firebase project elp---katlearn.
+This repository is being migrated to a static multi-page site plus Node.js 22 Netlify Functions. Netlify publishes frontend assets from `dist/` and routes the existing teacher/admin API handlers through `/api/*`.
 
-See CLOUDFLARE_WORKERS_MIGRATION.md for build settings, API deployment, secrets and smoke tests. Keep all service-account credentials and API keys in Cloudflare Worker secrets, never in Git.
+- Netlify configuration: `netlify.toml`
+- Static build: `node scripts/netlify-build.mjs`
+- API adapters: `netlify/functions/`
+- Firebase project: `elp---katlearn`
 
-## Build and deploy
+Read [NETLIFY_MIGRATION.md](NETLIFY_MIGRATION.md) before importing or promoting the site. Keep Firebase service-account credentials in Netlify runtime environment variables only—never in Git.
 
-Build command: node scripts/cloudflare-workers-build.mjs
-Deploy command: npx wrangler deploy
-Static assets output: dist
-Frontend Worker config: wrangler.toml
-API Worker config: wrangler-api.toml
-
-Workers Containers require the Workers Paid plan and incur usage-based charges. Deploy the API Worker before deploying the frontend Worker because the frontend's KATLEARN_API service binding targets the API Worker. Do not switch production domains until both frontend Workers and authenticated API smoke tests pass.
+Cloudflare Worker files remain for legacy reference. Their Container-based API path requires a Workers Paid plan and usage-based charges, so it is not the free-first deployment path. The Netlify Open Source plan also requires approval; do not enable paid usage if the goal is 0₫.
