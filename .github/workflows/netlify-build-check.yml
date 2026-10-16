@@ -1,0 +1,42 @@
+name: Netlify build smoke check
+
+on:
+  push:
+    branches: [main, codex/ui-motion-refresh]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in scripts/build-netlify.mjs netlify/adapter.mjs netlify/functions/*.mjs api/*.js; do
+            node --check "$file"
+          done
+      - name: Build Netlify static output
+        env:
+          KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
+          KATLEARN_TEACHER_SITE_URL: https://teacher-katlearn.netlify.app
+          KATLEARN_ALLOWED_ORIGINS: https://lms-katlearn.netlify.app,https://teacher-katlearn.netlify.app
+        run: node scripts/build-netlify.mjs
+      - name: Verify static publish excludes backend
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          test -s dist/deployment-config.js
+          test ! -e dist/api
+          test ! -e dist/netlify
+          test ! -e dist/cloudflare-api
+          test ! -e dist/cloudflare-worker.js
+          test ! -e dist/wrangler.toml
+          test ! -e dist/functions
+          test ! -e dist/.env.example
