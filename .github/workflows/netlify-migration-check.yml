@@ -1,0 +1,37 @@
+name: Netlify migration checks
+
+on:
+  push:
+    branches: [main, migration/netlify-fullstack]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in scripts/netlify-build.mjs netlify/lib/*.mjs netlify/functions/*.mjs api/*.js; do
+            node --check "$file"
+          done
+      - name: Build static Netlify publish directory
+        env:
+          KATLEARN_LMS_URL: https://lms-katlearn.netlify.app
+          KATLEARN_TEACHER_URL: https://teacher-katlearn.netlify.app
+        run: node scripts/netlify-build.mjs
+      - name: Verify publish output
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          test -s dist/site-config.js
+          test ! -e dist/api
+          test ! -e dist/netlify
+          test ! -e dist/.env.example
