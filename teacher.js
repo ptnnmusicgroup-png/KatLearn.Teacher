@@ -141,8 +141,8 @@ async function generateTeacherQuickPack(){
   const status=$('#quickPackStatus');
   if(!prompt)return toast('Nhập topic từ vựng trước nhé! ✨');
   if(!user||!isTeacher())return toast('Hãy đăng nhập bằng tài khoản giáo viên.');
-  btn.disabled=true;btn.textContent='🤖 Đang tìm từ...';
-  if(status)status.textContent='Gemini đang cố gắng tìm thật đầy đủ từ vựng liên quan đến topic...';
+  btn.disabled=true;btn.setAttribute('aria-busy','true');btn.textContent='🤖 Đang tìm từ...';
+  if(status){status.textContent='Gemini đang cố gắng tìm thật đầy đủ từ vựng liên quan đến topic...';status.classList.add('is-loading');status.setAttribute('aria-busy','true');}
   try{
     const token=await user.getIdToken();
     const res=await fetch('/api/ai-pack',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({
@@ -161,7 +161,7 @@ async function generateTeacherQuickPack(){
   }catch(e){
     if(status)status.textContent='Chưa tạo được bộ từ bằng AI.';
     toast('Không tạo được từ vựng bằng AI: '+(e.message||'Lỗi không xác định'));
-  }finally{btn.disabled=false;btn.textContent='✨ Thêm từ vựng của bạn'}
+  }finally{btn.disabled=false;btn.removeAttribute('aria-busy');if(status){status.classList.remove('is-loading');status.setAttribute('aria-busy','false')}btn.textContent='✨ Thêm từ vựng của bạn'}
 }
 $('#quickPackAiBtn')?.addEventListener('click',generateTeacherQuickPack);
 
