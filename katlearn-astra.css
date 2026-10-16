@@ -1165,3 +1165,380 @@ html body .test-hint,
 html body .test-run-note {
   color: var(--kl-astra-text-muted) !important;
 }
+
+
+/* ============================================================
+   ASTRA MOTION SUITE — all 9 motion patterns, wired to real UI
+   ============================================================ */
+
+/* 1. Ambient Aurora Float: slowly shifting light across hero / AI studio. */
+@keyframes klAstraHeroAurora {
+  0%   { background-position: 0% 10%, 100% 90%, 0 0; }
+  50%  { background-position: 60% 25%, 30% 65%, 0 0; }
+  100% { background-position: 100% 70%, 0% 20%, 0 0; }
+}
+html body .hero-card,
+html body .study-hero,
+html body .teacher-hero,
+html body .hero-main,
+html body .cp-hero-card {
+  background-image:
+    radial-gradient(ellipse at 15% 12%, rgba(139, 92, 246, .22), transparent 46%),
+    radial-gradient(ellipse at 88% 86%, rgba(6, 182, 212, .13), transparent 42%),
+    linear-gradient(135deg, rgba(24, 19, 52, .97), rgba(12, 10, 29, .96)) !important;
+  background-size: 165% 165%, 165% 165%, 100% 100% !important;
+  animation: klAstraHeroAurora 18s ease-in-out infinite alternate;
+}
+
+/* 2. Shimmering Text Gradient: headings and AI feature labels. */
+html body .test-title,
+html body .cp-hero h1,
+html body .study-panel-head h2,
+html body .study-output-head h2,
+html body .study-results-empty h3,
+html body .reflex-arena-title h1,
+html body .section-heading h2,
+html body .page-title {
+  background: linear-gradient(110deg, #f8fafc 0%, #c4b5fd 25%, #67e8f9 50%, #c4b5fd 75%, #f8fafc 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: klAstraShimmer 6s linear infinite;
+}
+
+/* 3. Spinning Conic Border Glow: cards glow only on hover / active modal. */
+@property --kl-astra-card-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes klAstraCardBorderSpin {
+  to { --kl-astra-card-angle: 360deg; }
+}
+html body .activity-card,
+html body .pack-tile,
+html body .published-pack,
+html body .personal-pack-card,
+html body .shop-theme-card,
+html body .study-panel,
+html body .study-calendar-card,
+html body .study-saved-row,
+html body .test-card,
+html body .result-card,
+html body .cp-card,
+html body .teacher-card-panel,
+html body .dashboard-grid .metric,
+html body .metric-grid .metric,
+html body .admin-card {
+  border: 1px solid rgba(216, 205, 255, .14) !important;
+  background:
+    linear-gradient(145deg, rgba(20, 17, 40, .90), rgba(12, 10, 27, .94)) padding-box,
+    linear-gradient(135deg, rgba(255,255,255,.13), rgba(139,92,246,.16)) border-box !important;
+  background-clip: padding-box, border-box !important;
+  transition: transform .32s cubic-bezier(.16, 1, .3, 1), box-shadow .32s ease, border-color .32s ease, background .32s ease !important;
+}
+html body .activity-card:hover,
+html body .pack-tile:hover,
+html body .published-pack:hover,
+html body .personal-pack-card:hover,
+html body .shop-theme-card:hover,
+html body .study-panel:hover,
+html body .study-calendar-card:hover,
+html body .study-saved-row:hover,
+html body .test-card:hover,
+html body .result-card:hover,
+html body .cp-card:hover,
+html body .teacher-card-panel:hover,
+html body .dashboard-grid .metric:hover,
+html body .metric-grid .metric:hover,
+html body .admin-card:hover,
+html body .modal.show .modal-card:hover,
+html body .modal.open .modal-card:hover,
+html body .modal[aria-hidden="false"] .modal-card:hover {
+  transform: translateY(-4px) scale(1.004);
+  border-color: transparent !important;
+  background:
+    linear-gradient(145deg, rgba(27, 23, 53, .96), rgba(13, 11, 29, .98)) padding-box,
+    conic-gradient(from var(--kl-astra-card-angle), rgba(139,92,246,.28), #8b5cf6, #06b6d4, #ec4899, rgba(139,92,246,.28)) border-box !important;
+  background-clip: padding-box, border-box !important;
+  box-shadow: 0 18px 42px rgba(88, 48, 170, .25) !important;
+  animation: klAstraCardBorderSpin 4.4s linear infinite;
+}
+
+/* 4. Pill Beacon Pulse: LIVE / ready indicators and KatCoin icon. */
+@keyframes klAstraBeaconGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(103, 232, 249, .28), 0 0 8px rgba(103,232,249,.25); }
+  50% { box-shadow: 0 0 0 5px rgba(103, 232, 249, 0), 0 0 16px rgba(139,92,246,.50); }
+}
+html body .reflex-live-dot,
+html body .study-pills i,
+html body .cp-status-dot,
+html body .kl-astra-badge-dot {
+  animation: klAstraBeaconGlow 1.9s ease-in-out infinite;
+}
+html body .kl-astra-badge-dot::after { animation: klAstraPulse 1.9s cubic-bezier(0, 0, .2, 1) infinite; }
+html body .coin-pill [data-kat-icon="coin"],
+html body .coin-pill svg {
+  animation: klAstraCoinGlow 3.6s ease-in-out infinite;
+}
+@keyframes klAstraCoinGlow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(250, 204, 21, 0)); }
+  50% { filter: drop-shadow(0 0 5px rgba(250, 204, 21, .65)); }
+}
+
+/* 5. Spring Card Elevation: restrained, tactile hover response. */
+@media (hover: hover) and (pointer: fine) {
+  html body .activity-card:hover,
+  html body .mode-card:hover,
+  html body .reflex-pack-card:hover,
+  html body .study-mode:hover,
+  html body .test-option:hover,
+  html body .quick:hover,
+  html body .teacher-btn:hover:not(:disabled),
+  html body .study-primary:hover:not(:disabled),
+  html body .cp-btn:hover:not(:disabled),
+  html body .primary-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+  }
+}
+html body .activity-card,
+html body .mode-card,
+html body .reflex-pack-card,
+html body .study-mode,
+html body .test-option,
+html body .quick,
+html body .teacher-btn,
+html body .study-primary,
+html body .cp-btn,
+html body .primary-btn {
+  transition-timing-function: cubic-bezier(.2, .9, .25, 1.25) !important;
+}
+
+/* 6. Glass Input Focal Beam: focus ring breathes softly, no layout shift. */
+@keyframes klAstraInputFocalBeam {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(139, 92, 246, .12), 0 0 12px rgba(139, 92, 246, .10), inset 0 0 0 rgba(139, 92, 246, 0); }
+  50% { box-shadow: 0 0 0 3px rgba(139, 92, 246, .22), 0 0 24px rgba(139, 92, 246, .22), inset 0 0 12px rgba(139, 92, 246, .08); }
+}
+html body input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+html body textarea:focus,
+html body select:focus,
+html body .word-search:focus-within,
+html body .study-field:focus-within,
+html body .cp-field:focus-within {
+  border-color: rgba(167, 139, 250, .86) !important;
+  animation: klAstraInputFocalBeam 2.4s ease-in-out infinite;
+}
+
+/* 7. Light Streak Sweep: layered background animation rather than pseudo-elements,
+      so existing icons / button contents stay intact. */
+html body .primary-btn,
+html body .login-btn,
+html body .submit,
+html body .start-lesson,
+html body .add-word-btn,
+html body .create-pack-btn,
+html body .teacher-btn:not(.secondary):not(.danger),
+html body .study-primary,
+html body .cp-btn.primary,
+html body .cp-add,
+html body .primary,
+html body .btn.primary,
+html body .btn.dark,
+html body button.primary,
+html body button.primary.big,
+html body button.primary-btn,
+html body #loginBtn,
+html body #savePackBtn,
+html body #generatePackBtn,
+html body #quickPackAiBtn,
+html body #studyGenerate,
+html body .test-start,
+html body .test-submit,
+html body .test-next,
+html body .settings-save,
+html body .actions .submit {
+  background-image:
+    linear-gradient(60deg, transparent 42%, rgba(255,255,255,.22) 49%, transparent 57%),
+    linear-gradient(135deg, #8b5cf6, #6366f1) !important;
+  background-size: 230% 100%, 100% 100% !important;
+  background-position: -155% 0, 0 0 !important;
+  background-repeat: no-repeat !important;
+  transition: background-position .62s ease, transform .26s cubic-bezier(.2,.9,.25,1.2), box-shadow .26s ease !important;
+}
+html body .primary-btn:hover,
+html body .login-btn:hover,
+html body .submit:hover,
+html body .start-lesson:hover,
+html body .add-word-btn:hover,
+html body .create-pack-btn:hover,
+html body .teacher-btn:not(.secondary):not(.danger):hover,
+html body .study-primary:hover,
+html body .cp-btn.primary:hover,
+html body .cp-add:hover,
+html body .primary:hover,
+html body .btn.primary:hover,
+html body .btn.dark:hover,
+html body button.primary:hover,
+html body button.primary-btn:hover,
+html body #generatePackBtn:hover,
+html body #quickPackAiBtn:hover,
+html body #studyGenerate:hover,
+html body .test-start:hover,
+html body .test-submit:hover,
+html body .test-next:hover,
+html body .settings-save:hover {
+  background-position: 155% 0, 0 0 !important;
+}
+
+/* 8. AI Wave Skeleton / Pulse: actual busy states + reusable skeleton utility. */
+@keyframes klAstraWaveSweep {
+  0% { background-position: 180% 0; opacity: .55; }
+  50% { opacity: 1; }
+  100% { background-position: -80% 0; opacity: .72; }
+}
+@keyframes klAstraSkeletonPulse {
+  0%, 100% { opacity: .55; filter: brightness(.94); }
+  50% { opacity: 1; filter: brightness(1.2); }
+}
+.kl-astra-wave-skeleton,
+.ai-wave-skeleton,
+.loading-skeleton,
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, .12);
+  border-radius: 10px;
+  background: linear-gradient(110deg, rgba(139,92,246,.08) 8%, rgba(103,232,249,.24) 18%, rgba(139,92,246,.10) 33%);
+  background-size: 220% 100%;
+  animation: klAstraWaveSweep 1.7s ease-in-out infinite;
+}
+.kl-astra-wave-skeleton::after,
+.ai-wave-skeleton::after,
+.loading-skeleton::after,
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.09), transparent);
+  background-size: 200% 100%;
+  animation: klAstraWaveSweep 1.3s linear infinite;
+  pointer-events: none;
+}
+html body .study-inline-status.is-loading,
+html body #quickPackStatus[aria-busy="true"] {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, .18) !important;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, .08) !important;
+  padding: 10px 12px;
+  color: #ddd6fe !important;
+  animation: klAstraSkeletonPulse 1.9s ease-in-out infinite;
+}
+html body .study-inline-status.is-loading::after,
+html body #quickPackStatus[aria-busy="true"]::after {
+  content: "";
+  display: block;
+  height: 4px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #8b5cf6 28%, #67e8f9 52%, #ec4899 74%, transparent);
+  background-size: 220% 100%;
+  animation: klAstraWaveSweep 1.4s linear infinite;
+}
+html body #generatePackBtn:disabled,
+html body #quickPackAiBtn:disabled,
+html body #studyGenerate:disabled,
+html body .study-primary:disabled {
+  cursor: progress !important;
+  background-size: 220% 100%, 100% 100% !important;
+  animation: klAstraSkeletonPulse 1.4s ease-in-out infinite;
+  box-shadow: 0 0 0 1px rgba(167,139,250,.18), 0 8px 28px rgba(99,102,241,.28) !important;
+}
+[aria-busy="true"] { cursor: progress; }
+
+/* 9. Floating Particle Field: subtle, slow-moving constellations in study areas. */
+@keyframes klAstraParticleDrift {
+  0% { background-position: 0 0, 55px 130px, 115px 40px; }
+  100% { background-position: 0 -240px, 55px -110px, 115px -320px; }
+}
+html body[data-page="practice"] #practice,
+html body[data-page="words"] #words {
+  background-image:
+    radial-gradient(circle, rgba(196,181,253,.45) 0 1px, transparent 1.8px),
+    radial-gradient(circle, rgba(103,232,249,.32) 0 1px, transparent 1.8px),
+    radial-gradient(circle, rgba(236,72,153,.26) 0 1.2px, transparent 2px) !important;
+  background-size: 190px 240px, 260px 300px, 340px 360px !important;
+  background-repeat: repeat !important;
+  animation: klAstraParticleDrift 32s linear infinite;
+}
+html body[data-page="practice"] #practice .reflex-arena-head,
+html body[data-page="practice"] #practice .reflex-source-picker,
+html body[data-page="practice"] #practice .reflex-settings,
+html body[data-page="practice"] #practice .mode-card,
+html body[data-page="practice"] #practice .reflex-hud-card {
+  color: var(--kl-astra-text) !important;
+  background: rgba(20, 17, 40, .82) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: var(--kl-astra-shadow) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+html body[data-page="practice"] #practice .reflex-arena-title p,
+html body[data-page="practice"] #practice .reflex-source-head p,
+html body[data-page="practice"] #practice .mode-card p,
+html body[data-page="practice"] #practice .mode-card small {
+  color: var(--kl-astra-text-muted) !important;
+}
+html body[data-page="practice"] #practice .reflex-live-badge {
+  color: #a5f3fc !important;
+  background: rgba(6, 182, 212, .10) !important;
+  border-color: rgba(103, 232, 249, .20) !important;
+}
+html body[data-page="practice"] #practice .reflex-game-mark {
+  background: linear-gradient(145deg, rgba(139,92,246,.38), rgba(6,182,212,.18)) !important;
+  border-color: rgba(167, 139, 250, .24) !important;
+  box-shadow: 0 12px 28px rgba(139, 92, 246, .18) !important;
+}
+html body[data-page="practice"] #practice .mode-card.active-mode {
+  background: linear-gradient(145deg, rgba(139,92,246,.24), rgba(6,182,212,.08)) !important;
+  border-color: rgba(167, 139, 250, .42) !important;
+}
+html body[data-page="words"] #words {
+  border-radius: 24px;
+}
+
+/* Keep animation costs low and respect the user's motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  html body::before,
+  html body::after,
+  html body .hero-card,
+  html body .study-hero,
+  html body .teacher-hero,
+  html body .hero-main,
+  html body .cp-hero-card,
+  html body .test-title,
+  html body .cp-hero h1,
+  html body .study-panel-head h2,
+  html body .study-output-head h2,
+  html body .study-results-empty h3,
+  html body .reflex-arena-title h1,
+  html body .section-heading h2,
+  html body .coin-pill [data-kat-icon="coin"],
+  html body .coin-pill svg,
+  html body[data-page="practice"] #practice,
+  html body[data-page="words"] #words,
+  .kl-astra-wave-skeleton,
+  .ai-wave-skeleton,
+  .loading-skeleton,
+  .skeleton,
+  .study-inline-status.is-loading,
+  #quickPackStatus[aria-busy="true"],
+  #generatePackBtn:disabled,
+  #quickPackAiBtn:disabled,
+  #studyGenerate:disabled {
+    animation: none !important;
+  }
+}
