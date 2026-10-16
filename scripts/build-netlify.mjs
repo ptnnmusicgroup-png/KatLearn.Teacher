@@ -6,11 +6,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist");
 const skippedDirectories = new Set([
   ".git", ".github", ".netlify", "node_modules", "dist",
-  "api", "netlify", "scripts"
+  "api", "netlify", "scripts",
+  ".wrangler", "functions", "cloudflare-api"
 ]);
 const skippedRootFiles = new Set([
   ".gitignore", "README.md", "package.json",
-  "firestore.rules", "netlify.toml"
+  "firestore.rules", "netlify.toml",
+  "wrangler.toml", "wrangler-api.toml", "cloudflare-worker.js",
+  "Dockerfile.cloudflare-api", "CLOUDFLARE_WORKERS_MIGRATION.md",
+  "NETLIFY_MIGRATION.md", "package-lock.json", "pnpm-lock.yaml", "yarn.lock"
 ]);
 
 function shouldCopy(source) {
