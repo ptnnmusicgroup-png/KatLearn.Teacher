@@ -2,7 +2,7 @@ name: Netlify build smoke check
 
 on:
   push:
-    branches: [main, codex/ui-motion-refresh]
+    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting]
   pull_request:
     branches: [main]
 
@@ -24,10 +24,10 @@ jobs:
       - name: Build Netlify static output
         env:
           KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
-          KATLEARN_TEACHER_SITE_URL: https://teacher-katlearn.netlify.app
-          KATLEARN_ALLOWED_ORIGINS: https://lms-katlearn.netlify.app,https://teacher-katlearn.netlify.app
+          KATLEARN_TEACHER_SITE_URL: https://teacher-katlearn1.netlify.app
+          KATLEARN_ALLOWED_ORIGINS: https://lms-katlearn.netlify.app,https://teacher-katlearn1.netlify.app
         run: node scripts/build-netlify.mjs
-      - name: Verify static publish excludes backend
+      - name: Verify static publish excludes server files and settings
         shell: bash
         run: |
           set -euo pipefail
@@ -35,8 +35,18 @@ jobs:
           test -s dist/deployment-config.js
           test ! -e dist/api
           test ! -e dist/netlify
-          test ! -e dist/cloudflare-api
-          test ! -e dist/cloudflare-worker.js
-          test ! -e dist/wrangler.toml
-          test ! -e dist/functions
+          test ! -e dist/scripts
           test ! -e dist/.env.example
+          test ! -e dist/netlify.toml
+          test ! -e dist/NETLIFY_MIGRATION.md
+      - name: Reject retired hosting references in source
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInEi \
+            --exclude-dir=.git --exclude-dir=dist --exclude-dir=node_modules --exclude-dir=.netlify \
+            --exclude=netlify-build-check.yml \
+            '(vercel|cloudflare|pages[.]dev|workers[.]dev|wrangler)' .; then
+            echo "::error::Unexpected reference to a retired hosting platform remains in the repository."
+            exit 1
+          fi
