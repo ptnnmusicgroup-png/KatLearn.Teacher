@@ -220,7 +220,7 @@ html body .content,
 html body main > .page,
 html body main .active-page {
   color: var(--kl-astra-text) !important;
-  background-color: transparent !important;
+  background: transparent !important;
 }
 html body .sidebar,
 html body .app > .sidebar {
@@ -412,7 +412,7 @@ html body .modal-content,
 html body .login-card,
 html body .auth-screen .card,
 html body .teacher-signup-page .card,
-html body body > main:not(.test-page) .card {
+html body > main:not(.test-page) .card {
   color: var(--kl-astra-text) !important;
   background: var(--kl-astra-surface-raised) !important;
   border-color: var(--kl-astra-border) !important;
