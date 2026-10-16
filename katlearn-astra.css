@@ -576,3 +576,173 @@ hr, .divider { border-color: rgba(255, 255, 255, .10) !important; }
   }
   body::before, body::after { animation: none !important; }
 }
+
+
+/* ============================================================
+   ASTRA CASCADE BRIDGE
+   Specificity guard for legacy CSS files loaded after this layer.
+   ============================================================ */
+html:root {
+  background: var(--kl-astra-bg) !important;
+}
+html body {
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(139, 92, 246, .13), transparent 35rem),
+    radial-gradient(ellipse at 96% 18%, rgba(6, 182, 212, .10), transparent 32rem),
+    radial-gradient(ellipse at 55% 100%, rgba(236, 72, 153, .07), transparent 34rem),
+    var(--kl-astra-bg) !important;
+  color: var(--kl-astra-text-bright) !important;
+}
+html body::before,
+html body::after {
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+html body .app-shell,
+html body .app,
+html body main,
+html body .main,
+html body .content,
+html body .page,
+html body .page.active-page,
+html body .page.active {
+  background: transparent !important;
+  color: var(--kl-astra-text-bright) !important;
+}
+html body .sidebar,
+html body .app .sidebar,
+html body .app-shell .sidebar {
+  background: linear-gradient(180deg, rgba(15, 12, 34, .96), rgba(10, 8, 24, .93)) !important;
+  color: var(--kl-astra-text-bright) !important;
+  border-right: 1px solid rgba(255, 255, 255, .09) !important;
+  box-shadow: 12px 0 42px rgba(0, 0, 0, .25) !important;
+}
+html body .topbar,
+html body header.topbar,
+html body .app .topbar,
+html body .app-shell .topbar {
+  background: rgba(12, 10, 27, .82) !important;
+  color: var(--kl-astra-text-bright) !important;
+  border-color: rgba(255, 255, 255, .09) !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, .15) !important;
+}
+html body .hero-card,
+html body .streak-card,
+html body .streak-goal-card,
+html body .daily-goal,
+html body .mini-ranking,
+html body .activity-grid .activity-card,
+html body .revision-exam-home-cta,
+html body .app .card,
+html body .app-shell .card,
+html body .metric-grid article,
+html body .login-panel,
+html body .login-panel .login-card,
+html body .login-showcase,
+html body .teacher-card,
+html body .goal-card,
+html body .table-wrap,
+html body .panel,
+html body .form-card,
+html body .auth-card,
+html body .content-card,
+html body .section-card,
+html body .pack-card,
+html body .pack-item,
+html body .word-card,
+html body .stat-card,
+html body .setting-card,
+html body .modal-card,
+html body .modal-box,
+html body .account-panel,
+html body .pack-preview,
+html body .study-panel,
+html body .study-workspace,
+html body .quiz-card,
+html body .question-card,
+html body .result-card {
+  background: var(--kl-astra-surface) !important;
+  color: var(--kl-astra-text-bright) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: var(--kl-astra-shadow) !important;
+}
+html body .hero-card,
+html body .hero,
+html body .login-showcase,
+html body .login-panel .login-showcase {
+  background:
+    radial-gradient(ellipse at 12% 15%, rgba(139, 92, 246, .22), transparent 58rem),
+    linear-gradient(135deg, rgba(21, 17, 49, .96), rgba(12, 10, 29, .90)) !important;
+}
+html body .login-gate {
+  background:
+    radial-gradient(ellipse at 12% 12%, rgba(139, 92, 246, .24), transparent 34rem),
+    radial-gradient(ellipse at 92% 86%, rgba(6, 182, 212, .16), transparent 32rem),
+    #080711 !important;
+}
+html body .login-panel,
+html body .login-card,
+html body .login-panel .login-card {
+  background: rgba(18, 16, 38, .91) !important;
+  border-color: rgba(255, 255, 255, .13) !important;
+  color: var(--kl-astra-text-bright) !important;
+}
+html body .sidebar .nav-item,
+html body .sidebar .nav button,
+html body .sidebar .nav a {
+  color: #cbd5e1 !important;
+}
+html body .sidebar .nav-item:hover,
+html body .sidebar .nav-item.active,
+html body .sidebar .nav button:hover,
+html body .sidebar .nav button.active,
+html body .sidebar .nav a:hover,
+html body .sidebar .nav a.active {
+  background: rgba(139, 92, 246, .18) !important;
+  color: #e9d5ff !important;
+}
+html body input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+html body textarea,
+html body select,
+html body .input,
+html body .select {
+  background: rgba(8, 7, 20, .82) !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, .14) !important;
+}
+html body .primary-btn,
+html body button.primary,
+html body button.primary.big,
+html body button.primary-btn,
+html body .primary,
+html body .btn.primary,
+html body #loginBtn,
+html body #savePackBtn,
+html body .login-btn {
+  background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo)) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, .15) !important;
+}
+html body h1,
+html body h2,
+html body h3,
+html body h4,
+html body h5,
+html body h6,
+html body .metric strong,
+html body .metric b,
+html body .activity-card b,
+html body .section-heading h2,
+html body .card h2,
+html body .card h3 {
+  color: var(--kl-astra-text-bright) !important;
+}
+html body .class-label,
+html body .profile-mini small,
+html body .subtext,
+html body .section-heading p,
+html body .metric small,
+html body .account-panel small,
+html body .goal small {
+  color: var(--kl-astra-text-muted) !important;
+}
