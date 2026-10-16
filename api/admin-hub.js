@@ -2,7 +2,7 @@ const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-ka
 const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
 const ALLOWED_ORIGINS = new Set([
-  "https://teacher-katlearn.netlify.app",
+  "https://teacher-katlearn1.netlify.app",
   "https://lms-katlearn.netlify.app",
   "http://localhost:3000",
   "http://localhost:5173",
