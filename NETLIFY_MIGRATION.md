@@ -14,7 +14,7 @@ The Teacher/Admin API remains exposed at its existing `/api/*` routes through Ne
 Set these on the Teacher site:
 - `FIREBASE_SERVICE_ACCOUNT_JSON` — privileged Firebase service-account JSON for project `elp---katlearn` (secret; never commit it).
 - `KATLEARN_LMS_SITE_URL` — exact LMS Netlify URL, e.g. `https://lms-katlearn.netlify.app`.
-- `KATLEARN_TEACHER_SITE_URL` — exact Teacher Netlify URL, e.g. `https://teacher-katlearn.netlify.app`.
+- `KATLEARN_TEACHER_SITE_URL` — exact Teacher Netlify URL, e.g. `https://teacher-katlearn1.netlify.app`.
 - `KATLEARN_ALLOWED_ORIGINS` — comma-separated exact origins for both sites.
 
 The current handler reads `KATLEARN_LMS_SITE_URL` and defaults to the expected Netlify LMS URL, so a separate `LMS_ADMIN_URL` is not required. Make both site URL variables available during Builds and Functions; allowed origins and Firebase credentials must be available to Functions. Use the actual URLs if Netlify assigns different site names.
