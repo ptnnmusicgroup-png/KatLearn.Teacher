@@ -1,28 +1,16 @@
-const DEFAULT_LMS_ADMIN = "https://katlearn-lms.pages.dev/api/admin-hub";
+const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-katlearn.netlify.app").replace(/\/+$/, "");
+const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
-const BUILTIN_ALLOWED_ORIGINS = new Set([
-  "https://katlearn-teacher.pages.dev",
-  "https://katlearn-lms.pages.dev",
+const ALLOWED_ORIGINS = new Set([
+  "https://teacher-katlearn.netlify.app",
+  "https://lms-katlearn.netlify.app",
   "http://localhost:3000",
   "http://localhost:5173",
+  ...String(process.env.KATLEARN_ALLOWED_ORIGINS || "").split(",").map((value) => value.trim()).filter(Boolean),
+  ...(process.env.KATLEARN_LMS_SITE_URL ? [String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/, "")] : []),
+  ...(process.env.KATLEARN_TEACHER_SITE_URL ? [String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/, "")] : []),
+  ...(process.env.URL ? [String(process.env.URL).replace(/\/+$/, "")] : []),
 ]);
-
-function getLmsAdminUrl() {
-  const value = String(process.env.LMS_ADMIN_URL || DEFAULT_LMS_ADMIN).trim();
-  const url = new URL(value);
-  if (url.protocol !== "https:" && !(url.protocol === "http:" && ["localhost", "127.0.0.1"].includes(url.hostname))) {
-    throw new Error("LMS_ADMIN_URL must use HTTPS.");
-  }
-  return url.toString();
-}
-
-function isAllowedOrigin(origin) {
-  const configured = String(process.env.KATLEARN_ALLOWED_ORIGINS || "")
-    .split(",")
-    .map((value) => value.trim())
-    .filter(Boolean);
-  return BUILTIN_ALLOWED_ORIGINS.has(origin) || configured.includes(origin);
-}
 
 function corsHeaders(origin) {
   const headers = {
@@ -30,7 +18,7 @@ function corsHeaders(origin) {
     "Cache-Control": "no-store",
   };
 
-  if (isAllowedOrigin(origin)) {
+  if (ALLOWED_ORIGINS.has(origin)) {
     headers["Access-Control-Allow-Origin"] = origin;
     headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
     headers["Access-Control-Allow-Headers"] = "authorization, content-type, accept";
@@ -70,7 +58,7 @@ async function proxy(request) {
   const timeout = setTimeout(() => controller.abort(), 52000);
 
   try {
-    const url = new URL(getLmsAdminUrl());
+    const url = new URL(LMS_ADMIN);
     const incomingUrl = new URL(request.url);
 
     for (const [key, value] of incomingUrl.searchParams) {
@@ -129,7 +117,7 @@ async function proxy(request) {
   }
 }
 
-// Netlify Functions adapt the Web Handler export shape for /api functions.
+// Netlify Node.js Functions use the Web Handler export shape for /api functions.
 // Keep this as a fetch handler instead of a legacy default(request) signature.
 export default {
   fetch: proxy,

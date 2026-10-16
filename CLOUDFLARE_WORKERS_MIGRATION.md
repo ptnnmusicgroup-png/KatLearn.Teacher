@@ -1,3 +1,5 @@
+> **Legacy deployment guide — superseded by the Netlify path.** This document describes Cloudflare Workers/Containers setup and may involve paid usage. For the current free-first migration, use [NETLIFY_MIGRATION.md](NETLIFY_MIGRATION.md). Do not switch production domains based only on this legacy guide.
+
 # KatLearn Teacher — Cloudflare Workers migration
 
 This repository deploys the Teacher frontend as a Cloudflare Worker with Static Assets. Its API runs separately in a Cloudflare Worker backed by a Node.js 22 Container so the existing Firebase Admin SDK handlers can be preserved.

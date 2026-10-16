@@ -1,0 +1,22 @@
+[build]
+  command = "node scripts/build-netlify.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["firebase-admin"]
+
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/favicon.svg"
+  status = 200
+
+[[redirects]]
+  from = "/api/:endpoint"
+  to = "/.netlify/functions/api-:endpoint"
+  status = 200
+  force = true

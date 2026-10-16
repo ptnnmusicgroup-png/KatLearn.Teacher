@@ -1,22 +1,13 @@
 # KatLearn Teacher
 
-Teacher and administrator portal for KatLearn.
+Teacher portal for KatLearn.
 
-## Cloudflare Workers deployment
+## Firebase Admin production configuration
 
-- Frontend Worker: teacher-katlearn
-- Other frontend Worker: lms-katlearn
-- API Worker: katlearn-teacher-api, using Cloudflare Workers Containers with Node.js 22 and the existing Firebase Admin API handlers.
-- Data/auth: Firebase project elp---katlearn.
+The Teacher portal server APIs use Firebase Admin SDK. Configure the following Netlify Production environment variable(s):
 
-See CLOUDFLARE_WORKERS_MIGRATION.md for build settings, API deployment, secrets and smoke tests. Keep all service-account credentials and API keys in Cloudflare Worker secrets, never in Git.
+- Preferred: `FIREBASE_SERVICE_ACCOUNT_JSON` = the complete Firebase service-account JSON.
+- Alternative: `FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` = Base64 of the complete service-account JSON.
+- Or the three fields: `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`.
 
-## Build and deploy
-
-Build command: node scripts/cloudflare-workers-build.mjs
-Deploy command: npx wrangler deploy
-Static assets output: dist
-Frontend Worker config: wrangler.toml
-API Worker config: wrangler-api.toml
-
-Workers Containers require the Workers Paid plan and incur usage-based charges. Deploy the API Worker before deploying the frontend Worker because the frontend's KATLEARN_API service binding targets the API Worker. Do not switch production domains until both frontend Workers and authenticated API smoke tests pass.
+Never commit a service-account JSON/private key to GitHub. After changing Netlify environment variables, redeploy the project.

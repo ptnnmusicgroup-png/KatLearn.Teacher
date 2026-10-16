@@ -1,9 +1,7 @@
 import { admin } from './_firebase-admin.js';
 
-const STUDENT_AI_URL = String(
-  process.env.LMS_AI_PACK_URL ||
-  (String(process.env.KATLEARN_LMS_URL || "https://lms-katlearn.netlify.app").replace(/\/+$/, "") + "/api/ai-pack")
-);
+const LMS_BASE_URL=String(process.env.KATLEARN_LMS_SITE_URL||'https://lms-katlearn.netlify.app').replace(/\/+$/,'');
+const STUDENT_AI_URL=LMS_BASE_URL+'/api/ai-pack';
 
 function headers(){
   return{'content-type':'application/json; charset=utf-8','cache-control':'no-store'};
