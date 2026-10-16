@@ -1,0 +1,22 @@
+name = "katlearn-teacher-api"
+main = "cloudflare-api/src/index.js"
+compatibility_date = "2026-10-15"
+upload_source_maps = true
+
+[observability]
+enabled = true
+
+[[containers]]
+class_name = "KatLearnApi"
+scheduling_policy = "durable_object"
+
+[containers.images.base]
+dockerfile = "./Dockerfile.cloudflare-api"
+
+[[durable_objects.bindings]]
+name = "KATLEARN_API"
+class_name = "KatLearnApi"
+
+[exports.KatLearnApi]
+type = "durable-object"
+storage = "sqlite"

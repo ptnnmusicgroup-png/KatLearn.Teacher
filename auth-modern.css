@@ -173,3 +173,23 @@ input:focus,select:focus,textarea:focus{
   #form .actions{align-items:stretch}.actions .submit,.actions .link{width:100%;justify-content:center;text-align:center}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+
+/* ===== Auth UI audit pass · 2026-10-15 ===== */
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid rgba(72,103,222,.48);outline-offset:3px
+}
+:where(button,a){-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:where(input,select,textarea){min-width:0;max-width:100%}
+.submit:active,.actions .submit:active{transform:translateY(1px)}
+.submit:disabled{cursor:not-allowed;opacity:.62;box-shadow:none}
+.card{overflow-wrap:anywhere}
+@media(max-width:480px){
+  .hero h1{font-size:clamp(32px,9vw,42px)!important;line-height:1.08!important;text-wrap:balance}
+  .hero p{overflow-wrap:anywhere}
+  .card{padding:clamp(15px,4vw,21px)!important}
+  .actions{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
