@@ -746,3 +746,32 @@ html body .account-panel small,
 html body .goal small {
   color: var(--kl-astra-text-muted) !important;
 }
+
+
+/* Final refinements for legacy compound selectors in dashboard pages. */
+html body .streak-card.streak-goal-card,
+html body .hero.hero-main,
+html body .app .metric.accent,
+html body .app .metric,
+html body .metric-grid .metric,
+html body .app .content .card,
+html body .app .card.sync-card,
+html body .table-wrap .table,
+html body .table-wrap .table th,
+html body .table-wrap .table td {
+  background-color: var(--kl-astra-surface) !important;
+  color: var(--kl-astra-text-bright) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .app .metric.accent,
+html body .app .metric,
+html body .metric-grid .metric {
+  box-shadow: var(--kl-astra-shadow) !important;
+}
+html body .app .btn.dark,
+html body .app button.refresh,
+html body .app .refresh {
+  background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo)) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, .15) !important;
+}
