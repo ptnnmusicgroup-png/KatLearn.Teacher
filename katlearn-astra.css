@@ -1,119 +1,103 @@
 /* ============================================================
-   KATLEARN x ASTRA AI DESIGN SYSTEM
-   Presentation layer only — no learning/auth/data logic.
+   KATLEARN x ASTRA — stable theme layer
+   Loaded LAST by HTML pages. Visual-only; preserve app behavior.
    ============================================================ */
 
 :root {
   color-scheme: dark;
   --kl-astra-bg: #080711;
-  --kl-astra-surface: rgba(18, 16, 38, 0.72);
-  --kl-astra-surface-hover: rgba(28, 25, 56, 0.90);
-  --kl-astra-border: rgba(255, 255, 255, 0.10);
+  --kl-astra-bg-soft: #100d20;
+  --kl-astra-surface: rgba(20, 17, 40, .82);
+  --kl-astra-surface-raised: rgba(27, 23, 53, .92);
+  --kl-astra-surface-hover: rgba(35, 29, 66, .96);
+  --kl-astra-border: rgba(216, 205, 255, .13);
   --kl-astra-violet: #8b5cf6;
   --kl-astra-indigo: #6366f1;
   --kl-astra-cyan: #06b6d4;
   --kl-astra-pink: #ec4899;
   --kl-astra-text-bright: #f8fafc;
+  --kl-astra-text: #e2e8f0;
   --kl-astra-text-muted: #a5b0c4;
-  --kl-astra-shadow: 0 20px 50px rgba(3, 2, 15, .40);
+  --kl-astra-shadow: 0 18px 48px rgba(0, 0, 0, .25);
+  --kl-astra-focus: 0 0 0 3px rgba(139, 92, 246, .22);
 }
 
-/* Shared aurora background for the existing KatLearn layouts. */
 html {
   min-height: 100%;
   background: var(--kl-astra-bg) !important;
-  color-scheme: dark;
 }
-body {
+html body {
   position: relative;
   isolation: isolate;
   min-height: 100vh;
+  color: var(--kl-astra-text) !important;
   background:
-    radial-gradient(ellipse at 12% 0%, rgba(139, 92, 246, .13), transparent 35rem),
-    radial-gradient(ellipse at 96% 18%, rgba(6, 182, 212, .10), transparent 32rem),
-    radial-gradient(ellipse at 55% 100%, rgba(236, 72, 153, .07), transparent 34rem),
+    radial-gradient(ellipse at 9% 0%, rgba(139, 92, 246, .17), transparent 34rem),
+    radial-gradient(ellipse at 96% 13%, rgba(6, 182, 212, .11), transparent 31rem),
+    radial-gradient(ellipse at 56% 100%, rgba(236, 72, 153, .08), transparent 32rem),
     var(--kl-astra-bg) !important;
-  color: var(--kl-astra-text-bright) !important;
   font-family: "Be Vietnam Pro", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-body::before,
-body::after {
+html body::before,
+html body::after {
   content: "";
   position: fixed;
   z-index: -1;
-  width: min(46vw, 520px);
-  height: min(46vw, 520px);
+  width: min(42vw, 470px);
+  height: min(42vw, 470px);
   border-radius: 50%;
-  filter: blur(105px);
-  opacity: .20;
+  filter: blur(100px);
+  opacity: .17;
   pointer-events: none;
-  animation: astra-aurora-float 18s ease-in-out infinite alternate;
+  animation: klAstraAurora 18s ease-in-out infinite alternate;
 }
-body::before {
-  top: -12rem;
+html body::before {
   left: 8%;
+  top: -15rem;
   background: radial-gradient(circle, var(--kl-astra-violet), var(--kl-astra-indigo));
 }
-body::after {
+html body::after {
   right: 4%;
-  bottom: -15rem;
+  bottom: -16rem;
   background: radial-gradient(circle, var(--kl-astra-cyan), var(--kl-astra-violet));
   animation-delay: -9s;
 }
-@keyframes astra-aurora-float {
+@keyframes klAstraAurora {
   0% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(34px, -28px, 0) scale(1.12); }
-  100% { transform: translate3d(-28px, 24px, 0) scale(.94); }
+  50% { transform: translate3d(28px, -22px, 0) scale(1.1); }
+  100% { transform: translate3d(-24px, 20px, 0) scale(.96); }
+}
+@keyframes klAstraShimmer {
+  to { background-position: 200% center; }
+}
+@keyframes klAstraBorderSpin {
+  to { --border-angle: 360deg; }
+}
+@keyframes klAstraPulse {
+  0% { transform: scale(.8); opacity: .8; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 
-/* The original utility classes remain available for new components. */
+/* Original utility classes from the supplied Astra spec. */
 .kl-astra-container {
   position: relative;
   isolation: isolate;
   min-height: 100vh;
   overflow: hidden;
-  background-color: var(--kl-astra-bg);
   color: var(--kl-astra-text-bright);
-}
-.kl-astra-container::before,
-.kl-astra-container::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: .45;
-  pointer-events: none;
-  animation: astra-aurora-float 14s ease-in-out infinite alternate;
-}
-.kl-astra-container::before {
-  top: -10%;
-  left: 15%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--kl-astra-violet), var(--kl-astra-indigo));
-}
-.kl-astra-container::after {
-  right: 10%;
-  bottom: -10%;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, var(--kl-astra-cyan), var(--kl-astra-violet));
-  animation-delay: -7s;
+  background: var(--kl-astra-bg);
 }
 .kl-astra-shimmer-text {
-  background: linear-gradient(110deg, #fff 0%, #c084fc 25%, #38bdf8 50%, #c084fc 75%, #fff 100%);
+  background: linear-gradient(110deg, #fff 0%, #c4b5fd 26%, #67e8f9 52%, #c4b5fd 76%, #fff 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: astra-shimmer 4s linear infinite;
+  animation: klAstraShimmer 5s linear infinite;
   font-weight: 800;
   letter-spacing: -.02em;
 }
-@keyframes astra-shimmer { to { background-position: 200% center; } }
-
 @property --border-angle {
   syntax: "<angle>";
   initial-value: 0deg;
@@ -121,39 +105,40 @@ body::after {
 }
 .kl-astra-card {
   position: relative;
-  z-index: 1;
   overflow: hidden;
-  padding: 24px;
+  isolation: isolate;
   border: 1px solid var(--kl-astra-border);
   border-radius: 20px;
   background: var(--kl-astra-surface);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: transform .3s cubic-bezier(.16, 1, .3, 1), box-shadow .3s ease, background .3s ease;
+  color: var(--kl-astra-text);
+  box-shadow: var(--kl-astra-shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: transform .28s cubic-bezier(.16, 1, .3, 1), border-color .28s ease, box-shadow .28s ease, background .28s ease;
 }
 .kl-astra-card::before {
   content: "";
   position: absolute;
+  z-index: -1;
   inset: -1px;
   padding: 1.5px;
   border-radius: inherit;
-  background: conic-gradient(from var(--border-angle), transparent 50%, var(--kl-astra-violet), var(--kl-astra-cyan), transparent 100%);
+  background: conic-gradient(from var(--border-angle), transparent 48%, var(--kl-astra-violet), var(--kl-astra-cyan), transparent 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  pointer-events: none;
   opacity: 0;
-  transition: opacity .4s ease;
-  animation: astra-spin-border 4s linear infinite;
+  pointer-events: none;
+  animation: klAstraBorderSpin 4s linear infinite;
+  transition: opacity .3s ease;
 }
-@keyframes astra-spin-border { to { --border-angle: 360deg; } }
 .kl-astra-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px -15px rgba(139, 92, 246, .35);
+  transform: translateY(-4px);
+  border-color: rgba(167, 139, 250, .48);
   background: var(--kl-astra-surface-hover);
+  box-shadow: 0 20px 42px rgba(88, 48, 170, .24);
 }
 .kl-astra-card:hover::before { opacity: 1; }
-
 .kl-astra-badge {
   display: inline-flex;
   align-items: center;
@@ -162,49 +147,41 @@ body::after {
   border: 1px solid rgba(139, 92, 246, .34);
   border-radius: 9999px;
   background: rgba(139, 92, 246, .14);
-  color: #d8b4fe;
+  color: #ddd6fe;
   font-size: .85rem;
-  font-weight: 600;
+  font-weight: 650;
   backdrop-filter: blur(8px);
 }
 .kl-astra-badge-dot {
   position: relative;
   width: 8px;
   height: 8px;
+  flex: 0 0 8px;
   border-radius: 50%;
-  background: #38bdf8;
+  background: #67e8f9;
 }
 .kl-astra-badge-dot::after {
   content: "";
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: #38bdf8;
-  opacity: .75;
-  animation: astra-dot-pulse 1.8s cubic-bezier(0, 0, .2, 1) infinite;
+  background: #67e8f9;
+  animation: klAstraPulse 1.8s cubic-bezier(0, 0, .2, 1) infinite;
 }
-@keyframes astra-dot-pulse {
-  0% { transform: scale(.8); opacity: .8; }
-  100% { transform: scale(2.5); opacity: 0; }
-}
-.kl-astra-input-wrapper { position: relative; width: 100%; max-width: 600px; margin: 0 auto; }
+.kl-astra-input-wrapper { position: relative; width: 100%; max-width: 600px; margin-inline: auto; }
 .kl-astra-input {
   width: 100%;
-  padding: 16px 54px 16px 20px;
-  border: 1px solid rgba(255, 255, 255, .13);
-  border-radius: 16px;
+  padding: 15px 18px;
+  border: 1px solid var(--kl-astra-border);
+  border-radius: 15px;
   outline: none;
-  background: rgba(12, 10, 26, .82);
-  color: #fff;
-  font-size: .95rem;
+  background: rgba(8, 7, 20, .76);
+  color: var(--kl-astra-text-bright);
   backdrop-filter: blur(16px);
-  transition: border-color .3s ease, box-shadow .3s ease;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
 .kl-astra-input::placeholder { color: var(--kl-astra-text-muted); }
-.kl-astra-input:focus {
-  border-color: var(--kl-astra-violet);
-  box-shadow: 0 0 30px rgba(139, 92, 246, .32), inset 0 0 12px rgba(139, 92, 246, .12);
-}
+.kl-astra-input:focus { border-color: var(--kl-astra-violet); box-shadow: var(--kl-astra-focus); }
 .kl-astra-btn {
   position: relative;
   display: inline-flex;
@@ -212,566 +189,714 @@ body::after {
   justify-content: center;
   gap: 8px;
   overflow: hidden;
-  padding: 12px 24px;
-  border: 0;
-  border-radius: 14px;
+  padding: 12px 22px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 13px;
   background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo));
   color: #fff;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(139, 92, 246, .32);
-  transition: transform .3s ease, box-shadow .3s ease;
+  box-shadow: 0 7px 22px rgba(99, 102, 241, .26);
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 .kl-astra-btn::after {
   content: "";
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(60deg, transparent, rgba(255, 255, 255, .25), transparent);
-  transform: rotate(30deg) translateY(-100%);
-  transition: transform .6s ease;
+  inset: -60%;
+  background: linear-gradient(60deg, transparent 42%, rgba(255,255,255,.22) 50%, transparent 58%);
+  transform: translateX(-65%) rotate(18deg);
+  transition: transform .55s ease;
   pointer-events: none;
 }
-.kl-astra-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(139, 92, 246, .48); }
-.kl-astra-btn:hover::after { transform: rotate(30deg) translateY(100%); }
+.kl-astra-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(139, 92, 246, .42); }
+.kl-astra-btn:hover::after { transform: translateX(65%) rotate(18deg); }
 
-/* Map the Astra palette to the existing Student LMS + Teacher/Admin selectors. */
-.app-shell,
-.app,
-main,
-.main,
-.content,
-.page,
-.page.active-page,
-.page.active {
-  background: transparent !important;
-  color: var(--kl-astra-text-bright) !important;
+/* App canvas and persistent navigation: deliberately do not touch display/layout. */
+html body .app-shell,
+html body .app,
+html body .app-shell > main,
+html body .app > .main,
+html body .content,
+html body main > .page,
+html body main .active-page {
+  color: var(--kl-astra-text) !important;
+  background-color: transparent !important;
 }
-.sidebar,
-.app .sidebar {
-  background: linear-gradient(180deg, rgba(15, 12, 34, .94), rgba(10, 8, 24, .90)) !important;
-  color: var(--kl-astra-text-bright) !important;
-  border-right: 1px solid rgba(255, 255, 255, .09) !important;
-  box-shadow: 12px 0 42px rgba(0, 0, 0, .22) !important;
+html body .sidebar,
+html body .app > .sidebar {
+  color: var(--kl-astra-text) !important;
+  background: linear-gradient(180deg, rgba(16, 13, 36, .97), rgba(9, 8, 23, .97)) !important;
+  border-color: rgba(216, 205, 255, .12) !important;
+  box-shadow: 12px 0 38px rgba(0, 0, 0, .22) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+html body .topbar,
+html body header.topbar {
+  color: var(--kl-astra-text) !important;
+  background: rgba(12, 10, 28, .88) !important;
+  border-color: rgba(216, 205, 255, .12) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .14) !important;
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
 }
-.topbar,
-header.topbar,
-.app .topbar {
-  background: rgba(12, 10, 27, .76) !important;
-  color: var(--kl-astra-text-bright) !important;
-  border-color: rgba(255, 255, 255, .09) !important;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, .13) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-.brand,
-.app .brand,
-.brand > span:last-child,
-.profile-mini,
-.profile-mini strong,
-.account-trigger,
-.page-title,
-.top-left,
-.top-right {
+html body .brand,
+html body .brand strong,
+html body .brand > span:last-child,
+html body .page-title,
+html body .account-trigger,
+html body .top-actions {
   color: var(--kl-astra-text-bright) !important;
 }
-.brand > span:last-child span,
-.brand > span:last-child em,
-.brand em {
+html body .brand > span:last-child span,
+html body .brand > span:last-child em,
+html body .brand em {
   color: #c4b5fd !important;
 }
-.brand-mark,
-.brand .brand-mark,
-.brand-icon {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1) !important;
-  box-shadow: 0 8px 24px rgba(139, 92, 246, .30) !important;
-  border: 1px solid rgba(255, 255, 255, .15);
+html body .brand-mark,
+html body .cp-brand-mark,
+html body .settings-brand-mark,
+html body .brand-icon,
+html body .logo {
+  box-shadow: 0 8px 24px rgba(139, 92, 246, .28) !important;
 }
-.class-label,
-.profile-mini small,
-.subtext,
-.section-heading p,
-.eyebrow,
-.card p,
-.metric small,
-.metric .label,
-.account-panel small,
-.goal small,
-.daily-goal p {
+html body .class-label,
+html body .profile-mini small,
+html body .account-panel small,
+html body .section-heading p,
+html body .subtext,
+html body .page-intro .subtext,
+html body .greeting-row .subtext,
+html body .eyebrow,
+html body .hint,
+html body .note,
+html body .foot,
+html body .teacher-signup-page .notice {
   color: var(--kl-astra-text-muted) !important;
-}
-.nav-item,
-.sidebar .nav button,
-.sidebar .nav a {
-  color: #cbd5e1 !important;
-  border-color: transparent !important;
-}
-.nav-item:hover,
-.nav-item.active,
-.sidebar .nav button:hover,
-.sidebar .nav button.active,
-.sidebar .nav a:hover,
-.sidebar .nav a.active {
-  background: rgba(139, 92, 246, .17) !important;
-  color: #e9d5ff !important;
-  box-shadow: inset 3px 0 0 #a78bfa;
-}
-.search,
-.search-box,
-.search input,
-.account-panel,
-.account-stats,
-.notification,
-.coin-pill,
-.settings-btn,
-.menu-toggle {
-  background: rgba(255, 255, 255, .055) !important;
-  color: #e2e8f0 !important;
-  border-color: var(--kl-astra-border) !important;
-}
-.hero-card,
-.streak-card,
-.streak-goal-card,
-.daily-goal,
-.mini-ranking,
-.activity-card,
-.revision-exam-home-cta,
-.card,
-.metric,
-.metric-grid article,
-.login-panel,
-.login-showcase,
-.login-card,
-.teacher-card,
-.goal-card,
-.table-wrap,
-.panel,
-.form-card,
-.auth-card,
-.content-card,
-.section-card,
-.pack-card,
-.pack-item,
-.word-card,
-.stat-card,
-.setting-card,
-.modal-card,
-.modal-box,
-.account-panel,
-.pack-preview,
-.study-panel,
-.study-workspace,
-.quiz-card,
-.question-card,
-.result-card {
-  border: 1px solid var(--kl-astra-border) !important;
-  border-radius: 20px !important;
-  background: var(--kl-astra-surface) !important;
-  color: var(--kl-astra-text-bright) !important;
-  box-shadow: var(--kl-astra-shadow) !important;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-.hero-card,
-.hero,
-.login-showcase {
-  background:
-    radial-gradient(ellipse at 12% 15%, rgba(139, 92, 246, .22), transparent 58%),
-    linear-gradient(135deg, rgba(21, 17, 49, .94), rgba(12, 10, 29, .84)) !important;
-}
-.hero,
-.hero-main {
-  border: 1px solid var(--kl-astra-border) !important;
-  border-radius: 22px !important;
-  color: var(--kl-astra-text-bright) !important;
-}
-.activity-card:hover,
-.revision-exam-home-cta:hover,
-.card:hover,
-.metric:hover,
-.pack-card:hover,
-.kl-astra-card:hover {
-  background: var(--kl-astra-surface-hover) !important;
-  border-color: rgba(167, 139, 250, .46) !important;
-  box-shadow: 0 20px 46px rgba(69, 35, 137, .24) !important;
-}
-h1, h2, h3, h4, h5, h6,
-.hero-content h2,
-.hero h1,
-.login-showcase h1,
-.section-heading h2,
-.card h2,
-.card h3,
-.metric strong,
-.metric b,
-.activity-card b {
-  color: var(--kl-astra-text-bright) !important;
-}
-.hero-content h2,
-.hero h1,
-.login-showcase h1,
-.page-title {
-  background: linear-gradient(110deg, #fff 0%, #c084fc 27%, #38bdf8 56%, #c084fc 78%, #fff 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: astra-shimmer 6s linear infinite;
-}
-p, label, .subtext, .showcase-copy, .card-copy {
-  color: #cbd5e1;
-}
-a { color: #c4b5fd; }
-a:hover { color: #e9d5ff; }
-input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-textarea,
-select,
-.input,
-.select {
-  background: rgba(8, 7, 20, .72) !important;
-  color: #f8fafc !important;
-  border: 1px solid rgba(255, 255, 255, .13) !important;
-  border-radius: 12px;
-}
-input::placeholder,
-textarea::placeholder {
-  color: #94a3b8 !important;
-  opacity: 1;
-}
-input:focus,
-textarea:focus,
-select:focus,
-.input:focus,
-.select:focus {
-  border-color: var(--kl-astra-violet) !important;
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, .18), 0 0 24px rgba(139, 92, 246, .16) !important;
-}
-button,
-.button,
-.btn {
-  border-color: rgba(255, 255, 255, .13);
-}
-.primary-btn,
-button.primary,
-button.primary.big,
-button.primary-btn,
-.primary,
-.btn.primary,
-#loginBtn,
-#savePackBtn,
-.login-btn {
-  background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo)) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255, 255, 255, .15) !important;
-  box-shadow: 0 7px 24px rgba(99, 102, 241, .26) !important;
-}
-.primary-btn:hover,
-button.primary:hover,
-button.primary-btn:hover,
-.primary:hover,
-.btn.primary:hover,
-#loginBtn:hover,
-#savePackBtn:hover,
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 11px 30px rgba(139, 92, 246, .40) !important;
-}
-.table,
-table {
-  color: #e2e8f0 !important;
-  border-color: rgba(255, 255, 255, .10) !important;
-}
-.table th,
-table th {
-  background: rgba(139, 92, 246, .12) !important;
-  color: #e9d5ff !important;
-  border-color: rgba(255, 255, 255, .10) !important;
-}
-.table td,
-table td,
-.table tr,
-table tr {
-  border-color: rgba(255, 255, 255, .09) !important;
-}
-.table tbody tr:hover,
-table tbody tr:hover {
-  background: rgba(139, 92, 246, .08) !important;
-}
-.modal,
-.modal-overlay {
-  background: rgba(3, 2, 12, .76) !important;
-  backdrop-filter: blur(10px);
-}
-.toast,
-#toast {
-  border: 1px solid rgba(255, 255, 255, .12);
-  background: rgba(18, 16, 38, .95) !important;
-  color: #f8fafc !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, .38);
-}
-.login-gate {
-  background:
-    radial-gradient(ellipse at 12% 12%, rgba(139, 92, 246, .24), transparent 34rem),
-    radial-gradient(ellipse at 92% 86%, rgba(6, 182, 212, .16), transparent 32rem),
-    #080711 !important;
-}
-.login-panel {
-  overflow: hidden;
-  border-color: rgba(255, 255, 255, .13) !important;
-  background: rgba(14, 12, 31, .82) !important;
-}
-.login-card {
-  background: rgba(18, 16, 38, .88) !important;
-}
-.login-card input,
-.login-card select {
-  background: rgba(8, 7, 20, .86) !important;
-}
-.login-card .eyebrow,
-.login-foot,
-.login-foot a {
-  color: #c4b5fd !important;
-}
-.account-panel[hidden],
-.modal[hidden],
-.hidden {
-  display: none !important;
-}
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 3px solid rgba(192, 132, 252, .58) !important;
-  outline-offset: 3px;
-}
-.vn-ui-motif { opacity: .15; pointer-events: none; }
-.streak-goal-ring-track { stroke: rgba(255, 255, 255, .12) !important; }
-.streak-goal-ring-progress { stroke: #a78bfa !important; }
-.streak-goal-ring-center strong,
-.streak-goal-ring-center small,
-.streak-goal-title,
-.streak-goal-meta,
-.streak-goal-status,
-.streak-goal-message { color: #f8fafc !important; }
-hr, .divider { border-color: rgba(255, 255, 255, .10) !important; }
-
-/* Respect device sizes and reduced-motion preferences. */
-@media (max-width: 760px) {
-  body::before, body::after { width: 78vw; height: 78vw; filter: blur(80px); opacity: .16; }
-  .hero-card, .streak-card, .card, .metric, .login-panel, .login-card { border-radius: 16px !important; }
-  .kl-astra-card { padding: 18px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
-  }
-  body::before, body::after { animation: none !important; }
-}
-
-
-/* ============================================================
-   ASTRA CASCADE BRIDGE
-   Specificity guard for legacy CSS files loaded after this layer.
-   ============================================================ */
-html:root {
-  background: var(--kl-astra-bg) !important;
-}
-html body {
-  background:
-    radial-gradient(ellipse at 12% 0%, rgba(139, 92, 246, .13), transparent 35rem),
-    radial-gradient(ellipse at 96% 18%, rgba(6, 182, 212, .10), transparent 32rem),
-    radial-gradient(ellipse at 55% 100%, rgba(236, 72, 153, .07), transparent 34rem),
-    var(--kl-astra-bg) !important;
-  color: var(--kl-astra-text-bright) !important;
-}
-html body::before,
-html body::after {
-  z-index: -1 !important;
-  pointer-events: none !important;
-}
-html body .app-shell,
-html body .app,
-html body main,
-html body .main,
-html body .content,
-html body .page,
-html body .page.active-page,
-html body .page.active {
-  background: transparent !important;
-  color: var(--kl-astra-text-bright) !important;
-}
-html body .sidebar,
-html body .app .sidebar,
-html body .app-shell .sidebar {
-  background: linear-gradient(180deg, rgba(15, 12, 34, .96), rgba(10, 8, 24, .93)) !important;
-  color: var(--kl-astra-text-bright) !important;
-  border-right: 1px solid rgba(255, 255, 255, .09) !important;
-  box-shadow: 12px 0 42px rgba(0, 0, 0, .25) !important;
-}
-html body .topbar,
-html body header.topbar,
-html body .app .topbar,
-html body .app-shell .topbar {
-  background: rgba(12, 10, 27, .82) !important;
-  color: var(--kl-astra-text-bright) !important;
-  border-color: rgba(255, 255, 255, .09) !important;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, .15) !important;
-}
-html body .hero-card,
-html body .streak-card,
-html body .streak-goal-card,
-html body .daily-goal,
-html body .mini-ranking,
-html body .activity-grid .activity-card,
-html body .revision-exam-home-cta,
-html body .app .card,
-html body .app-shell .card,
-html body .metric-grid article,
-html body .login-panel,
-html body .login-panel .login-card,
-html body .login-showcase,
-html body .teacher-card,
-html body .goal-card,
-html body .table-wrap,
-html body .panel,
-html body .form-card,
-html body .auth-card,
-html body .content-card,
-html body .section-card,
-html body .pack-card,
-html body .pack-item,
-html body .word-card,
-html body .stat-card,
-html body .setting-card,
-html body .modal-card,
-html body .modal-box,
-html body .account-panel,
-html body .pack-preview,
-html body .study-panel,
-html body .study-workspace,
-html body .quiz-card,
-html body .question-card,
-html body .result-card {
-  background: var(--kl-astra-surface) !important;
-  color: var(--kl-astra-text-bright) !important;
-  border-color: var(--kl-astra-border) !important;
-  box-shadow: var(--kl-astra-shadow) !important;
-}
-html body .hero-card,
-html body .hero,
-html body .login-showcase,
-html body .login-panel .login-showcase {
-  background:
-    radial-gradient(ellipse at 12% 15%, rgba(139, 92, 246, .22), transparent 58rem),
-    linear-gradient(135deg, rgba(21, 17, 49, .96), rgba(12, 10, 29, .90)) !important;
-}
-html body .login-gate {
-  background:
-    radial-gradient(ellipse at 12% 12%, rgba(139, 92, 246, .24), transparent 34rem),
-    radial-gradient(ellipse at 92% 86%, rgba(6, 182, 212, .16), transparent 32rem),
-    #080711 !important;
-}
-html body .login-panel,
-html body .login-card,
-html body .login-panel .login-card {
-  background: rgba(18, 16, 38, .91) !important;
-  border-color: rgba(255, 255, 255, .13) !important;
-  color: var(--kl-astra-text-bright) !important;
 }
 html body .sidebar .nav-item,
 html body .sidebar .nav button,
-html body .sidebar .nav a {
+html body .sidebar .nav a,
+html body .nav-item {
   color: #cbd5e1 !important;
+  border-color: transparent !important;
 }
 html body .sidebar .nav-item:hover,
 html body .sidebar .nav-item.active,
 html body .sidebar .nav button:hover,
 html body .sidebar .nav button.active,
 html body .sidebar .nav a:hover,
-html body .sidebar .nav a.active {
+html body .sidebar .nav a.active,
+html body .nav-item:hover,
+html body .nav-item.active {
+  color: #f5f3ff !important;
   background: rgba(139, 92, 246, .18) !important;
-  color: #e9d5ff !important;
+  border-color: rgba(167, 139, 250, .22) !important;
+  box-shadow: inset 3px 0 0 #a78bfa;
 }
+html body .search,
+html body .word-search,
+html body .menu-toggle,
+html body .settings-btn,
+html body .notification,
+html body .coin-pill,
+html body .account-trigger,
+html body .account-menu-btn:not(.danger),
+html body .icon-btn,
+html body .refresh,
+html body .connection,
+html body .profile,
+html body .learn-tool-btn,
+html body .study-soft-btn,
+html body .flash-nav-btn,
+html body .text-btn,
+html body .quick,
+html body .cp-back,
+html body .cp-btn.secondary,
+html body .teacher-btn.secondary,
+html body .btn.secondary {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, .055) !important;
+  border: 1px solid var(--kl-astra-border) !important;
+  box-shadow: none !important;
+}
+html body .settings-btn:hover,
+html body .notification:hover,
+html body .coin-pill:hover,
+html body .account-trigger:hover,
+html body .learn-tool-btn:hover,
+html body .study-soft-btn:hover,
+html body .quick:hover,
+html body .cp-back:hover {
+  background: rgba(139, 92, 246, .14) !important;
+  border-color: rgba(167, 139, 250, .28) !important;
+}
+
+/* Main cards and work areas used across LMS, teacher dashboard and admin. */
+html body .hero-card,
+html body .streak-card,
+html body .daily-goal,
+html body .mini-ranking,
+html body .activity-card,
+html body .revision-exam-home-cta,
+html body .learn-summary,
+html body .published-packs,
+html body .published-pack,
+html body .pack-tile,
+html body .pack-summary > div,
+html body .word-summary > div,
+html body .stat-grid > div,
+html body .word-table-card,
+html body .word-list,
+html body .personal-pack-card,
+html body .personal-pack-more,
+html body .shop-theme-card,
+html body .quiz-panel,
+html body .mode-card,
+html body .flash-stage,
+html body .study-panel,
+html body .study-calendar-card,
+html body .study-content-block,
+html body .study-flashcard,
+html body .study-saved-row,
+html body .study-studio-promo,
+html body .cp-hero-card,
+html body .cp-account,
+html body .cp-card,
+html body .cp-editor,
+html body .settings-card,
+html body .teacher-hero,
+html body .teacher-card-panel,
+html body .dashboard-grid .metric,
+html body .data-table-wrap,
+html body .class-card,
+html body .student-card,
+html body .progress-card,
+html body .catalog-card,
+html body .practice-card,
+html body .game-card,
+html body .rank-card,
+html body .ranking-card,
+html body .exam-card,
+html body .revision-card,
+html body .hero,
+html body .metric,
+html body .panel,
+html body .table-card,
+html body .section-card,
+html body .admin-card,
+html body .card {
+  color: var(--kl-astra-text) !important;
+  background: var(--kl-astra-surface) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: var(--kl-astra-shadow) !important;
+}
+html body .hero-card,
+html body .teacher-hero,
+html body .hero-main,
+html body .cp-hero-card {
+  background:
+    radial-gradient(ellipse at 88% 12%, rgba(6, 182, 212, .10), transparent 23rem),
+    radial-gradient(ellipse at 12% 10%, rgba(139, 92, 246, .20), transparent 28rem),
+    linear-gradient(135deg, rgba(24, 19, 52, .97), rgba(13, 11, 30, .95)) !important;
+  border-color: rgba(167, 139, 250, .20) !important;
+}
+html body .teacher-card,
+html body .admin-chip,
+html body .account-panel,
+html body .account-stats,
+html body .pack-modal-box,
+html body .modal-card,
+html body .modal-box,
+html body .modal-content,
+html body .login-card,
+html body .auth-screen .card,
+html body .teacher-signup-page .card,
+html body body > main:not(.test-page) .card {
+  color: var(--kl-astra-text) !important;
+  background: var(--kl-astra-surface-raised) !important;
+  border-color: var(--kl-astra-border) !important;
+  box-shadow: var(--kl-astra-shadow) !important;
+}
+html body .hero-content .tag,
+html body .study-kicker,
+html body .study-pills span,
+html body .cp-eyebrow,
+html body .cp-pill,
+html body .quiz-badge,
+html body .badge {
+  color: #ddd6fe !important;
+  background: rgba(139, 92, 246, .14) !important;
+  border-color: rgba(167, 139, 250, .22) !important;
+}
+html body main h1,
+html body main h2,
+html body main h3,
+html body main h4,
+html body .hero h1,
+html body .teacher-hero h1,
+html body .hero-content h2,
+html body .study-hero h1,
+html body .study-output-head h2,
+html body .page-intro h1,
+html body .greeting-row h1,
+html body .section-heading h2,
+html body .card-head h2,
+html body .card-head h3,
+html body .metric strong,
+html body .metric b,
+html body .activity-card b,
+html body .pack-tile h3,
+html body .pack-tile h4,
+html body .study-panel-head h2,
+html body .study-content-block h3,
+html body .study-results-empty h3,
+html body .cp-card-title,
+html body .login-card h2,
+html body .auth-screen .hero h1 {
+  color: var(--kl-astra-text-bright) !important;
+}
+html body .hero-content h2,
+html body .page-intro h1,
+html body .greeting-row h1,
+html body .study-hero h1,
+html body .teacher-hero h1,
+html body .login-showcase h1,
+html body .auth-screen .hero h1 {
+  background: linear-gradient(110deg, #fff 0%, #c4b5fd 30%, #67e8f9 58%, #c4b5fd 82%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: klAstraShimmer 7s linear infinite;
+}
+html body .hero-content p,
+html body .hero-meta span,
+html body .section-heading p,
+html body .activity-card small,
+html body .daily-goal p,
+html body .daily-goal small,
+html body .mini-ranking p,
+html body .mini-ranking small,
+html body .pack-tile p,
+html body .pack-summary span,
+html body .pack-summary small,
+html body .word-summary span,
+html body .word-summary small,
+html body .word-table-row small,
+html body .word-item small,
+html body .learn-summary small,
+html body .study-hero p,
+html body .study-panel-head p,
+html body .study-content-block p,
+html body .study-results-empty p,
+html body .study-saved-row small,
+html body .study-studio-promo small,
+html body .teacher-hero p,
+html body .teacher-card-panel > p,
+html body .metric small,
+html body .card-head p,
+html body .quick small,
+html body .health-row span,
+html body .profile small,
+html body .login-card > p:not(.eyebrow),
+html body .auth-screen .tagline,
+html body .auth-screen .hint {
+  color: var(--kl-astra-text-muted) !important;
+}
+
+/* Form controls, editor rows, search, and focus states. */
 html body input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
 html body textarea,
 html body select,
 html body .input,
-html body .select {
-  background: rgba(8, 7, 20, .82) !important;
+html body .select,
+html body .word-search input,
+html body .study-field input,
+html body .study-field select,
+html body .study-field textarea,
+html body .study-answer-box,
+html body .cp-field input,
+html body .cp-field textarea,
+html body .cp-field select,
+html body .teacher-form input,
+html body .teacher-form textarea,
+html body .toolbar input,
+html body .toolbar select,
+html body .login-card input,
+html body .auth-screen input,
+html body .auth-screen select,
+html body .auth-screen textarea {
+  min-width: 0;
   color: #f8fafc !important;
-  border-color: rgba(255, 255, 255, .14) !important;
+  background: rgba(8, 7, 20, .78) !important;
+  border-color: rgba(216, 205, 255, .17) !important;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
 }
+html body input::placeholder,
+html body textarea::placeholder,
+html body .word-search input::placeholder {
+  color: #8f9bb0 !important;
+  opacity: 1;
+}
+html body input:focus,
+html body textarea:focus,
+html body select:focus,
+html body .input:focus,
+html body .select:focus,
+html body .study-field input:focus,
+html body .study-field select:focus,
+html body .study-field textarea:focus,
+html body .cp-field input:focus,
+html body .cp-field textarea:focus,
+html body .cp-field select:focus,
+html body .login-card input:focus {
+  border-color: var(--kl-astra-violet) !important;
+  outline: none !important;
+  box-shadow: var(--kl-astra-focus) !important;
+}
+html body input[type="checkbox"],
+html body input[type="radio"] { accent-color: var(--kl-astra-violet); }
+
+/* Primary actions: consistent violet gradient, with secondary/danger states preserved. */
 html body .primary-btn,
+html body .login-btn,
+html body .submit,
+html body .start-lesson,
+html body .add-word-btn,
+html body .create-pack-btn,
+html body .teacher-btn:not(.secondary):not(.danger),
+html body .study-primary,
+html body .cp-btn.primary,
+html body .cp-add,
+html body .primary,
+html body .btn.primary,
+html body .btn.dark,
 html body button.primary,
 html body button.primary.big,
 html body button.primary-btn,
-html body .primary,
-html body .btn.primary,
 html body #loginBtn,
 html body #savePackBtn,
-html body .login-btn {
-  background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo)) !important;
+html body .actions .submit {
   color: #fff !important;
-  border-color: rgba(255, 255, 255, .15) !important;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1) !important;
+  border: 1px solid rgba(216, 205, 255, .20) !important;
+  box-shadow: 0 7px 24px rgba(99, 102, 241, .25) !important;
 }
-html body h1,
-html body h2,
-html body h3,
-html body h4,
-html body h5,
-html body h6,
-html body .metric strong,
-html body .metric b,
-html body .activity-card b,
-html body .section-heading h2,
-html body .card h2,
-html body .card h3 {
-  color: var(--kl-astra-text-bright) !important;
+html body .primary-btn:hover,
+html body .login-btn:hover,
+html body .submit:hover,
+html body .start-lesson:hover,
+html body .add-word-btn:hover,
+html body .create-pack-btn:hover,
+html body .teacher-btn:not(.secondary):not(.danger):hover,
+html body .study-primary:hover,
+html body .cp-btn.primary:hover,
+html body .cp-add:hover,
+html body .primary:hover,
+html body .btn.primary:hover,
+html body .btn.dark:hover,
+html body button.primary:hover,
+html body button.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 11px 28px rgba(139, 92, 246, .38) !important;
 }
-html body .class-label,
-html body .profile-mini small,
-html body .subtext,
-html body .section-heading p,
-html body .metric small,
-html body .account-panel small,
-html body .goal small {
-  color: var(--kl-astra-text-muted) !important;
-}
-
-
-/* Final refinements for legacy compound selectors in dashboard pages. */
-html body .streak-card.streak-goal-card,
-html body .hero.hero-main,
-html body .app .metric.accent,
-html body .app .metric,
-html body .metric-grid .metric,
-html body .app .content .card,
-html body .app .card.sync-card,
-html body .table-wrap .table,
-html body .table-wrap .table th,
-html body .table-wrap .table td {
-  background-color: var(--kl-astra-surface) !important;
-  color: var(--kl-astra-text-bright) !important;
+html body .secondary,
+html body .teacher-btn.secondary,
+html body .btn.secondary,
+html body .cp-btn.secondary,
+html body .settings-cancel,
+html body .cp-add.secondary,
+html body .study-soft-btn,
+html body .flash-nav-btn,
+html body .learn-tool-btn {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, .055) !important;
   border-color: var(--kl-astra-border) !important;
 }
-html body .app .metric.accent,
-html body .app .metric,
-html body .metric-grid .metric {
+html body button.danger,
+html body .danger,
+html body .account-menu-btn.danger,
+html body .personal-pack-action-menu button.danger {
+  color: #fecdd3 !important;
+  background: rgba(225, 29, 72, .14) !important;
+  border-color: rgba(251, 113, 133, .28) !important;
+}
+html body button:disabled,
+html body [aria-disabled="true"] { opacity: .58; cursor: not-allowed; transform: none !important; }
+
+/* Lesson surfaces and interactive study states. */
+html body .word-item,
+html body .word-table-row,
+html body .published-pack,
+html body .personal-pack-card,
+html body .study-mode,
+html body .study-option,
+html body .reflex-source-option,
+html body .reflex-length,
+html body .answer,
+html body .test-option,
+html body .test-action,
+html body .pack-card {
+  color: var(--kl-astra-text) !important;
+  background: rgba(255, 255, 255, .045) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .word-item:hover,
+html body .word-item.selected,
+html body .word-table-row:hover,
+html body .study-mode:hover,
+html body .study-mode[aria-pressed="true"],
+html body .study-option:hover,
+html body .reflex-source-option:hover,
+html body .reflex-length:hover,
+html body .answer:hover,
+html body .test-option:hover,
+html body .test-action:hover,
+html body .pack-card:hover {
+  background: rgba(139, 92, 246, .14) !important;
+  border-color: rgba(167, 139, 250, .34) !important;
+}
+html body .flash-stage,
+html body .flashcard,
+html body .flashcard .card-face,
+html body .study-flashcard,
+html body .study-option,
+html body .study-feedback,
+html body .reflex-hud-card,
+html body .reflex-source-picker,
+html body .reflex-settings,
+html body .reflex-source-toggle,
+html body .reflex-source-option,
+html body .study-calendar,
+html body .study-calendar-empty,
+html body .study-results-empty {
+  color: var(--kl-astra-text) !important;
+  background-color: rgba(18, 15, 37, .86) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .flashcard .card-front,
+html body .flashcard .card-back {
+  color: var(--kl-astra-text-bright) !important;
+  background: linear-gradient(145deg, rgba(27, 23, 53, .98), rgba(13, 11, 29, .98)) !important;
+  border-color: rgba(167, 139, 250, .20) !important;
+}
+html body .word-status,
+html body .study-status-success,
+html body .good-text { color: #6ee7b7 !important; }
+html body .study-status-error,
+html body .bad-text { color: #fda4af !important; }
+html body .progress-line,
+html body .progress-bar,
+html body .quiz-progress,
+html body .study-progress-track,
+html body .reflex-time-track {
+  background: rgba(255, 255, 255, .10) !important;
+}
+html body .progress-line span,
+html body .progress-bar > span,
+html body .progress-fill,
+html body .study-progress-track span {
+  background: linear-gradient(90deg, var(--kl-astra-violet), var(--kl-astra-cyan)) !important;
+}
+html body .streak-goal-ring-track { stroke: rgba(255, 255, 255, .12) !important; }
+html body .streak-goal-ring-progress { stroke: #a78bfa !important; }
+
+/* Teacher dashboard + Admin Control Center tables, summaries and overlays. */
+html body .metric strong,
+html body .metric.accent strong,
+html body .health-row b,
+html body .quick strong,
+html body .pending-main strong,
+html body .data-table td strong,
+html body .table td strong,
+html body .table td b {
+  color: #f8fafc !important;
+}
+html body .data-table,
+html body .table,
+html body table {
+  color: #e2e8f0 !important;
+  border-color: rgba(216, 205, 255, .12) !important;
+}
+html body .data-table thead,
+html body .table thead,
+html body table thead,
+html body .table th,
+html body table th,
+html body .data-table thead th {
+  color: #ddd6fe !important;
+  background: rgba(139, 92, 246, .12) !important;
+  border-color: rgba(216, 205, 255, .12) !important;
+}
+html body .data-table td,
+html body .table td,
+html body table td,
+html body .data-table tbody tr,
+html body .table tbody tr,
+html body table tbody tr {
+  color: #e2e8f0 !important;
+  border-color: rgba(216, 205, 255, .09) !important;
+  background-color: transparent !important;
+}
+html body .data-table tbody tr:hover,
+html body .table tbody tr:hover,
+html body table tbody tr:hover { background: rgba(139, 92, 246, .08) !important; }
+html body .table-wrap,
+html body .data-table-wrap {
+  background: rgba(16, 13, 34, .62) !important;
+  border: 1px solid var(--kl-astra-border) !important;
+  border-radius: 16px;
+  overflow-x: auto;
+}
+html body .table-wrap .table th,
+html body .table-wrap .table td { white-space: normal; }
+html body .library-tree-node,
+html body .library-tree-leaf,
+html body .sync-item,
+html body .health-row,
+html body .quick,
+html body .pending,
+html body .class-item,
+html body .student-row,
+html body .study-saved-row {
+  background: rgba(255, 255, 255, .045) !important;
+  border-color: var(--kl-astra-border) !important;
+  color: var(--kl-astra-text) !important;
+}
+html body .library-tree-node summary,
+html body .library-tree-copy b,
+html body .library-tree-leaf,
+html body .library-tree-chevron {
+  color: #e2e8f0 !important;
+}
+html body .library-tree-copy small,
+html body .class-item small,
+html body .student-row small,
+html body .table td small {
+  color: var(--kl-astra-text-muted) !important;
+}
+html body .login-gate {
+  background:
+    radial-gradient(ellipse at 12% 12%, rgba(139, 92, 246, .23), transparent 32rem),
+    radial-gradient(ellipse at 92% 86%, rgba(6, 182, 212, .15), transparent 30rem),
+    #080711 !important;
+}
+html body .login-panel {
+  overflow: hidden;
+  border: 1px solid var(--kl-astra-border) !important;
+  background: rgba(18, 16, 38, .86) !important;
+}
+html body .login-showcase {
+  background:
+    radial-gradient(ellipse at 85% 12%, rgba(6, 182, 212, .12), transparent 22rem),
+    linear-gradient(145deg, #17122f, #0d0b1e) !important;
+  color: #f8fafc !important;
+}
+html body .login-foot,
+html body .login-foot a,
+html body .login-foot button { color: #c4b5fd !important; }
+html body .auth-screen,
+html body .teacher-signup-page,
+html body .auth-screen main {
+  background: transparent !important;
+  color: var(--kl-astra-text) !important;
+}
+html body .auth-screen .hero,
+html body .teacher-signup-page .hero {
+  background:
+    radial-gradient(ellipse at 10% 5%, rgba(139, 92, 246, .20), transparent 26rem),
+    transparent !important;
+  box-shadow: none !important;
+}
+html body .auth-screen .card,
+html body .teacher-signup-page .card {
+  background: rgba(18, 16, 38, .88) !important;
+  border: 1px solid var(--kl-astra-border) !important;
+  color: #e2e8f0 !important;
+}
+html body .auth-screen .brand,
+html body .teacher-signup-page .brand { color: #f8fafc !important; }
+html body .auth-screen .brand small,
+html body .auth-screen .foot,
+html body .teacher-signup-page .foot { color: var(--kl-astra-text-muted) !important; }
+html body .auth-screen .tab,
+html body .auth-screen .provider,
+html body .account-type {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, .05) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .auth-screen .tab.active,
+html body .auth-screen .provider:hover,
+html body .account-type:hover,
+html body .account-type:has(input:checked) {
+  background: rgba(139, 92, 246, .16) !important;
+  border-color: rgba(167, 139, 250, .34) !important;
+}
+html body .site-footer,
+html body #katlearnFooter {
+  color: var(--kl-astra-text-muted) !important;
+  background: rgba(12, 10, 27, .46) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .toast,
+html body #toast,
+html body #cpToast {
+  color: #f8fafc !important;
+  background: rgba(18, 16, 38, .97) !important;
+  border: 1px solid var(--kl-astra-border) !important;
   box-shadow: var(--kl-astra-shadow) !important;
 }
-html body .app .btn.dark,
-html body .app button.refresh,
-html body .app .refresh {
-  background: linear-gradient(135deg, var(--kl-astra-violet), var(--kl-astra-indigo)) !important;
-  color: #fff !important;
-  border-color: rgba(255, 255, 255, .15) !important;
+html body .modal,
+html body .modal-overlay,
+html body .modal-backdrop {
+  background-color: rgba(3, 2, 12, .72) !important;
+  backdrop-filter: blur(9px);
+}
+html body .modal-card,
+html body .modal-box,
+html body .modal-content,
+html body .pack-modal-box {
+  color: var(--kl-astra-text) !important;
+  background: rgba(18, 16, 38, .97) !important;
+  border: 1px solid var(--kl-astra-border) !important;
+}
+html body .modal-card h2,
+html body .modal-box h2,
+html body .modal-content h2,
+html body .pack-modal-box h2 { color: #f8fafc !important; }
+html body button:focus-visible,
+html body a:focus-visible,
+html body input:focus-visible,
+html body textarea:focus-visible,
+html body select:focus-visible,
+html body summary:focus-visible {
+  outline: 3px solid rgba(192, 132, 252, .66) !important;
+  outline-offset: 3px;
+}
+html body .vn-ui-motif { opacity: .13; pointer-events: none; }
+
+@media (max-width: 900px) {
+  html body::before, html body::after { width: 76vw; height: 76vw; filter: blur(82px); opacity: .13; }
+}
+@media (max-width: 620px) {
+  html body .hero-card,
+  html body .teacher-hero,
+  html body .cp-hero-card,
+  html body .login-panel,
+  html body .auth-screen .card { border-radius: 17px !important; }
+  html body .table-wrap { max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body::before,
+  html body::after { animation: none !important; }
+  html body .kl-astra-shimmer-text,
+  html body .hero-content h2,
+  html body .page-intro h1,
+  html body .greeting-row h1,
+  html body .study-hero h1,
+  html body .teacher-hero h1,
+  html body .login-showcase h1 { animation: none !important; }
 }
