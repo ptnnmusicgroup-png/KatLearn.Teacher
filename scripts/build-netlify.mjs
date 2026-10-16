@@ -6,14 +6,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist");
 const skippedDirectories = new Set([
   ".git", ".github", ".netlify", "node_modules", "dist",
-  "api", "netlify", "scripts",
-  ".wrangler", "functions", "cloudflare-api"
+  "api", "netlify", "scripts"
 ]);
 const skippedRootFiles = new Set([
   ".gitignore", "README.md", "package.json",
   "firestore.rules", "netlify.toml",
-  "wrangler.toml", "wrangler-api.toml", "cloudflare-worker.js",
-  "Dockerfile.cloudflare-api", "CLOUDFLARE_WORKERS_MIGRATION.md",
   "NETLIFY_MIGRATION.md", "package-lock.json", "pnpm-lock.yaml", "yarn.lock"
 ]);
 
@@ -71,13 +68,10 @@ const lmsUrl = cleanUrl(
   process.env.KATLEARN_LMS_SITE_URL,
   "https://lms-katlearn.netlify.app"
 );
-const configuredTeacherUrl = cleanUrl(
+const teacherUrl = cleanUrl(
   process.env.KATLEARN_TEACHER_SITE_URL || productionUrl,
   "https://teacher-katlearn1.netlify.app"
 );
-const teacherUrl = configuredTeacherUrl === "https://teacher-katlearn.netlify.app"
-  ? "https://teacher-katlearn1.netlify.app"
-  : configuredTeacherUrl;
 fs.writeFileSync(
   path.join(output, "deployment-config.js"),
   "window.KATLEARN_DEPLOYMENT_CONFIG = Object.freeze(" +
