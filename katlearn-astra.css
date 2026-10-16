@@ -1096,3 +1096,72 @@ html body .settings-toast {
   background: rgba(18, 16, 38, .97) !important;
   border: 1px solid var(--kl-astra-border) !important;
 }
+
+
+/* Final readability pass: labels and utility copy on dark surfaces. */
+html body .auth-screen label,
+html body .login-card label,
+html body .teacher-signup-page label,
+html body .teacher-form label,
+html body .settings-card label,
+html body .study-field label,
+html body .study-response-form label,
+html body .test-field span,
+html body .cp-field > span,
+html body .admin-card label,
+html body .pack-modal-box > label {
+  color: #cbd5e1 !important;
+}
+html body .auth-screen .kicker,
+html body .auth-screen .hero > p:first-of-type,
+html body .teacher-signup-page .kicker,
+html body .test-kicker,
+html body .test-type,
+html body .cp-eyebrow,
+html body .admin-card .eyebrow {
+  color: #c4b5fd !important;
+}
+html body .teacher-pending-page .card,
+html body .card .tag,
+html body .teacher-signup-page .notice,
+html body .admin-card,
+html body .alert {
+  color: var(--kl-astra-text) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .card .tag {
+  background: rgba(139, 92, 246, .14) !important;
+}
+html body .admin-card > p,
+html body .admin-card small,
+html body .admin-ai-note,
+html body .pack-modal-box > p:not(.eyebrow),
+html body .pack-word-row,
+html body .pack-column-head,
+html body .cp-editor-meta,
+html body .test-feedback,
+html body .settings-status,
+html body .form-error {
+  color: var(--kl-astra-text-muted) !important;
+}
+html body .modal-close,
+html body .cp-icon-btn,
+html body .remove-row-btn {
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, .055) !important;
+  border-color: var(--kl-astra-border) !important;
+}
+html body .alert {
+  background: rgba(251, 191, 36, .08) !important;
+}
+html body .form-error,
+html body .editor-error,
+html body .study-status-error {
+  color: #fda4af !important;
+}
+html body .empty,
+html body .empty-state,
+html body .test-hint,
+html body .test-run-note {
+  color: var(--kl-astra-text-muted) !important;
+}
