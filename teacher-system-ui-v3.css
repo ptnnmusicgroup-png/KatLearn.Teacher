@@ -1,3 +1,4 @@
+@import url("/katlearn-astra.css?v=20261016-astra1");
 /* KatLearn Teacher System UI v3 — presentation layer only. */
 :root{
   --kt-bg:#f5f7ff;--kt-surface:rgba(255,255,255,.72);--kt-line:rgba(103,91,161,.13);
