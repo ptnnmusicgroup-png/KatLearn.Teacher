@@ -1,8 +1,10 @@
-const DEFAULT_LMS_ADMIN = "https://katlearn-lms.pages.dev/api/admin-hub";
+const DEFAULT_LMS_ADMIN = "https://lms-katlearn.netlify.app/api/admin-hub";
 
 const BUILTIN_ALLOWED_ORIGINS = new Set([
   "https://katlearn-teacher.pages.dev",
   "https://katlearn-lms.pages.dev",
+  "https://teacher-katlearn.netlify.app",
+  "https://lms-katlearn.netlify.app",
   "http://localhost:3000",
   "http://localhost:5173",
 ]);
