@@ -1,29 +1,32 @@
 # KatLearn Teacher — Netlify deployment
 
-## Netlify settings
-Import `ptnnmusicgroup-png/KatLearn.Teacher` into Netlify using production branch `main`.
-The repository defines:
+## Build configuration
+
+The repository is configured for Netlify:
 - Build command: `node scripts/build-netlify.mjs`
 - Publish directory: `dist`
 - Functions directory: `netlify/functions`
-- Node.js version: `22`
+- Runtime/build Node.js version: `22`
 
-The Teacher/Admin API remains exposed at its existing `/api/*` routes through Netlify Functions. During each build, the required linked text `This site is powered by Netlify` is injected into every published HTML page, including login/admin pages.
+Teacher/Admin endpoints remain available through Netlify Functions at the existing `/api/*` routes.
 
-## Environment variables
-Set these on the Teacher site:
-- `FIREBASE_SERVICE_ACCOUNT_JSON` — privileged Firebase service-account JSON for project `elp---katlearn` (secret; never commit it).
-- `KATLEARN_LMS_SITE_URL` — exact LMS Netlify URL, e.g. `https://lms-katlearn.netlify.app`.
-- `KATLEARN_TEACHER_SITE_URL` — exact Teacher Netlify URL, e.g. `https://teacher-katlearn1.netlify.app`.
-- `KATLEARN_ALLOWED_ORIGINS` — comma-separated exact origins for both sites.
+## Netlify environment variables
 
-The current handler reads `KATLEARN_LMS_SITE_URL` and defaults to the expected Netlify LMS URL, so a separate `LMS_ADMIN_URL` is not required. Make both site URL variables available during Builds and Functions; allowed origins and Firebase credentials must be available to Functions. Use the actual URLs if Netlify assigns different site names.
+Set these in the Teacher Netlify site's environment settings:
 
-## Safe rollout
-1. Deploy/test the LMS site first because Teacher's admin proxy and AI-pack features call its API.
-2. Deploy Teacher and test login/signup, LMS ↔ Teacher SSO, teacher signup/approval, class/assignment management, admin/catalog operations and Teacher AI.
-3. Add both actual Netlify hostnames in Firebase Console → Authentication → Settings → Authorized domains.
-4. Verify CORS and Firestore effects using test accounts. Don't stop previous hosting until all tests pass.
+- `KATLEARN_LMS_SITE_URL=https://lms-katlearn.netlify.app`
+- `KATLEARN_TEACHER_SITE_URL=https://teacher-katlearn1.netlify.app`
+- `KATLEARN_ALLOWED_ORIGINS=https://lms-katlearn.netlify.app,https://teacher-katlearn1.netlify.app`
+- `FIREBASE_SERVICE_ACCOUNT_JSON`: full service-account JSON for Firebase project `elp---katlearn` (secret).
 
-## Free hosting
-The Netlify Open Source plan requires approval and the project must remain non-commercial. Disable auto-recharge and avoid paid add-ons while the goal is 0₫.
+The site URL variables are used during the static build and by runtime functions; configure them for both Builds and Functions. Allowed origins and Firebase Admin credentials must be available to Functions. The Teacher portal calls the LMS site's Admin Hub and AI endpoints, so the LMS hostname must match the actual Netlify LMS site.
+
+Never commit service-account JSON, private keys or API keys.
+
+## Verification and rollout
+
+Test teacher login/sign-up, LMS ↔ Teacher SSO, teacher registration/approval, class/assignment management, admin/catalog operations, Teacher AI and Firestore effects with test accounts. Ensure both Netlify hostnames are present in Firebase Authentication's authorized domains and both sites use synchronized origin settings.
+
+## Free-only target
+
+Netlify Open Source plan access requires approval and continuing eligibility. Keep auto-recharge disabled and do not enable paid add-ons while the target is 0₫.
