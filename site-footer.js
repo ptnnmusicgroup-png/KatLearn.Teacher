@@ -12,6 +12,7 @@
 #katlearnFooter .footer-title{font:700 15px 'Fredoka','Be Vietnam Pro',sans-serif;color:#952336;margin:0 0 9px}
 #katlearnFooter p{margin:4px 0}
 #katlearnFooter .footer-right p{color:#705f58}
+#katlearnFooter .footer-right a{color:inherit;text-decoration:underline;text-underline-offset:2px}
 #katlearnFooter .footer-right p::before{content:'•';margin-right:8px;color:#d3a64a}
 #katlearnFooter .dmca{font-style:italic;color:#9b8e87;margin-top:11px}
 @media(max-width:700px){#katlearnFooter{grid-template-columns:1fr;gap:18px;padding:28px 20px 34px;min-height:210px;text-align:center}#katlearnFooter .footer-left,#katlearnFooter .footer-right{text-align:center}}
@@ -29,7 +30,7 @@
       <div class="footer-right">
         <p>Được lưu trữ bởi GitHub</p>
         <p>Dữ liệu người dùng, hệ thống đăng nhập bởi Google Firebase</p>
-        <p>Được triển khai trên Netlify</p>
+        <p><a href="https://www.netlify.com/" target="_blank" rel="noopener noreferrer">This site is powered by Netlify</a></p>
         <p>Được bảo vệ bởi DMCA</p>
       </div>`;
     main.appendChild(footer);
