@@ -891,3 +891,19 @@ html body[data-kat-theme="default"] #practice .reflex-pack-check{
 html body[data-kat-theme="default"] #practice .reflex-pack-empty button{
   color:#d5ceff!important; background:rgba(121,101,232,.14)!important; border-color:rgba(169,156,255,.2)!important;
 }
+
+/* Teacher/Admin portals: older pages use generic .hero panels rather than .hero-card. */
+html body:not([data-kat-theme]) .hero,
+html body[data-kat-theme="default"] .hero,
+html body:not([data-kat-theme]) .page .hero,
+html body[data-kat-theme="default"] .page .hero{
+  color:#f3f0ff!important;
+  background:radial-gradient(ellipse at 88% 12%,rgba(121,101,232,.18),transparent 32rem),linear-gradient(125deg,#17132c 0%,#111a2c 58%,#0f1020 100%)!important;
+  border-color:rgba(169,156,255,.2)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.32)!important;
+}
+html body:not([data-kat-theme]) .hero h1,html body:not([data-kat-theme]) .hero h2,
+html body:not([data-kat-theme]) .hero h3,html body[data-kat-theme="default"] .hero h1,
+html body[data-kat-theme="default"] .hero h2,html body[data-kat-theme="default"] .hero h3{color:#f3f0ff!important}
+html body:not([data-kat-theme]) .hero p,html body[data-kat-theme="default"] .hero p{color:#c1badb!important}
+html body:not([data-kat-theme]) .hero small,html body[data-kat-theme="default"] .hero small{color:#aaa4c4!important}
