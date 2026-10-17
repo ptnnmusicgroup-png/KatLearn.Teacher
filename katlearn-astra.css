@@ -94,3 +94,106 @@ html body .word-table-head,html body .data-table thead,html body table thead{
 }
 html body .word-table-row,html body .data-table td{color:var(--kl-default-text)!important;border-color:var(--kl-default-line)!important}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+
+/* ==========================================================
+   Astra motion system — visual layer only, safe on the light default theme.
+   ========================================================== */
+:root{
+  --astra-violet:#7965e8;
+  --astra-cyan:#38b7dc;
+  --astra-pink:#ef86ae;
+  --astra-motion-ease:cubic-bezier(.22,1,.36,1);
+}
+@media(prefers-reduced-motion:no-preference){
+  /* 1. Ambient Aurora Float + 9. Floating Particle Field */
+  html body{isolation:isolate}
+  html body::before,html body::after{display:block!important;content:"";position:fixed;pointer-events:none;z-index:0}
+  html body::before{
+    width:min(42vw,520px);height:min(42vw,520px);left:-120px;top:-170px;border-radius:50%;
+    background:radial-gradient(circle,rgba(121,101,232,.16),rgba(56,183,220,.06) 42%,transparent 70%);
+    filter:blur(20px);animation:astraAuroraFloat 16s ease-in-out infinite alternate;
+  }
+  html body::after{
+    width:3px;height:3px;right:12%;bottom:9%;border-radius:50%;opacity:.48;background:#b7b0ff;
+    box-shadow:12vw 8vh #89dff4,-7vw -10vh #d6b9ff,18vw -2vh #92cfff,5vw 17vh #ffc3db,
+      -15vw 13vh #b0a7ff,-23vw -4vh #80d5ee,25vw 18vh #c9c1ff,-2vw 27vh #8eddf4,
+      9vw -19vh #f5b5d2,-29vw 23vh #b3a7ff;
+    animation:astraParticleFloat 11s ease-in-out infinite alternate;
+  }
+  html body .app-shell,html body .cp-page,html body .auth-screen,html body .teacher-signup-page{position:relative;z-index:1}
+
+  /* 2. Shimmering Text Gradient */
+  :where(.hero-content h2,.teacher-hero h1,.astra-shimmer-text){
+    background:linear-gradient(105deg,#343d62 0%,#6f5bd8 36%,#2ba9cf 52%,#7d65df 68%,#343d62 100%);
+    background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;
+    animation:astraTextShimmer 6s linear infinite;
+  }
+
+  /* 3. Spinning Conic Border Glow */
+  :where(.activity-card,.pack-tile,.personal-pack-card,.teacher-card-panel,.modal-card,.modal-box){
+    position:relative;isolation:isolate;
+  }
+  :where(.activity-card,.pack-tile,.personal-pack-card,.teacher-card-panel,.modal-card,.modal-box)::after{
+    content:"";position:absolute;inset:-1px;padding:1px;border-radius:inherit;pointer-events:none;opacity:0;
+    background:conic-gradient(from 0deg,transparent 0 58%,rgba(121,101,232,.8),rgba(56,183,220,.85),rgba(239,134,174,.72),transparent 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+    transition:opacity .25s ease;animation:astraBorderSpin 3.8s linear infinite;
+  }
+  :where(.activity-card,.pack-tile,.personal-pack-card,.teacher-card-panel,.modal-card,.modal-box):hover::after,
+  .modal.show :where(.modal-card,.modal-box)::after{opacity:1}
+
+  /* 4. Pill Beacon Pulse */
+  :where(.ai-online,.ai-status,.ai-badge,[data-ai-status="online"]){
+    position:relative;isolation:isolate;
+  }
+  :where(.ai-online,.ai-status,.ai-badge,[data-ai-status="online"])::before{
+    content:"";display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;
+    background:#2bb785;box-shadow:0 0 0 0 rgba(43,183,133,.38);animation:astraBeacon 1.9s infinite;
+  }
+
+  /* 5. Spring Card Elevation */
+  :where(.activity-card,.pack-tile,.personal-pack-card,.teacher-card-panel,.metric,.shop-item,.mode-card){
+    transition:transform .28s var(--astra-motion-ease),box-shadow .28s ease,border-color .28s ease!important;
+  }
+  :where(.activity-card,.pack-tile,.personal-pack-card,.teacher-card-panel,.metric,.shop-item,.mode-card):hover{
+    transform:translateY(-5px) scale(1.008)!important;box-shadow:0 20px 42px rgba(82,68,151,.15)!important;
+  }
+
+  /* 6. Glass Input Focal Beam */
+  :where(input,textarea,select,.search,.word-search):focus,
+  :where(input,textarea,select,.search,.word-search):focus-within{
+    border-color:rgba(121,101,232,.68)!important;
+    box-shadow:0 0 0 4px rgba(121,101,232,.12),0 0 26px rgba(95,162,226,.12)!important;
+    animation:astraInputBeam 1.8s ease-in-out infinite alternate;
+  }
+
+  /* 7. Light Streak Sweep CTA */
+  :where(.primary-btn,.create-pack-btn,.login-btn,.teacher-btn,.add-word-btn,.start-lesson){
+    position:relative;overflow:hidden;
+  }
+  :where(.primary-btn,.create-pack-btn,.login-btn,.teacher-btn,.add-word-btn,.start-lesson)::before{
+    content:"";position:absolute;inset:-70% auto -70% -45%;width:34%;pointer-events:none;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.42),transparent);transform:skewX(-18deg) translateX(-260%);
+  }
+  :where(.primary-btn,.create-pack-btn,.login-btn,.teacher-btn,.add-word-btn,.start-lesson):hover::before{
+    animation:astraLightSweep .72s var(--astra-motion-ease) forwards;
+  }
+
+  /* 8. AI Wave Skeleton / Pulse */
+  :where(.ai-loading,.skeleton,.loading-skeleton,[aria-busy="true"]){
+    background:linear-gradient(100deg,#f1efff 8%,#fff 24%,#e8f7ff 42%,#f1efff 58%)!important;
+    background-size:220% 100%!important;animation:astraWave 1.45s linear infinite;
+  }
+}
+@keyframes astraAuroraFloat{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(52px,32px,0) scale(1.14)}}
+@keyframes astraParticleFloat{from{transform:translate3d(0,0,0);opacity:.28}to{transform:translate3d(-18px,-34px,0);opacity:.62}}
+@keyframes astraTextShimmer{to{background-position:220% center}}
+@keyframes astraBorderSpin{to{transform:rotate(1turn)}}
+@keyframes astraBeacon{70%{box-shadow:0 0 0 9px rgba(43,183,133,0)}100%{box-shadow:0 0 0 0 rgba(43,183,133,0)}}
+@keyframes astraInputBeam{from{filter:brightness(1)}to{filter:brightness(1.025)}}
+@keyframes astraLightSweep{to{transform:skewX(-18deg) translateX(700%)}}
+@keyframes astraWave{to{background-position:-220% 0}}
+@media(prefers-reduced-motion:reduce){
+  html body::before,html body::after{display:none!important}
+}
