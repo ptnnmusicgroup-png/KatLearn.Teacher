@@ -18,7 +18,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in scripts/build-netlify.mjs scripts/check-inline-scripts.mjs netlify/adapter.mjs netlify/functions/*.mjs api/*.js; do
+          while IFS= read -r file; do
+            node --check "$file"
+          done < <(find . -type f -name '*.js' -not -path './.git/*' | sort)
+          for file in scripts/*.mjs netlify/adapter.mjs netlify/functions/*.mjs api/*.js; do
             node --check "$file"
           done
           node scripts/check-inline-scripts.mjs
