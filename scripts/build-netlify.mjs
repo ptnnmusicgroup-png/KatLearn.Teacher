@@ -69,7 +69,9 @@ const lmsUrl = cleanUrl(
   "https://lms-katlearn.netlify.app"
 );
 const teacherUrl = cleanUrl(
-  process.env.KATLEARN_TEACHER_SITE_URL || productionUrl,
+  process.env.CONTEXT === "production" && productionUrl
+    ? productionUrl
+    : (process.env.KATLEARN_TEACHER_SITE_URL || productionUrl),
   "https://quanly-giaovien-katlearn.netlify.app"
 );
 fs.writeFileSync(
