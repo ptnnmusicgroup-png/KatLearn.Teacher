@@ -101,13 +101,126 @@
     box.innerHTML=rows.length?rows.map(t=>'<div class="student-row"><div><strong>'+esc(t.displayName||'Giáo viên')+'</strong><small>'+esc(t.email||'')+' · '+esc(t.schoolName||t.schoolId||'Chưa có trường')+'</small></div><div class="student-score"><small>'+esc(t.province||'')+' · '+esc(t.ward||'')+'</small></div><button class="teacher-btn secondary" data-verify-teacher="'+t.id+'">✓ Xác minh</button></div>').join(''):'<div class="empty">Không có hồ sơ chờ xác minh.</div>';
     box.querySelectorAll('[data-verify-teacher]').forEach(b=>b.onclick=()=>verifyTeacher(b.dataset.verifyTeacher));
   }
-  async function verifyTeacher(uid){try{const teacherSnap=await api.getDoc(api.doc(db,'users',uid));if(!teacherSnap.exists())throw new Error('Không tìm thấy hồ sơ giáo viên.');const profile=teacherSnap.data()||{},requested=profile.teacherVerification||{};let schoolId=String(profile.schoolId||'').trim(),classIds=Array.isArray(profile.classIds)?profile.classIds.filter(Boolean).slice(0,20):[],schoolName=String(profile.schoolName||'').trim();const province=String(profile.province||'').trim(),ward=String(profile.ward||'').trim(),requestedSchoolName=String(requested.requestedSchoolName||'').trim(),requestedClassName=String(requested.requestedClassName||'').trim();if(schoolId){const schoolSnap=await api.getDoc(api.doc(db,'schools',schoolId));if(!schoolSnap.exists()||String(schoolSnap.data()?.province||'').trim()!==province||String(schoolSnap.data()?.ward||'').trim()!==ward)schoolId='';else schoolName=String(schoolSnap.data()?.name||schoolName).trim()}if(!schoolId&&requestedSchoolName){const snap=await api.getDocs(api.query(api.collection(db,'schools'),api.where('name','==',requestedSchoolName)));const existing=snap.docs.map(d=>({id:d.id,...d.data()})).find(s=>String(s.province||'')===province&&String(s.ward||'')===ward);if(existing){schoolId=existing.id;schoolName=String(existing.name||requestedSchoolName)}else{const ref=await api.addDoc(api.collection(db,'schools'),{name:requestedSchoolName,province,ward,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});schoolId=ref.id;schoolName=requestedSchoolName}}if(!schoolId)throw new Error('Hồ sơ chưa có trường hợp lệ.');
-    // Mirror the approved school into the dedicated Firestore catalog.
-    const schoolCatalogRef=api.doc(db,'KatLearn_Teacher_Schools',schoolId);
-    const schoolCatalogSnap=await api.getDoc(schoolCatalogRef);
-    if(!schoolCatalogSnap.exists()||String(schoolCatalogSnap.data()?.name||'').trim()!==schoolName){
-      await api.setDoc(schoolCatalogRef,{name:schoolName,schoolId,province,ward,source:'teacher_verification',updatedAt:Date.now()},{merge:true});
-    }const validClassIds=[];for(const classId of classIds){const snap=await api.getDoc(api.doc(db,'schools',schoolId,'classes',classId));if(snap.exists())validClassIds.push(classId)}classIds=validClassIds;if(!classIds.length&&requestedClassName){const snap=await api.getDocs(api.query(api.collection(db,'schools',schoolId,'classes'),api.where('name','==',requestedClassName)));const existing=snap.docs[0];if(existing)classIds=[existing.id];else{const ref=await api.addDoc(api.collection(db,'schools',schoolId,'classes'),{name:requestedClassName,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});classIds=[ref.id]}}if(!classIds.length)throw new Error('Hồ sơ chưa có lớp hợp lệ.');const catalogClassId=String(profile.catalogClassId&&classIds.includes(profile.catalogClassId)?profile.catalogClassId:classIds[0]).trim();await api.updateDoc(api.doc(db,'users',uid),{role:'teacher',schoolId,schoolName,province,ward,classIds,catalogClassId,teacherVerification:{...requested,status:'verified',verifiedAt:Date.now(),verifiedBy:user.uid},updatedAt:Date.now()});toast('✓ Đã cấp quyền giáo viên');renderPending();}catch(e){toast('Không thể xác minh: '+e.message)}}
+  async function canonicalSchoolId(school){
+    if(!school||!school.provinceId||!school.sourceSchoolId||!school.name)return '';
+    const input=String(school.provinceId)+'|'+String(school.sourceSchoolId)+'|'+String(school.name).trim().toLowerCase();
+    const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input));
+    return 'sch_'+[...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,28);
+  }
+  async function verifyTeacher(uid){
+    try{
+      const teacherSnap=await api.getDoc(api.doc(db,'users',uid));
+      if(!teacherSnap.exists())throw new Error('Không tìm thấy hồ sơ giáo viên.');
+      const profile=teacherSnap.data()||{},requested=profile.teacherVerification||{};
+      const catalogSchool=requested.catalogSchool&&typeof requested.catalogSchool==='object'?requested.catalogSchool:null;
+      let schoolId=String(profile.schoolId||'').trim();
+      let classIds=Array.isArray(profile.classIds)?profile.classIds.filter(Boolean).slice(0,20):[];
+      let schoolName=String(profile.schoolName||'').trim();
+      const province=String(profile.province||'').trim(),ward=String(profile.ward||'').trim();
+      const requestedSchoolName=String(requested.requestedSchoolName||'').trim();
+      const requestedClassName=String(requested.requestedClassName||'').trim();
+
+      if(schoolId){
+        const schoolSnap=await api.getDoc(api.doc(db,'schools',schoolId));
+        if(schoolSnap.exists()&&String(schoolSnap.data()?.province||'').trim()===province&&String(schoolSnap.data()?.ward||'').trim()===ward){
+          schoolName=String(schoolSnap.data()?.name||schoolName).trim();
+        }else if(catalogSchool&&catalogSchool.schoolId===schoolId&&catalogSchool.name===schoolName&&catalogSchool.province===province&&catalogSchool.ward===ward&&await canonicalSchoolId(catalogSchool)===schoolId){
+          const now=Date.now();
+          const record={
+            name:String(catalogSchool.name||'').trim(),schoolId,
+            province:String(catalogSchool.province||province).trim(),provinceId:String(catalogSchool.provinceId||requested.requestedProvinceId||'').trim(),
+            ward:String(catalogSchool.ward||ward).trim(),wardId:String(catalogSchool.wardId||requested.requestedWardId||'').trim(),
+            sourceSchoolId:String(catalogSchool.sourceSchoolId||''),sourceProvinceId:String(catalogSchool.sourceProvinceId||''),
+            schoolLevel:String(catalogSchool.schoolLevel||'combined'),source:'lms_national_catalog',
+            createdAt:now,updatedAt:now
+          };
+          if(!record.name||!record.provinceId||!record.wardId||!record.sourceSchoolId)throw new Error('Thông tin trường LMS chưa đầy đủ. Hãy kiểm tra hồ sơ trước khi xác minh.');
+          await api.setDoc(api.doc(db,'schools',schoolId),record,{merge:true});
+          await api.setDoc(api.doc(db,'KatLearn_TRUONGHOC_1',schoolId),record,{merge:true});
+          schoolName=record.name;
+        }else{
+          schoolId='';
+        }
+      }
+
+      if(!schoolId&&requestedSchoolName){
+        const snap=await api.getDocs(api.query(api.collection(db,'schools'),api.where('name','==',requestedSchoolName)));
+        const existing=snap.docs.map(d=>({id:d.id,...d.data()})).find(s=>String(s.province||'')===province&&String(s.ward||'')===ward);
+        if(existing){schoolId=existing.id;schoolName=String(existing.name||requestedSchoolName)}
+        else{
+          const ref=await api.addDoc(api.collection(db,'schools'),{name:requestedSchoolName,province,ward,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});
+          schoolId=ref.id;schoolName=requestedSchoolName;
+        }
+      }
+      if(!schoolId)throw new Error('Hồ sơ chưa có trường hợp lệ.');
+
+      const schoolDoc=await api.getDoc(api.doc(db,'schools',schoolId));
+      const schoolData=schoolDoc.exists()?schoolDoc.data()||{}:{};
+      const approvedSchool={
+        name:schoolName,schoolId,province,ward,
+        provinceId:String(catalogSchool?.provinceId||schoolData.provinceId||requested.requestedProvinceId||'').trim(),
+        wardId:String(catalogSchool?.wardId||schoolData.wardId||requested.requestedWardId||'').trim(),
+        sourceSchoolId:String(catalogSchool?.sourceSchoolId||schoolData.sourceSchoolId||''),
+        sourceProvinceId:String(catalogSchool?.sourceProvinceId||schoolData.sourceProvinceId||''),
+        schoolLevel:String(catalogSchool?.schoolLevel||schoolData.schoolLevel||'combined'),
+        source:String(catalogSchool?'lms_national_catalog':'teacher_verification'),
+        updatedAt:Date.now()
+      };
+      const schoolCatalogRef=api.doc(db,'KatLearn_Teacher_Schools',schoolId);
+      const schoolCatalogSnap=await api.getDoc(schoolCatalogRef);
+      if(!schoolCatalogSnap.exists()||String(schoolCatalogSnap.data()?.name||'').trim()!==schoolName){
+        await api.setDoc(schoolCatalogRef,{...approvedSchool,updatedAt:Date.now()},{merge:true});
+      }
+
+      // Keep the selected LMS class IDs canonical. Add the relevant school's grade templates
+      // only when they are absent, so the teacher dashboard and LMS share the same IDs.
+      const templates={primary:['1','2','3','4','5'],middle:['6','7','8','9'],high:['10','11','12'],combined:['1','2','3','4','5','6','7','8','9','10','11','12']};
+      const isVerifiedCatalogSchool=Boolean(catalogSchool&&catalogSchool.schoolId===schoolId&&await canonicalSchoolId(catalogSchool)===schoolId);
+      if(isVerifiedCatalogSchool){
+        const grades=templates[String(catalogSchool.schoolLevel||'combined')]||templates.combined;
+        const now=Date.now();
+        await Promise.all(grades.map(async grade=>{
+          const classId=schoolId+'-'+grade;
+          const cls={classId,name:'Lớp '+grade,grade:String(grade),schoolId,schoolName,province,ward,provinceId:approvedSchool.provinceId,wardId:approvedSchool.wardId,schoolLevel:approvedSchool.schoolLevel,isTemplate:true,source:'lms_national_catalog',updatedAt:now};
+          await Promise.all([
+            api.setDoc(api.doc(db,'schools',schoolId,'classes',classId),cls,{merge:true}),
+            api.setDoc(api.doc(db,'KatLearn_LOPHOC_1',classId),cls,{merge:true})
+          ]);
+        }));
+      }
+
+      const validClassIds=[];
+      for(const classId of classIds){
+        const snap=await api.getDoc(api.doc(db,'schools',schoolId,'classes',classId));
+        if(snap.exists())validClassIds.push(classId);
+      }
+      classIds=validClassIds;
+      if(!classIds.length&&requestedClassName){
+        const canonicalId=String(requested.catalogClassId||profile.catalogClassId||'').trim();
+        const canonicalGrade=canonicalId.startsWith(schoolId+'-')?canonicalId.slice(schoolId.length+1):'';
+        const canonicalIsAllowed=isVerifiedCatalogSchool&&/^(?:[1-9]|1[0-2])$/.test(canonicalGrade)&&requestedClassName==='Lớp '+canonicalGrade;
+        if(canonicalIsAllowed){
+          classIds=[canonicalId];
+        }else{
+          const snap=await api.getDocs(api.query(api.collection(db,'schools',schoolId,'classes'),api.where('name','==',requestedClassName)));
+          const existing=snap.docs[0];
+          if(existing)classIds=[existing.id];
+          else{
+            const ref=await api.addDoc(api.collection(db,'schools',schoolId,'classes'),{name:requestedClassName,createdBy:uid,createdAt:Date.now(),updatedAt:Date.now()});
+            classIds=[ref.id];
+          }
+        }
+      }
+      if(!classIds.length)throw new Error('Hồ sơ chưa có lớp hợp lệ.');
+      const catalogClassId=String(profile.catalogClassId&&classIds.includes(profile.catalogClassId)?profile.catalogClassId:classIds[0]).trim();
+      await api.updateDoc(api.doc(db,'users',uid),{
+        role:'teacher',schoolId,schoolName,province,ward,classIds,catalogClassId,
+        teacherVerification:{...requested,status:'verified',verifiedAt:Date.now(),verifiedBy:user.uid},
+        updatedAt:Date.now()
+      });
+      toast('✓ Đã cấp quyền giáo viên');renderPending();
+    }catch(e){toast('Không thể xác minh: '+e.message)}
+  }
   window.addEventListener('katlearn-teacher-auth-change',()=>{void refreshAdminUi()});
   boot().catch(e=>console.warn('[KatLearn catalog]',e));
 })();
