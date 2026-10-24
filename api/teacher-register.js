@@ -89,7 +89,7 @@ export default async request => {
   const origin = String(request.headers.get('origin') || '').replace(/\/+$/, '');
   if (request.method === 'OPTIONS') {
     if (origin && !ORIGINS.has(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
-    return response({ ok: true }, 204, origin);
+    return response({ ok: true }, 200, origin);
   }
   if (request.method !== 'POST') return response({ ok: false, error: 'Phương thức không được hỗ trợ.' }, 405, origin);
   if (!ORIGINS.has(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
@@ -115,6 +115,9 @@ export default async request => {
     const newClass = clean(body?.newClass, 80);
     const submittedSchoolId = newSchool ? '' : clean(body?.schoolId, 80);
     const school = validateSchool(body?.catalogSchool, submittedSchoolId, province, ward);
+    if (school && (clean(body?.provinceId, 8) !== school.provinceId || clean(body?.wardId, 32) !== school.wardId)) {
+      throw fail('Trường không thuộc xã/phường đang chọn. Hãy chọn lại danh mục.', 400, 'catalog_place_mismatch');
+    }
     const schoolId = school?.schoolId || '';
     const schoolName = school?.name || newSchool;
     const requestedClassName = newClass || clean(body?.selectedClassName, 80);
