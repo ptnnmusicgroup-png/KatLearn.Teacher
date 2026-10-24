@@ -10,7 +10,19 @@
     decorateClassModal();decorateStudentModal();await refreshAdminUi();
   }
   async function loadSchools(){
-    const snap=await api.getDocs(api.collection(db,'schools'));schools=snap.docs.map(d=>({id:d.id,...d.data()}));return schools;
+    const uid=String(user?.uid||'');
+    if(!uid){schools=[];return schools}
+    if(typeof isAdminUser!=='function'||!isAdminUser()){
+      const profileSnap=await api.getDoc(api.doc(db,'users',uid));
+      const schoolId=String((profileSnap.exists()?profileSnap.data()?.schoolId:'')||'').trim();
+      if(!schoolId){schools=[];return schools}
+      const schoolSnap=await api.getDoc(api.doc(db,'schools',schoolId));
+      schools=schoolSnap.exists()?[{id:schoolSnap.id,...schoolSnap.data()}]:[];
+      return schools;
+    }
+    const snap=await api.getDocs(api.collection(db,'schools'));
+    schools=snap.docs.map(d=>({id:d.id,...d.data()}));
+    return schools;
   }
   function decorateClassModal(){
     const form=$('#classForm');if(!form)return;
