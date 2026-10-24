@@ -248,7 +248,7 @@ function lmsSchoolLevel(name){
  const n=lmsNorm(name);
  const hasThcs=n.includes("thcs")||n.includes("trung hoc co so");
  const hasThpt=n.includes("thpt")||n.includes("trung hoc pho thong");
- const hasStandaloneTh=/(^|\\s)th($|\\s)/.test(n);
+ const hasStandaloneTh=/(^|\s)th($|\s)/.test(n);
  if((hasThcs&&hasThpt)||(hasStandaloneTh&&(hasThcs||hasThpt)))return "combined";
  if(hasThpt)return "high";
  if(hasThcs)return "middle";
