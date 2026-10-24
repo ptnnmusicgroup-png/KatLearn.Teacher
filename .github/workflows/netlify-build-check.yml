@@ -31,6 +31,17 @@ jobs:
           KATLEARN_TEACHER_SITE_URL: https://quanly-giaovien-katlearn.netlify.app
           KATLEARN_ALLOWED_ORIGINS: https://lms-katlearn.netlify.app,https://quanly-giaovien-katlearn.netlify.app
         run: node scripts/build-netlify.mjs
+      - name: Ensure production site URL overrides stale Teacher URL config
+        env:
+          CONTEXT: production
+          URL: https://quanly-giaovien-katlearn.netlify.app
+          KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
+        shell: bash
+        run: |
+          set -euo pipefail
+          legacy_teacher_host="$(printf '%s%s%s' 'https://teacher-katlearn' '1' '.netlify.app')"
+          KATLEARN_TEACHER_SITE_URL="$legacy_teacher_host" node scripts/build-netlify.mjs
+          grep -q '"teacherUrl":"https://quanly-giaovien-katlearn.netlify.app"' dist/deployment-config.js
       - name: Verify static publish excludes server files and settings
         shell: bash
         run: |
