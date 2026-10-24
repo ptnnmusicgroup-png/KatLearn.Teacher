@@ -95,29 +95,229 @@ main.teacher-signup-page{
     margin-bottom:22px!important;
   }
 }
-</style><link rel="stylesheet" href="katlearn-blue-theme.css?v=20261001-1"><link rel="stylesheet" href="/katlearn-astra.css?v=20261017-dark-default3"></head><body><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div><main class="teacher-signup-page"><a class="back" href="index.html">← Quay lại KatLearn Teacher</a><section class="hero"><p class="kicker">KATLEARN TEACHER • DÀNH CHO GIÁO VIÊN VIỆT NAM</p><h1>Đăng ký tài khoản giáo viên 🇻🇳</h1><p>Điền đúng thông tin công tác. Tài khoản mới sẽ ở trạng thái <b>chờ xác minh</b> trước khi được mở quyền quản trị.</p></section><section class="card"><form id="form"><div class="grid"><label>Họ và tên<input id="name" required placeholder="Nguyễn Thị Như"></label><label>Email<input id="email" type="email" required placeholder="teacher@example.com"></label><label>Mật khẩu<input id="password" type="password" minlength="6" required placeholder="Ít nhất 6 ký tự"></label><label>Tỉnh/Thành phố công tác<input id="province" list="provinceList" required placeholder="Ví dụ: Quảng Ngãi"><datalist id="provinceList"></datalist></label><label>Xã/Phường<input id="ward" list="wardList" required placeholder="Ví dụ: Bình Sơn"><datalist id="wardList"></datalist></label><label>Trường công tác<select id="school" disabled><option value="">Chọn trường</option></select></label><label>Lớp đang quản lý<select id="classCatalog" disabled><option value="">Chọn lớp</option></select></label></div><div class="notice">Không thấy trường/lớp? Bạn có thể đề xuất trường/lớp mới ngay tại đây. Đề xuất sẽ được admin kiểm tra và đưa vào danh mục dùng chung sau khi hồ sơ được xác minh.</div><p class="section">Danh mục công tác</p><div class="grid"><label>Tạo trường mới (nếu cần)<input id="newSchool" placeholder="Ví dụ: THCS Chu Văn An"></label><label>Tạo lớp mới (nếu cần)<input id="newClass" placeholder="Ví dụ: 8B2"></label></div><div class="actions"><button class="submit" type="submit" id="submit">Gửi đăng ký →</button><a class="link" href="https://lms-katlearn.netlify.app/login.html">Đã có tài khoản? Đăng nhập</a></div><p class="message" id="status"></p></form></section></main>
+</style><link rel="stylesheet" href="katlearn-blue-theme.css?v=20261001-1"><link rel="stylesheet" href="/katlearn-astra.css?v=20261024-teacher-system1"></head><body><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div><main class="teacher-signup-page"><a class="back" href="index.html">← Quay lại KatLearn Teacher</a><section class="hero"><p class="kicker">KATLEARN TEACHER • DÀNH CHO GIÁO VIÊN VIỆT NAM</p><h1>Đăng ký tài khoản giáo viên 🇻🇳</h1><p>Điền đúng thông tin công tác. Tài khoản mới sẽ ở trạng thái <b>chờ xác minh</b> trước khi được mở quyền quản trị.</p></section><section class="card"><form id="form"><div class="grid"><label>Họ và tên<input id="name" required placeholder="Nguyễn Thị Như"></label><label>Email<input id="email" type="email" required placeholder="teacher@example.com"></label><label>Mật khẩu<input id="password" type="password" minlength="6" required placeholder="Ít nhất 6 ký tự"></label><label>Tỉnh/Thành phố công tác<select id="province" required><option value="">Chọn tỉnh/thành</option></select></label><label>Xã/Phường<select id="ward" required disabled><option value="">Chọn xã/phường</option></select></label><label>Trường công tác<select id="school" disabled><option value="">Chọn trường</option></select></label><label>Lớp đang quản lý<select id="classCatalog" disabled><option value="">Chọn lớp</option></select></label></div><div class="notice">Không thấy trường/lớp? Bạn có thể đề xuất trường/lớp mới ngay tại đây. Đề xuất sẽ được admin kiểm tra và đưa vào danh mục dùng chung sau khi hồ sơ được xác minh.</div><p class="section">Danh mục công tác</p><div class="grid"><label>Tạo trường mới (nếu cần)<input id="newSchool" placeholder="Ví dụ: THCS Chu Văn An"></label><label>Tạo lớp mới (nếu cần)<input id="newClass" placeholder="Ví dụ: 8B2"></label></div><div class="actions"><button class="submit" type="submit" id="submit">Gửi đăng ký →</button><a class="link" href="https://lms-katlearn.netlify.app/login.html">Đã có tài khoản? Đăng nhập</a></div><p class="message" id="status"></p></form></section></main>
 <script>
-const C={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};const $=s=>document.querySelector(s);let auth,db,api,schools=[],nationalWardsByProvince=new Map(),nationalProvinceNames=[];
-async function init(){const [{initializeApp,getApps},{getAuth,createUserWithEmailAndPassword,deleteUser},{getFirestore,collection,getDocs,doc,getDoc,addDoc,setDoc,query,where}]=await Promise.all([import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')]);const app=getApps().length?getApps()[0]:initializeApp(C);auth=getAuth(app);db=getFirestore(app);api={collection,getDocs,doc,getDoc,addDoc,setDoc,query,where,createUserWithEmailAndPassword,deleteUser};await loadSchools()}
-const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const normPlace=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-async function loadNationalWards(){
-  try{
-    const response=await fetch('./data/national-catalog/official-ward-list.json',{cache:'force-cache'});
-    if(!response.ok)throw new Error('Không tải được danh sách xã/phường quốc gia.');
-    const catalog=await response.json();
-    if(!catalog||!Array.isArray(catalog.provinces)||catalog.provinceCount!==34||catalog.totalUnitCount!==3321)throw new Error('Danh sách xã/phường quốc gia không hợp lệ.');
-    nationalWardsByProvince.clear();nationalProvinceNames=[];
-    for(const province of catalog.provinces){
-      const name=String(province?.name||'').replace(/\s+/g,' ').trim();if(!name)continue;
-      nationalProvinceNames.push(name);
-      nationalWardsByProvince.set(normPlace(name),(province.wards||[]).map(w=>String(w?.name||'').replace(/\s+/g,' ').trim()).filter(Boolean));
-    }
-  }catch(e){console.warn('[KatLearn Teacher] National ward catalog unavailable:',e)}
+const C={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};
+const LMS_CATALOG='https://raw.githubusercontent.com/ptnnmusicgroup-png/KatLearn1/main/data/national-catalog/';
+const $=s=>document.querySelector(s);
+let auth,api,createdUser=null,submitting=false;
+const catalog={provinces:[],wardsByProvince:new Map(),schoolsByProvince:new Map(),schoolById:new Map()};
+const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const stripUnit=v=>String(v??'').replace(/^(Xã|Phường|Đặc khu)\s+/i,'').trim();
+const gradeTemplates={primary:['1','2','3','4','5'],middle:['6','7','8','9'],high:['10','11','12'],combined:['1','2','3','4','5','6','7','8','9','10','11','12']};
+const OFFICIAL_PROVINCE_CODES={
+ 'ha noi':'01','cao bang':'04','tuyen quang':'08','dien bien':'11','lai chau':'12','son la':'14','lao cai':'15','thai nguyen':'19',
+ 'lang son':'20','quang ninh':'22','bac ninh':'24','phu tho':'25','hai phong':'31','hung yen':'33','ninh binh':'37','thanh hoa':'38',
+ 'nghe an':'40','ha tinh':'42','quang tri':'44','hue':'46','da nang':'48','quang ngai':'51','gia lai':'52','khanh hoa':'56',
+ 'dak lak':'66','lam dong':'68','dong nai':'75','ho chi minh':'79','tay ninh':'80','dong thap':'82','vinh long':'86','an giang':'91',
+ 'can tho':'92','ca mau':'96'
+};
+function officialProvinceCode(name){return OFFICIAL_PROVINCE_CODES[norm(String(name||'').replace(/^(Tỉnh|Thành phố)\s*/i,''))]||''}
+function inferLevel(name){
+ const n=norm(name);
+ if(n.includes('thcs&thpt')||n.includes('thcs thpt')||n.includes('th&thcs')||n.includes('th-thcs')||n.includes('th thcs'))return'combined';
+ if(n.includes('thpt')||n.includes('trung hoc pho thong'))return'high';
+ if(n.includes('thcs')||n.includes('trung hoc co so'))return'middle';
+ if(n.includes('tieu hoc')||n.startsWith('th ')||n.startsWith('th-'))return'primary';
+ return'combined';
 }
-async function loadSchools(){const snap=await api.getDocs(api.collection(db,'schools'));schools=snap.docs.map(d=>({id:d.id,...d.data()}));await loadNationalWards();const ps=[...new Set([...schools.map(s=>s.province),...nationalProvinceNames].filter(Boolean))].sort((a,b)=>a.localeCompare(b,'vi'));$('#provinceList').innerHTML=ps.map(x=>'<option value="'+esc(x)+'">').join('');refreshWards()}
-function refreshWards(){const p=$('#province').value.trim();const national=nationalWardsByProvince.get(normPlace(p))||[],firestore=schools.filter(s=>s.province===p).map(s=>s.ward).filter(Boolean);const ws=[...new Set([...national,...firestore])].sort((a,b)=>a.localeCompare(b,'vi'));$('#wardList').innerHTML=ws.map(x=>'<option value="'+esc(x)+'">').join('');refreshSchools()}
-function refreshSchools(){const p=$('#province').value.trim(),w=$('#ward').value.trim();const rows=schools.filter(s=>s.province===p&&s.ward===w);$('#school').disabled=!rows.length;$('#school').innerHTML='<option value="">Chọn trường đã có</option>'+rows.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('');$('#classCatalog').disabled=true}
-async function refreshClasses(){const id=$('#school').value;if(!id)return;const snap=await api.getDocs(api.collection(db,'schools',id,'classes'));$('#classCatalog').disabled=false;$('#classCatalog').innerHTML='<option value="">Chọn lớp</option>'+snap.docs.map(d=>'<option value="'+d.id+'">'+esc(d.data().name)+'</option>').join('')}
-$('#province').oninput=refreshWards;$('#ward').oninput=refreshSchools;$('#school').onchange=refreshClasses;
-$('#form').onsubmit=async e=>{e.preventDefault();const st=$('#status'),btn=$('#submit');if(btn.disabled)return;btn.disabled=true;let createdUser=null;st.textContent='⏳ Đang gửi hồ sơ...';try{const name=$('#name').value.trim(),email=$('#email').value.trim().toLowerCase(),password=$('#password').value,province=$('#province').value.trim(),ward=$('#ward').value.trim();const schoolId=$('#school').value,classId=$('#classCatalog').value,newSchool=$('#newSchool').value.trim(),newClass=$('#newClass').value.trim(),school=schools.find(s=>s.id===schoolId);if(!name)throw new Error('Hãy nhập họ và tên.');if(!province||!ward)throw new Error('Hãy nhập đầy đủ tỉnh/thành phố và xã/phường.');if(!schoolId&&!newSchool)throw new Error('Hãy chọn trường hoặc tạo trường mới.');if(!classId&&!newClass)throw new Error('Hãy chọn lớp hoặc tạo lớp mới.');if(schoolId&&(!school||school.province!==province||school.ward!==ward))throw new Error('Trường đã chọn không khớp địa bàn.');const selectedClassName=classId?String($('#classCatalog').selectedOptions[0]?.textContent||'').trim():'';if(classId&&!selectedClassName)throw new Error('Không tìm thấy lớp đã chọn.');const cred=await api.createUserWithEmailAndPassword(auth,email,password),u=cred.user;createdUser=u;const now=Date.now();await api.setDoc(api.doc(db,'users',u.uid),{displayName:name,email,role:'pending_teacher_verification',province,ward,schoolId:schoolId||'',schoolName:school?.name||'',catalogClassId:classId||'',classIds:classId?[classId]:[],teacherVerification:{status:'pending',submittedAt:now,verifiedAt:null,verifiedBy:null,requestedSchoolName:newSchool,requestedClassName:newClass||selectedClassName},createdAt:now,updatedAt:now},{merge:false});st.textContent='✓ Đã gửi hồ sơ. Tài khoản đang chờ admin xác minh.';location.replace('teacher-pending.html')}catch(e){if(createdUser&&auth.currentUser?.uid===createdUser.uid){await api.deleteUser(createdUser).catch(()=>{})}st.textContent='❌ '+(e?.message||'Không thể gửi hồ sơ.');btn.disabled=false}};init().catch(e=>$('#status').textContent='❌ Không tải được danh mục: '+e.message);
+async function jsonFromCatalog(name){
+ const urls=[LMS_CATALOG+name,'./data/national-catalog/'+name];
+ let lastError;
+ for(const url of urls){
+  try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('HTTP '+response.status);return await response.json()}
+  catch(error){lastError=error}
+ }
+ throw lastError||new Error('Không tải được '+name);
+}
+async function sha256Hex(value){const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(value)));return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function makeSchoolId(provinceCode,sourceSchoolId,name){return 'sch_'+(await sha256Hex(String(provinceCode)+'|'+String(sourceSchoolId||'')+'|'+String(name||'').trim().toLowerCase())).slice(0,28)}
+async function init(){
+ const [{initializeApp,getApps},{getAuth,createUserWithEmailAndPassword,onAuthStateChanged}]=await Promise.all([
+  import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
+  import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js')
+ ]);
+ const app=getApps().length?getApps()[0]:initializeApp(C);
+ auth=getAuth(app);api={createUserWithEmailAndPassword,onAuthStateChanged};
+ await loadCatalog();
+}
+async function loadCatalog(){
+ const status=$('#status');status.textContent='⏳ Đang tải danh mục tỉnh, xã/phường và trường học từ LMS...';
+ const [tree,officialCatalog,overrides]=await Promise.all([
+  jsonFromCatalog('full-school-tree.json'),
+  jsonFromCatalog('official-ward-list.json'),
+  jsonFromCatalog('catalog-overrides.json').catch(()=>[])
+ ]);
+ if(!Array.isArray(tree)||tree.length!==34)throw new Error('Danh mục trường của LMS không hợp lệ.');
+ if(!officialCatalog||!Array.isArray(officialCatalog.provinces)||officialCatalog.provinceCount!==34)throw new Error('Danh mục xã/phường của LMS không hợp lệ.');
+ catalog.provinces=[];catalog.wardsByProvince.clear();catalog.schoolsByProvince.clear();catalog.schoolById.clear();
+ const officialByProvince=new Map();
+ for(const p of officialCatalog.provinces){
+  const id=String(p.code||'').trim(),name=String(p.name||'').trim();
+  if(!id||!name)continue;
+  catalog.provinces.push({id,name});
+  catalog.wardsByProvince.set(id,(p.wards||[]).map(w=>({id:String(w.id||'').trim(),name:String(w.name||'').replace(/\s+/g,' ').trim()})).filter(w=>w.id&&w.name));
+  officialByProvince.set(id,p);
+ }
+ for(const sourceProvince of tree){
+  const sourceProvinceId=String(sourceProvince.id||'').trim();
+  const provinceName=String(sourceProvince.name||'').trim();
+  const provinceId=officialProvinceCode(provinceName);
+  if(!sourceProvinceId||!provinceName||!provinceId)continue;
+  const officialProvince=officialByProvince.get(provinceId);
+  const wardByKey=new Map((officialProvince?.wards||[]).map(w=>[norm(stripUnit(w.name)),w]));
+  const rows=[];
+  for(const sourceWard of (sourceProvince.wards||[])){
+   const oldWardName=String(sourceWard.name||'').replace(/\s+/g,' ').trim();
+   const canonical=wardByKey.get(norm(stripUnit(oldWardName)));
+   for(const rawSchool of (sourceWard.schools||[])){
+    const name=String(rawSchool.name||'').trim();if(!name)continue;
+    rows.push({
+     id:'',provinceId,provinceName,sourceProvinceId,
+     wardId:String(canonical?.id||sourceWard.id||'').trim(),
+     wardName:String(canonical?.name||oldWardName).trim(),
+     sourceSchoolId:String(rawSchool.id||''),name,schoolLevel:inferLevel(name),
+     source:'lms_national_catalog'
+    });
+   }
+  }
+  catalog.schoolsByProvince.set(provinceId,rows);
+ }
+ for(const override of Array.isArray(overrides)?overrides:[]){
+  const provinceId=String(override.provinceCode||'').trim(),provinceName=String(override.provinceName||'').trim();
+  const wardId=String(override.wardId||'').trim(),wardName=String(override.wardName||'').trim();
+  const rows=catalog.schoolsByProvince.get(provinceId);
+  if(!rows||!provinceName||!wardId||!wardName)continue;
+  for(const item of (Array.isArray(override.schools)?override.schools:[])){
+   const sourceSchoolId=String(item.sourceSchoolId||'').trim(),name=String(item.name||'').trim();if(!sourceSchoolId||!name)continue;
+   const next={id:'',provinceId,provinceName,sourceProvinceId:'',wardId,wardName,sourceSchoolId,name,schoolLevel:inferLevel(name),source:'lms_catalog_override'};
+   const index=rows.findIndex(x=>x.sourceSchoolId===sourceSchoolId);
+   if(index>=0)rows[index]=next;else rows.push(next);
+  }
+ }
+ const jobs=[];
+ for(const rows of catalog.schoolsByProvince.values())jobs.push(...rows);
+ await Promise.all(jobs.map(async school=>{
+  school.id=await makeSchoolId(school.provinceId,school.sourceSchoolId,school.name);
+  catalog.schoolById.set(school.id,school);
+ }));
+ catalog.provinces.sort((a,b)=>a.name.localeCompare(b.name,'vi'));
+ $('#province').innerHTML='<option value="">Chọn tỉnh/thành</option>'+catalog.provinces.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>').join('');
+ $('#ward').innerHTML='<option value="">Chọn xã/phường</option>';$('#school').innerHTML='<option value="">Chọn trường</option>';$('#classCatalog').innerHTML='<option value="">Chọn lớp</option>';
+ status.textContent='';
+}
+function refreshWards(){
+ const provinceId=$('#province').value;
+ $('#ward').disabled=true;$('#school').disabled=true;$('#classCatalog').disabled=true;
+ $('#ward').innerHTML='<option value="">'+(provinceId?'Đang tải xã/phường...':'Chọn xã/phường')+'</option>';
+ $('#school').innerHTML='<option value="">Chọn trường</option>';$('#classCatalog').innerHTML='<option value="">Chọn lớp</option>';
+ if(!provinceId)return;
+ const base=catalog.wardsByProvince.get(provinceId)||[];
+ const schools=catalog.schoolsByProvince.get(provinceId)||[];
+ const wards=[...base.map(w=>[w.id,w.name]),...schools.filter(s=>s.wardId&&s.wardName).map(s=>[s.wardId,s.wardName])];
+ const unique=[...new Map(wards.map(([id,name])=>[id,name])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'vi'));
+ $('#ward').disabled=!unique.length;
+ $('#ward').innerHTML='<option value="">Chọn xã/phường</option>'+unique.map(([id,name])=>'<option value="'+esc(id)+'">'+esc(name)+'</option>').join('');
+}
+function refreshSchools(){
+ const provinceId=$('#province').value,wardId=$('#ward').value;
+ $('#school').disabled=true;$('#classCatalog').disabled=true;$('#classCatalog').innerHTML='<option value="">Chọn lớp</option>';
+ if(!provinceId||!wardId){$('#school').innerHTML='<option value="">Chọn trường</option>';return}
+ const rows=(catalog.schoolsByProvince.get(provinceId)||[]).filter(s=>s.wardId===wardId).sort((a,b)=>a.name.localeCompare(b.name,'vi'));
+ $('#school').disabled=!rows.length;
+ $('#school').innerHTML='<option value="">Chọn trường</option>'+rows.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('');
+ if(!rows.length){$('#school').insertAdjacentHTML('beforeend','<option value="">Chưa có trường phù hợp</option>')}
+}
+function refreshClasses(){
+ const schoolId=$('#school').value,school=catalog.schoolById.get(schoolId);
+ $('#classCatalog').disabled=true;$('#classCatalog').innerHTML='<option value="">'+(schoolId?'Đang tải lớp...':'Chọn lớp')+'</option>';
+ if(!school)return;
+ const grades=gradeTemplates[school.schoolLevel]||gradeTemplates.combined;
+ $('#classCatalog').disabled=false;
+ $('#classCatalog').innerHTML='<option value="">Chọn lớp</option>'+grades.map(grade=>'<option value="'+esc(schoolId+'-'+grade)+'">Lớp '+esc(grade)+'</option>').join('');
+}
+$('#province').addEventListener('change',refreshWards);
+$('#ward').addEventListener('change',refreshSchools);
+$('#school').addEventListener('change',refreshClasses);
+$('#newSchool').addEventListener('input',()=>{
+ if($('#newSchool').value.trim()){
+  $('#school').value='';$('#school').disabled=true;
+  $('#classCatalog').value='';$('#classCatalog').disabled=true;
+ }else{refreshSchools()}
+});
+async function submitTeacherProfile(user){
+ const name=$('#name').value.trim(),email=$('#email').value.trim().toLowerCase();
+ const provinceId=$('#province').value,wardId=$('#ward').value;
+ const province=catalog.provinces.find(p=>p.id===provinceId);
+ const ward=(catalog.wardsByProvince.get(provinceId)||[]).find(w=>w.id===wardId)||
+  (catalog.schoolsByProvince.get(provinceId)||[]).filter(s=>s.wardId===wardId).map(s=>({id:s.wardId,name:s.wardName}))[0];
+ const newSchool=$('#newSchool').value.trim(),newClass=$('#newClass').value.trim();
+ const selectedSchool=newSchool?'':$('#school').value;
+ const school=selectedSchool?catalog.schoolById.get(selectedSchool):null;
+ const classId=newClass||!school?'':$('#classCatalog').value;
+ const selectedClassName=classId?String($('#classCatalog').selectedOptions[0]?.textContent||'').trim():'';
+ if(!name)throw new Error('Hãy nhập họ và tên.');
+ if(!email)throw new Error('Hãy nhập email.');
+ if(!provinceId||!province)throw new Error('Hãy chọn tỉnh/thành phố từ danh mục LMS.');
+ if(!wardId||!ward)throw new Error('Hãy chọn xã/phường từ danh mục LMS.');
+ if(!school&&!newSchool)throw new Error('Hãy chọn trường hoặc nhập tên trường mới.');
+ if(newSchool&&newSchool.length<3)throw new Error('Tên trường mới cần ít nhất 3 ký tự.');
+ if((newSchool||newClass)&&!newClass)throw new Error('Hãy nhập tên lớp đang quản lý.');
+ if(!newSchool&&!newClass&&(!school||!classId||!selectedClassName))throw new Error('Hãy chọn trường và lớp từ danh mục LMS.');
+ const payload={
+  displayName:name,email,
+  province:school?school.provinceName:province.name,
+  ward:school?school.wardName:ward.name,
+  provinceId,wardId,
+  schoolId:school?school.id:'',
+  schoolName:school?school.name:newSchool,
+  catalogSchool:school?school:null,
+  classId:school&&!newClass?classId:'',
+  selectedClassName:newClass?'':selectedClassName,
+  newSchool:school?'':newSchool,
+  newClass
+ };
+ const token=await user.getIdToken(true);
+ const response=await fetch('/api/teacher-register',{
+  method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','Authorization':'Bearer '+token},
+  body:JSON.stringify(payload),credentials:'same-origin'
+ });
+ const result=await response.json().catch(()=>({}));
+ if(!response.ok||result.ok!==true)throw Object.assign(new Error(result.error||'Không thể lưu hồ sơ giáo viên.'),{code:result.code||'teacher_registration_failed',status:response.status});
+ return result;
+}
+$('#form').onsubmit=async e=>{
+ e.preventDefault();const status=$('#status'),button=$('#submit');
+ if(submitting)return;submitting=true;button.disabled=true;status.textContent='⏳ Đang gửi hồ sơ an toàn...';
+ try{
+  const email=$('#email').value.trim().toLowerCase();
+  if(createdUser&&auth.currentUser?.uid===createdUser.uid&&String(createdUser.email||'').toLowerCase()===email){
+   await submitTeacherProfile(createdUser);
+  }else{
+   const credential=await api.createUserWithEmailAndPassword(auth,email,$('#password').value);
+   createdUser=credential.user;
+   await submitTeacherProfile(createdUser);
+  }
+  status.textContent='✓ Đã gửi hồ sơ. Tài khoản đang chờ Admin xác minh.';
+  $('#submit').textContent='Đã gửi hồ sơ ✓';
+  location.replace('teacher-pending.html');
+ }catch(error){
+  const messages={
+   'auth/email-already-in-use':'Email này đã được đăng ký. Hãy đăng nhập hoặc dùng email khác.',
+   'auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.',
+   'auth/invalid-email':'Email không hợp lệ.',
+   'auth/network-request-failed':'Mất kết nối mạng. Kiểm tra Internet rồi thử lại.',
+   'auth/too-many-requests':'Có quá nhiều yêu cầu. Hãy thử lại sau.'
+  };
+  status.textContent='❌ '+(messages[error?.code]||error?.message||'Không thể gửi hồ sơ.');
+  if(createdUser&&auth.currentUser?.uid===createdUser.uid){
+   button.textContent='Thử lưu hồ sơ lại →';
+   const note=document.createElement('small');note.className='retry-note';note.textContent='Tài khoản đã tạo; bấm nút trên để gửi lại hồ sơ, không cần tạo tài khoản lần nữa.';
+   status.appendChild(document.createElement('br'));status.appendChild(note);
+  }
+ }finally{submitting=false;button.disabled=false}
+};
+init().catch(error=>{$('#status').textContent='❌ Không tải được danh mục LMS: '+(error?.message||'Lỗi không xác định')});
+
 </script></body></html>
