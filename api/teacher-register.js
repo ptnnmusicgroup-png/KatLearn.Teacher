@@ -43,11 +43,11 @@ function validateSchool(input, schoolId, province, ward) {
   if (!/^sch_[a-f0-9]{28}$/.test(schoolId) || !input || typeof input !== 'object') {
     throw fail('Danh mục trường không hợp lệ. Hãy tải lại trang và chọn trường lần nữa.', 400, 'invalid_catalog_school');
   }
-  const name = clean(input.name);
+  const name = String(input.name ?? '').trim().slice(0, 180);
   const provinceId = clean(input.provinceId, 8);
   const wardId = clean(input.wardId, 32);
-  const sourceSchoolId = clean(input.sourceSchoolId, 80);
-  const sourceProvinceId = clean(input.sourceProvinceId, 80);
+  const sourceSchoolId = String(input.sourceSchoolId ?? '').slice(0, 80);
+  const sourceProvinceId = String(input.sourceProvinceId ?? '').slice(0, 80);
   const schoolLevel = normalizeLevel(input.schoolLevel);
   const provinceName = clean(input.provinceName);
   const wardName = clean(input.wardName);
