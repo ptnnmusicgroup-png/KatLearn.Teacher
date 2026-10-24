@@ -333,10 +333,11 @@ async function submitTeacherProfile(user){
   const contentType=String(response.headers?.get?.('content-type')||'').toLowerCase();
   const responseBody=await response.text();
   result={};try{result=responseBody?JSON.parse(responseBody):{}}catch(_){}
-  const hostingAccessBlocked=/app\.netlify\.com\/edge-access/i.test(responseBody)||(response.status===401&&contentType.includes('text/html'));
+  const hostingAccessBlocked=/app\.netlify\.com\/edge-access/i.test(responseBody)||([401,403].includes(response.status)&&contentType.includes('text/html'));
   if(!response.ok||result.ok!==true){
    const serverError=Object.assign(new Error(hostingAccessBlocked?'Đường dẫn đăng ký đang bị chặn bởi lớp truy cập hosting.':(result.error||'Không thể lưu hồ sơ giáo viên.')),{code:hostingAccessBlocked?'teacher_registration_access_blocked':(result.code||'teacher_registration_failed'),status:response.status,details:hostingAccessBlocked?'Hosting returned an HTML access page.':result.details});
    if(!permissionFailure(serverError))throw serverError;
+   $('#status').textContent='Máy chủ đăng ký đang bị giới hạn quyền truy cập. Đang chuyển sang kênh Firebase an toàn…';
    console.warn('[KatLearn Teacher] Admin API is permission/access blocked; trying the restricted pending-teacher Firestore path.',serverError.code);
    try{return await submitTeacherProfileWithClient(user,payload)}
    catch(clientError){
