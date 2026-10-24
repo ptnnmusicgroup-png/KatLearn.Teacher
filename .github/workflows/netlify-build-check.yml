@@ -18,14 +18,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in scripts/build-netlify.mjs netlify/adapter.mjs netlify/functions/*.mjs api/*.js; do
+          for file in scripts/build-netlify.mjs scripts/check-inline-scripts.mjs netlify/adapter.mjs netlify/functions/*.mjs api/*.js; do
             node --check "$file"
           done
+          node scripts/check-inline-scripts.mjs
       - name: Build Netlify static output
         env:
           KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
-          KATLEARN_TEACHER_SITE_URL: https://teacher-katlearn1.netlify.app
-          KATLEARN_ALLOWED_ORIGINS: https://lms-katlearn.netlify.app,https://teacher-katlearn1.netlify.app
+          KATLEARN_TEACHER_SITE_URL: https://quanly-giaovien-katlearn.netlify.app
+          KATLEARN_ALLOWED_ORIGINS: https://lms-katlearn.netlify.app,https://quanly-giaovien-katlearn.netlify.app
         run: node scripts/build-netlify.mjs
       - name: Verify static publish excludes server files and settings
         shell: bash
@@ -33,6 +34,10 @@ jobs:
           set -euo pipefail
           test -s dist/index.html
           test -s dist/deployment-config.js
+          test -s dist/teacher-signup.html
+          test -s dist/katlearn-astra.css
+          grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
+          grep -q '20261024-teacher-system1' dist/teacher-signup.html
           test ! -e dist/api
           test ! -e dist/netlify
           test ! -e dist/scripts
@@ -47,7 +52,7 @@ jobs:
           # leave complete retired-provider names embedded in the repository.
           retired_hosting_pattern="$(printf '%s%s|%s%s|%s[.]%s|%s[.]%s|%s%s' \
             'ver' 'cel' 'cloud' 'flare' 'pages' 'dev' 'workers' 'dev' 'wran' 'gler')"
-          legacy_teacher_host="$(printf '%s%s' 'https://teacher-katlearn' '.netlify.app')"
+          legacy_teacher_host="$(printf '%s%s%s' 'https://teacher-katlearn' '1' '.netlify.app')"
           scan_args=(--exclude-dir=.git --exclude-dir=dist --exclude-dir=node_modules --exclude-dir=.netlify)
           if grep -RInEi "${scan_args[@]}" -E "$retired_hosting_pattern" .; then
             echo "::error::Retired-hosting reference found in source."

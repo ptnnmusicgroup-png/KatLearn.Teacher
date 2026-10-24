@@ -16,7 +16,7 @@ jobs:
           set -euo pipefail
           body="$(mktemp)"
           headers="$(mktemp)"
-          code="$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' --http1.1 --connect-timeout 5 --max-time 15 'https://teacher-katlearn1.netlify.app/api/admin-hub?section=overview' || true)"
+          code="$(curl -sS -D "$headers" -o "$body" -w '%{http_code}' --http1.1 --connect-timeout 5 --max-time 15 'https://quanly-giaovien-katlearn.netlify.app/api/admin-hub?section=overview' || true)"
           echo "HTTP $code"
           echo "--- headers ---"
           cat "$headers" || true

@@ -70,7 +70,7 @@ const lmsUrl = cleanUrl(
 );
 const teacherUrl = cleanUrl(
   process.env.KATLEARN_TEACHER_SITE_URL || productionUrl,
-  "https://teacher-katlearn1.netlify.app"
+  "https://quanly-giaovien-katlearn.netlify.app"
 );
 fs.writeFileSync(
   path.join(output, "deployment-config.js"),

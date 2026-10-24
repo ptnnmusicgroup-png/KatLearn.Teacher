@@ -907,3 +907,192 @@ html body:not([data-kat-theme]) .hero h3,html body[data-kat-theme="default"] .he
 html body[data-kat-theme="default"] .hero h2,html body[data-kat-theme="default"] .hero h3{color:#f3f0ff!important}
 html body:not([data-kat-theme]) .hero p,html body[data-kat-theme="default"] .hero p{color:#c1badb!important}
 html body:not([data-kat-theme]) .hero small,html body[data-kat-theme="default"] .hero small{color:#aaa4c4!important}
+
+
+/* KatLearn Teacher system refresh — consistent glass surfaces and lightweight motion. */
+:root{
+  --kt-glass-border:rgba(190,178,255,.17);
+  --kt-glass-edge:rgba(255,255,255,.12);
+  --kt-glass-fill:rgba(19,16,36,.78);
+  --kt-glass-shadow:0 18px 54px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.075);
+  --kt-motion:cubic-bezier(.2,.75,.25,1);
+}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+html body:not([data-kat-theme]),html body[data-kat-theme="default"]{
+  background-color:#080711!important;
+  background-image:
+    radial-gradient(ellipse at 12% 4%,rgba(121,101,232,.13),transparent 32rem),
+    radial-gradient(ellipse at 92% 12%,rgba(69,190,231,.085),transparent 28rem),
+    linear-gradient(160deg,#080711 0%,#0b0a17 55%,#0b101b 100%)!important;
+}
+html body:not([data-kat-theme]) .sidebar,html body[data-kat-theme="default"] .sidebar{
+  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018) 55%),rgba(15,13,29,.86)!important;
+  border-color:var(--kt-glass-border)!important;
+  box-shadow:14px 0 48px rgba(0,0,0,.23),inset -1px 0 rgba(255,255,255,.05)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  backdrop-filter:blur(20px) saturate(150%);
+}
+html body:not([data-kat-theme]) .topbar,html body[data-kat-theme="default"] .topbar{
+  background:linear-gradient(140deg,rgba(255,255,255,.085),rgba(255,255,255,.018) 60%),rgba(17,15,32,.82)!important;
+  border-color:var(--kt-glass-border)!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.19),inset 0 1px rgba(255,255,255,.08)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(155%);
+  backdrop-filter:blur(20px) saturate(155%);
+}
+html body:not([data-kat-theme]) .nav-item,html body[data-kat-theme="default"] .nav-item{
+  border-radius:15px!important;
+  transition:background-color .2s var(--kt-motion),color .2s var(--kt-motion),border-color .2s,transform .2s var(--kt-motion),box-shadow .2s!important;
+}
+html body:not([data-kat-theme]) .nav-item:hover,html body[data-kat-theme="default"] .nav-item:hover{
+  transform:translateX(2px);
+  background:rgba(255,255,255,.045)!important;
+}
+html body:not([data-kat-theme]) .nav-item.active,html body[data-kat-theme="default"] .nav-item.active{
+  background:linear-gradient(115deg,rgba(121,101,232,.24),rgba(85,178,222,.08))!important;
+  border-color:rgba(169,156,255,.26)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.09),0 7px 20px rgba(0,0,0,.13)!important;
+}
+html body:not([data-kat-theme]) .card,
+html body:not([data-kat-theme]) .teacher-card,
+html body:not([data-kat-theme]) .teacher-card-panel,
+html body:not([data-kat-theme]) .metric,
+html body:not([data-kat-theme]) .daily-goal,
+html body:not([data-kat-theme]) .mini-ranking,
+html body:not([data-kat-theme]) .student-row,
+html body:not([data-kat-theme]) .class-stat,
+html body:not([data-kat-theme]) .class-item,
+html body:not([data-kat-theme]) .account-panel,
+html body:not([data-kat-theme]) .auth-screen .card,
+html body:not([data-kat-theme]) .teacher-signup-page .card,
+html body[data-kat-theme="default"] .card,
+html body[data-kat-theme="default"] .teacher-card,
+html body[data-kat-theme="default"] .teacher-card-panel,
+html body[data-kat-theme="default"] .metric,
+html body[data-kat-theme="default"] .daily-goal,
+html body[data-kat-theme="default"] .mini-ranking,
+html body[data-kat-theme="default"] .student-row,
+html body[data-kat-theme="default"] .class-stat,
+html body[data-kat-theme="default"] .class-item,
+html body[data-kat-theme="default"] .account-panel,
+html body[data-kat-theme="default"] .auth-screen .card,
+html body[data-kat-theme="default"] .teacher-signup-page .card{
+  border-color:var(--kt-glass-border)!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.012) 52%),var(--kt-glass-fill)!important;
+  box-shadow:var(--kt-glass-shadow)!important;
+}
+html body:not([data-kat-theme]) .teacher-signup-page .card,
+html body[data-kat-theme="default"] .teacher-signup-page .card,
+html body:not([data-kat-theme]) .auth-screen .card,
+html body[data-kat-theme="default"] .auth-screen .card{
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+  backdrop-filter:blur(18px) saturate(145%);
+}
+html body:not([data-kat-theme]) input,
+html body:not([data-kat-theme]) select,
+html body:not([data-kat-theme]) textarea,
+html body[data-kat-theme="default"] input,
+html body[data-kat-theme="default"] select,
+html body[data-kat-theme="default"] textarea{
+  color:#f3f0ff!important;
+  border-color:rgba(190,178,255,.2)!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012)),rgba(11,9,24,.76)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.045)!important;
+  transition:border-color .18s var(--kt-motion),box-shadow .18s var(--kt-motion),background-color .18s!important;
+}
+html body:not([data-kat-theme]) input:focus,
+html body:not([data-kat-theme]) select:focus,
+html body:not([data-kat-theme]) textarea:focus,
+html body[data-kat-theme="default"] input:focus,
+html body[data-kat-theme="default"] select:focus,
+html body[data-kat-theme="default"] textarea:focus{
+  border-color:rgba(169,156,255,.72)!important;
+  box-shadow:0 0 0 4px rgba(121,101,232,.15),inset 0 1px rgba(255,255,255,.06)!important;
+  outline:none!important;
+}
+html body:not([data-kat-theme]) button,
+html body:not([data-kat-theme]) .teacher-btn,
+html body:not([data-kat-theme]) .primary-btn,
+html body:not([data-kat-theme]) .submit,
+html body[data-kat-theme="default"] button,
+html body[data-kat-theme="default"] .teacher-btn,
+html body[data-kat-theme="default"] .primary-btn,
+html body[data-kat-theme="default"] .submit{
+  transition:transform .19s var(--kt-motion),box-shadow .2s var(--kt-motion),border-color .18s,background-color .18s!important;
+}
+html body:not([data-kat-theme]) button:hover:not(:disabled),
+html body:not([data-kat-theme]) .teacher-btn:hover:not(:disabled),
+html body:not([data-kat-theme]) .primary-btn:hover:not(:disabled),
+html body:not([data-kat-theme]) .submit:hover:not(:disabled),
+html body[data-kat-theme="default"] button:hover:not(:disabled),
+html body[data-kat-theme="default"] .teacher-btn:hover:not(:disabled),
+html body[data-kat-theme="default"] .primary-btn:hover:not(:disabled),
+html body[data-kat-theme="default"] .submit:hover:not(:disabled){
+  transform:translateY(-1px);
+}
+html body:not([data-kat-theme]) button:active:not(:disabled),
+html body:not([data-kat-theme]) .teacher-btn:active:not(:disabled),
+html body:not([data-kat-theme]) .primary-btn:active:not(:disabled),
+html body[data-kat-theme="default"] button:active:not(:disabled),
+html body[data-kat-theme="default"] .teacher-btn:active:not(:disabled),
+html body[data-kat-theme="default"] .primary-btn:active:not(:disabled){
+  transform:scale(.985);
+}
+html body:not([data-kat-theme]) .page.active-page,
+html body:not([data-kat-theme]) .page.active,
+html body[data-kat-theme="default"] .page.active-page,
+html body[data-kat-theme="default"] .page.active{
+  animation:kt-page-enter .22s var(--kt-motion) both;
+}
+@keyframes kt-page-enter{from{opacity:0;translate:0 5px}to{opacity:1;translate:0 0}}
+html body:not([data-kat-theme]) .modal.show,
+html body[data-kat-theme="default"] .modal.show,
+html body:not([data-kat-theme]) .modal-overlay.show,
+html body[data-kat-theme="default"] .modal-overlay.show{
+  animation:kt-overlay-in .18s ease-out both;
+}
+@keyframes kt-overlay-in{from{opacity:0}to{opacity:1}}
+html body:not([data-kat-theme]) .modal.show .modal-card,
+html body:not([data-kat-theme]) .modal.show .modal-box,
+html body[data-kat-theme="default"] .modal.show .modal-card,
+html body[data-kat-theme="default"] .modal.show .modal-box{
+  animation:kt-modal-in .24s var(--kt-motion) both;
+}
+@keyframes kt-modal-in{from{opacity:0;translate:0 7px;scale:.99}to{opacity:1;translate:0 0;scale:1}}
+html body:not([data-kat-theme]) .table-wrap,
+html body:not([data-kat-theme]) .table-responsive,
+html body[data-kat-theme="default"] .table-wrap,
+html body[data-kat-theme="default"] .table-responsive{
+  max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;
+  scrollbar-width:thin;scrollbar-color:rgba(169,156,255,.32) transparent;
+}
+html body:not([data-kat-theme]) table,
+html body[data-kat-theme="default"] table{border-collapse:separate;border-spacing:0}
+html body:not([data-kat-theme]) th,
+html body[data-kat-theme="default"] th{white-space:nowrap}
+html body:not([data-kat-theme]) :focus-visible,
+html body[data-kat-theme="default"] :focus-visible{
+  outline:2px solid rgba(169,156,255,.82)!important;outline-offset:3px;
+}
+html body:not([data-kat-theme]) .message,
+html body[data-kat-theme="default"] .message{overflow-wrap:anywhere}
+@media(max-width:760px){
+  html body:not([data-kat-theme]) .teacher-signup-page .card,
+  html body[data-kat-theme="default"] .teacher-signup-page .card,
+  html body:not([data-kat-theme]) .auth-screen .card,
+  html body[data-kat-theme="default"] .auth-screen .card{border-radius:22px!important}
+  html body:not([data-kat-theme]) .table-wrap,
+  html body[data-kat-theme="default"] .table-wrap{border-radius:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  html body:not([data-kat-theme]) *,
+  html body:not([data-kat-theme]) *::before,
+  html body:not([data-kat-theme]) *::after,
+  html body[data-kat-theme="default"] *,
+  html body[data-kat-theme="default"] *::before,
+  html body[data-kat-theme="default"] *::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important;
+  }
+}
