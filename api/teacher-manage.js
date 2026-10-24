@@ -3,6 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { createHash } from 'node:crypto';
 
 const allowedOrigins=new Set([
+ 'https://quanly-giaovien-katlearn.netlify.app',
  'https://teacher-katlearn1.netlify.app',
  ...String(process.env.KATLEARN_ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
  ...(process.env.KATLEARN_LMS_SITE_URL?[String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/,'')]:[]),
