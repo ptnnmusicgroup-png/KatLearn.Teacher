@@ -3,7 +3,7 @@ import { admin } from './_firebase-admin.js';
 
 const ORIGINS = new Set([
   'https://quanly-giaovien-katlearn.netlify.app',
-  'https://teacher-katlearn1.netlify.app',
+  'https://quanly-giaovien-katlearn.netlify.app',
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean),
   ...[process.env.KATLEARN_TEACHER_SITE_URL, process.env.URL, process.env.DEPLOY_PRIME_URL]
     .map(x => String(x || '').trim().replace(/\/+$/, ''))
