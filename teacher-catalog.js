@@ -41,7 +41,7 @@
       }
       try{
         const profileSnap=await api.getDoc(api.doc(db,'users',user.uid));
-        const profile=profileSnap.exists()?profileSnap.data()||:{};
+        const profile=profileSnap.exists()?profileSnap.data()||{};
         const schoolId=String(profile.schoolId||'').trim();
         const assignedSchool=schools.find(item=>item.id===schoolId);
         if(!schoolId||!assignedSchool){
