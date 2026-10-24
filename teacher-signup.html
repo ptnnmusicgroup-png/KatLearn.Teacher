@@ -134,12 +134,12 @@ async function jsonFromCatalog(name){
 async function sha256Hex(value){const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(value)));return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function makeSchoolId(provinceCode,sourceSchoolId,name){return 'sch_'+(await sha256Hex(String(provinceCode)+'|'+String(sourceSchoolId||'')+'|'+String(name||'').trim().toLowerCase())).slice(0,28)}
 async function init(){
- const [{initializeApp,getApps},{getAuth,createUserWithEmailAndPassword,onAuthStateChanged}]=await Promise.all([
+ const [{initializeApp,getApps},{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged}]=await Promise.all([
   import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
   import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js')
  ]);
  const app=getApps().length?getApps()[0]:initializeApp(C);
- auth=getAuth(app);api={createUserWithEmailAndPassword,onAuthStateChanged};
+ auth=getAuth(app);api={createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged};
  await loadCatalog();
 }
 async function loadCatalog(){
@@ -295,7 +295,14 @@ $('#form').onsubmit=async e=>{
   if(createdUser&&auth.currentUser?.uid===createdUser.uid&&String(createdUser.email||'').toLowerCase()===email){
    await submitTeacherProfile(createdUser);
   }else{
-   const credential=await api.createUserWithEmailAndPassword(auth,email,$('#password').value);
+   let credential;
+   try{
+    credential=await api.createUserWithEmailAndPassword(auth,email,$('#password').value);
+   }catch(authError){
+    if(authError?.code!=='auth/email-already-in-use')throw authError;
+    // Recover a previous attempt that created Auth but failed before the pending profile write.
+    credential=await api.signInWithEmailAndPassword(auth,email,$('#password').value);
+   }
    createdUser=credential.user;
    await submitTeacherProfile(createdUser);
   }
@@ -305,6 +312,7 @@ $('#form').onsubmit=async e=>{
  }catch(error){
   const messages={
    'auth/email-already-in-use':'Email này đã được đăng ký. Hãy đăng nhập hoặc dùng email khác.',
+   'auth/invalid-credential':'Email hoặc mật khẩu không đúng. Hãy kiểm tra thông tin rồi thử lại.',
    'auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.',
    'auth/invalid-email':'Email không hợp lệ.',
    'auth/network-request-failed':'Mất kết nối mạng. Kiểm tra Internet rồi thử lại.',
