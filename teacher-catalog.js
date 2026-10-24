@@ -30,6 +30,48 @@
   }
   async function fillCatalog(){
     const p=$('#catalogProvince');if(!p)return;
+    // Non-admin teachers can manage classes only inside their verified school.
+    // Restricting this picker before submission prevents predictable Firestore permission errors.
+    if(typeof isAdminUser!=='function'||!isAdminUser()){
+      const wardSelect=$('#catalogWard'),schoolSelect=$('#catalogSchool'),classSelect=$('#catalogClass');
+      if(!user?.uid){
+        p.innerHTML='<option value="">Đăng nhập để tải trường công tác</option>';
+        p.disabled=true;wardSelect.disabled=true;schoolSelect.disabled=true;classSelect.disabled=true;
+        return;
+      }
+      try{
+        const profileSnap=await api.getDoc(api.doc(db,'users',user.uid));
+        const profile=profileSnap.exists()?profileSnap.data()||:{};
+        const schoolId=String(profile.schoolId||'').trim();
+        const assignedSchool=schools.find(item=>item.id===schoolId);
+        if(!schoolId||!assignedSchool){
+          p.innerHTML='<option value="">Chưa liên kết trường công tác</option>';
+          p.disabled=true;wardSelect.disabled=true;schoolSelect.disabled=true;classSelect.disabled=true;
+          toast('Hồ sơ giáo viên chưa được liên kết trường. Hãy liên hệ Admin để cập nhật hồ sơ.');
+          return;
+        }
+        const province=String(profile.province||assignedSchool.province||'').trim();
+        const ward=String(profile.ward||assignedSchool.ward||'').trim();
+        p.innerHTML='<option value="'+esc(province)+'">'+esc(province)+'</option>';p.value=province;p.disabled=true;
+        wardSelect.innerHTML='<option value="'+esc(ward)+'">'+esc(ward)+'</option>';wardSelect.value=ward;wardSelect.disabled=true;
+        schoolSelect.innerHTML='<option value="'+esc(assignedSchool.id)+'">'+esc(assignedSchool.name)+'</option>';schoolSelect.value=assignedSchool.id;schoolSelect.disabled=true;
+        classSelect.disabled=true;classSelect.innerHTML='<option value="">Đang tải lớp danh mục...</option>';
+        const classSnap=await api.getDocs(api.collection(db,'schools',assignedSchool.id,'classes'));
+        classSelect.innerHTML='<option value="">Chọn lớp danh mục</option>'+classSnap.docs
+          .map(doc=>({id:doc.id,...doc.data()}))
+          .sort((a,b)=>String(a.grade||a.name||'').localeCompare(String(b.grade||b.name||''),'vi',{numeric:true}))
+          .map(item=>'<option value="'+esc(item.id)+'">'+esc(item.name||('Lớp '+item.grade))+'</option>').join('');
+        classSelect.disabled=!classSnap.size;
+        if(!classSnap.size)toast('Trường của bạn chưa có lớp danh mục. Hãy liên hệ Admin để đồng bộ catalog LMS.');
+        return;
+      }catch(error){
+        p.innerHTML='<option value="">Không tải được trường công tác</option>';
+        p.disabled=true;wardSelect.disabled=true;schoolSelect.disabled=true;classSelect.disabled=true;
+        toast('Không tải được hồ sơ trường: '+(error?.message||'Lỗi không xác định'));
+        return;
+      }
+    }
+    p.disabled=false;
     let officialProvinces=[];
     try{
       const response=await fetch('./data/national-catalog/official-ward-list.json',{cache:'force-cache'});
@@ -232,7 +274,10 @@
       toast('✓ Đã cấp quyền giáo viên');renderPending();
     }catch(e){toast('Không thể xác minh: '+e.message)}
   }
-  window.addEventListener('katlearn-teacher-auth-change',()=>{void refreshAdminUi()});
+  window.addEventListener('katlearn-teacher-auth-change',()=>{
+    void refreshAdminUi();
+    if(api&&db)void loadSchools().then(fillCatalog).catch(error=>toast('Không tải được danh mục trường/lớp: '+(error?.message||'Lỗi không xác định')));
+  });
   boot().catch(e=>console.warn('[KatLearn catalog]',e));
 })();
 
