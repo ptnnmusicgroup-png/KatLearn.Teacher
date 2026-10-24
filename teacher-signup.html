@@ -251,6 +251,7 @@ $('#newSchool').addEventListener('input',()=>{
 function permissionFailure(error){
  const text=String([error?.message,error?.code,error?.details].filter(Boolean).join(" "));
  return /permission[_\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
+  ||error?.code==="teacher_registration_access_blocked"
   ||(Number(error?.status)===503&&/firebase admin credentials|service account|firebase_credentials/i.test(text));
 }
 async function submitTeacherProfileWithClient(user,payload){
@@ -329,11 +330,14 @@ async function submitTeacherProfile(user){
    method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','Authorization':'Bearer '+token},
    body:JSON.stringify(payload),credentials:'same-origin'
   });
-  result=await response.json().catch(()=>({}));
+  const contentType=String(response.headers?.get?.('content-type')||'').toLowerCase();
+  const responseBody=await response.text();
+  result={};try{result=responseBody?JSON.parse(responseBody):{}}catch(_){}
+  const hostingAccessBlocked=/app\.netlify\.com\/edge-access/i.test(responseBody)||(response.status===401&&contentType.includes('text/html'));
   if(!response.ok||result.ok!==true){
-   const serverError=Object.assign(new Error(result.error||'Không thể lưu hồ sơ giáo viên.'),{code:result.code||'teacher_registration_failed',status:response.status,details:result.details});
+   const serverError=Object.assign(new Error(hostingAccessBlocked?'Đường dẫn đăng ký đang bị chặn bởi lớp truy cập hosting.':(result.error||'Không thể lưu hồ sơ giáo viên.')),{code:hostingAccessBlocked?'teacher_registration_access_blocked':(result.code||'teacher_registration_failed'),status:response.status,details:hostingAccessBlocked?'Hosting returned an HTML access page.':result.details});
    if(!permissionFailure(serverError))throw serverError;
-   console.warn('[KatLearn Teacher] Admin API denied profile write; trying the restricted pending-teacher Firestore path.',serverError.code);
+   console.warn('[KatLearn Teacher] Admin API is permission/access blocked; trying the restricted pending-teacher Firestore path.',serverError.code);
    try{return await submitTeacherProfileWithClient(user,payload)}
    catch(clientError){
     throw Object.assign(new Error('Máy chủ đăng ký bị từ chối quyền ghi hồ sơ và phương án dự phòng Firebase cũng không thành công. Kiểm tra Firestore Rules cho users/{uid} (pending_teacher_verification) và quyền tài khoản dịch vụ Admin. Chi tiết: '+(clientError.message||'permission denied')),{code:'teacher_profile_permission_blocked',cause:clientError});
