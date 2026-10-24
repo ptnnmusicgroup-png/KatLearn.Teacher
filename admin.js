@@ -159,31 +159,71 @@ function health(id,ok,text){const x=$(id);x.textContent=text;x.classList.toggle(
 function setConnection(ok,text){const x=$("#backendStatus");x.classList.toggle("good",ok===true);x.classList.toggle("bad",ok===false);$("#backendLabel").textContent=text}
 
 async function token(){if(!state.user)throw new Error("Chưa đăng nhập Admin.");const t=await state.user.getIdToken(true);if(!t)throw new Error("Không lấy được phiên Admin.");return t}
+function adminHubURLs(){
+ const local="/api/admin-hub";
+ const lmsBase=String(window.KATLEARN_DEPLOYMENT_CONFIG?.lmsUrl||"https://lms-katlearn.netlify.app").replace(/\\/+$/,"");
+ const remote=lmsBase+"/api/admin-hub";
+ const isLocalHost=/^(localhost|127\\.0\\.0\\.1)$/.test(String(location.hostname||""));
+ return isLocalHost?[local,remote]:[remote,local];
+}
+async function requestAdminHub(suffix,init,timeoutMs=12000){
+ const urls=adminHubURLs();
+ let lastError=null;
+ for(let i=0;i<urls.length;i++){
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+   let response;
+   try{
+    response=await fetch(urls[i]+suffix,{...init,cache:"no-store",signal:controller.signal});
+   }catch(error){
+    if(i<urls.length-1&&(error?.name==="TypeError"||error?.name==="AbortError")){
+     lastError=error;
+     console.warn("[KatLearn Admin] Admin Hub endpoint unreachable; trying fallback endpoint.");
+     continue;
+    }
+    if(error?.name==="AbortError")throw Object.assign(new Error("Admin Hub phản hồi quá lâu ("+Math.round(timeoutMs/1000)+" giây)."),{code:"admin_fetch_timeout",cause:error});
+    throw Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_fetch_failed",cause:error});
+   }
+   const raw=await response.text();
+   let data={};
+   try{data=raw?JSON.parse(raw):{}}
+   catch(_){
+    const contentType=String(response.headers?.get?.("content-type")||"").toLowerCase();
+    const looksLikeAccessPage=/app\\.netlify\\.com\\/edge-access/i.test(raw)||/<!doctype html|<html[\\s>]/i.test(raw.slice(0,2000));
+    if(i<urls.length-1&&(contentType.includes("text/html")||looksLikeAccessPage)){
+     lastError=Object.assign(new Error("Endpoint Admin Hub bị chặn bởi trang truy cập của hosting."),{code:"admin_edge_access_blocked"});
+     console.warn("[KatLearn Admin] Admin Hub endpoint returned an HTML access page; trying the alternate endpoint.");
+     continue;
+    }
+    throw Object.assign(new Error("Admin Hub trả dữ liệu không hợp lệ · HTTP "+response.status),{code:"admin_invalid_json",details:raw.slice(0,800)});
+   }
+   if(!response.ok||data.ok!==true){
+    throw Object.assign(new Error(errText(data.error,"HTTP "+response.status+" · Admin Hub thất bại")),{code:data.code||"admin_http_"+response.status,details:data.details,status:response.status});
+   }
+   return data;
+  }finally{clearTimeout(timeout)}
+ }
+ if(lastError?.name==="AbortError")throw Object.assign(new Error("Không kết nối được Admin Hub; cả hai endpoint đều quá thời gian chờ."),{code:"admin_fetch_timeout",cause:lastError});
+ throw lastError||Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_fetch_failed"});
+}
 async function apiGet(section,params={}){
  const t=await token();
- let response;
- const controller=new AbortController();
- const timeoutMs=section==="users"?45000:12000; const timeout=setTimeout(()=>controller.abort(),timeoutMs);
- try{
-  const query=new URLSearchParams({section:String(section||"overview")});
-  Object.entries(params||{}).forEach(([key,value])=>{if(value!==undefined&&value!==null&&String(value)!=="")query.set(key,String(value))});
-  response=await fetch("/api/admin-hub?"+query.toString(),{method:"GET",cache:"no-store",headers:{Authorization:"Bearer "+t,Accept:"application/json"},signal:controller.signal})
- }catch(e){
-  if(e?.name==="AbortError"){const seconds=Math.round(timeoutMs/1000);throw Object.assign(new Error("Admin Hub phản hồi quá lâu ("+seconds+" giây)."),{code:"admin_fetch_timeout",cause:e});}
-  throw Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_fetch_failed",cause:e})
- }finally{clearTimeout(timeout)}
- const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){throw Object.assign(new Error("Admin Hub trả dữ liệu không hợp lệ · HTTP "+response.status),{code:"admin_invalid_json",details:raw.slice(0,800)})}
- if(!response.ok||data.ok!==true)throw Object.assign(new Error(errText(data.error,"HTTP "+response.status+" · Admin Hub thất bại")),{code:data.code||"admin_http_"+response.status,details:data.details})
- return data
+ const query=new URLSearchParams({section:String(section||"overview")});
+ Object.entries(params||{}).forEach(([key,value])=>{if(value!==undefined&&value!==null&&String(value)!=="")query.set(key,String(value))});
+ const timeoutMs=section==="users"?45000:12000;
+ return requestAdminHub("?"+query.toString(),{
+  method:"GET",
+  headers:{Authorization:"Bearer "+t,Accept:"application/json"}
+ },timeoutMs);
 }
 async function apiAction(action,payload={}){
  const t=await token();
- let response;
- try{response=await fetch("/api/admin-hub",{method:"POST",cache:"no-store",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({action,...payload})})}
- catch(e){throw Object.assign(new Error("Không kết nối được Admin Hub."),{code:"admin_action_fetch_failed",cause:e})}
- const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){throw Object.assign(new Error("Admin Hub trả dữ liệu không hợp lệ · HTTP "+response.status),{code:"admin_invalid_json",details:raw.slice(0,800)})}
- if(!response.ok||data.ok!==true)throw Object.assign(new Error(errText(data.error,"HTTP "+response.status+" · Admin Hub thất bại")),{code:data.code||"admin_action_"+response.status,details:data.details})
- return data
+ return requestAdminHub("",{
+  method:"POST",
+  headers:{Authorization:"Bearer "+t,"Content-Type":"application/json",Accept:"application/json"},
+  body:JSON.stringify({action,...payload})
+ },30000);
 }
 
 function showPage(name){
