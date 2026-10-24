@@ -246,10 +246,13 @@ function lmsStripProvince(value){return String(value??"").replace(/^(?:tỉnh|th
 function lmsStripWard(value){return String(value??"").replace(/^(?:xã|phường|đặc khu|thị trấn)\s*/i,"").trim()}
 function lmsSchoolLevel(name){
  const n=lmsNorm(name);
- if(n.includes("thcs")&&n.includes("thpt")||n.includes("th")&&n.includes("thcs"))return "combined";
- if(n.includes("thpt")||n.includes("trung hoc pho thong"))return "high";
- if(n.includes("thcs")||n.includes("trung hoc co so"))return "middle";
- if(n.includes("tieu hoc")||/^th(?: |$)/.test(n)||n.startsWith("truong tieu"))return "primary";
+ const hasThcs=n.includes("thcs")||n.includes("trung hoc co so");
+ const hasThpt=n.includes("thpt")||n.includes("trung hoc pho thong");
+ const hasStandaloneTh=/(^|\\s)th($|\\s)/.test(n);
+ if((hasThcs&&hasThpt)||(hasStandaloneTh&&(hasThcs||hasThpt)))return "combined";
+ if(hasThpt)return "high";
+ if(hasThcs)return "middle";
+ if(n.includes("tieu hoc")||hasStandaloneTh)return "primary";
  return "combined";
 }
 function lmsLevelLabel(level){return({primary:"Tiểu học",middle:"THCS",high:"THPT",combined:"Liên cấp/khác"})[level]||"Liên cấp/khác"}
