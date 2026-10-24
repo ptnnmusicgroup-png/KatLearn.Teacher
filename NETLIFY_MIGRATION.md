@@ -8,14 +8,14 @@ The repository is configured for Netlify:
 - Functions directory: `netlify/functions`
 - Runtime/build Node.js version: `22`
 
-Teacher/Admin endpoints remain available through Netlify Functions at the existing `/api/*` routes.
+Teacher/Admin endpoints remain available through Netlify Functions at the existing `/api/*` routes. Teacher registration is handled by `/api/teacher-register`, which verifies the Firebase ID token and writes the pending profile through Firebase Admin; do not relax public Firestore write rules to work around registration errors.
 
 ## Netlify environment variables
 
 Set these in the Teacher Netlify site's environment settings:
 
 - `KATLEARN_LMS_SITE_URL=https://lms-katlearn.netlify.app`
-- `KATLEARN_TEACHER_SITE_URL=https://teacher-katlearn1.netlify.app`
+- `KATLEARN_TEACHER_SITE_URL=https://quanly-giaovien-katlearn.netlify.app`
 - `KATLEARN_ALLOWED_ORIGINS=https://lms-katlearn.netlify.app,https://teacher-katlearn1.netlify.app`
 - `FIREBASE_SERVICE_ACCOUNT_JSON`: full service-account JSON for Firebase project `elp---katlearn` (secret).
 
