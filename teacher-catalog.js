@@ -166,16 +166,27 @@
         source:String(catalogSchool?'lms_national_catalog':'teacher_verification'),
         updatedAt:Date.now()
       };
-      const schoolCatalogRef=api.doc(db,'KatLearn_Teacher_Schools',schoolId);
-      const schoolCatalogSnap=await api.getDoc(schoolCatalogRef);
-      if(!schoolCatalogSnap.exists()||String(schoolCatalogSnap.data()?.name||'').trim()!==schoolName){
-        await api.setDoc(schoolCatalogRef,{...approvedSchool,updatedAt:Date.now()},{merge:true});
+      const isVerifiedCatalogSchool=Boolean(catalogSchool&&catalogSchool.schoolId===schoolId&&catalogSchool.name===schoolName&&catalogSchool.province===province&&catalogSchool.ward===ward&&await canonicalSchoolId(catalogSchool)===schoolId);
+      if(isVerifiedCatalogSchool){
+        const canonicalRecord={
+          ...catalogSchool,
+          schoolId,name:schoolName,province,ward,
+          createdAt:schoolData.createdAt||Date.now(),
+          updatedAt:Date.now(),
+          source:'lms_national_catalog'
+        };
+        // Keep the legacy school path and both shared LMS catalogs aligned.
+        await Promise.all([
+          api.setDoc(api.doc(db,'schools',schoolId),canonicalRecord,{merge:true}),
+          api.setDoc(api.doc(db,'KatLearn_TRUONGHOC_1',schoolId),canonicalRecord,{merge:true}),
+          api.setDoc(api.doc(db,'KatLearn_Teacher_Schools',schoolId),canonicalRecord,{merge:true})
+        ]);
+      }else{
+        await api.setDoc(api.doc(db,'KatLearn_Teacher_Schools',schoolId),{...approvedSchool,updatedAt:Date.now()},{merge:true});
       }
 
-      // Keep the selected LMS class IDs canonical. Add the relevant school's grade templates
-      // only when they are absent, so the teacher dashboard and LMS share the same IDs.
+      // Provision canonical grade IDs from the LMS catalog so the teacher dashboard and LMS use the same classes.
       const templates={primary:['1','2','3','4','5'],middle:['6','7','8','9'],high:['10','11','12'],combined:['1','2','3','4','5','6','7','8','9','10','11','12']};
-      const isVerifiedCatalogSchool=Boolean(catalogSchool&&catalogSchool.schoolId===schoolId&&await canonicalSchoolId(catalogSchool)===schoolId);
       if(isVerifiedCatalogSchool){
         const grades=templates[String(catalogSchool.schoolLevel||'combined')]||templates.combined;
         const now=Date.now();
