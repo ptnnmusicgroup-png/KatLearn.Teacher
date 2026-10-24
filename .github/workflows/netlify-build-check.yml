@@ -51,7 +51,8 @@ jobs:
           test -s dist/teacher-signup.html
           test -s dist/katlearn-astra.css
           grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
-          grep -q '20261024-teacher-system1' dist/teacher-signup.html
+          grep -q '20261024-teacher-system2' dist/teacher-signup.html
+          grep -q 'page-lms-directory' dist/admin.html
           test ! -e dist/api
           test ! -e dist/netlify
           test ! -e dist/scripts

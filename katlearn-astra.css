@@ -1096,3 +1096,145 @@ html body[data-kat-theme="default"] .message{overflow-wrap:anywhere}
     animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important;
   }
 }
+
+
+/* KatLearn Teacher full-system pass · 2026-10-24
+   Keep the liquid-glass identity while reducing expensive continuous paints. */
+:root{
+  --kt-glass-blur:16px;
+  --kt-glass-tint:rgba(255,255,255,.68);
+  --kt-glass-edge:rgba(255,255,255,.74);
+  --kt-glass-shadow:0 18px 48px rgba(56,43,108,.075);
+}
+html body:not([data-kat-theme]) .sidebar,
+html body[data-kat-theme="default"] .sidebar{
+  -webkit-backdrop-filter:blur(18px) saturate(150%)!important;
+  backdrop-filter:blur(18px) saturate(150%)!important;
+}
+html body:not([data-kat-theme]) .topbar,
+html body[data-kat-theme="default"] .topbar{
+  -webkit-backdrop-filter:blur(16px) saturate(145%)!important;
+  backdrop-filter:blur(16px) saturate(145%)!important;
+}
+html body:not([data-kat-theme]) .teacher-card-panel,
+html body[data-kat-theme="default"] .teacher-card-panel,
+html body:not([data-kat-theme]) .teacher-hero,
+html body[data-kat-theme="default"] .teacher-hero,
+html body:not([data-kat-theme]) .data-table-wrap,
+html body[data-kat-theme="default"] .data-table-wrap,
+html body:not([data-kat-theme]) .metric,
+html body[data-kat-theme="default"] .metric,
+html body:not([data-kat-theme]) .card,
+html body[data-kat-theme="default"] .card,
+html body:not([data-kat-theme]) .panel,
+html body[data-kat-theme="default"] .panel,
+html body:not([data-kat-theme]) .table-card,
+html body[data-kat-theme="default"] .table-card{
+  -webkit-backdrop-filter:blur(13px) saturate(145%)!important;
+  backdrop-filter:blur(13px) saturate(145%)!important;
+}
+html body:not([data-kat-theme]) .modal-card,
+html body:not([data-kat-theme]) .modal-content,
+html body[data-kat-theme="default"] .modal-card,
+html body[data-kat-theme="default"] .modal-content{
+  -webkit-backdrop-filter:blur(20px) saturate(155%)!important;
+  backdrop-filter:blur(20px) saturate(155%)!important;
+}
+html body:not([data-kat-theme]) .nav-item,
+html body[data-kat-theme="default"] .nav-item,
+html body:not([data-kat-theme]) .metric,
+html body[data-kat-theme="default"] .metric,
+html body:not([data-kat-theme]) .teacher-card-panel,
+html body[data-kat-theme="default"] .teacher-card-panel,
+html body:not([data-kat-theme]) .activity-card,
+html body[data-kat-theme="default"] .activity-card{
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),background-color .2s ease,border-color .2s ease,box-shadow .2s ease!important;
+}
+html body:not([data-kat-theme]) .nav-item:hover,
+html body[data-kat-theme="default"] .nav-item:hover{
+  transform:translateX(2px)!important;
+}
+html body:not([data-kat-theme]) .metric:hover,
+html body[data-kat-theme="default"] .metric:hover,
+html body:not([data-kat-theme]) .teacher-card-panel:hover,
+html body[data-kat-theme="default"] .teacher-card-panel:hover{
+  transform:translateY(-2px)!important;
+}
+html body:not([data-kat-theme]) .page,
+html body[data-kat-theme="default"] .page{
+  min-width:0;
+}
+html body:not([data-kat-theme]) .table-wrap,
+html body[data-kat-theme="default"] .table-wrap{
+  max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+}
+html body:not([data-kat-theme]) .teacher-form input,
+html body:not([data-kat-theme]) .teacher-form select,
+html body:not([data-kat-theme]) .teacher-form textarea,
+html body[data-kat-theme="default"] .teacher-form input,
+html body[data-kat-theme="default"] .teacher-form select,
+html body[data-kat-theme="default"] .teacher-form textarea{
+  max-width:100%;min-width:0;
+}
+html body:not([data-kat-theme]) :where(button,a,input,select,textarea,[tabindex]):focus-visible,
+html body[data-kat-theme="default"] :where(button,a,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid rgba(145,126,255,.62)!important;outline-offset:3px!important;
+}
+html body:not([data-kat-theme]) button:disabled,
+html body[data-kat-theme="default"] button:disabled{
+  cursor:not-allowed!important;opacity:.58;transform:none!important;
+}
+
+/* The LMS directory is virtualized at the page level: only 50 rows paint at once. */
+html body:not([data-kat-theme]) .lms-directory-metrics,
+html body[data-kat-theme="default"] .lms-directory-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+html body:not([data-kat-theme]) .lms-directory-card,
+html body[data-kat-theme="default"] .lms-directory-card{min-width:0;overflow:hidden}
+html body:not([data-kat-theme]) .lms-directory-filters,
+html body[data-kat-theme="default"] .lms-directory-filters{
+  display:grid;grid-template-columns:minmax(220px,1.6fr) repeat(3,minmax(150px,1fr));gap:10px;
+}
+html body:not([data-kat-theme]) .lms-directory-filters>*,
+html body[data-kat-theme="default"] .lms-directory-filters>*{min-width:0;width:100%}
+html body:not([data-kat-theme]) .lms-directory-table,
+html body[data-kat-theme="default"] .lms-directory-table{min-width:980px}
+html body:not([data-kat-theme]) .lms-directory-table td,
+html body[data-kat-theme="default"] .lms-directory-table td{vertical-align:top}
+html body:not([data-kat-theme]) .lms-directory-table td strong,
+html body[data-kat-theme="default"] .lms-directory-table td strong{display:block;max-width:360px;white-space:normal;overflow-wrap:anywhere}
+html body:not([data-kat-theme]) .lms-directory-table td small,
+html body[data-kat-theme="default"] .lms-directory-table td small{display:block;margin-top:4px;opacity:.65;font-size:10px;overflow-wrap:anywhere}
+html body:not([data-kat-theme]) .lms-directory-pagination,
+html body[data-kat-theme="default"] .lms-directory-pagination{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;color:var(--ka-muted,#7f8398);font-size:12px;
+}
+html body:not([data-kat-theme]) .lms-directory-pagination>div,
+html body[data-kat-theme="default"] .lms-directory-pagination>div{display:flex;gap:8px}
+html body:not([data-kat-theme]) .lms-directory-pagination button,
+html body[data-kat-theme="default"] .lms-directory-pagination button{min-height:38px}
+html body:not([data-kat-theme]) #lmsDirectoryStatus,
+html body[data-kat-theme="default"] #lmsDirectoryStatus{overflow-wrap:anywhere;line-height:1.65}
+@media(max-width:1050px){
+ html body:not([data-kat-theme]) .lms-directory-filters,
+ html body[data-kat-theme="default"] .lms-directory-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+ html body:not([data-kat-theme]) .lms-directory-metrics,
+ html body[data-kat-theme="default"] .lms-directory-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body:not([data-kat-theme]) .lms-directory-metrics .metric:first-child,
+ html body[data-kat-theme="default"] .lms-directory-metrics .metric:first-child{grid-column:1/-1}
+ html body:not([data-kat-theme]) .lms-directory-filters,
+ html body[data-kat-theme="default"] .lms-directory-filters{grid-template-columns:minmax(0,1fr)}
+ html body:not([data-kat-theme]) .lms-directory-pagination,
+ html body[data-kat-theme="default"] .lms-directory-pagination{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+ html body:not([data-kat-theme]) *,
+ html body:not([data-kat-theme]) *::before,
+ html body:not([data-kat-theme]) *::after,
+ html body[data-kat-theme="default"] *,
+ html body[data-kat-theme="default"] *::before,
+ html body[data-kat-theme="default"] *::after{
+  animation:none!important;transition:none!important;scroll-behavior:auto!important;
+ }
+}

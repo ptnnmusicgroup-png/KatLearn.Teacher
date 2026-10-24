@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="admin.css?v=20261001-3">
-<link rel="stylesheet" href="katlearn-blue-admin.css?v=20261001-1"><link rel="stylesheet" href="admin-system-ui-v3.css?v=20261003-2"><link rel="stylesheet" href="/katlearn-astra.css?v=20261024-teacher-system1"></head>
+<link rel="stylesheet" href="katlearn-blue-admin.css?v=20261001-1"><link rel="stylesheet" href="admin-system-ui-v3.css?v=20261003-2"><link rel="stylesheet" href="/katlearn-astra.css?v=20261024-teacher-system2"></head>
 <body><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div>
 <section id="loginGate" class="login-gate">
   <div class="login-panel">
@@ -51,6 +51,7 @@
       <button data-page="libraries"><i>▥</i><span>Thư viện công khai</span></button>
       <button data-page="private-packs" class="private-nav-item" title="Mở kho bộ từ riêng của người dùng"><i>🔒</i><span>Bộ từ riêng</span><b class="nav-new-badge">RIÊNG</b></button>
       <button data-page="schools"><i>🏫</i>Trường học</button>
+      <button data-page="lms-directory"><i>🗺️</i><span>Danh mục trường/lớp LMS</span></button>
       <button data-page="catalog"><i>🇻🇳</i>Danh mục toàn quốc</button>
       <button data-page="activity"><i>◷</i>Hoạt động</button>
     </nav>
@@ -132,6 +133,30 @@
       <section class="page" id="page-schools">
         <div class="hero"><div><p class="eyebrow">SCHOOL DIRECTORY</p><h1>Trường học</h1><p>Danh sách trường mà ứng dụng đang tham chiếu, gồm cả dữ liệu catalog.</p></div><div class="hero-cat">🏫</div></div>
         <section class="card"><div class="toolbar"><input id="schoolSearch" class="input" placeholder="Tìm trường, tỉnh/thành, xã/phường…"></div><div class="table-wrap"><table class="table"><thead><tr><th>Trường</th><th>Tỉnh / thành</th><th>Xã / phường</th><th>Mức</th><th>Nguồn</th><th>Quản lý</th></tr></thead><tbody id="schoolTable"></tbody></table></div><div id="schoolLimit" class="limit"></div></section>
+      </section>
+
+      <section class="page" id="page-lms-directory">
+        <div class="hero">
+          <div><p class="eyebrow">LIVE LMS DIRECTORY</p><h1>Danh mục trường & lớp LMS 🏫</h1><p>Tra cứu trực tiếp danh mục gốc từ KatLearn LMS. Trang này chỉ đọc dữ liệu nguồn, không ghi đè danh mục Firebase.</p></div>
+          <div class="hero-cat">🗺️</div>
+        </div>
+        <div class="metric-grid lms-directory-metrics">
+          <article class="metric accent"><span>🏫</span><small>Tổng trường trong nguồn</small><strong id="lmsDirectoryTotal">—</strong></article>
+          <article class="metric"><span>🗺️</span><small>Tỉnh/thành</small><strong id="lmsDirectoryProvinces">—</strong></article>
+          <article class="metric"><span>🔎</span><small>Kết quả phù hợp</small><strong id="lmsDirectoryMatches">—</strong></article>
+        </div>
+        <section class="card lms-directory-card">
+          <div class="card-head"><div><p class="eyebrow">SOURCE OF TRUTH</p><h2>Danh sách trường theo địa bàn</h2><p id="lmsDirectorySource">Dữ liệu sẽ tải khi mở mục này.</p></div><button id="lmsDirectoryReload" class="btn dark" type="button">↻ Tải lại từ LMS</button></div>
+          <div class="toolbar lms-directory-filters">
+            <input id="lmsDirectorySearch" class="input" type="search" placeholder="Tìm trường, xã/phường, tỉnh hoặc mã…">
+            <select id="lmsDirectoryProvince" class="select"><option value="">Tất cả tỉnh/thành</option></select>
+            <select id="lmsDirectoryWard" class="select" disabled><option value="">Tất cả xã/phường</option></select>
+            <select id="lmsDirectoryLevel" class="select"><option value="">Tất cả cấp học</option><option value="primary">Tiểu học</option><option value="middle">THCS</option><option value="high">THPT</option><option value="combined">Liên cấp/khác</option></select>
+          </div>
+          <div id="lmsDirectoryStatus" class="limit" role="status" aria-live="polite">Sẵn sàng tải danh mục gốc.</div>
+          <div class="table-wrap"><table class="table lms-directory-table"><thead><tr><th>Trường học</th><th>Tỉnh/thành</th><th>Xã/phường</th><th>Cấp học</th><th>Khối/lớp mẫu</th><th>Nguồn</th></tr></thead><tbody id="lmsDirectoryTable"><tr><td colspan="6"><div class="empty">Mở mục này để tải danh mục từ LMS.</div></td></tr></tbody></table></div>
+          <div class="lms-directory-pagination"><span id="lmsDirectoryPageInfo">—</span><div><button class="btn" id="lmsDirectoryPrev" type="button" disabled>← Trước</button><button class="btn" id="lmsDirectoryNext" type="button" disabled>Tiếp →</button></div></div>
+        </section>
       </section>
 
       <section class="page" id="page-catalog">

@@ -121,8 +121,8 @@ async function restoreAdminSession(user){
 }
 
 const $=s=>document.querySelector(s),qsa=s=>Array.from(document.querySelectorAll(s)||[]),each=(value,fn)=>{if(value==null)return;if(typeof value.forEach==="function")value.forEach(fn)};
-const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",libraries:"Thư viện công khai","private-packs":"Bộ từ riêng",schools:"Trường học",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
-const state={user:null,page:"overview",data:{},catalog:null,syncing:false,syncingDirectory:{},packEditId:""};
+const titles={overview:"Tổng quan",teachers:"Giáo viên",users:"Tài khoản",classes:"Lớp học",packs:"Bộ từ công khai",libraries:"Thư viện công khai","private-packs":"Bộ từ riêng",schools:"Trường học","lms-directory":"Danh mục trường/lớp LMS",catalog:"Danh mục toàn quốc",activity:"Hoạt động Admin"};
+const state={user:null,page:"overview",data:{},catalog:null,lmsDirectory:{loaded:false,loading:false,rows:[],page:0},syncing:false,syncingDirectory:{},packEditId:""};
 const syncKey="katlearn.admin.catalog.v2";
 const directorySyncKey="katlearn.admin.directory-sync.v1";
 const DIRECTORY_SYNC_CONFIG={
@@ -216,7 +216,14 @@ $("#clearSession").onclick=leaveAdmin;
  each(["teacherSearch","userSearch","classSearch","packSearch","schoolSearch","privatePackSearch","librarySearch"],id=>$("#"+id)?.addEventListener("input",()=>render(state.page)));
  $("#teacherFilter")?.addEventListener("change",()=>render("teachers"));
  $("#userFilter")?.addEventListener("change",()=>render("users"));
-  $("#catalogSync")?.addEventListener("click",syncCatalog);
+  $("#lmsDirectorySearch")?.addEventListener("input",()=>{if(state.lmsDirectory){state.lmsDirectory.page=0;renderLmsDirectory()}});
+ $("#lmsDirectoryProvince")?.addEventListener("change",()=>{state.lmsDirectory.page=0;refreshLmsDirectoryWards();renderLmsDirectory()});
+ $("#lmsDirectoryWard")?.addEventListener("change",()=>{state.lmsDirectory.page=0;renderLmsDirectory()});
+ $("#lmsDirectoryLevel")?.addEventListener("change",()=>{state.lmsDirectory.page=0;renderLmsDirectory()});
+ $("#lmsDirectoryPrev")?.addEventListener("click",()=>{state.lmsDirectory.page=Math.max(0,state.lmsDirectory.page-1);renderLmsDirectory()});
+ $("#lmsDirectoryNext")?.addEventListener("click",()=>{state.lmsDirectory.page=Math.min(Math.max(0,Math.ceil(filteredLmsDirectoryRows().length/50)-1),state.lmsDirectory.page+1);renderLmsDirectory()});
+ $("#lmsDirectoryReload")?.addEventListener("click",()=>loadLmsDirectory(true).catch(e=>{pageError(e,"Không tải được danh mục LMS");toast(e,"bad")}));
+ $("#catalogSync")?.addEventListener("click",syncCatalog);
  $("#syncAll")?.addEventListener("click",()=>runDirectorySyncAll());
  $("#syncUsers")?.addEventListener("click",()=>runDirectorySync("users"));
  $("#syncClasses")?.addEventListener("click",()=>runDirectorySync("classes"));
@@ -228,7 +235,137 @@ $("#clearSession").onclick=leaveAdmin;
  $("#packEditSave")?.addEventListener("click",saveEditedPack);
  $("#packEditorBackdrop")?.addEventListener("click",e=>{if(e.target.id==="packEditorBackdrop")closePackEditor()});
 }
+
+/* Live, read-only school/class directory sourced directly from the LMS catalogue. */
+const LMS_DIRECTORY_BASE="https://raw.githubusercontent.com/ptnnmusicgroup-png/KatLearn1/main/data/national-catalog/";
+const LMS_DIRECTORY_PAGE_SIZE=50;
+const LMS_PROVINCE_ALIASES={"thua thien hue":"46","hue":"46","ha noi":"01","cao bang":"04","tuyen quang":"08","dien bien":"11","lai chau":"12","son la":"14","lao cai":"15","thai nguyen":"19","lang son":"20","quang ninh":"22","bac ninh":"24","phu tho":"25","hai phong":"31","hung yen":"33","ninh binh":"37","thanh hoa":"38","nghe an":"40","ha tinh":"42","quang tri":"44","da nang":"48","quang ngai":"51","kon tum":"51","gia lai":"52","khanh hoa":"56","dak lak":"66","lam dong":"68","dong nai":"75","ho chi minh":"79","tay ninh":"80","dong thap":"82","vinh long":"86","an giang":"91","can tho":"92","ca mau":"96"};
+const LMS_LEVEL_GRADES={primary:["1","2","3","4","5"],middle:["6","7","8","9"],high:["10","11","12"],combined:["1","2","3","4","5","6","7","8","9","10","11","12"]};
+function lmsNorm(value){return String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[đĐ]/g,"d").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}
+function lmsStripProvince(value){return String(value??"").replace(/^(?:tỉnh|thành phố)\s*/i,"").trim()}
+function lmsStripWard(value){return String(value??"").replace(/^(?:xã|phường|đặc khu|thị trấn)\s*/i,"").trim()}
+function lmsSchoolLevel(name){
+ const n=lmsNorm(name);
+ if(n.includes("thcs")&&n.includes("thpt")||n.includes("th")&&n.includes("thcs"))return "combined";
+ if(n.includes("thpt")||n.includes("trung hoc pho thong"))return "high";
+ if(n.includes("thcs")||n.includes("trung hoc co so"))return "middle";
+ if(n.includes("tieu hoc")||/^th(?: |$)/.test(n)||n.startsWith("truong tieu"))return "primary";
+ return "combined";
+}
+function lmsLevelLabel(level){return({primary:"Tiểu học",middle:"THCS",high:"THPT",combined:"Liên cấp/khác"})[level]||"Liên cấp/khác"}
+async function fetchLmsDirectoryJson(file,signal,cacheMode){
+ const response=await fetch(LMS_DIRECTORY_BASE+file,{cache:cacheMode,signal,headers:{Accept:"application/json"}});
+ if(!response.ok)throw Object.assign(new Error("Không tải được "+file+" từ LMS (HTTP "+response.status+")."),{code:"lms_catalog_http_"+response.status});
+ return response.json();
+}
+async function loadLmsDirectory(force=false){
+ const directory=state.lmsDirectory||(state.lmsDirectory={loaded:false,loading:false,rows:[],page:0});
+ if(directory.loading)return;
+ if(directory.loaded&&!force){renderLmsDirectory();return}
+ directory.loading=true;
+ const status=$("#lmsDirectoryStatus"),table=$("#lmsDirectoryTable");
+ if(status)status.textContent="⏳ Đang tải danh sách trường và danh mục xã/phường từ LMS…";
+ if(table)table.innerHTML='<tr><td colspan="6"><div class="empty">Đang tải dữ liệu nguồn…</div></td></tr>';
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),30000);
+ try{
+  const cacheMode=force?"reload":"default";
+  const [tree,official]=await Promise.all([
+   fetchLmsDirectoryJson("full-school-tree.json",controller.signal,cacheMode),
+   fetchLmsDirectoryJson("official-ward-list.json",controller.signal,cacheMode)
+  ]);
+  if(!Array.isArray(tree)||!tree.length)throw new Error("Tệp danh mục trường LMS không có dữ liệu hợp lệ.");
+  if(!Array.isArray(official?.provinces)||!official.provinces.length)throw new Error("Tệp danh mục tỉnh/xã/phường LMS không hợp lệ.");
+  const officialByCode=new Map(official.provinces.map(p=>[String(p.code||"").trim(),p]));
+  const officialByName=new Map(official.provinces.map(p=>[lmsNorm(lmsStripProvince(p.name)),p]));
+  const rows=[];
+  for(const sourceProvince of tree){
+   const sourceProvinceName=String(sourceProvince?.name||"").trim();
+   if(!sourceProvinceName)continue;
+   const provinceKey=lmsNorm(lmsStripProvince(sourceProvinceName));
+   const mappedCode=LMS_PROVINCE_ALIASES[provinceKey]||"";
+   const canonicalProvince=officialByCode.get(mappedCode)||officialByName.get(provinceKey)||null;
+   const provinceCode=String(canonicalProvince?.code||sourceProvince.id||provinceKey).trim();
+   const provinceName=String(canonicalProvince?.name||sourceProvinceName).trim();
+   const officialWardByName=new Map((canonicalProvince?.wards||[]).map(w=>[lmsNorm(lmsStripWard(w.name)),w]));
+   for(const sourceWard of Array.isArray(sourceProvince.wards)?sourceProvince.wards:[]){
+    const sourceWardName=String(sourceWard?.name||"").replace(/\s+/g," ").trim();
+    if(!sourceWardName)continue;
+    const canonicalWard=officialWardByName.get(lmsNorm(lmsStripWard(sourceWardName)));
+    const wardName=String(canonicalWard?.name||sourceWardName).trim();
+    const wardId=String(canonicalWard?.id||sourceWard.id||"").trim();
+    const schools=Array.isArray(sourceWard.schools)?sourceWard.schools:[];
+    for(const school of schools){
+     const name=String(school?.name||"").replace(/\s+/g," ").trim();
+     if(!name)continue;
+     const level=lmsSchoolLevel(name);
+     const grades=LMS_LEVEL_GRADES[level]||LMS_LEVEL_GRADES.combined;
+     rows.push({
+      id:String(school.id||""),name,provinceCode,province:provinceName,
+      wardId,ward:wardName,level,grades,source:"LMS · danh mục gốc"
+     });
+    }
+   }
+  }
+  if(!rows.length)throw new Error("Danh mục đã tải nhưng không tìm thấy trường nào.");
+  directory.rows=rows;
+  directory.provinces=[...new Map(rows.map(r=>[r.provinceCode,{code:r.provinceCode,name:r.province}])).values()].sort((a,b)=>a.name.localeCompare(b.name,"vi"));
+  directory.loaded=true;directory.page=0;
+  const provinceSelect=$("#lmsDirectoryProvince");
+  if(provinceSelect){
+   const selected=provinceSelect.value;
+   provinceSelect.innerHTML='<option value="">Tất cả tỉnh/thành</option>'+directory.provinces.map(p=>'<option value="'+esc(p.code)+'">'+esc(p.name)+'</option>').join("");
+   if(directory.provinces.some(p=>p.code===selected))provinceSelect.value=selected;
+  }
+  refreshLmsDirectoryWards();
+  const source=$("#lmsDirectorySource");
+  if(source)source.textContent="Nguồn: KatLearn LMS · GitHub main · tải trực tiếp, chỉ đọc · cập nhật "+new Date().toLocaleString("vi-VN");
+  $("#lmsDirectoryTotal").textContent=fmt(rows.length);
+  $("#lmsDirectoryProvinces").textContent=fmt(directory.provinces.length);
+  if(status)status.textContent="✓ Đã tải "+fmt(rows.length)+" trường từ nguồn LMS. Mỗi dòng hiển thị các khối/lớp mẫu theo cấp học.";
+  renderLmsDirectory();
+ }catch(error){
+  const message=error?.name==="AbortError"?"Tải danh mục LMS quá thời gian chờ. Hãy thử tải lại.":errText(error,"Không tải được danh mục LMS.");
+  if(status)status.textContent="❌ "+message;
+  if(table)table.innerHTML='<tr><td colspan="6"><div class="empty">'+esc(message)+'<br><button class="btn dark" id="lmsDirectoryRetry" type="button">Thử lại</button></div></td></tr>';
+  $("#lmsDirectoryRetry")?.addEventListener("click",()=>loadLmsDirectory(true).catch(()=>{}));
+  throw Object.assign(new Error(message),{code:error?.code||"lms_catalog_load_failed"});
+ }finally{
+  clearTimeout(timeout);directory.loading=false;
+ }
+}
+function refreshLmsDirectoryWards(){
+ const select=$("#lmsDirectoryWard"),provinceCode=$("#lmsDirectoryProvince")?.value||"";
+ if(!select)return;
+ const rows=state.lmsDirectory?.rows||[];
+ const wards=[...new Map(rows.filter(r=>!provinceCode||r.provinceCode===provinceCode).map(r=>[r.wardId||lmsNorm(r.ward),{id:r.wardId||lmsNorm(r.ward),name:r.ward}])).values()].sort((a,b)=>a.name.localeCompare(b.name,"vi"));
+ const previous=select.value;
+ select.innerHTML='<option value="">Tất cả xã/phường</option>'+wards.map(w=>'<option value="'+esc(w.id)+'">'+esc(w.name)+'</option>').join("");
+ select.disabled=!wards.length;
+ if(wards.some(w=>w.id===previous))select.value=previous;
+}
+function filteredLmsDirectoryRows(){
+ const d=state.lmsDirectory||{},rows=Array.isArray(d.rows)?d.rows:[];
+ const q=String($("#lmsDirectorySearch")?.value||"").trim().toLocaleLowerCase("vi");
+ const province=$("#lmsDirectoryProvince")?.value||"",ward=$("#lmsDirectoryWard")?.value||"",level=$("#lmsDirectoryLevel")?.value||"";
+ const nq=lmsNorm(q);
+ return rows.filter(row=>(!province||row.provinceCode===province)&&(!ward||(row.wardId||lmsNorm(row.ward))===ward)&&(!level||row.level===level)&&(!q||lmsNorm(row.name+" "+row.id+" "+row.province+" "+row.ward).includes(nq)));
+}
+function renderLmsDirectory(){
+ const d=state.lmsDirectory||{},table=$("#lmsDirectoryTable");
+ if(!table)return;
+ const rows=filteredLmsDirectoryRows(),pages=Math.max(1,Math.ceil(rows.length/LMS_DIRECTORY_PAGE_SIZE));
+ d.page=Math.min(Math.max(0,Number(d.page)||0),pages-1);
+ const start=d.page*LMS_DIRECTORY_PAGE_SIZE,visible=rows.slice(start,start+LMS_DIRECTORY_PAGE_SIZE);
+ $("#lmsDirectoryMatches").textContent=fmt(rows.length);
+ table.innerHTML=visible.length?visible.map(row=>'<tr><td><strong>'+esc(row.name)+'</strong><small class="mono">'+esc(row.id||"—")+'</small></td><td>'+esc(row.province)+'</td><td>'+esc(row.ward)+'</td><td><span class="badge teacher">'+esc(lmsLevelLabel(row.level))+'</span></td><td>'+esc((row.grades||[]).map(g=>"Lớp "+g).join(" · "))+'</td><td><span class="badge">'+esc(row.source)+'</span></td></tr>').join(""):'<tr><td colspan="6"><div class="empty">Không có trường phù hợp với bộ lọc này.</div></td></tr>';
+ $("#lmsDirectoryPageInfo").textContent=rows.length?("Hiển thị "+fmt(start+1)+"–"+fmt(Math.min(start+visible.length,rows.length))+" / "+fmt(rows.length)+" · Trang "+(d.page+1)+"/"+pages):"Không có kết quả";
+ $("#lmsDirectoryPrev").disabled=d.page<=0;
+ $("#lmsDirectoryNext").disabled=d.page>=pages-1||!rows.length;
+ if(d.loaded&&rows.length===0)$("#lmsDirectoryStatus").textContent="Không tìm thấy trường phù hợp. Thử xóa bớt bộ lọc nhé.";
+ else if(d.loaded)$("#lmsDirectoryStatus").textContent="Đã lọc "+fmt(rows.length)+" trường · hiển thị tối đa "+LMS_DIRECTORY_PAGE_SIZE+" dòng mỗi trang để giao diện luôn nhẹ.";
+}
 async function loadPage(page,force=false){
+ if(page==="lms-directory"){await loadLmsDirectory(force);return}
  if(!force&&state.data[page]){render(page);return}
  if(page==="catalog"){
   state.catalog=await apiGet("catalog");state.data.catalog=state.catalog;renderCatalog();return;
