@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 
 const allowedOrigins=new Set([
  'https://quanly-giaovien-katlearn.netlify.app',
- 'https://teacher-katlearn1.netlify.app',
+ 'https://quanly-giaovien-katlearn.netlify.app',
  ...String(process.env.KATLEARN_ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
  ...(process.env.KATLEARN_LMS_SITE_URL?[String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/,'')]:[]),
  ...(process.env.KATLEARN_TEACHER_SITE_URL?[String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/,'')]:[]),
