@@ -16,7 +16,7 @@ Set these in the Teacher Netlify site's environment settings:
 
 - `KATLEARN_LMS_SITE_URL=https://lms-katlearn.netlify.app`
 - `KATLEARN_TEACHER_SITE_URL=https://quanly-giaovien-katlearn.netlify.app`
-- `KATLEARN_ALLOWED_ORIGINS=https://lms-katlearn.netlify.app,https://teacher-katlearn1.netlify.app`
+- `KATLEARN_ALLOWED_ORIGINS=https://lms-katlearn.netlify.app,https://quanly-giaovien-katlearn.netlify.app`
 - `FIREBASE_SERVICE_ACCOUNT_JSON`: full service-account JSON for Firebase project `elp---katlearn` (secret).
 
 The site URL variables are used during the static build and by runtime functions; configure them for both Builds and Functions. Allowed origins and Firebase Admin credentials must be available to Functions. The Teacher portal calls the LMS site's Admin Hub and AI endpoints, so the LMS hostname must match the actual Netlify LMS site.
