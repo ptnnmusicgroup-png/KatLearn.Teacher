@@ -232,7 +232,50 @@ async function createNewPack(name){if(!isTeacher()||!user)return;try{
   await mirrorTeacherPackToMemory(identity.docId,{...data,publicPackId:ref.id});
   await loadPackChoices();$('#packSelect').value=ref.id;toast('✓ Đã tạo bộ từ mới · mã '+identity.packCode);
 }catch(e){toast('Không thể tạo bộ từ: '+e.message)}}
-$('#packForm').onsubmit=async e=>{e.preventDefault();const selectedId=$('#packSelect')?.value?.trim();const selectedOption=$('#packSelect option:checked');const name=selectedOption?.textContent?.trim()||'';const rows=[...document.querySelectorAll('.pack-word-row')];try{const words=rows.map(r=>({word:r.querySelector('.pack-word')?.value.trim(),pron:r.querySelector('.pack-pron')?.value.trim()||'',mean:r.querySelector('.pack-mean')?.value.trim(),type:r.querySelector('.pack-type')?.value||'',example:r.querySelector('.pack-example')?.value.trim()||'',note:r.querySelector('.pack-note')?.value.trim()||'',emoji:'📚'})).filter(x=>x.word&&x.mean);if(!selectedId)return toast('Hãy chọn một bộ từ của bạn.');if(!words.length)return toast('Nhập ít nhất một từ và nghĩa.');const ref=fb.doc(db,'publicPacks',selectedId);const existing=await fb.getDoc(ref);if(!existing.exists())throw new Error('Không tìm thấy bộ từ đã chọn.');const existingData=existing.data()||{};const oldWords=Array.isArray(existingData.words)?existingData.words:[];let memoryDocId=String(existingData.memoryDocId||'');let packCode=String(existingData.packCode||'');if(!memoryDocId){const identity=await ensureTeacherPackIdentity(name||existingData.name||'Pack');memoryDocId=identity.docId;packCode=identity.packCode;await fb.updateDoc(ref,{memoryDocId,packCode,updatedAt:Date.now()});}const nextWords=[...oldWords,...words];await fb.updateDoc(ref,{words:nextWords,updatedAt:Date.now()});await mirrorTeacherPackToMemory(memoryDocId,{...existingData,name:existingData.name||name,words:nextWords,packCode,memoryDocId,publicPackId:selectedId});closeModal('packCreateModal');e.target.reset();$('#packWordRows').innerHTML='';addPackRow();toast('✓ Đã xuất bản pack');loadPacks();loadDashboard()}catch(err){toast('Không thể tạo pack: '+err.message)}};
+$('#packForm').onsubmit=async e=>{
+  e.preventDefault();
+  const selectedId=$('#packSelect')?.value?.trim();
+  const selectedOption=$('#packSelect option:checked');
+  const name=selectedOption?.textContent?.trim()||'';
+  const rows=[...document.querySelectorAll('.pack-word-row')];
+  try{
+    const words=rows.map(r=>({
+      word:r.querySelector('.pack-word')?.value.trim(),
+      pron:r.querySelector('.pack-pron')?.value.trim()||'',
+      mean:r.querySelector('.pack-mean')?.value.trim(),
+      type:r.querySelector('.pack-type')?.value||'',
+      example:r.querySelector('.pack-example')?.value.trim()||'',
+      note:r.querySelector('.pack-note')?.value.trim()||'',
+      emoji:'📚'
+    })).filter(x=>x.word&&x.mean);
+    if(!selectedId)return toast('Hãy chọn một bộ từ của bạn.');
+    if(!words.length)return toast('Nhập ít nhất một từ và nghĩa.');
+    const ref=fb.doc(db,'publicPacks',selectedId);
+    const existing=await fb.getDoc(ref);
+    if(!existing.exists())throw new Error('Không tìm thấy bộ từ đã chọn.');
+    const existingData=existing.data()||{};
+    let memoryDocId=String(existingData.memoryDocId||'');
+    let packCode=String(existingData.packCode||'');
+    if(!memoryDocId||!packCode){
+      const identity=await ensureTeacherPackIdentity(name||existingData.name||'Pack');
+      memoryDocId=memoryDocId||identity.docId;
+      packCode=packCode||identity.packCode;
+    }
+    const result=await packActionRequest('append-pack-words',{
+      packId:selectedId,words,memoryDocId,packCode
+    });
+    const updated=result.pack||{...existingData,words:[...(existingData.words||[]),...words],memoryDocId,packCode};
+    memoryDocId=String(updated.memoryDocId||memoryDocId);
+    await mirrorTeacherPackToMemory(memoryDocId,{...existingData,...updated,publicPackId:selectedId});
+    closeModal('packCreateModal');
+    e.target.reset();
+    $('#packWordRows').innerHTML='';
+    addPackRow();
+    toast('✓ Đã xuất bản '+words.length+' từ vào pack');
+    await loadPacks();
+    await loadDashboard();
+  }catch(err){toast('Không thể tạo pack: '+err.message)}
+};
 async function loadProgress(){const uid=String(user?.uid||'');if(!uid||!isTeacher())return;if(!selectedClass&&classes[0])selectedClass=classes[0];const cls=selectedClass;if(!cls){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}const stat=await classStats(cls);if(String(user?.uid||'')!==uid||!isTeacher()||selectedClass?.id!==cls.id)return;if(!stat||!stat.rows.length){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}$('#progressTable').innerHTML=`<p class="progress-note">${esc(cls.name)} · xếp hạng theo số câu đúng, sau đó đến độ chính xác và XP.</p>`+stat.rows.map((s,i)=>`<div class="student-row"><b>#${i+1}</b><span class="student-avatar">${esc((s.displayName||'K')[0]).toUpperCase()}</span><div><strong>${esc(s.displayName||'KatLearn Student')}</strong><small>${esc(s.email||'')} · ${accuracy(s)}% chính xác</small></div><div class="student-score"><b>${Number(s.correctAnswers||0)} câu đúng</b><small>⚡ ${Number(s.energy||0).toLocaleString()} XP · 📚 ${Number(s.totalWords||0)} từ</small></div></div>`).join('')}
 $('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');
 
@@ -246,14 +289,35 @@ async function importPackCsv(file){
     const header=parseCsvLine(lines[0]).map(x=>x.toLowerCase());
     const find=(names,def)=>{const i=header.findIndex(h=>names.includes(h));return i>=0?i:def};
     const wi=find(['word','từ','từ vựng','english'],0), mi=find(['mean','meaning','nghĩa','vietnamese','tiếng việt'],2), pi=find(['pron','pronunciation','phiên âm'],1), ti=find(['type','loại từ'],3), ei=find(['example','ví dụ'],4), ni=find(['note','ghi chú'],5);
-    const words=lines.slice(1).map(line=>{const a=parseCsvLine(line);return {word:a[wi]||'',pron:a[pi]||'',mean:a[mi]||'',type:a[ti]||'',example:a[ei]||'',note:a[ni]||'',emoji:'📚'}}).filter(w=>w.word&&w.mean);
+    const words=lines.slice(1).map(line=>{
+      const a=parseCsvLine(line);
+      return {word:a[wi]||'',pron:a[pi]||'',mean:a[mi]||'',type:a[ti]||'',example:a[ei]||'',note:a[ni]||'',emoji:'📚'};
+    }).filter(w=>w.word&&w.mean);
     if(!words.length)throw new Error('Không tìm thấy dòng dữ liệu hợp lệ. CSV cần có ít nhất cột Từ vựng và Nghĩa.');
+    if(words.length>500)throw new Error('Mỗi lần chỉ nhập tối đa 500 từ. Hãy chia file thành nhiều phần.');
     const selectedId=$('#packSelect')?.value?.trim();
     if(!selectedId)throw new Error('Hãy chọn bộ từ trước khi nhập CSV.');
-    const ref=fb.doc(db,'publicPacks',selectedId),snap=await fb.getDoc(ref),old=snap.exists()&&Array.isArray(snap.data()?.words)?snap.data().words:[];
-    await fb.updateDoc(ref,{words:[...old,...words],updatedAt:Date.now()});
+    const ref=fb.doc(db,'publicPacks',selectedId);
+    const snap=await fb.getDoc(ref);
+    if(!snap.exists())throw new Error('Không tìm thấy bộ từ đã chọn.');
+    const existingData=snap.data()||{};
+    let memoryDocId=String(existingData.memoryDocId||'');
+    let packCode=String(existingData.packCode||'');
+    if(!memoryDocId||!packCode){
+      const identity=await ensureTeacherPackIdentity(existingData.name||'Pack');
+      memoryDocId=memoryDocId||identity.docId;
+      packCode=packCode||identity.packCode;
+    }
+    const result=await packActionRequest('append-pack-words',{
+      packId:selectedId,words,memoryDocId,packCode
+    });
+    const updated=result.pack||{...existingData,words:[...(existingData.words||[]),...words],memoryDocId,packCode};
+    memoryDocId=String(updated.memoryDocId||memoryDocId);
+    await mirrorTeacherPackToMemory(memoryDocId,{...existingData,...updated,publicPackId:selectedId});
     toast('✓ Đã nhập '+words.length+' từ từ CSV');
-    loadPacks();loadDashboard();$('#packFileInput').value='';
+    await loadPacks();
+    await loadDashboard();
+    $('#packFileInput').value='';
   }catch(e){toast('CSV: '+e.message)}
 }
 $('#importPackBtn').onclick=()=>{$('#packFileInput').click()};
