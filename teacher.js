@@ -284,7 +284,7 @@ async function importPackCsv(file){
   if(!file)return;
   try{
     const text=await file.text();
-    const lines=text.replace(/^\\uFEFF/,'').split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean);
+    const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
     if(!lines.length)throw new Error('File CSV trống.');
     const header=parseCsvLine(lines[0]).map(x=>x.toLowerCase());
     const find=(names,def)=>{const i=header.findIndex(h=>names.includes(h));return i>=0?i:def};
