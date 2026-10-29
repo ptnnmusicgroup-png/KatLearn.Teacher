@@ -20,7 +20,7 @@ function clearSsoHash(){if(location.hash.includes('katlearn_id_token'))history.r
 function showBlocked(message='Tài khoản này là học sinh nên không thể truy cập cổng giáo viên.'){
   document.body.classList.add('locked');
   const box=document.createElement('div');box.id='katlearnRoleLock';box.innerHTML=`<div class="kat-role-lock-card"><div class="kat-role-lock-icon">🚫</div><div class="kat-role-lock-error">ERROR!</div><h1>${esc(message)}</h1><p>Cổng giáo viên chỉ dành cho tài khoản giáo viên.</p><button id="katBackStudent">Quay về trang học sinh của bạn</button></div>`;
-  const style=document.createElement('style');style.textContent='#katlearnRoleLock{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:linear-gradient(135deg,#fff7f8,#f7f5ff);padding:24px}.kat-role-lock-card{width:min(560px,100%);padding:42px 34px;text-align:center;background:#fff;border:1px solid #eee6f0;border-radius:28px;box-shadow:0 24px 80px #3c31501c}.kat-role-lock-icon{font-size:54px;margin-bottom:10px}.kat-role-lock-error{font:800 14px "Be Vietnam Pro",system-ui;color:#d94c68;letter-spacing:.12em}.kat-role-lock-card h1{margin:12px auto 8px;max-width:480px;font:700 24px/1.35 Fredoka,"Be Vietnam Pro",system-ui;color:#3e3549}.kat-role-lock-card p{color:#8b8295;font:500 13px/1.6 "Be Vietnam Pro",system-ui}.kat-role-lock-card button{margin-top:18px;border:0;border-radius:13px;padding:13px 20px;background:#f47c93;color:#fff;font:700 13px "Be Vietnam Pro",system-ui;cursor:pointer}.kat-role-lock-card button:hover{filter:brightness(.97);transform:translateY(-1px)}';document.head.appendChild(style);document.body.appendChild(box);$('#katBackStudent').onclick=()=>location.replace(LMS_HOME);}
+  const style=document.createElement('style');style.textContent='#katlearnRoleLock{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:linear-gradient(135deg,#fff7f8,#f7f5ff);padding:24px}.kat-role-lock-card{width:min(560px,100%);padding:42px 34px;text-align:center;background:#fff;border:1px solid #eee6f0;border-radius:28px;box-shadow:0 24px 80px #3c31501c}.kat-role-lock-icon{font-size:54px;margin-bottom:10px}.kat-role-lock-error{font:800 14px "Be Vietnam Pro",system-ui;color:#d94c68;letter-spacing:.12em}.kat-role-lock-card h1{margin:12px auto 8px;max-width:480px;font:700 24px/1.35 Fredoka,"Be Vietnam Pro",system-ui;color:#3e3549}.kat-role-lock-card p{color:#8b8295;font:500 13px/1.6 "Be Vietnam Pro",system-ui}.kat-role-lock-card button{margin-top:18px;border:0;border-radius:13px;padding:13px 20px;background:#f47c93;color:#fff;font:700 13px "Be Vietnam Pro",system-ui;cursor:pointer}.kat-role-lock-card button:hover{filter:brightness(.97);transform:translateY(-1px)}';document.head.appendChild(style);document.body.appendChild(box);$('#katBackStudent').onclick=()=>location.replace(TEACHER_HOME+'/login.html');}
 async function exchangeSsoToken(idToken){
   const response=await fetch(SSO_EXCHANGE,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({idToken})});
   const data=await response.json().catch(()=>({}));
@@ -49,7 +49,9 @@ let ssoAttempted=sessionStorage.getItem('katlearn-sso-teacher-attempt')==='1';
 async function startCrossAppCheck(){
   if(ssoAttempted||new URLSearchParams(location.search).has('sso'))return;
   ssoAttempted=true;sessionStorage.setItem('katlearn-sso-teacher-attempt','1');
-  location.replace(LMS_HOME+'/sso-bridge.html?return=teacher');
+  // Keep visitors inside the Teacher portal. The old cross-app redirect sent
+  // them to the legacy LMS hostname before the Teacher login could load.
+  location.replace(TEACHER_HOME+'/login.html?required=teacher');
 }
 async function initFirebase(){
   const [{initializeApp,getApps},{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,query,orderBy,where,limit,runTransaction}]=await Promise.all([
@@ -270,7 +272,7 @@ $('#packFileInput').onchange=e=>importPackCsv(e.target.files?.[0]);
         return;
       }
       await fb.signOut(auth).catch(()=>{});
-      location.replace(LMS_HOME+'/login.html');
+      location.replace(TEACHER_HOME+'/login.html?required=teacher');
       return;
     }
     if(!handled&&!user&&!new URLSearchParams(location.search).has('sso'))await startCrossAppCheck();
