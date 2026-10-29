@@ -1,0 +1,147 @@
+/* KatLearn Teacher — Professional LMS dark interface
+   This layer intentionally loads last so the teacher dashboard remains readable
+   even when a previous theme stylesheet is cached by the browser. */
+:root{
+  --tl-bg:#070b16;
+  --tl-bg-soft:#0b1122;
+  --tl-panel:rgba(16,24,45,.86);
+  --tl-panel-solid:#111a30;
+  --tl-panel-hover:#18243f;
+  --tl-line:rgba(164,184,255,.16);
+  --tl-line-bright:rgba(142,114,255,.45);
+  --tl-text:#f4f7ff;
+  --tl-muted:#aebbd7;
+  --tl-dim:#7887a8;
+  --tl-primary:#9b87ff;
+  --tl-primary-2:#55d8ff;
+  --tl-success:#4ce0a1;
+  --tl-danger:#ff6d8b;
+  --tl-warn:#ffc760;
+  --tl-shadow:0 20px 55px rgba(0,0,0,.28);
+}
+html body{
+  color:var(--tl-text)!important;
+  background:
+    radial-gradient(circle at 9% 0%,rgba(109,78,255,.20),transparent 32rem),
+    radial-gradient(circle at 92% 16%,rgba(35,197,255,.12),transparent 28rem),
+    var(--tl-bg)!important;
+}
+html body::before,html body::after{display:block!important;opacity:.55!important;pointer-events:none!important}
+html body .app-shell,html body main,html body .page{background:transparent!important}
+html body .sidebar{
+  background:linear-gradient(180deg,rgba(15,22,42,.97),rgba(8,13,27,.96))!important;
+  border-right:1px solid var(--tl-line)!important;
+  box-shadow:12px 0 40px rgba(0,0,0,.22)!important;
+}
+html body .brand,html body .brand *,html body h1,html body h2,html body h3,
+html body h4,html body strong,html body b,html body label{color:var(--tl-text)!important}
+html body .brand span span{color:#b7aaff!important}
+html body .class-label,html body p,html body small,html body .eyebrow,
+html body .subtext,html body .muted,html body .empty-state{color:var(--tl-muted)!important}
+html body .eyebrow{letter-spacing:.14em!important;color:#a99cff!important;font-weight:800!important}
+html body nav{gap:9px!important}
+html body .nav-item{
+  color:var(--tl-muted)!important;background:rgba(255,255,255,.018)!important;
+  border:1px solid transparent!important;border-radius:14px!important;
+  min-height:46px!important;font-weight:700!important;
+}
+html body .nav-item:hover{
+  color:var(--tl-text)!important;background:rgba(155,135,255,.12)!important;
+  border-color:rgba(155,135,255,.22)!important;transform:translateX(4px)!important;
+}
+html body .nav-item.active{
+  color:#fff!important;background:linear-gradient(100deg,rgba(137,105,255,.94),rgba(82,184,255,.72))!important;
+  border-color:rgba(207,197,255,.62)!important;box-shadow:0 9px 22px rgba(91,67,205,.28)!important;
+}
+html body .teacher-card{
+  color:var(--tl-text)!important;background:linear-gradient(145deg,rgba(142,114,255,.15),rgba(83,215,255,.07))!important;
+  border:1px solid var(--tl-line-bright)!important;box-shadow:none!important;
+}
+html body .teacher-card button,html body .teacher-card small{color:var(--tl-text)!important}
+html body .topbar{
+  color:var(--tl-text)!important;background:rgba(9,14,29,.80)!important;
+  border-bottom:1px solid var(--tl-line)!important;backdrop-filter:blur(18px)!important;
+}
+html body .search,html body .search *,html body .teacher-account-root{color:var(--tl-muted)!important}
+html body .search{
+  background:rgba(255,255,255,.055)!important;border:1px solid var(--tl-line)!important;
+  border-radius:14px!important;
+}
+html body .menu-toggle,html body .login-btn,html body button:not(.nav-item):not(.activity-card){
+  color:var(--tl-text)!important;background:rgba(155,135,255,.15)!important;
+  border-color:rgba(169,153,255,.38)!important;
+}
+html body .teacher-hero,html body .hero-card{
+  color:var(--tl-text)!important;
+  background:linear-gradient(125deg,rgba(42,29,101,.94),rgba(18,41,76,.91) 66%,rgba(19,31,59,.93))!important;
+  border:1px solid rgba(174,157,255,.38)!important;box-shadow:var(--tl-shadow)!important;
+  overflow:hidden!important;
+}
+html body .teacher-hero::after,html body .hero-card::after{
+  content:"";position:absolute;inset:auto -13% -70% auto;width:310px;height:310px;border-radius:50%;
+  background:radial-gradient(circle,rgba(104,221,255,.24),transparent 68%);pointer-events:none;
+}
+html body .teacher-hero h1,html body .teacher-hero p{color:var(--tl-text)!important}
+html body .teacher-hero p{color:#d3dcfa!important}
+html body .metric,html body .teacher-card-panel,html body .class-item,
+html body .student-row,html body .data-table,html body .published-packs,
+html body .published-pack,html body .pack-tile,html body .activity-card,
+html body .stat-grid>div{
+  color:var(--tl-text)!important;background:var(--tl-panel)!important;
+  border:1px solid var(--tl-line)!important;box-shadow:var(--tl-shadow)!important;
+  backdrop-filter:blur(15px)!important;
+}
+html body .metric{position:relative;overflow:hidden!important}
+html body .metric::before{
+  content:"";position:absolute;left:0;top:16%;bottom:16%;width:3px;border-radius:4px;
+  background:linear-gradient(#af9dff,#58d6ff);
+}
+html body .metric small,html body .metric span{color:var(--tl-muted)!important}
+html body .metric strong{font-size:clamp(1.5rem,2vw,2.15rem)!important;color:#fff!important}
+html body .teacher-card-panel>h3{padding-bottom:13px!important;border-bottom:1px solid var(--tl-line)!important}
+html body .activity-card:hover,html body .class-item:hover,html body .student-row:hover,
+html body .published-pack:hover,html body .pack-tile:hover{
+  background:var(--tl-panel-hover)!important;border-color:var(--tl-line-bright)!important;
+  transform:translateY(-3px)!important;
+}
+html body .activity-card small,html body .class-item small,html body .student-row small,
+html body .teacher-card-panel p{color:var(--tl-muted)!important}
+html body .activity-card i{color:#bfb4ff!important}
+html body .data-table,html body .table-wrap,html body .table-responsive{
+  background:var(--tl-panel)!important;border:1px solid var(--tl-line)!important;border-radius:18px!important;
+}
+html body table,html body tbody,html body tr,html body td{color:var(--tl-text)!important;background:transparent!important;border-color:var(--tl-line)!important}
+html body table thead,html body .data-table thead,html body .word-table-head{
+  color:#cfc7ff!important;background:rgba(155,135,255,.12)!important;
+}
+html body th{color:#dcd7ff!important;background:transparent!important}
+html body tr:hover td{background:rgba(155,135,255,.065)!important}
+html body input,html body textarea,html body select{
+  color:var(--tl-text)!important;background:rgba(4,8,19,.72)!important;
+  border:1px solid var(--tl-line)!important;box-shadow:none!important;
+}
+html body input::placeholder,html body textarea::placeholder{color:var(--tl-dim)!important}
+html body input:focus,html body textarea:focus,html body select:focus{
+  border-color:#9b87ff!important;box-shadow:0 0 0 4px rgba(155,135,255,.16)!important;
+}
+html body .modal,html body .modal-overlay{background:rgba(2,5,13,.72)!important;backdrop-filter:blur(8px)!important}
+html body .modal-card,html body .modal-box,html body .modal-content,html body .student-pack-modal{
+  color:var(--tl-text)!important;background:linear-gradient(145deg,#18223d,#0e162a)!important;
+  border:1px solid var(--tl-line-bright)!important;box-shadow:0 28px 80px rgba(0,0,0,.52)!important;
+}
+html body .modal-card p,html body .modal-box p,html body .modal-content p{color:var(--tl-muted)!important}
+html body .badge,html body .status,html body .tag{color:#ded8ff!important;background:rgba(155,135,255,.14)!important;border-color:rgba(155,135,255,.32)!important}
+html body .success,html body .correct{color:var(--tl-success)!important}
+html body .error,html body .wrong{color:var(--tl-danger)!important}
+html body .site-footer,html body #katlearnFooter{
+  color:var(--tl-muted)!important;background:transparent!important;border-color:var(--tl-line)!important;
+}
+html body .site-footer *,html body #katlearnFooter *{color:inherit!important}
+@media(max-width:900px){
+  html body .sidebar{background:rgba(8,13,27,.985)!important}
+  html body .topbar{padding-inline:14px!important}
+  html body .search{display:none!important}
+  html body .teacher-hero{padding:22px!important}
+  html body .dashboard-grid{gap:12px!important}
+}
+@media(prefers-reduced-motion:reduce){html body *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
