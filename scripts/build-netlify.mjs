@@ -61,19 +61,13 @@ for (const name of fs.readdirSync(root)) {
   });
 }
 
-const productionUrl = process.env.CONTEXT === "production"
-  ? process.env.URL
-  : (process.env.DEPLOY_PRIME_URL || process.env.URL);
+// The Teacher portal always publishes its own canonical origin. Do not use
+// a Netlify preview/legacy URL here because it leaks into login redirects and SSO.
 const lmsUrl = cleanUrl(
   process.env.KATLEARN_LMS_SITE_URL,
   "https://lms-katlearn.netlify.app"
 );
-const teacherUrl = cleanUrl(
-  process.env.CONTEXT === "production" && productionUrl
-    ? productionUrl
-    : (process.env.KATLEARN_TEACHER_SITE_URL || productionUrl),
-  "https://quanly-giaovien-katlearn.netlify.app"
-);
+const teacherUrl = "https://quanly-giaovien-katlearn.netlify.app";
 fs.writeFileSync(
   path.join(output, "deployment-config.js"),
   "window.KATLEARN_DEPLOYMENT_CONFIG = Object.freeze(" +

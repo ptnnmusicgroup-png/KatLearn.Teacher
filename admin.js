@@ -161,7 +161,7 @@ function setConnection(ok,text){const x=$("#backendStatus");x.classList.toggle("
 async function token(){if(!state.user)throw new Error("Chưa đăng nhập Admin.");const t=await state.user.getIdToken(true);if(!t)throw new Error("Không lấy được phiên Admin.");return t}
 function adminHubURLs(){
  const local="/api/admin-hub";
- const lmsBase=String(window.KATLEARN_DEPLOYMENT_CONFIG?.lmsUrl||"https://lms-katlearn.netlify.app").replace(/\/+$/,"");
+ const lmsBase=String(window.KATLEARN_DEPLOYMENT_CONFIG?.teacherUrl||"https://quanly-giaovien-katlearn.netlify.app").replace(/\/+$/,"");
  const remote=lmsBase+"/api/admin-hub";
  const isLocalHost=/^(localhost|127\.0\.0\.1)$/.test(String(location.hostname||""));
  return isLocalHost?[local,remote]:[remote,local];
@@ -244,7 +244,7 @@ function bind(){
   try{
     await signOut(auth);
   }finally{
-    location.replace(String(window.KATLEARN_DEPLOYMENT_CONFIG?.lmsUrl||"https://lms-katlearn.netlify.app").replace(/\/+$/,"")+"/login.html?logout=1");
+    location.replace(String(window.KATLEARN_DEPLOYMENT_CONFIG?.teacherUrl||"https://quanly-giaovien-katlearn.netlify.app").replace(/\/+$/,"")+"/login.html?logout=1");
   }
 }
 $("#logout").onclick=leaveAdmin;
