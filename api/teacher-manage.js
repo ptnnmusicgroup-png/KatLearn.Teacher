@@ -92,6 +92,50 @@ export default async request=>{
       return jsonResponse({ok:true,message:'Đã xóa bộ từ và các bài giao liên quan.'},{headers:headers(origin)});
     }
 
+
+    if(action==='append-pack-words'){
+      const packId=clean(body?.packId,160);
+      if(!packId)throw Object.assign(new Error('Thiếu bộ từ.'),{status:400});
+      if(!Array.isArray(body?.words)||body.words.length<1||body.words.length>500){
+        throw Object.assign(new Error('Mỗi lần chỉ có thể thêm từ 1 đến 500 mục.'),{status:400});
+      }
+      const words=body.words.map(item=>{
+        const source=item&&typeof item==='object'?item:{};
+        const word=clean(source.word,120),mean=clean(source.mean,300);
+        if(!word||!mean)throw Object.assign(new Error('Mỗi từ cần có từ tiếng Anh và nghĩa tiếng Việt.'),{status:400});
+        return {
+          word,mean,pron:clean(source.pron,80),type:clean(source.type,40),
+          example:clean(source.example,300),note:clean(source.note,300),
+          emoji:clean(source.emoji,16)||'📚'
+        };
+      });
+      const packRef=ctx.db.collection('publicPacks').doc(packId);
+      let resultPack=null;
+      await ctx.db.runTransaction(async transaction=>{
+        const packSnap=await transaction.get(packRef);
+        if(!packSnap.exists)throw Object.assign(new Error('Không tìm thấy bộ từ.'),{status:404});
+        const current=packSnap.data()||{};
+        const ownerUid=String(current.createdByUid||current.ownerUid||current.teacherUid||'').trim();
+        const ownerEmail=String(current.createdByEmail||current.createdBy||current.teacherEmail||current.ownerEmail||'').trim().toLowerCase();
+        if(!ctx.admin&&(ownerUid?ownerUid!==ctx.uid:ownerEmail!==String(ctx.email||'').trim().toLowerCase())){
+          throw Object.assign(new Error('Bạn không quản lý bộ từ này.'),{status:403});
+        }
+        const oldWords=Array.isArray(current.words)?current.words:[];
+        if(oldWords.length+words.length>2000){
+          throw Object.assign(new Error('Bộ từ không thể vượt quá 2.000 mục.'),{status:400});
+        }
+        const memoryDocId=String(current.memoryDocId||clean(body?.memoryDocId,180)).trim();
+        const packCode=String(current.packCode||clean(body?.packCode,40)).trim();
+        const nextWords=[...oldWords,...words];
+        const update={words:nextWords,updatedAt:FieldValue.serverTimestamp()};
+        if(memoryDocId)update.memoryDocId=memoryDocId;
+        if(packCode)update.packCode=packCode;
+        transaction.update(packRef,update);
+        resultPack={...current,words:nextWords,memoryDocId,packCode};
+      });
+      return jsonResponse({ok:true,addedCount:words.length,pack:resultPack},{headers:headers(origin)});
+    }
+
     if(!classId)throw Object.assign(new Error('Thiếu lớp.'),{status:400});
     const classSnap=await assertClass(ctx,classId),classData=classSnap.data(),students=ctx.db.collection('users');
 
