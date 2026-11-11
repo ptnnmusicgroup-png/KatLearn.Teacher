@@ -6,6 +6,13 @@ let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false,account
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const isTeacher=()=>teacherAccess;
+function setTeacherAuthState(message,showLogin=false){
+  const messageNode=$('#teacherAuthStateMessage'),loginLink=$('#teacherAuthLogin'),spinner=$('#teacherAuthSpinner'),paw=$('#teacherAuthPaw');
+  if(messageNode)messageNode.textContent=String(message||'Đang xác thực phiên đăng nhập…');
+  if(loginLink)loginLink.hidden=!showLogin;
+  if(spinner)spinner.hidden=showLogin;
+  if(paw)paw.hidden=!showLogin;
+}
 const isAdminUser=()=>ADMIN_EMAILS.includes((user?.email||'').toLowerCase());
 function toast(msg){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 function makeJoinCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=new Uint8Array(6);crypto.getRandomValues(bytes);return [...bytes].map(b=>chars[b%chars.length]).join('')}
@@ -62,8 +69,16 @@ async function consumeIncomingSso(){
 }
 let ssoAttempted=sessionStorage.getItem('katlearn-sso-teacher-attempt')==='1';
 async function startCrossAppCheck(){
-  if(ssoAttempted||new URLSearchParams(location.search).has('sso'))return;
+  if(new URLSearchParams(location.search).has('sso')){
+    setTeacherAuthState('Liên kết đăng nhập chưa hoàn tất hoặc đã hết hạn. Hãy đăng nhập lại để tiếp tục.',true);
+    return;
+  }
+  if(ssoAttempted){
+    setTeacherAuthState('Chưa khôi phục được phiên đăng nhập. Bạn có thể đăng nhập lại để tiếp tục.',true);
+    return;
+  }
   ssoAttempted=true;sessionStorage.setItem('katlearn-sso-teacher-attempt','1');
+  setTeacherAuthState('Đang chuyển tới trang đăng nhập giáo viên…',false);
   // Keep visitors inside the Teacher portal. The old cross-app redirect sent
   // them to the legacy LMS hostname before the Teacher login could load.
   location.replace(TEACHER_HOME+'/login.html?required=teacher');
@@ -108,10 +123,12 @@ async function initFirebase(){
     window.dispatchEvent(new CustomEvent('katlearn-teacher-auth-change',{detail:{user:u,teacherAccess,role:accountRole}}));
     if(firstAuthEvent){firstAuthEvent=false;resolveReady(u)}
     if(u&&isTeacher()){
+      sessionStorage.removeItem('katlearn-sso-teacher-attempt');
       document.body.classList.remove('locked');
       void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error)).then(()=>showPage(teacherPageFromHash(),{updateHash:false,refresh:false}));
     }else{
       document.body.classList.add('locked');
+      setTeacherAuthState(new URLSearchParams(location.search).has('sso')?'Đang kiểm tra liên kết đăng nhập an toàn…':'Đang kiểm tra phiên đăng nhập…',false);
       showPage('dashboard');
     }
   });
@@ -372,7 +389,11 @@ $('#packFileInput').onchange=e=>importPackCsv(e.target.files?.[0]);
       showBlocked('Tài khoản đã đăng nhập nhưng chưa được cấp quyền giáo viên.');
       return;
     }
-    if(!handled&&!user&&!new URLSearchParams(location.search).has('sso'))await startCrossAppCheck();
-  }catch(e){console.error(e);toast('Firebase chưa sẵn sàng: '+e.message)}
+    if(!handled&&!user)await startCrossAppCheck();
+  }catch(e){
+    console.error(e);
+    setTeacherAuthState('Không thể kết nối dịch vụ đăng nhập. Kiểm tra kết nối mạng rồi thử đăng nhập lại.',true);
+    toast('Firebase chưa sẵn sàng: '+e.message);
+  }
 })();
 
