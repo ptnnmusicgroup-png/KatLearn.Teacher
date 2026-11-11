@@ -2,7 +2,7 @@ name: Netlify build smoke check
 
 on:
   push:
-    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting]
+    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting, feat/teacher-classroom-games-dark-theme]
   pull_request:
     branches: [main]
 
@@ -37,6 +37,19 @@ jobs:
           fi
           grep -q 'LMS_CATALOG' teacher-signup.html
           echo "Verified signup.html redirects to the static LMS-backed Teacher registration form."
+      - name: Verify the full LMS theme is shared across Teacher user-facing pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s katlearn-defaultdarkmode.css
+          test -s teacher-katlearn-auth-theme.css
+          for page in index.html login.html teacher-signup.html teacher-pending.html sso-bridge.html; do
+            grep -q 'katlearn-defaultdarkmode.css' "$page"
+            grep -q 'teacher-katlearn-auth-theme.css\|teacher-katlearn-theme.css' "$page"
+          done
+          grep -q 'body class="sso-bridge"' sso-bridge.html
+          grep -q 'body class="teacher-pending"' teacher-pending.html
+          echo "Verified LMS Default Dark Mode and Teacher adapters are linked on every user-facing Teacher page."
       - name: Build Netlify static output
         env:
           KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
@@ -62,8 +75,27 @@ jobs:
           test -s dist/deployment-config.js
           test -s dist/teacher-signup.html
           test -s dist/katlearn-astra.css
+          test -s dist/katlearn-defaultdarkmode.css
+          test -s dist/teacher-katlearn-theme.css
+          test -s dist/teacher-katlearn-auth-theme.css
+          test -s dist/teacher-classroom-games.js
+          test -s dist/teacher-learning-tools.js
+          test -s dist/teacher-learning-tools.css
+          grep -q 'data-page="games"' dist/index.html
+          grep -q 'teacher-classroom-games.js' dist/index.html
+          grep -q 'teacher-learning-tools.js' dist/index.html
+          grep -q 'teacher-learning-tools.css' dist/index.html
+          grep -q 'data-tool-card="flashcards"' dist/index.html
+          for page in login.html teacher-signup.html teacher-pending.html sso-bridge.html; do
+            grep -q 'katlearn-defaultdarkmode.css' "dist/$page"
+            grep -q 'teacher-katlearn-auth-theme.css' "dist/$page"
+          done
+          if grep -Eq 'modern-ui.css|katlearn-blue-theme.css|teacher-system-ui-v3.css|katlearn-astra.css|teacher-lms-professional.css' dist/index.html; then
+            echo "::error::Obsolete light/blue/Astra theme layer is still loaded by the Teacher dashboard."
+            exit 1
+          fi
           grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
-          grep -q '20261024-teacher-system2' dist/teacher-signup.html
+          grep -q 'teacher-katlearn-auth-theme.css' dist/teacher-signup.html
           grep -q 'page-lms-directory' dist/admin.html
           test ! -e dist/api
           test ! -e dist/netlify

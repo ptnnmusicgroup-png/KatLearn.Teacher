@@ -1,0 +1,54 @@
+/* KatLearn Teacher learning-tools library — original KatLearn UI. */
+.learning-tools-library{margin:18px 0 22px}
+.learning-tools-library-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}
+.learning-tools-library-head h2{margin:0;color:var(--kl-ink);font-size:clamp(19px,2.4vw,25px)}
+.learning-tools-library-head p{margin:6px 0 0;color:var(--kl-muted);font-size:12px}
+.learning-tools-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.learning-tools-search{flex:1;min-width:190px;max-width:320px;min-height:42px;padding:0 13px;border:1px solid var(--kl-line-strong);border-radius:12px;background:var(--kl-surface-2);color:var(--kl-ink)}
+.learning-tool-filters{display:flex;gap:7px;flex-wrap:wrap}
+.learning-tool-filters button{padding:9px 12px;border:1px solid var(--kl-line);border-radius:999px;background:var(--kl-surface);color:var(--kl-muted);font-size:11px;font-weight:800;cursor:pointer}
+.learning-tool-filters button.active{color:var(--kl-ink);border-color:rgba(169,156,255,.45);background:rgba(169,156,255,.14)}
+.learning-tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,225px),1fr));gap:13px}
+.learning-tool-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-height:194px;padding:17px;border:1px solid var(--kl-line);border-radius:19px;background:linear-gradient(145deg,rgba(31,28,50,.97),rgba(17,16,31,.97));color:var(--kl-ink);text-align:left;box-shadow:var(--kl-shadow-sm);cursor:pointer;transition:transform .18s,border-color .18s,background .18s}
+.learning-tool-card:hover{transform:translateY(-3px);border-color:rgba(169,156,255,.48);background:linear-gradient(145deg,rgba(42,37,67,.98),rgba(20,19,38,.98))}
+.learning-tool-card:focus-visible{outline:2px solid var(--kl-accent-2);outline-offset:3px}
+.learning-tool-icon{display:grid;place-items:center;width:46px;height:46px;margin-bottom:13px;border:1px solid rgba(169,156,255,.2);border-radius:15px;background:linear-gradient(135deg,rgba(169,156,255,.18),rgba(56,183,220,.12));font-size:23px}
+.learning-tool-card strong{font-size:14px;line-height:1.35}
+.learning-tool-card small{margin-top:7px;color:var(--kl-muted);font-size:11px;line-height:1.6}
+.learning-tool-card .tool-badge{position:absolute;top:14px;right:14px;padding:5px 8px;border-radius:999px;background:rgba(56,183,220,.13);color:var(--kl-accent-2);font-size:9px;font-weight:900}
+.learning-tool-card[hidden]{display:none}
+.learning-tools-empty{grid-column:1/-1;padding:22px;border:1px dashed var(--kl-line-strong);border-radius:16px;color:var(--kl-muted);text-align:center;font-size:12px}
+.learning-tool-panel{margin:18px 0}
+.learning-tool-panel[hidden]{display:none!important}
+.learning-tool-panel .teacher-card-panel{padding:22px}
+.tool-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+.tool-panel-heading h2{margin:3px 0;color:var(--kl-ink);font-size:21px}
+.tool-panel-heading p{margin:5px 0 0;color:var(--kl-muted);font-size:12px;line-height:1.6}
+.tool-panel-kicker{color:var(--kl-accent-2);font-size:10px;font-weight:900;letter-spacing:.1em}
+.tool-input,.tool-textarea,.tool-select{width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--kl-line-strong);border-radius:12px;background:var(--kl-surface-2);color:var(--kl-ink);font:500 12px "Be Vietnam Pro",sans-serif}
+.tool-textarea{min-height:110px;resize:vertical;line-height:1.6}
+.tool-field{display:grid;gap:7px;min-width:0;color:var(--kl-muted);font-size:11px;font-weight:800}
+.tool-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+.tool-help{color:var(--kl-muted);font-size:10px;line-height:1.65}
+.tool-stage{display:grid;place-items:center;min-height:135px;margin-top:14px;padding:19px;border:1px solid var(--kl-line);border-radius:16px;background:rgba(169,156,255,.06);color:var(--kl-ink);text-align:center}
+.tool-stage strong{font-size:clamp(19px,3vw,30px);overflow-wrap:anywhere}
+.tool-stage small{margin-top:8px;color:var(--kl-muted);font-size:11px}
+.tool-two-column{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.tool-flashcard{display:grid;place-items:center;min-height:190px;padding:18px;border:1px solid var(--kl-line-strong);border-radius:18px;background:linear-gradient(135deg,rgba(169,156,255,.16),rgba(56,183,220,.08));color:var(--kl-ink);text-align:center;cursor:pointer}
+.tool-flashcard strong{font-size:clamp(18px,3vw,25px);overflow-wrap:anywhere}
+.tool-flashcard small{margin-top:10px;color:var(--kl-muted);font-size:10px}
+.tool-match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-top:16px}
+.tool-match-card{min-height:86px;padding:12px;border:1px solid var(--kl-line);border-radius:13px;background:var(--kl-surface-2);color:var(--kl-ink);font-size:12px;font-weight:700;cursor:pointer;overflow-wrap:anywhere}
+.tool-match-card.is-open{border-color:var(--kl-accent);background:rgba(169,156,255,.15)}
+.tool-match-card.is-matched{border-color:var(--kl-good);background:rgba(91,189,155,.1);cursor:default}
+.tool-match-card:disabled{opacity:1}
+.tool-clock{font-variant-numeric:tabular-nums;font-size:clamp(48px,10vw,82px);font-weight:900;letter-spacing:-.05em;color:var(--kl-ink)}
+.tool-scoreboard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}
+.tool-score{padding:18px;border:1px solid var(--kl-line);border-radius:16px;background:var(--kl-surface-2);text-align:center}
+.tool-score strong{display:block;margin:9px 0;font-size:clamp(35px,6vw,54px);font-variant-numeric:tabular-nums}
+.tool-score-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.tool-roster-pairs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:14px}
+.tool-roster-pair{padding:13px 15px;border:1px solid var(--kl-line);border-radius:13px;background:var(--kl-surface-2);color:var(--kl-ink);font-size:12px}
+.tool-roster-pair strong{display:block;margin-bottom:6px;color:var(--kl-accent-2);font-size:10px}
+@media(max-width:700px){.learning-tools-library-head{align-items:flex-start;flex-direction:column}.tool-two-column{grid-template-columns:1fr}.tool-panel-heading{flex-direction:column}.tool-scoreboard{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.learning-tool-card{transition:none}.learning-tool-card:hover{transform:none}}
