@@ -153,20 +153,26 @@ $('#newSchool').addEventListener('input',()=>{
 });
 function permissionFailure(error){
  const text=String([error?.message,error?.code,error?.details].filter(Boolean).join(" "));
+ // Only retry through client Firestore for explicit hosting/credential/permission
+ // failures. A generic HTTP 403 can also mean wrong identity or rejected Origin.
  return /permission[_\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
   ||error?.code==="teacher_registration_access_blocked"
   ||(Number(error?.status)===503&&/firebase admin credentials|service account|firebase_credentials/i.test(text));
 }
 async function submitTeacherProfileWithClient(user,payload){
- if(!db||!api?.getDoc||!api?.setDoc)throw new Error("Firebase Firestore chưa sẵn sàng.");
+ if(!db||!api?.getDoc||!api?.setDoc)throw Object.assign(new Error("Firebase Firestore chưa sẵn sàng."),{stage:"khởi tạo Firestore"});
+ const currentUser=auth?.currentUser;
+ if(!currentUser||currentUser.uid!==user.uid)throw Object.assign(new Error("Phiên Firebase Auth không trùng với tài khoản vừa đăng ký. Hãy đăng nhập lại bằng đúng tài khoản."),{stage:"kiểm tra phiên đăng nhập"});
+ try{await currentUser.getIdToken(true)}catch(error){throw Object.assign(new Error("Không làm mới được Firebase ID token: "+(error?.message||"unknown error")),{stage:"làm mới ID token",cause:error})}
  const ref=api.doc(db,"users",user.uid);
- const existing=await api.getDoc(ref);
+ let existing;
+ try{existing=await api.getDoc(ref)}catch(error){throw Object.assign(new Error(error?.message||"Không đọc được hồ sơ users/{uid}"),{stage:"đọc users/{uid}",cause:error})}
  if(existing.exists()){
   const current=existing.data()||{};
   if(String(current.email||"").toLowerCase()===payload.email&&current.role==="pending_teacher_verification"&&current.teacherVerification?.status==="pending"){
    return{ok:true,uid:user.uid,status:"pending_teacher_verification",existing:true,clientFallback:true};
   }
-  throw new Error("UID này đã có hồ sơ với quyền khác. Để bảo vệ tài khoản, hệ thống không ghi đè hồ sơ hiện tại.");
+  throw Object.assign(new Error("UID này đã có hồ sơ với quyền khác. Để bảo vệ tài khoản, hệ thống không ghi đè hồ sơ hiện tại."),{stage:"kiểm tra hồ sơ hiện có"});
  }
  const now=Date.now();
  const requestedClassName=payload.newClass||payload.selectedClassName||"";
@@ -191,7 +197,7 @@ async function submitTeacherProfileWithClient(user,payload){
   },
   createdAt:now,updatedAt:now
  };
- await api.setDoc(ref,profile);
+ try{await api.setDoc(ref,profile)}catch(error){throw Object.assign(new Error(error?.message||"Không tạo được hồ sơ users/{uid}"),{stage:"tạo users/{uid}",cause:error})}
  return{ok:true,uid:user.uid,status:"pending_teacher_verification",existing:false,clientFallback:true};
 }
 async function submitTeacherProfile(user){
@@ -239,12 +245,17 @@ async function submitTeacherProfile(user){
   const hostingAccessBlocked=/app\.netlify\.com\/edge-access/i.test(responseBody)||([401,403].includes(response.status)&&contentType.includes('text/html'));
   if(!response.ok||result.ok!==true){
    const serverError=Object.assign(new Error(hostingAccessBlocked?'Đường dẫn đăng ký đang bị chặn bởi lớp truy cập hosting.':(result.error||'Không thể lưu hồ sơ giáo viên.')),{code:hostingAccessBlocked?'teacher_registration_access_blocked':(result.code||'teacher_registration_failed'),status:response.status,details:hostingAccessBlocked?'Hosting returned an HTML access page.':result.details});
-   if(!permissionFailure(serverError))throw serverError;
-   $('#status').textContent='Máy chủ đăng ký đang bị giới hạn quyền truy cập. Đang chuyển sang kênh Firebase an toàn…';
-   console.warn('[KatLearn Teacher] Admin API is permission/access blocked; trying the restricted pending-teacher Firestore path.',serverError.code);
+   if(!permissionFailure(serverError)){
+    throw Object.assign(new Error('API đăng ký trả về HTTP '+response.status+' ('+serverError.code+'): '+serverError.message),{code:serverError.code,status:response.status,cause:serverError});
+   }
+   $('#status').textContent='Máy chủ đăng ký chưa sẵn sàng. Đang thử kênh Firebase giới hạn quyền…';
+   console.warn('[KatLearn Teacher] API fallback reason:',{status:serverError.status,code:serverError.code,message:serverError.message});
    try{return await submitTeacherProfileWithClient(user,payload)}
    catch(clientError){
-    throw Object.assign(new Error('Máy chủ đăng ký bị từ chối quyền ghi hồ sơ và phương án dự phòng Firebase cũng không thành công. Kiểm tra Firestore Rules cho users/{uid} (pending_teacher_verification) và quyền tài khoản dịch vụ Admin. Chi tiết: '+(clientError.message||'permission denied')),{code:'teacher_profile_permission_blocked',cause:clientError});
+    const serverDetail='API HTTP '+response.status+' ('+serverError.code+'): '+serverError.message;
+    const clientDetail='Firestore '+(clientError.stage||'fallback')+': '+(clientError.message||'permission denied');
+    console.error('[KatLearn Teacher] Registration fallback failed:',{serverStatus:response.status,serverCode:serverError.code,clientStage:clientError.stage,clientCode:clientError.cause?.code});
+    throw Object.assign(new Error(serverDetail+'. '+clientDetail+'. Không mở rộng quyền ghi công khai; cần sửa đúng cấu hình máy chủ hoặc quyền của tài khoản này.'),{code:'teacher_profile_permission_blocked',cause:clientError,serverError});
    }
   }
   return result;
