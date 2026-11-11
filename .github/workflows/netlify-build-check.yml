@@ -54,6 +54,14 @@ jobs:
           grep -q 'https://deploy-preview-41--quanly-giaovien-katlearn.netlify.app' api/teacher-register.js
           grep -q 'https://deploy-preview-41--teacher-katlearn1.netlify.app' api/teacher-register.js
           grep -q 'function isAllowedOrigin(origin)' api/teacher-register.js
+          grep -q "code: 'origin_not_allowed'" api/teacher-register.js
+          grep -q 'Only retry through client Firestore for explicit hosting/credential/permission' teacher-signup.html
+          grep -q "API HTTP '+response.status+' (" teacher-signup.html
+          grep -q 'Firestore.*clientError.stage' teacher-signup.html
+          if grep -Eq 'Number\(error\?\.status\)===403' teacher-signup.html; then
+            echo "::error::Generic HTTP 403 must not trigger a Firestore fallback."
+            exit 1
+          fi
           grep -q '!isAllowedOrigin(origin)' api/teacher-register.js
           if grep -Eq 'access-control-allow-origin[^\n]*\*' api/teacher-register.js; then
             echo "::error::Teacher registration must not allow every CORS origin."
