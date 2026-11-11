@@ -3,12 +3,19 @@ import { admin } from './_firebase-admin.js';
 
 const ORIGINS = new Set([
   'https://quanly-giaovien-katlearn.netlify.app',
-  'https://quanly-giaovien-katlearn.netlify.app',
+  // PR #41 previews use Netlify's deploy-preview-<PR>--<site> host format.
+  // Keep this list exact: do not reflect arbitrary origins or enable CORS "*".
+  'https://deploy-preview-41--quanly-giaovien-katlearn.netlify.app',
+  'https://deploy-preview-41--teacher-katlearn1.netlify.app',
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean),
   ...[process.env.KATLEARN_TEACHER_SITE_URL, process.env.URL, process.env.DEPLOY_PRIME_URL]
     .map(x => String(x || '').trim().replace(/\/+$/, ''))
     .filter(Boolean)
 ]);
+
+function isAllowedOrigin(origin) {
+  return ORIGINS.has(origin);
+}
 
 const clean = (value, max = 180) => String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
 const lower = value => clean(value, 254).toLowerCase();
@@ -19,7 +26,7 @@ function response(body, status, origin) {
     'cache-control': 'no-store',
     'x-content-type-options': 'nosniff'
   };
-  if (ORIGINS.has(origin)) {
+  if (isAllowedOrigin(origin)) {
     headers['access-control-allow-origin'] = origin;
     headers['access-control-allow-methods'] = 'POST, OPTIONS';
     headers['access-control-allow-headers'] = 'content-type, authorization';
@@ -88,11 +95,11 @@ function validateClass(classId, catalogSchool, requestedClassName) {
 export default async request => {
   const origin = String(request.headers.get('origin') || '').replace(/\/+$/, '');
   if (request.method === 'OPTIONS') {
-    if (origin && !ORIGINS.has(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
+    if (origin && !isAllowedOrigin(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
     return response({ ok: true }, 200, origin);
   }
   if (request.method !== 'POST') return response({ ok: false, error: 'Phương thức không được hỗ trợ.' }, 405, origin);
-  if (!ORIGINS.has(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
+  if (!isAllowedOrigin(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
 
   try {
     const body = await request.json();
