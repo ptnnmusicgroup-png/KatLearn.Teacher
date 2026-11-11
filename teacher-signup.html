@@ -156,8 +156,8 @@ function permissionFailure(error){
  // Missing/invalid Admin credentials are server configuration faults; a client
  // Firestore fallback cannot create server credentials or repair that condition.
  if(/^firebase_(?:credentials_|project_)/.test(String(error?.code||'')))return false;
- // Retry only explicit hosting-access or Firestore permission failures.
- // Generic HTTP 403/503 responses can represent unrelated server faults.
+ // Only retry through client Firestore for explicit hosting/credential/permission failures;
+ // Admin credential setup faults are excluded above, and generic HTTP 403/503 is not enough.
  return /permission[_\\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
   ||error?.code==="teacher_registration_access_blocked";
 }
