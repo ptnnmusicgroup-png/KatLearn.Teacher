@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080711"><title>KatLearn Teacher</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet"><link rel="canonical" href="https://quanly-giaovien-katlearn.netlify.app/"><link rel="stylesheet" href="/katlearn-defaultdarkmode.css?v=20261111-lms-theme"><link rel="stylesheet" href="/teacher-katlearn-theme.css?v=20261111-2"><link rel="stylesheet" href="/teacher-learning-tools.css?v=20261111-2"><link rel="stylesheet" href="/teacher-katlearn-workspace.css?v=20261111-1"></head><body class="locked" data-page="teacher"><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div><div class="app-shell teacher-app-shell"><aside class="sidebar"><a class="brand" href="/home.html" aria-label="KatLearn Teacher — Trang chủ"><span class="brand-mark">🐱</span><span>Kat<span>Learn</span></span></a><p class="class-label">TEACHER MANAGEMENT PORTAL</p><nav aria-label="Điều hướng Teacher"><button type="button" class="nav-item active" data-page="dashboard" aria-current="page"><span>⌂</span> Tổng quan</button><button type="button" class="nav-item" data-page="classes"><span>👥</span> Lớp học</button><button type="button" class="nav-item" data-page="students"><span>☷</span> Học sinh</button><button type="button" class="nav-item" data-page="packs"><span>▣</span> Bộ từ & bài học</button><button type="button" class="nav-item" data-page="progress"><span>◔</span> Tiến độ</button><button type="button" class="nav-item" data-page="games"><span>🧰</span> Công cụ dạy học</button></nav><div class="teacher-card"><span class="teacher-icon">🐾</span><strong>KatLearn Teacher</strong><small>Quản lý lớp học, học sinh và nội dung học tập.</small><button type="button" id="goProgress">Theo dõi tiến độ →</button></div></aside><main class="teacher-main" id="teacherMain"><header class="topbar"><button type="button" class="menu-toggle" aria-label="Mở menu điều hướng" aria-expanded="false"><span aria-hidden="true">☰</span></button><div class="search" role="search"><span aria-hidden="true">⌕</span><span>Tìm lớp, học sinh, bộ từ...</span></div><div class="top-actions" aria-label="Tài khoản giáo viên"><div id="teacherAccount" class="teacher-account-root"></div><button class="login-btn" id="loginBtn" hidden>Đăng nhập</button><button class="login-btn" id="logoutBtn" hidden>Đăng xuất</button><span id="accountName" hidden>Chưa đăng nhập</span><span id="accountEmail" hidden></span></div></header><section class="page teacher-content active-page" id="dashboard" aria-labelledby="teacherHomeTitle">
+  <div class="greeting-row teacher-greeting"><div>
+    <p class="eyebrow">KATLEARN TEACHER</p>
+    <h1 id="teacherHomeTitle">Trung tâm giáo viên <span>🐾</span></h1>
+    <p class="subtext">Quản lý lớp học, học sinh và nội dung giảng dạy trong cùng một không gian.</p>
+    <p class="auth-message" role="status" aria-live="polite"></p>
+  </div></div>
+  <section class="hero-card teacher-home-hero" aria-label="Teacher workspace">
+    <div class="hero-content">
+      <span class="tag">TEACHER WORKSPACE · KATLEARN</span>
+      <h2>Lớp học của bạn,<br><em>được kết nối trong một nơi.</em></h2>
+      <p>Tổ chức lớp, quản lý học sinh, xây dựng bộ từ và theo dõi tiến độ với giao diện KatLearn quen thuộc.</p>
+      <div class="hero-meta"><span>👥 Quản lý lớp</span><span>📚 Nội dung học tập</span><span>📊 Phân tích tiến độ</span></div>
+      <button type="button" class="primary-btn" id="goClasses">Mở quản lý lớp <span>→</span></button>
+    </div>
+    <div class="hero-art" aria-hidden="true"><div class="blob"></div><div class="cat-hero">🐱<span>📚</span><i>✦</i></div><div class="floating-card f1">TEACH <b>🐾</b></div><div class="floating-card f2">A+ <b>✦</b></div></div>
+  </section>
+  <section class="dashboard-grid" aria-label="Tổng quan">
+    <article class="metric"><span>👥</span><small>Lớp học</small><strong id="metricClasses">0</strong><em>Đang quản lý</em></article>
+    <article class="metric"><span>🧑‍🎓</span><small>Học sinh</small><strong id="metricStudents">0</strong><em>Trong các lớp</em></article>
+    <article class="metric"><span>📚</span><small>Bộ từ công khai</small><strong id="metricPacks">0</strong><em>Kho nội dung</em></article>
+    <article class="metric"><span>⚡</span><small>Học sinh hoạt động</small><strong id="metricActive">0</strong><em>Có năng lượng học tập</em></article>
+  </section>
+  <div class="section-heading teacher-section-heading"><div><h2>Bạn muốn làm gì hôm nay?</h2><p>Mở nhanh khu vực cần thao tác.</p></div></div>
+  <div class="teacher-grid teacher-home-grid">
+    <section class="teacher-card-panel">
+      <div class="teacher-panel-heading"><div><p class="eyebrow">QUICK ACCESS</p><h3>Thao tác nhanh</h3><p>Đi thẳng đến công cụ quản lý.</p></div></div>
+      <div class="activity-grid">
+        <button type="button" class="activity-card coral" id="goStudents"><span class="activity-icon">🧑‍🎓</span><span><b>Học sinh</b><small>Thêm và quản lý thành viên lớp</small></span><i>→</i></button>
+        <button type="button" class="activity-card blue" id="goPacks"><span class="activity-icon">📚</span><span><b>Bộ từ & bài học</b><small>Tạo, nhập và xuất bản nội dung</small></span><i>→</i></button>
+        <button type="button" class="activity-card purple" id="goProgressCard"><span class="activity-icon">📊</span><span><b>Tiến độ</b><small>Xem kết quả học tập theo lớp</small></span><i>→</i></button>
+        <button type="button" class="activity-card yellow" id="goTeachingTools"><span class="activity-icon">🧰</span><span><b>Công cụ dạy học</b><small>Trò chơi và hoạt động tương tác</small></span><i>→</i></button>
+      </div>
+    </section>
+    <section class="teacher-card-panel">
+      <div class="teacher-panel-heading"><div><p class="eyebrow">RECENT CLASSES</p><h3>Lớp gần đây</h3><p>Các lớp bạn đang quản lý.</p></div><button type="button" class="teacher-text-link" id="goAllClasses">Xem tất cả →</button></div>
+      <div id="recentClasses" class="class-list"><div class="empty">Đang tải dữ liệu lớp học...</div></div>
+    </section>
+  </div>
+</section><div class="page" id="classes"><div class="page-intro"><div><p class="eyebrow">CLASS MANAGEMENT</p><h1>Quản lý lớp</h1><p class="subtext">Tạo lớp và theo dõi số lượng học sinh.</p></div><button class="create-pack-btn" id="createClassBtn">＋ Tạo lớp</button></div><div class="teacher-card-panel"><div class="toolbar"><input placeholder="Tìm lớp..." id="classSearch"><span></span></div><table class="data-table"><thead><tr><th>Lớp</th><th>Khối</th><th>Học sinh</th><th>Trạng thái</th><th></th></tr></thead><tbody id="classTable"></tbody></table></div></div><div class="page" id="students"><div class="page-intro"><div><p class="eyebrow">STUDENT ROSTER</p><h1>Học sinh</h1><p class="subtext">Quản lý thành viên của từng lớp.</p></div><button class="create-pack-btn" id="addStudentBtn">＋ Thêm học sinh</button></div><div class="teacher-card-panel"><div class="toolbar"><select id="classSelector"></select><strong id="selectedClassName">Chưa chọn lớp</strong><input id="studentSearch" placeholder="Tìm học sinh..." autocomplete="off"></div><div id="studentList"><div class="empty">Đang tải...</div></div></div></div><div class="page" id="packs"><div class="page-intro"><div><p class="eyebrow">CONTENT MANAGEMENT</p><h1>Bộ từ & bài học</h1><p class="subtext">Tạo và quản lý các pack công khai cho học sinh.</p></div><button class="create-pack-btn" id="createPackBtn">＋ Tạo bộ từ</button></div><div class="teacher-card-panel"><table class="data-table"><thead><tr><th>Tên pack</th><th>Số từ</th><th>Người tạo</th><th></th></tr></thead><tbody id="packTable"></tbody></table></div></div><div class="page" id="progress"><div class="page-intro"><div><p class="eyebrow">LEARNING ANALYTICS</p><h1>Tiến độ học sinh</h1><p class="subtext">Theo dõi hoạt động học tập theo lớp.</p></div><button class="teacher-btn secondary" id="viewProgressBtn">↻ Làm mới</button></div><div class="teacher-card-panel"><div id="progressTable"><div class="empty">Chọn lớp có học sinh để xem dữ liệu.</div></div></div></div><div class="page" id="games">
+  <div class="page-intro classroom-games-intro">
+    <div><p class="eyebrow">KATLEARN CLASSROOM ARCADE</p><h1>Các Công Cụ Dạy Học 🧰</h1><p class="subtext">Khám phá các hoạt động tương tác, trò chơi lớp học và tiện ích hỗ trợ giảng dạy.</p></div>
+  </div>
+  <section class="teacher-card-panel classroom-game-toolbar">
+    <label for="gameClassSelector">Lớp học
+      <select id="gameClassSelector"><option value="">Đang tải danh sách lớp…</option></select>
+    </label>
+    <div class="classroom-game-toolbar-actions">
+      <span id="gameRosterStatus" class="game-roster-status" aria-live="polite">Đang chờ dữ liệu lớp học…</span>
+      <button type="button" class="teacher-btn secondary" id="gameReloadRoster">↻ Tải lại danh sách</button>
+      <button type="button" class="teacher-btn secondary" id="gameResetRound">↺ Vòng mới</button>
+    </div>
+  </section>
+  <section class="learning-tools-library" id="learningToolLibrary">
+    <div class="learning-tools-library-head"><div><p class="eyebrow">KATLEARN TEACHING TOOLKIT</p><h2>Khám phá công cụ</h2><p>Chọn một hoạt động để mở ngay trong Teacher. Các công cụ xử lý nội dung tại trình duyệt.</p></div></div>
+    <div class="learning-tools-controls">
+      <input class="learning-tools-search" id="learningToolSearch" type="search" placeholder="Tìm công cụ..." aria-label="Tìm công cụ dạy học">
+      <div class="learning-tool-filters" role="group" aria-label="Lọc công cụ">
+        <button type="button" class="active" data-tool-filter="all">Tất cả</button>
+        <button type="button" data-tool-filter="random">Gọi tên & nhóm</button>
+        <button type="button" data-tool-filter="study">Học tập</button>
+        <button type="button" data-tool-filter="class">Quản lý lớp</button>
+      </div>
+    </div>
+    <div class="learning-tools-grid">
+      <button type="button" class="learning-tool-card" data-tool-card="wheel" data-tool-category="random" data-tool-search="vòng quay gọi tên chọn học sinh ngẫu nhiên"><span class="tool-badge">NỔI BẬT</span><span class="learning-tool-icon">🎡</span><strong>Vòng quay gọi tên</strong><small>Chọn ngẫu nhiên một học sinh từ lớp đang dạy, không lặp trong cùng lượt.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="quick" data-tool-category="random" data-tool-search="bốc thăm nhanh gọi tên chọn học sinh"><span class="learning-tool-icon">⚡</span><strong>Bốc thăm nhanh</strong><small>Gọi nhanh từ 1 đến 5 học sinh cho câu hỏi hoặc hoạt động.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="teams" data-tool-category="random" data-tool-search="chia đội ngẫu nhiên xếp nhóm"><span class="learning-tool-icon">👥</span><strong>Chia đội ngẫu nhiên</strong><small>Trộn danh sách và chia học sinh thành các đội cân bằng.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="roster-pairs" data-tool-category="random" data-tool-search="ghép cặp học sinh ngẫu nhiên làm việc đôi"><span class="learning-tool-icon">🤝</span><strong>Ghép cặp học sinh</strong><small>Tạo cặp làm việc ngẫu nhiên từ danh sách lớp đã chọn.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="flashcards" data-tool-category="study" data-tool-search="thẻ lật flashcards ghi nhớ từ vựng khái niệm"><span class="learning-tool-icon">🃏</span><strong>Thẻ lật kiến thức</strong><small>Tạo bộ thẻ hỏi–đáp và trình chiếu từng thẻ trong lớp.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="matching" data-tool-category="study" data-tool-search="ghép cặp nối ý từ nghĩa matching memory"><span class="learning-tool-icon">🧩</span><strong>Ghép cặp kiến thức</strong><small>Nối thuật ngữ với định nghĩa bằng trò chơi lật thẻ ghi nhớ.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="questions" data-tool-category="study" data-tool-search="bốc câu hỏi ngẫu nhiên quiz câu hỏi ôn tập"><span class="learning-tool-icon">🎯</span><strong>Bốc câu hỏi</strong><small>Chọn câu hỏi ngẫu nhiên từ danh sách ôn tập, không lặp đến hết lượt.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="words" data-tool-category="study" data-tool-search="từ ngữ biết bay xáo chữ sắp xếp từ vựng"><span class="learning-tool-icon">🔤</span><strong>Xáo chữ bí mật</strong><small>Hiển thị chữ cái đã đảo thứ tự để cả lớp đoán từ hoặc cụm từ.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="timer" data-tool-category="class" data-tool-search="đồng hồ đếm ngược timer thời gian hoạt động"><span class="tool-badge">MỚI</span><span class="learning-tool-icon">⏳</span><strong>Đồng hồ lớp học</strong><small>Đếm ngược cho hoạt động nhóm, thảo luận, kiểm tra nhanh.</small></button>
+      <button type="button" class="learning-tool-card" data-tool-card="scoreboard" data-tool-category="class" data-tool-search="bảng điểm thi đua đội đua thuyền kiến thức"><span class="learning-tool-icon">🏁</span><strong>Bảng điểm thi đua</strong><small>Theo dõi điểm của hai đội trong hoạt động trên lớp.</small></button>
+    </div>
+    <p class="learning-tools-empty" id="learningToolsEmpty" hidden>Không tìm thấy công cụ phù hợp.</p>
+  </section>
+  <div class="classroom-game-tabs" role="tablist" aria-label="Chọn trò chơi">
+    <button type="button" class="active" data-classroom-game-tab="wheel" role="tab" aria-selected="true">🎡 Vòng quay gọi tên</button>
+    <button type="button" data-classroom-game-tab="quick" role="tab" aria-selected="false">⚡ Bốc thăm nhanh</button>
+    <button type="button" data-classroom-game-tab="teams" role="tab" aria-selected="false">👥 Chia đội ngẫu nhiên</button>
+  </div>
+  <section class="classroom-game-panel active" data-classroom-game-panel="wheel">
+    <div class="classroom-game-layout">
+      <div class="teacher-card-panel classroom-wheel-card">
+        <div class="classroom-wheel-pointer" aria-hidden="true">▼</div>
+        <canvas id="classroomWheel" width="560" height="560" aria-label="Vòng quay chọn học sinh ngẫu nhiên"></canvas>
+        <div class="classroom-wheel-controls"><button type="button" class="primary-btn" id="spinStudentWheel">Quay chọn học sinh</button><small id="wheelRemaining">Chưa có danh sách</small></div>
+      </div>
+      <div class="teacher-card-panel classroom-game-result">
+        <p class="eyebrow">KẾT QUẢ VÒNG QUAY</p>
+        <div class="game-winner-avatar">🐱</div>
+        <h2 id="wheelWinner">Sẵn sàng gọi tên?</h2>
+        <p id="wheelMessage">Chọn lớp rồi bắt đầu vòng quay nhé.</p>
+        <div class="game-history"><h3>Lượt đã gọi</h3><ol id="gameHistory"><li class="empty">Chưa có lượt nào.</li></ol></div>
+      </div>
+    </div>
+  </section>
+  <section class="classroom-game-panel" data-classroom-game-panel="quick" hidden>
+    <div class="teacher-card-panel quick-draw-card">
+      <p class="eyebrow">QUICK PICK</p><h2>Bốc thăm nhanh</h2><p>Chọn số lượng học sinh cần gọi. Mỗi bạn chỉ xuất hiện một lần trong một vòng.</p>
+      <div class="quick-draw-controls"><label for="quickDrawCount">Số học sinh</label><select id="quickDrawCount"><option value="1">1 học sinh</option><option value="2">2 học sinh</option><option value="3">3 học sinh</option><option value="4">4 học sinh</option><option value="5">5 học sinh</option></select><button type="button" class="primary-btn" id="quickDrawButton">Bốc thăm ngay</button></div>
+      <div id="quickDrawResults" class="quick-draw-results"><div class="empty">Kết quả sẽ xuất hiện tại đây.</div></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel" data-classroom-game-panel="teams" hidden>
+    <div class="teacher-card-panel quick-draw-card">
+      <p class="eyebrow">TEAM SHUFFLE</p><h2>Chia đội ngẫu nhiên</h2><p>Trộn danh sách học sinh và chia đều thành các đội. Tất cả học sinh trong lớp đều được xếp đội.</p>
+      <div class="quick-draw-controls"><label for="teamCount">Số đội</label><select id="teamCount"><option value="2">2 đội</option><option value="3">3 đội</option><option value="4">4 đội</option><option value="5">5 đội</option><option value="6">6 đội</option><option value="7">7 đội</option><option value="8">8 đội</option></select><button type="button" class="primary-btn" id="shuffleTeamsButton">Chia đội</button></div>
+      <div id="teamResults" class="team-results"><div class="empty">Chọn lớp và nhấn “Chia đội”.</div></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-flashcards" data-learning-panel="flashcards" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">HỌC TẬP TƯƠNG TÁC</span><h2>Thẻ lật kiến thức 🃏</h2><p>Mỗi dòng nhập một thẻ theo dạng <b>Mặt trước | Mặt sau</b>.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <label class="tool-field">Nội dung bộ thẻ<textarea class="tool-textarea" id="flashcardInput" placeholder="Photosynthesis | Quá trình thực vật tạo chất hữu cơ&#10;Evaporation | Sự bay hơi"></textarea></label>
+      <div class="tool-actions"><button type="button" class="primary-btn" id="createFlashcards">Tạo bộ thẻ</button><button type="button" class="teacher-btn secondary" id="flashcardShuffle">Trộn thẻ</button><span class="tool-help" id="flashcardStatus">Bộ thẻ chỉ được giữ trong bộ nhớ trang.</span></div>
+      <div class="tool-stage"><button type="button" class="tool-flashcard" id="flashcardFace"><strong>Chưa có thẻ học</strong><small>Chạm để lật thẻ</small></button></div>
+      <div class="tool-actions"><button type="button" class="teacher-btn secondary" id="flashcardPrev">← Trước</button><span class="tool-help" id="flashcardCounter">0 / 0</span><button type="button" class="teacher-btn secondary" id="flashcardReveal">Lật thẻ</button><button type="button" class="teacher-btn secondary" id="flashcardNext">Tiếp →</button></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-matching" data-learning-panel="matching" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">TRÒ CHƠI GHI NHỚ</span><h2>Ghép cặp kiến thức 🧩</h2><p>Nhập mỗi dòng theo dạng <b>Thuật ngữ | Định nghĩa</b>. Lật hai thẻ để tìm cặp đúng.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <label class="tool-field">Các cặp nội dung<textarea class="tool-textarea" id="matchingInput" placeholder="Oxygen | Khí cần cho hô hấp hiếu khí&#10;Evaporation | Chất lỏng chuyển thành hơi&#10;Mammal | Động vật có tuyến sữa"></textarea></label>
+      <div class="tool-actions"><button type="button" class="primary-btn" id="createMatchingGame">Tạo trò chơi</button><span class="tool-help" id="matchingStatus">Cần ít nhất 2 cặp nội dung.</span></div>
+      <div class="tool-match-grid" id="matchingBoard"></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-timer" data-learning-panel="timer" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">QUẢN LÝ THỜI GIAN</span><h2>Đồng hồ lớp học ⏳</h2><p>Đặt thời lượng cho hoạt động cá nhân, thảo luận hoặc làm việc nhóm.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <div class="tool-two-column"><label class="tool-field">Thời lượng (1–90 phút)<input class="tool-input" id="classTimerMinutes" type="number" min="1" max="90" value="5"></label><div class="tool-stage" style="margin:0"><div><div class="tool-clock" id="classTimerDisplay">05:00</div><small id="classTimerStatus">Sẵn sàng bắt đầu hoạt động.</small></div></div></div>
+      <div class="tool-actions"><button type="button" class="primary-btn" id="classTimerStart">Bắt đầu</button><button type="button" class="teacher-btn secondary" id="classTimerReset">Đặt lại</button></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-questions" data-learning-panel="questions" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">ÔN TẬP NHANH</span><h2>Bốc câu hỏi 🎯</h2><p>Nhập mỗi câu hỏi trên một dòng, sau đó chọn ngẫu nhiên không lặp.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <label class="tool-field">Danh sách câu hỏi<textarea class="tool-textarea" id="questionPool" placeholder="Nêu một nguyên nhân gây biến đổi khí hậu.&#10;Thế nào là quang hợp?&#10;Hãy đặt một câu với từ environment."></textarea></label>
+      <div class="tool-actions"><button type="button" class="primary-btn" id="loadQuestionPool">Nạp câu hỏi</button><button type="button" class="teacher-btn secondary" id="drawQuestion">Chọn câu hỏi</button><button type="button" class="teacher-btn secondary" id="resetQuestionPool">Vòng mới</button></div>
+      <div class="tool-stage"><div><strong id="questionDrawResult">Sẵn sàng chọn câu hỏi.</strong><small id="questionDrawStatus">Nội dung chỉ nằm trong phiên hiện tại.</small></div></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-roster-pairs" data-learning-panel="roster-pairs" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">HOẠT ĐỘNG NHÓM</span><h2>Ghép cặp học sinh 🤝</h2><p>Dùng lớp đang chọn ở thanh phía trên để ghép đôi ngẫu nhiên. Nếu số lượng lẻ, nhóm cuối có ba bạn.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <div class="tool-actions"><button type="button" class="primary-btn" id="makeRosterPairs">Ghép cặp ngẫu nhiên</button><span class="tool-help" id="rosterPairStatus">Chọn lớp ở phía trên trước khi bắt đầu.</span></div>
+      <div class="tool-roster-pairs" id="rosterPairResults"></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-scoreboard" data-learning-panel="scoreboard" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">THI ĐUA THEO ĐỘI</span><h2>Bảng điểm thi đua 🏁</h2><p>Cộng hoặc trừ điểm trong lúc tổ chức hoạt động trên lớp.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <div class="tool-scoreboard">
+        <article class="tool-score"><label class="tool-field">Tên đội<input class="tool-input" id="teamScoreNameInput0" value="Đội 1"></label><strong id="teamScore0">0</strong><div class="tool-score-actions"><button type="button" class="teacher-btn secondary" data-score-team="0" data-score-change="-1">−1</button><button type="button" class="primary-btn" data-score-team="0" data-score-change="1">+1 điểm</button></div></article>
+        <article class="tool-score"><label class="tool-field">Tên đội<input class="tool-input" id="teamScoreNameInput1" value="Đội 2"></label><strong id="teamScore1">0</strong><div class="tool-score-actions"><button type="button" class="teacher-btn secondary" data-score-team="1" data-score-change="-1">−1</button><button type="button" class="primary-btn" data-score-team="1" data-score-change="1">+1 điểm</button></div></article>
+      </div>
+      <div class="tool-actions"><button type="button" class="teacher-btn secondary" id="resetTeamScores">Đặt lại điểm</button></div>
+    </div>
+  </section>
+  <section class="classroom-game-panel learning-tool-panel" id="tool-words" data-learning-panel="words" hidden>
+    <div class="teacher-card-panel">
+      <div class="tool-panel-heading"><div><span class="tool-panel-kicker">TỪ VỰNG & TƯ DUY</span><h2>Xáo chữ bí mật 🔤</h2><p>Chọn một từ ngẫu nhiên và đảo thứ tự chữ cái để cả lớp đoán.</p></div><button type="button" class="teacher-btn secondary" data-tool-back>← Thư viện</button></div>
+      <label class="tool-field">Danh sách từ hoặc cụm từ<textarea class="tool-textarea" id="wordPoolInput" placeholder="photosynthesis&#10;environment&#10;renewable energy"></textarea></label>
+      <div class="tool-actions"><button type="button" class="primary-btn" id="loadWordPool">Nạp danh sách</button><button type="button" class="teacher-btn secondary" id="drawScrambledWord">Xáo từ tiếp theo</button><button type="button" class="teacher-btn secondary" id="revealScrambledWord">Xem đáp án</button><button type="button" class="teacher-btn secondary" id="resetScrambledWords">Nạp lại</button></div>
+      <div class="tool-stage"><div><strong id="wordScrambleResult">Sẵn sàng xáo chữ.</strong><small id="wordScrambleAnswer">Đáp án sẽ hiện tại đây.</small><small id="wordScrambleStatus">Mỗi dòng là một từ hoặc cụm từ.</small></div></div>
+    </div>
+  </section>
+  <p class="classroom-game-privacy">🔒 Danh sách chỉ được đọc từ lớp giáo viên đang quản lý và xử lý tạm thời trong trình duyệt. Tên học sinh không được lưu vào lịch sử hay gửi sang dịch vụ trò chơi bên ngoài.</p>
+</div>
+</main></div>
+<div class="modal" id="classModal"><div class="modal-box wide"><button class="modal-close" data-modal="classModal">×</button><h2>Tạo lớp mới</h2><form class="teacher-form" id="classForm"><label>Tên lớp<input id="className" required placeholder="Ví dụ: 8B1"></label><label>Khối<input id="classGrade" placeholder="Ví dụ: 8"></label><label>Mô tả<textarea id="classDescription" placeholder="Mục tiêu hoặc ghi chú cho lớp..."></textarea></label><button class="primary-btn" type="submit">Tạo lớp</button></form></div></div><div class="modal" id="studentModal"><div class="modal-box wide"><button class="modal-close" data-modal="studentModal">×</button><h2>Thêm học sinh</h2><p>Thêm trực tiếp bằng email. Tài khoản lớp học sẽ được GV quản trị thêm vào nhóm lớp; học sinh không tự tham gia bằng mã.</p><form class="teacher-form" id="studentForm"><label>Email học sinh<input id="studentEmail" type="email" required placeholder="student@example.com"></label><button class="primary-btn" type="submit">Thêm vào lớp</button></form></div></div><div class="modal" id="packCreateModal"><div class="modal-box wide pack-create-box"><button class="modal-close" data-modal="packCreateModal">×</button><div class="pack-create-head"><h2>Thêm vào bộ từ:</h2><div class="pack-create-actions"><button type="button" class="teacher-btn secondary" id="importPackBtn">📥 Nhập CSV</button><select id="packSelect"><option value="">Chọn bộ từ của bạn...</option></select><button type="button" id="newPackBtn">＋ Tạo mới</button><button type="button" class="pack-help">Hướng dẫn</button><input id="packFileInput" type="file" accept=".csv,text/csv" hidden></div><button type="button" id="quickAddBtn" class="quick-add">Thêm nhanh</button></div><div id="quickPackPanel" hidden style="margin:0 0 16px;padding:14px;border:1px solid rgba(99,102,241,.18);border-radius:16px;"><p style="margin:0 0 8px;font-weight:800;">Thêm topic từ vựng của bạn nhé</p><textarea id="quickPackPrompt" rows="3" maxlength="600" placeholder="Ví dụ: môi trường, biến đổi khí hậu, ô nhiễm không khí..."></textarea><button type="button" class="primary-btn" id="quickPackAiBtn" style="margin-top:10px;">✨ Thêm từ vựng của bạn</button><small id="quickPackStatus" style="display:block;margin-top:8px;opacity:.7;">Cố gắng cho Gemini tìm thật đầy đủ các từ vựng về topic (tối đa 100 từ).</small></div><form class="teacher-form pack-form" id="packForm"><div id="packWordRows"><div class="pack-word-row"><span class="row-number"># 1</span><input class="pack-word" placeholder="TỪ VỰNG" required><input class="pack-pron" placeholder="PHIÊN ÂM"><input class="pack-mean" placeholder="NGHĨA*" required><select class="pack-type"><option value="">LOẠI TỪ</option><option>noun</option><option>verb</option><option>adjective</option><option>adverb</option><option>phrase</option><option>other</option></select><input class="pack-example" placeholder="VÍ DỤ"><input class="pack-note" placeholder="GHI CHÚ"></div></div><button type="button" id="addPackRow" class="add-pack-row">＋ Thêm dòng</button><div class="pack-create-footer"><button type="button" class="teacher-btn secondary" id="cancelPackBtn">Hủy</button><button type="submit" class="primary-btn" id="savePackBtn">Lưu <span id="packWordCount">0</span> từ</button></div></form></div></div><div class="modal" id="packModal"><div class="modal-box wide"><button class="modal-close" data-modal="packModal">×</button><div id="packDetail"></div></div></div><div id="toast"></div><script src="teacher.js"></script><script src="teacher-classroom-games.js"></script><script src="teacher-learning-tools.js"></script><script src="teacher-catalog.js"></script><script src="teacher-home-account.js"></script><script src="site-footer.js"></script><script src="dmca-badge.js"></script></body></html>
