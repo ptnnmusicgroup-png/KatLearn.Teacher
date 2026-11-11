@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           grep -q 'teacher-signup.html' signup.html
           grep -q 'window.location.replace' signup.html
-          if grep -Eq 'getDocs|initializeApp|firebase-firestore|collection\\(' signup.html; then
+          if grep -Eq 'getDocs|initializeApp|firebase-firestore|collection[(]' signup.html; then
             echo "::error::Legacy signup page must not run the retired Firestore catalog loader."
             exit 1
           fi
