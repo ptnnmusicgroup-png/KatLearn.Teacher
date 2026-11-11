@@ -32,6 +32,6 @@ The Teacher workspace is served from `/home.html`. It uses the full `katlearn-de
 
 The dashboard, classes, students, packs, progress and teaching-tools areas are separate page modules with direct links: `/home.html#dashboard`, `#classes`, `#students`, `#packs`, `#progress` and `#games`. The legacy root `index.html` redirects to `/home.html` while preserving query strings and fragments for SSO and deep links.
 
-The old light/blue dashboard and authentication styles are no longer loaded by the user-facing Teacher portal. Admin Control Center remains a separately scoped administration interface. The active LMS does not link `katlearn-polish.css`, so it is not loaded as a competing theme layer.
+The retired light/blue dashboard and authentication stylesheets have been removed from the repository and static output. Admin Control Center remains a separately scoped administration interface. Admin Control Center remains a separately scoped administration interface. The active LMS does not link `katlearn-polish.css`, so it is not loaded as a competing theme layer.
 
 The copied LMS stylesheet is GPL-3.0-only; see `THIRD-PARTY-NOTICES/KATLEARN-LMS-THEME.txt`.
