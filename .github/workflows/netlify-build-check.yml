@@ -2,7 +2,7 @@ name: Netlify build smoke check
 
 on:
   push:
-    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting]
+    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting, feat/teacher-classroom-games-dark-theme]
   pull_request:
     branches: [main]
 
@@ -65,6 +65,7 @@ jobs:
           test -s dist/katlearn-astra.css
           test -s dist/katlearn-defaultdarkmode.css
           test -s dist/teacher-katlearn-theme.css
+          test -s dist/teacher-katlearn-auth-theme.css
           test -s dist/teacher-classroom-games.js
           test -s dist/teacher-learning-tools.js
           test -s dist/teacher-learning-tools.css
@@ -73,6 +74,14 @@ jobs:
           grep -q 'teacher-learning-tools.js' dist/index.html
           grep -q 'teacher-learning-tools.css' dist/index.html
           grep -q 'data-tool-card="flashcards"' dist/index.html
+          for page in login.html teacher-signup.html teacher-pending.html sso-bridge.html; do
+            grep -q 'katlearn-defaultdarkmode.css' "dist/$page"
+            grep -q 'teacher-katlearn-auth-theme.css' "dist/$page"
+          done
+          if grep -Eq 'modern-ui.css|katlearn-blue-theme.css|teacher-system-ui-v3.css|katlearn-astra.css|teacher-lms-professional.css' dist/index.html; then
+            echo "::error::Obsolete light/blue/Astra theme layer is still loaded by the Teacher dashboard."
+            exit 1
+          fi
           grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
           grep -q '20261024-teacher-system2' dist/teacher-signup.html
           grep -q 'page-lms-directory' dist/admin.html
