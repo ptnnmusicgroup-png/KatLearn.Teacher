@@ -1,0 +1,58 @@
+/* Auth page layout only. Visual tokens and colors come from the KatLearn LMS theme. */
+html,body{min-height:100%;margin:0}
+body{min-width:320px;overflow-x:hidden;background:var(--kl-bg);color:var(--kl-ink);font-family:"Be Vietnam Pro",system-ui,sans-serif}
+.auth-screen{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,500px);align-items:center;gap:clamp(30px,6vw,90px);width:min(1260px,calc(100% - 40px));min-height:100vh;margin:0 auto;padding:34px 0;box-sizing:border-box}
+.auth-screen>.hero{max-width:700px;min-width:0}
+.auth-screen .back,.teacher-signup-page .back{display:inline-flex;align-items:center;margin:0 0 32px;font-size:12px;font-weight:800}
+.auth-screen .kicker,.teacher-signup-page .kicker{margin:0 0 10px;font-size:10px;font-weight:900;letter-spacing:.14em}
+.auth-screen .hero h1,.teacher-signup-page .hero h1{margin:6px 0 17px;font:700 clamp(42px,5.5vw,78px)/1 "Fredoka","Be Vietnam Pro",sans-serif;letter-spacing:-.045em}
+.auth-screen .tagline,.teacher-signup-page .hero>p:not(.kicker){max-width:620px;font-size:clamp(15px,1.8vw,21px);font-weight:600;line-height:1.55}
+.auth-screen .cat-pill{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:11px 15px;border-radius:999px;font-size:10px}
+.auth-screen>.card{width:100%;min-width:0;box-sizing:border-box;padding:clamp(22px,3vw,34px)}
+.auth-screen .brand{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:0}
+.auth-screen .logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;font-size:22px}
+.auth-screen .brand strong,.auth-screen .brand small{display:block}
+.auth-screen .brand strong{font-size:14px}
+.auth-screen .brand small{margin-top:3px;font-size:9px;letter-spacing:.12em}
+.auth-screen .tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;margin:0 0 18px;border-radius:999px}
+.auth-screen .tab{min-height:42px;border:0;border-radius:999px;font:800 11px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.auth-screen .providers{display:grid;gap:9px;margin:0 0 17px}
+.auth-screen .provider{display:flex;align-items:center;justify-content:center;gap:9px;min-height:47px;padding:0 13px;border-radius:999px;font:800 11px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.auth-screen .divider{display:flex;align-items:center;gap:10px;margin:6px 0 17px;font-size:10px;font-weight:700}
+.auth-screen .divider:before,.auth-screen .divider:after{content:"";height:1px;flex:1}
+.auth-screen form{display:grid;gap:13px}
+.auth-screen label,.teacher-signup-page label{display:grid;gap:7px;font-size:11px;font-weight:800}
+.auth-screen input,.teacher-signup-page input,.teacher-signup-page select{display:block;width:100%;min-width:0;min-height:47px;padding:0 13px;border-radius:13px;box-sizing:border-box;font:500 12px "Be Vietnam Pro",sans-serif}
+.auth-screen .submit,.teacher-signup-page .submit{width:100%;min-height:48px;border-radius:14px;font:800 12px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.auth-screen .message,.teacher-signup-page .message{min-height:20px;margin:0;font-size:10px;line-height:1.6}
+.auth-screen .foot,.auth-screen .note{margin:14px 0 0;text-align:center;font-size:9px;line-height:1.6}
+.auth-screen .account-view{text-align:center}
+.auth-screen .account-actions{display:grid;gap:9px}
+.auth-screen .account-actions a,.auth-screen .account-actions button{display:grid;place-items:center;min-height:46px;border-radius:14px;font:800 11px "Be Vietnam Pro",sans-serif}
+.teacher-signup-page{position:relative;z-index:1;display:block!important;width:min(1120px,calc(100% - 40px))!important;min-height:100vh;max-width:none!important;margin:0 auto!important;padding:30px 0 58px!important;box-sizing:border-box;grid-template-columns:none!important;gap:0!important}
+.teacher-signup-page>.hero{max-width:900px;margin:18px auto 26px;text-align:center}
+.teacher-signup-page .back{margin-bottom:17px}
+.teacher-signup-page .hero h1{max-width:900px;margin:4px auto 13px;font-size:clamp(38px,5.3vw,66px)}
+.teacher-signup-page .hero>p:not(.kicker){max-width:750px;margin:0 auto;font-size:13px}
+.teacher-signup-page .card{width:min(1040px,100%);margin:0 auto;padding:clamp(22px,3.4vw,42px);border-radius:26px;box-sizing:border-box}
+.teacher-signup-page #form{display:grid;gap:17px}
+.teacher-signup-page #form .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px}
+.teacher-signup-page .section{margin:4px 0 0;font:700 18px "Fredoka",sans-serif}
+.teacher-signup-page .notice{margin:0;padding:14px 16px;border-radius:14px;font-size:10px;line-height:1.7}
+.teacher-signup-page .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0}
+.teacher-signup-page .actions .submit{width:auto;min-width:180px;padding:0 22px}
+.teacher-signup-page .link{font-size:10px;font-weight:800}
+.teacher-signup-page .message{margin:0;min-height:20px}
+body.teacher-pending{display:grid;place-items:center;min-height:100vh;padding:20px;box-sizing:border-box}
+body.teacher-pending>main.card{display:block;width:min(620px,100%);margin:0;padding:clamp(25px,5vw,45px);text-align:center;box-sizing:border-box}
+body.teacher-pending .icon{margin-bottom:12px;font-size:54px}
+body.teacher-pending .tag{font-size:10px;font-weight:900;letter-spacing:.13em}
+body.teacher-pending h1{margin:10px 0;font:700 clamp(25px,4vw,32px) "Fredoka",sans-serif}
+body.teacher-pending p{font-size:12px;line-height:1.8}
+body.teacher-pending .btn{display:inline-flex;align-items:center;justify-content:center;min-height:43px;margin-top:16px;padding:0 18px;border-radius:14px;font-size:11px;font-weight:800;text-decoration:none}
+body.sso-bridge{display:grid;place-items:center;min-height:100vh;padding:20px;box-sizing:border-box;text-align:center}
+body.sso-bridge .box{width:min(460px,100%);padding:30px;border:1px solid var(--kl-line);border-radius:24px;background:var(--kl-surface);color:var(--kl-ink);box-shadow:var(--kl-shadow);box-sizing:border-box}
+body.sso-bridge .box small{display:block;margin-top:9px;color:var(--kl-muted);font-size:11px}
+@media(max-width:900px){.auth-screen{grid-template-columns:1fr;gap:22px;width:min(700px,calc(100% - 30px));padding:28px 0}.auth-screen>.hero{text-align:center;max-width:none}.auth-screen .back{margin-bottom:20px}.auth-screen .tagline{margin-left:auto;margin-right:auto}}
+@media(max-width:640px){.auth-screen{width:calc(100% - 22px);padding:18px 0 28px}.auth-screen .hero h1{font-size:clamp(35px,10vw,48px);line-height:1.05}.auth-screen .tagline{font-size:15px}.auth-screen>.card{padding:22px}.teacher-signup-page{width:calc(100% - 22px)!important;padding:20px 0 38px!important}.teacher-signup-page #form .grid{grid-template-columns:1fr;gap:14px}.teacher-signup-page .card{padding:25px 18px}.teacher-signup-page .hero{margin:12px auto 20px}.teacher-signup-page .actions{align-items:stretch;flex-direction:column}.teacher-signup-page .actions .submit{width:100%}}
+@media(prefers-reduced-motion:reduce){.auth-screen *,.teacher-signup-page *{scroll-behavior:auto!important;transition:none!important}}
