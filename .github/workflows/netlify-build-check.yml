@@ -46,6 +46,9 @@ jobs:
           test -s teacher-katlearn-workspace.css
           test -s teacher-katlearn-auth-layout.css
           test -s teacher-katlearn-auth-theme.css
+          for legacy in style.css extras.css teacher.css auth-modern.css katlearn-blue-theme.css modern-ui.css teacher-system-ui-v3.css teacher-lms-professional.css; do
+            test ! -e "$legacy"
+          done
           grep -q 'home.html' index.html
           grep -q 'location.replace(target.toString())' index.html
           for page_id in dashboard classes students packs progress games; do
@@ -113,6 +116,9 @@ jobs:
           test -s dist/teacher-katlearn-workspace.css
           test -s dist/teacher-katlearn-auth-layout.css
           test -s dist/teacher-katlearn-auth-theme.css
+          for legacy in style.css extras.css teacher.css auth-modern.css katlearn-blue-theme.css modern-ui.css teacher-system-ui-v3.css teacher-lms-professional.css; do
+            test ! -e "dist/$legacy"
+          done
           test -s dist/teacher-classroom-games.js
           test -s dist/teacher-learning-tools.js
           test -s dist/teacher-learning-tools.css
