@@ -10,8 +10,24 @@ const isAdminUser=()=>ADMIN_EMAILS.includes((user?.email||'').toLowerCase());
 function toast(msg){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 function makeJoinCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=new Uint8Array(6);crypto.getRandomValues(bytes);return [...bytes].map(b=>chars[b%chars.length]).join('')}
 async function copyText(value){const text=String(value??'');if(!text)return;try{await navigator.clipboard.writeText(text);toast('✓ Đã sao chép mã lớp')}catch(_){const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();try{document.execCommand('copy');toast('✓ Đã sao chép mã lớp')}catch(e){toast('Không thể sao chép mã lớp.')}finally{area.remove()}}}
-function showPage(id){$('.page').forEach(x=>x.classList.remove('active-page'));$('#'+id)?.classList.add('active-page');$('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='dashboard')loadDashboard();if(id==='classes')loadClasses();if(id==='students')loadStudents();if(id==='packs')loadPacks();if(id==='progress')loadProgress();window.dispatchEvent(new CustomEvent('katlearn-teacher-page-change',{detail:{page:id}}));window.scrollTo({top:0,behavior:'smooth'})}
-$$('.nav-item').forEach(b=>b.onclick=()=>showPage(b.dataset.page));$('.menu-toggle').onclick=()=>$('.sidebar').classList.toggle('open');
+const TEACHER_PAGE_IDS=new Set(['dashboard','classes','students','packs','progress','games']);
+function teacherPageFromHash(){const value=decodeURIComponent((location.hash||'').replace(/^#/,'')).trim().toLowerCase();return TEACHER_PAGE_IDS.has(value)?value:'dashboard'}
+function showPage(id,{updateHash=true}={}){
+  if(!TEACHER_PAGE_IDS.has(id)||!$('#'+id)?.classList.contains('page'))id='dashboard';
+  document.querySelectorAll('.teacher-main .page').forEach(page=>page.classList.toggle('active-page',page.id===id));
+  document.querySelectorAll('.sidebar .nav-item').forEach(button=>{const active=button.dataset.page===id;button.classList.toggle('active',active);if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current')});
+  $('.sidebar')?.classList.remove('open');$('.menu-toggle')?.setAttribute('aria-expanded','false');
+  if(updateHash&&location.hash!=='#'+id)history.replaceState(history.state,'',location.pathname+location.search+'#'+id);
+  if(id==='dashboard')void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
+  if(id==='classes')void loadClasses().catch(error=>console.warn('[KatLearn] Class list load failed:',error));
+  if(id==='students')void loadStudents().catch(error=>console.warn('[KatLearn] Student list load failed:',error));
+  if(id==='packs')void loadPacks().catch(error=>console.warn('[KatLearn] Pack list load failed:',error));
+  if(id==='progress')void loadProgress().catch(error=>console.warn('[KatLearn] Progress load failed:',error));
+  window.dispatchEvent(new CustomEvent('katlearn-teacher-page-change',{detail:{page:id}}));window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.sidebar .nav-item').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
+$('.menu-toggle')?.addEventListener('click',()=>{const sidebar=$('.sidebar');if(!sidebar)return;const open=sidebar.classList.toggle('open');$('.menu-toggle')?.setAttribute('aria-expanded',String(open))});
+window.addEventListener('hashchange',()=>showPage(teacherPageFromHash(),{updateHash:false}));
 function openModal(id){$('#'+id).classList.add('show')}function closeModal(id){$('#'+id).classList.remove('show')}$$('.modal-close').forEach(b=>b.onclick=()=>closeModal(b.dataset.modal));
 if(!$('#classAnalytics'))$('#dashboard')?.insertAdjacentHTML('beforeend','<section class="teacher-card-panel class-analytics"><h3>Thống kê theo lớp / nhóm</h3><p>Hiệu quả trung bình và top 3 của từng lớp được tính từ kết quả học tập thực tế.</p><div id="classAnalytics" class="class-analytics-list"><div class="empty">Đang tải...</div></div></section>');
 
@@ -93,7 +109,7 @@ async function initFirebase(){
     if(firstAuthEvent){firstAuthEvent=false;resolveReady(u)}
     if(u&&isTeacher()){
       document.body.classList.remove('locked');
-      void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
+      showPage(teacherPageFromHash(),{updateHash:false});
     }else{
       document.body.classList.add('locked');
       showPage('dashboard');
@@ -295,7 +311,7 @@ $('#packForm').onsubmit=async e=>{
   }catch(err){toast('Không thể tạo pack: '+err.message)}
 };
 async function loadProgress(){const uid=String(user?.uid||'');if(!uid||!isTeacher())return;if(!selectedClass&&classes[0])selectedClass=classes[0];const cls=selectedClass;if(!cls){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}const stat=await classStats(cls);if(String(user?.uid||'')!==uid||!isTeacher()||selectedClass?.id!==cls.id)return;if(!stat||!stat.rows.length){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}$('#progressTable').innerHTML=`<p class="progress-note">${esc(cls.name)} · xếp hạng theo số câu đúng, sau đó đến độ chính xác và XP.</p>`+stat.rows.map((s,i)=>`<div class="student-row"><b>#${i+1}</b><span class="student-avatar">${esc((s.displayName||'K')[0]).toUpperCase()}</span><div><strong>${esc(s.displayName||'KatLearn Student')}</strong><small>${esc(s.email||'')} · ${accuracy(s)}% chính xác</small></div><div class="student-score"><b>${Number(s.correctAnswers||0)} câu đúng</b><small>⚡ ${Number(s.energy||0).toLocaleString()} XP · 📚 ${Number(s.totalWords||0)} từ</small></div></div>`).join('')}
-$('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');
+$('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');$('#goTeachingTools').onclick=()=>showPage('games');$('#goAllClasses').onclick=()=>showPage('classes');
 
 function parseCsvLine(line){const out=[];let cur='',quoted=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(quoted&&line[i+1]==='"'){cur+='"';i++;}else quoted=!quoted}else if(ch===','&&!quoted){out.push(cur.trim());cur=''}else cur+=ch}out.push(cur.trim());return out}
 async function importPackCsv(file){
