@@ -50,6 +50,11 @@ jobs:
           test -s dist/deployment-config.js
           test -s dist/teacher-signup.html
           test -s dist/katlearn-astra.css
+          test -s dist/katlearn-defaultdarkmode.css
+          test -s dist/teacher-katlearn-theme.css
+          test -s dist/teacher-classroom-games.js
+          grep -q 'data-page="games"' dist/index.html
+          grep -q 'teacher-classroom-games.js' dist/index.html
           grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
           grep -q '20261024-teacher-system2' dist/teacher-signup.html
           grep -q 'page-lms-directory' dist/admin.html
