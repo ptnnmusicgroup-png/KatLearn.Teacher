@@ -50,6 +50,15 @@ jobs:
           grep -q 'Liên kết đăng nhập chưa hoàn tất' teacher.js
           test -s teacher-katlearn-auth-layout.css
           test -s teacher-katlearn-auth-theme.css
+          test -s api/teacher-register.js
+          grep -q 'https://deploy-preview-41--quanly-giaovien-katlearn.netlify.app' api/teacher-register.js
+          grep -q 'https://deploy-preview-41--teacher-katlearn1.netlify.app' api/teacher-register.js
+          grep -q 'function isAllowedOrigin(origin)' api/teacher-register.js
+          grep -q '!isAllowedOrigin(origin)' api/teacher-register.js
+          if grep -Eq 'access-control-allow-origin[^\n]*\*' api/teacher-register.js; then
+            echo "::error::Teacher registration must not allow every CORS origin."
+            exit 1
+          fi
           for legacy in style.css extras.css teacher.css auth-modern.css katlearn-blue-theme.css modern-ui.css teacher-system-ui-v3.css teacher-lms-professional.css; do
             test ! -e "$legacy"
           done
