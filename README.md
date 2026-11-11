@@ -26,8 +26,12 @@ The Teacher portal also includes a copy of the LMS `katlearn-defaultdarkmode.css
 The Teacher portal includes a searchable teaching-tools library: random name wheel, quick draw, random teams, student pairing, flashcards, a matching game, question draw, word scramble, a class countdown timer, and a two-team score board. The additional tools in `teacher-learning-tools.js` are original KatLearn implementations; they do not add third-party runtime dependencies. The student roster tools continue to use the existing teacher-authorized class API. Text entered into tools and roster results are held in page memory only and are not saved to local storage.
 
 
-## LMS design system parity
+## LMS design system and Teacher workspace
 
-The user-facing Teacher pages load the complete `katlearn-defaultdarkmode.css` stylesheet copied byte-for-byte from the active LMS source (with a separate source/license header). The Teacher dashboard keeps only its structural base styles (`style.css`, `extras.css`, `teacher.css`) and uses `teacher-katlearn-theme.css` for Teacher-specific layout adaptation. Login, Teacher signup, pending-verification, and SSO pages use `teacher-katlearn-auth-theme.css` on top of the same LMS design tokens.
+The Teacher workspace is served from `/home.html`. It uses the full `katlearn-defaultdarkmode.css` stylesheet from the active LMS plus a scoped Teacher workspace adapter, a layout-only auth stylesheet and the dedicated classroom-tools layer. Sidebar, topbar, buttons, cards, modals, typography, motion and responsive behavior follow the KatLearn LMS glass design system.
 
-The LMS `katlearn-polish.css` file is not linked by the current LMS pages; it is not part of the active single-stylesheet system and is therefore not added as a competing legacy layer here. The separate Admin Control Center keeps its existing admin-specific design.
+The dashboard, classes, students, packs, progress and teaching-tools areas are separate page modules with direct links: `/home.html#dashboard`, `#classes`, `#students`, `#packs`, `#progress` and `#games`. The legacy root `index.html` redirects to `/home.html` while preserving query strings and fragments for SSO and deep links.
+
+The old light/blue dashboard and authentication styles are no longer loaded by the user-facing Teacher portal. Admin Control Center remains a separately scoped administration interface. The active LMS does not link `katlearn-polish.css`, so it is not loaded as a competing theme layer.
+
+The copied LMS stylesheet is GPL-3.0-only; see `THIRD-PARTY-NOTICES/KATLEARN-LMS-THEME.txt`.
