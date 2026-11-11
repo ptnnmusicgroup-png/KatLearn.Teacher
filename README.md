@@ -2,16 +2,27 @@
 
 Teacher portal for KatLearn.
 
-## Firebase Admin production configuration
+## Firebase Admin runtime configuration
 
-The Teacher portal server APIs use Firebase Admin SDK. Configure the following Netlify Production environment variable(s):
+The Teacher registration API uses the Firebase Admin SDK and needs credentials at runtime.
+Configure the Netlify site environment variable `FIREBASE_SERVICE_ACCOUNT_JSON` with the
+complete service-account JSON for Firebase project `elp---katlearn`. The API also accepts
+`FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` (Base64-encoded JSON), or the three separate fields
+`FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY`.
 
-- Preferred: `FIREBASE_SERVICE_ACCOUNT_JSON` = the complete Firebase service-account JSON.
-- Alternative: `FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` = Base64 of the complete service-account JSON.
-- Or the three fields: `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`.
+**Important for previews:** create the secret for the **Deploy Previews** context as well
+as **Production**. Setting it only for Production leaves PR Deploy Preview Functions
+without credentials and the registration API returns
+`firebase_credentials_missing`. The variable must be available to Netlify Functions
+(use the Functions scope, or all scopes if scope selection is unavailable).
 
-Never commit a service-account JSON/private key to GitHub. After changing Netlify environment variables, redeploy the project.
+For the current canonical Teacher site, configure this on the Netlify site
+`quanly-giaovien-katlearn`. If testing its secondary preview site
+`teacher-katlearn1`, configure that Netlify site separately too.
 
+Mark the value as secret/sensitive. Never commit a service-account JSON/private key to
+GitHub, put it in browser code, or paste it into chat. After changing Netlify environment
+variables, trigger a new deploy so Functions receive the updated value.
 ## Classroom Games
 
 The Teacher portal includes a classroom games area for no-repeat random student selection, a name wheel, and random team assignment. The roster is loaded only for the signed-in teacher's own classes and is kept in memory for the current page session.
