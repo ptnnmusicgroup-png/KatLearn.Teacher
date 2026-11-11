@@ -153,11 +153,13 @@ $('#newSchool').addEventListener('input',()=>{
 });
 function permissionFailure(error){
  const text=String([error?.message,error?.code,error?.details].filter(Boolean).join(" "));
- // Only retry through client Firestore for explicit hosting/credential/permission
- // failures. A generic HTTP 403 can also mean wrong identity or rejected Origin.
- return /permission[_\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
-  ||error?.code==="teacher_registration_access_blocked"
-  ||(Number(error?.status)===503&&/firebase admin credentials|service account|firebase_credentials/i.test(text));
+ // Missing/invalid Admin credentials are server configuration faults; a client
+ // Firestore fallback cannot create server credentials or repair that condition.
+ if(/^firebase_(?:credentials_|project_)/.test(String(error?.code||'')))return false;
+ // Retry only explicit hosting-access or Firestore permission failures.
+ // Generic HTTP 403/503 responses can represent unrelated server faults.
+ return /permission[_\\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
+  ||error?.code==="teacher_registration_access_blocked";
 }
 async function submitTeacherProfileWithClient(user,payload){
  if(!db||!api?.getDoc||!api?.setDoc)throw Object.assign(new Error("Firebase Firestore chưa sẵn sàng."),{stage:"khởi tạo Firestore"});
@@ -298,7 +300,10 @@ $('#form').onsubmit=async e=>{
    'auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.',
    'auth/invalid-email':'Email không hợp lệ.',
    'auth/network-request-failed':'Mất kết nối mạng. Kiểm tra Internet rồi thử lại.',
-   'auth/too-many-requests':'Có quá nhiều yêu cầu. Hãy thử lại sau.'
+   'auth/too-many-requests':'Có quá nhiều yêu cầu. Hãy thử lại sau.',
+   'firebase_credentials_missing':'Máy chủ đăng ký chưa được cấu hình Firebase Admin cho Deploy Preview. Tài khoản đã tạo; hãy bấm “Thử lưu hồ sơ lại” sau khi quản trị viên hoàn tất cấu hình máy chủ.',
+   'firebase_credentials_invalid':'Cấu hình Firebase Admin trên máy chủ không hợp lệ. Tài khoản đã tạo; hãy thử lưu hồ sơ lại sau khi quản trị viên sửa cấu hình.',
+   'firebase_project_mismatch':'Máy chủ đăng ký đang kết nối nhầm dự án Firebase. Tài khoản đã tạo; hãy thử lưu hồ sơ lại sau khi quản trị viên sửa cấu hình.'
   };
   status.textContent='❌ '+(messages[error?.code]||error?.message||'Không thể gửi hồ sơ.');
   if(createdUser&&auth.currentUser?.uid===createdUser.uid){
