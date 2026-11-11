@@ -155,7 +155,9 @@
       const roster=await api.getRoster(classId);
       if(!roster.length)throw new Error('Lớp chưa có học sinh.');
       const students=shuffle(roster),groups=[];
-      for(let i=0;i<students.length;i+=2)groups.push(students.slice(i,i+2));
+      const pairLimit=students.length%2?Math.max(0,students.length-3):students.length;
+      for(let i=0;i<pairLimit;i+=2)groups.push(students.slice(i,i+2));
+      if(students.length%2)groups.push(students.slice(-3));
       $('rosterPairResults').innerHTML=groups.map((group,index)=>'<article class="tool-roster-pair"><strong>'+(group.length===2?'CẶP '+(index+1):'NHÓM 3 · '+(index+1))+'</strong>'+group.map(s=>'<div>'+escapeHtml(s.name)+'</div>').join('')+'</article>').join('');
       $('rosterPairStatus').textContent='Đã ghép '+roster.length+' học sinh; danh sách chỉ được giữ trong bộ nhớ trang.';
     }catch(error){$('rosterPairStatus').textContent=error.message||'Không thể ghép cặp lúc này.'}
