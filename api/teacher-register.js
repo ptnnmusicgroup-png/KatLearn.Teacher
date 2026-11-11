@@ -95,11 +95,11 @@ function validateClass(classId, catalogSchool, requestedClassName) {
 export default async request => {
   const origin = String(request.headers.get('origin') || '').replace(/\/+$/, '');
   if (request.method === 'OPTIONS') {
-    if (origin && !isAllowedOrigin(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
+    if (origin && !isAllowedOrigin(origin)) return response({ ok: false, error: 'Origin không được phép.', code: 'origin_not_allowed' }, 403, origin);
     return response({ ok: true }, 200, origin);
   }
   if (request.method !== 'POST') return response({ ok: false, error: 'Phương thức không được hỗ trợ.' }, 405, origin);
-  if (!isAllowedOrigin(origin)) return response({ ok: false, error: 'Origin không được phép.' }, 403, origin);
+  if (!isAllowedOrigin(origin)) return response({ ok: false, error: 'Origin không được phép.', code: 'origin_not_allowed' }, 403, origin);
 
   try {
     const body = await request.json();
