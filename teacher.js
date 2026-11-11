@@ -12,13 +12,13 @@ function makeJoinCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=new
 async function copyText(value){const text=String(value??'');if(!text)return;try{await navigator.clipboard.writeText(text);toast('✓ Đã sao chép mã lớp')}catch(_){const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();try{document.execCommand('copy');toast('✓ Đã sao chép mã lớp')}catch(e){toast('Không thể sao chép mã lớp.')}finally{area.remove()}}}
 const TEACHER_PAGE_IDS=new Set(['dashboard','classes','students','packs','progress','games']);
 function teacherPageFromHash(){const value=decodeURIComponent((location.hash||'').replace(/^#/,'')).trim().toLowerCase();return TEACHER_PAGE_IDS.has(value)?value:'dashboard'}
-function showPage(id,{updateHash=true}={}){
+function showPage(id,{updateHash=true,refresh=true}={}){
   if(!TEACHER_PAGE_IDS.has(id)||!$('#'+id)?.classList.contains('page'))id='dashboard';
   document.querySelectorAll('.teacher-main .page').forEach(page=>page.classList.toggle('active-page',page.id===id));
   document.querySelectorAll('.sidebar .nav-item').forEach(button=>{const active=button.dataset.page===id;button.classList.toggle('active',active);if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current')});
   $('.sidebar')?.classList.remove('open');$('.menu-toggle')?.setAttribute('aria-expanded','false');
   if(updateHash&&location.hash!=='#'+id)history.replaceState(history.state,'',location.pathname+location.search+'#'+id);
-  if(id==='dashboard')void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
+  if(id==='dashboard'&&refresh)void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
   if(id==='classes')void loadClasses().catch(error=>console.warn('[KatLearn] Class list load failed:',error));
   if(id==='students')void loadStudents().catch(error=>console.warn('[KatLearn] Student list load failed:',error));
   if(id==='packs')void loadPacks().catch(error=>console.warn('[KatLearn] Pack list load failed:',error));
@@ -109,7 +109,7 @@ async function initFirebase(){
     if(firstAuthEvent){firstAuthEvent=false;resolveReady(u)}
     if(u&&isTeacher()){
       document.body.classList.remove('locked');
-      showPage(teacherPageFromHash(),{updateHash:false});
+      void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error)).then(()=>showPage(teacherPageFromHash(),{updateHash:false,refresh:false}));
     }else{
       document.body.classList.add('locked');
       showPage('dashboard');
