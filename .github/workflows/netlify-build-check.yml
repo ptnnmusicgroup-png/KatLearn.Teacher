@@ -53,8 +53,13 @@ jobs:
           test -s dist/katlearn-defaultdarkmode.css
           test -s dist/teacher-katlearn-theme.css
           test -s dist/teacher-classroom-games.js
+          test -s dist/teacher-learning-tools.js
+          test -s dist/teacher-learning-tools.css
           grep -q 'data-page="games"' dist/index.html
           grep -q 'teacher-classroom-games.js' dist/index.html
+          grep -q 'teacher-learning-tools.js' dist/index.html
+          grep -q 'teacher-learning-tools.css' dist/index.html
+          grep -q 'data-tool-card="flashcards"' dist/index.html
           grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
           grep -q '20261024-teacher-system2' dist/teacher-signup.html
           grep -q 'page-lms-directory' dist/admin.html
