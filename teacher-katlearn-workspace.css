@@ -90,10 +90,10 @@ body.locked .teacher-app-shell{visibility:hidden}
 .teacher-btn.secondary,.teacher-btn.danger{background:var(--kl-surface-2);border-color:var(--kl-line-strong);color:var(--kl-ink);box-shadow:none}
 .teacher-btn.danger{color:var(--kl-danger);border-color:color-mix(in srgb,var(--kl-danger) 24%,var(--kl-line))}
 .primary-btn:disabled,.teacher-btn:disabled,.create-pack-btn:disabled{opacity:.48;cursor:not-allowed;transform:none}
-.teacher-main .modal-box{width:min(760px,calc(100vw - 28px));padding:clamp(20px,3vw,30px);border:1px solid var(--kl-line-strong);border-radius:27px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.025)),color-mix(in srgb,var(--kl-bg-elevated) 72%,transparent);color:var(--kl-ink);box-shadow:0 34px 90px rgba(0,0,0,.42);backdrop-filter:blur(24px) saturate(170%)}
-.teacher-main .modal-box.wide{width:min(850px,calc(100vw - 28px));text-align:left}
-.teacher-main .modal-box h2{margin:4px 0 14px;color:var(--kl-ink);font:700 23px "Fredoka","Be Vietnam Pro",sans-serif}
-.teacher-main .modal-box>p{color:var(--kl-muted);font-size:11px;line-height:1.65}
+.modal .modal-box{width:min(760px,calc(100vw - 28px));padding:clamp(20px,3vw,30px);border:1px solid var(--kl-line-strong);border-radius:27px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.025)),color-mix(in srgb,var(--kl-bg-elevated) 72%,transparent);color:var(--kl-ink);box-shadow:0 34px 90px rgba(0,0,0,.42);backdrop-filter:blur(24px) saturate(170%)}
+.modal .modal-box.wide{width:min(850px,calc(100vw - 28px));text-align:left}
+.modal .modal-box h2{margin:4px 0 14px;color:var(--kl-ink);font:700 23px "Fredoka","Be Vietnam Pro",sans-serif}
+.modal .modal-box>p{color:var(--kl-muted);font-size:11px;line-height:1.65}
 .teacher-form{display:grid;gap:14px}
 .teacher-form label{display:grid;gap:7px;color:var(--kl-muted);font-size:11px;font-weight:800}
 .teacher-form input,.teacher-form textarea,.teacher-form select{width:100%;box-sizing:border-box}
