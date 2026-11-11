@@ -25,6 +25,19 @@ jobs:
             node --check "$file"
           done
           node scripts/check-inline-scripts.mjs
+      - name: Verify the full LMS theme is shared across Teacher user-facing pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s katlearn-defaultdarkmode.css
+          test -s teacher-katlearn-auth-theme.css
+          for page in index.html login.html teacher-signup.html teacher-pending.html sso-bridge.html; do
+            grep -q 'katlearn-defaultdarkmode.css' "$page"
+            grep -q 'teacher-katlearn-auth-theme.css\|teacher-katlearn-theme.css' "$page"
+          done
+          grep -q 'body class="sso-bridge"' sso-bridge.html
+          grep -q 'body class="teacher-pending"' teacher-pending.html
+          echo "Verified LMS Default Dark Mode and Teacher adapters are linked on every user-facing Teacher page."
       - name: Build Netlify static output
         env:
           KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
