@@ -1,0 +1,178 @@
+/* Teacher workspace layer — official KatLearn LMS tokens and components only. */
+html,body{min-height:100%;background:var(--kl-bg);color:var(--kl-ink)}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;overflow-x:hidden}
+body.locked .teacher-app-shell{visibility:hidden}
+.teacher-app-shell{min-height:100vh}
+.teacher-app-shell>.sidebar{background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.02)),color-mix(in srgb,var(--kl-bg-elevated) 70%,transparent);border-right:1px solid rgba(255,255,255,.15);box-shadow:14px 0 44px rgba(0,0,0,.16);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%)}
+.teacher-app-shell .brand-mark{background:linear-gradient(135deg,var(--kl-accent),var(--kl-accent-2))}
+.teacher-app-shell .class-label{margin-bottom:16px}
+.teacher-app-shell .sidebar nav{gap:8px}
+.teacher-app-shell .nav-item{min-height:46px;border-radius:16px}
+.teacher-app-shell .nav-item.active{background:linear-gradient(110deg,color-mix(in srgb,var(--kl-accent) 24%,transparent),color-mix(in srgb,var(--kl-accent-2) 12%,transparent),rgba(255,255,255,.035));border-color:color-mix(in srgb,var(--kl-accent) 48%,var(--kl-line))}
+.teacher-app-shell .teacher-card{display:grid;gap:7px;margin-top:auto;padding:15px 13px;border:1px solid var(--kl-line);border-radius:19px;background:linear-gradient(145deg,rgba(169,156,255,.13),rgba(56,183,220,.07));color:var(--kl-ink);box-shadow:var(--kl-shadow-sm)}
+.teacher-app-shell .teacher-card .teacher-icon{font-size:22px}
+.teacher-app-shell .teacher-card strong{font:700 13px "Fredoka","Be Vietnam Pro",sans-serif}
+.teacher-app-shell .teacher-card small{color:var(--kl-muted);font-size:10px;line-height:1.6}
+.teacher-app-shell .teacher-card button,.teacher-text-link{justify-self:start;padding:8px 10px;border:1px solid var(--kl-line);border-radius:11px;background:var(--kl-surface-2);color:var(--kl-accent-2);font:800 10px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.teacher-main{min-width:0;width:auto;max-width:none;margin:0;padding:0;background:transparent;color:var(--kl-ink)}
+.teacher-main .page{width:100%;max-width:1480px;margin:0 auto;padding:clamp(22px,3vw,38px) clamp(15px,3.2vw,42px) 54px;box-sizing:border-box}
+.teacher-main .page.active-page{display:block;animation:klPageIn .32s var(--kl-motion) both}
+.teacher-greeting{align-items:flex-end;margin-bottom:20px}
+.teacher-greeting h1{margin:3px 0 7px;color:var(--kl-ink);font:700 clamp(29px,3vw,38px)/1.1 "Fredoka","Baloo 2",sans-serif;letter-spacing:-.035em}
+.teacher-greeting .subtext{max-width:740px;font-size:12px}
+.teacher-greeting .auth-message{margin:8px 0 0;color:var(--kl-accent-2);font-size:11px;font-weight:700}
+.teacher-home-hero{min-height:250px;margin-bottom:18px;border-radius:32px}
+.teacher-home-hero .hero-content{max-width:720px;padding:clamp(25px,4vw,40px)}
+.teacher-home-hero .hero-content h2{font-size:clamp(27px,3.3vw,43px);line-height:1.08}
+.teacher-home-hero .hero-content p{max-width:520px}
+.teacher-home-hero .hero-meta{display:flex;flex-wrap:wrap;gap:9px 16px;margin:18px 0;color:#d2ccef;font-size:10px;font-weight:700}
+.teacher-home-hero .hero-art .blob{right:12%;top:13%;width:clamp(155px,18vw,245px)}
+.teacher-home-hero .hero-art .cat-hero{right:19%;top:19%;font-size:clamp(84px,8vw,115px)}
+.teacher-home-hero .floating-card{position:absolute;z-index:3;padding:10px 13px;border:1px solid rgba(255,255,255,.2);border-radius:15px;background:rgba(255,255,255,.12);color:#f5f2ff;font-size:10px;font-weight:800;backdrop-filter:blur(14px)}
+.teacher-home-hero .floating-card b{margin-left:7px}
+.teacher-home-hero .f1{right:9%;bottom:18%}
+.teacher-home-hero .f2{right:35%;top:15%}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:18px 0 26px}
+.metric{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr);align-items:center;gap:2px 11px;min-width:0;min-height:112px;padding:17px;border:1px solid var(--kl-line);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),color-mix(in srgb,var(--kl-surface) 64%,transparent);box-shadow:var(--kl-shadow-sm);color:var(--kl-ink)}
+.metric>span{grid-row:span 3;display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--kl-line);border-radius:14px;background:var(--kl-soft);font-size:20px}
+.metric small{color:var(--kl-muted);font-size:10px;font-weight:700}
+.metric strong{display:block;margin:3px 0;color:var(--kl-ink);font:700 27px/1 "Fredoka","Be Vietnam Pro",sans-serif;font-variant-numeric:tabular-nums}
+.metric em{color:var(--kl-muted-2);font-size:9px;font-style:normal}
+.section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:22px 0 14px}
+.section-heading h2{margin:0;color:var(--kl-ink);font:700 21px "Fredoka","Be Vietnam Pro",sans-serif}
+.section-heading p{margin:5px 0 0;color:var(--kl-muted);font-size:11px}
+.teacher-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:15px;margin-top:14px}
+.teacher-card-panel{min-width:0;padding:21px;border:1px solid var(--kl-line);border-radius:25px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.018)),color-mix(in srgb,var(--kl-surface) 62%,transparent);color:var(--kl-ink);box-shadow:var(--kl-shadow-sm);backdrop-filter:blur(17px) saturate(155%);-webkit-backdrop-filter:blur(17px) saturate(155%)}
+.teacher-card-panel h3{margin:0;color:var(--kl-ink);font:700 17px "Fredoka","Be Vietnam Pro",sans-serif}
+.teacher-card-panel>p{margin:6px 0 14px;color:var(--kl-muted);font-size:10px;line-height:1.65}
+.teacher-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.teacher-panel-heading .eyebrow{margin:0 0 5px}
+.teacher-panel-heading h3{margin:0}
+.teacher-panel-heading p:not(.eyebrow){margin:5px 0 0;color:var(--kl-muted);font-size:10px}
+.teacher-home-grid .activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.teacher-home-grid .activity-card{min-height:82px;padding:13px;border-radius:18px}
+.teacher-home-grid .activity-card .activity-icon{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border:1px solid var(--kl-line);border-radius:13px;background:var(--kl-soft);font-size:18px}
+.teacher-home-grid .activity-card small{color:var(--kl-muted)}
+.teacher-home-grid .activity-card i{color:var(--kl-accent-2)}
+.teacher-main .page-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:0 0 22px}
+.teacher-main .page-intro h1{margin:3px 0 7px;color:var(--kl-ink);font:700 clamp(26px,3vw,36px) "Fredoka","Be Vietnam Pro",sans-serif}
+.teacher-main .page-intro .subtext{margin:0;color:var(--kl-muted);font-size:11px;line-height:1.7}
+.teacher-main .page-intro .eyebrow{margin:0 0 6px;color:var(--kl-accent-2);font-size:9px;font-weight:900;letter-spacing:.13em}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.toolbar>span{flex:1}
+.toolbar>strong{color:var(--kl-ink);font-size:11px}
+.toolbar input,.toolbar select,.teacher-form input,.teacher-form textarea,.teacher-form select,.pack-create-actions select,.pack-word-row input,.pack-word-row select,.quick-add textarea{min-height:42px;padding:10px 12px;border:1px solid var(--kl-line-strong);border-radius:13px;background:color-mix(in srgb,var(--kl-surface-2) 80%,transparent);color:var(--kl-ink);font:500 12px "Be Vietnam Pro",sans-serif;outline:none;box-shadow:inset 0 1px rgba(255,255,255,.045)}
+.toolbar input:focus,.toolbar select:focus,.teacher-form input:focus,.teacher-form textarea:focus,.teacher-form select:focus,.pack-create-actions select:focus,.pack-word-row input:focus,.pack-word-row select:focus,.quick-add textarea:focus{border-color:var(--kl-accent);box-shadow:var(--kl-focus)}
+.teacher-main .data-table{width:100%;min-width:620px;border-collapse:separate;border-spacing:0;color:var(--kl-ink);font-size:11px}
+.teacher-card-panel:has(.data-table){overflow-x:auto}
+.teacher-main .data-table th{padding:12px 13px;background:rgba(169,156,255,.09);color:var(--kl-muted);text-align:left;font-size:9px;font-weight:900;letter-spacing:.07em}
+.teacher-main .data-table td{padding:12px 13px;border-bottom:1px solid var(--kl-line);color:var(--kl-ink);vertical-align:middle}
+.teacher-main .data-table td strong{color:var(--kl-ink);font-size:11px}
+.teacher-main .data-table td small{color:var(--kl-muted)}
+.teacher-main .data-table .actions{display:flex;gap:6px;flex-wrap:wrap}
+.teacher-main .class-list{display:grid;gap:9px}
+.teacher-main .class-item{padding:13px 14px;border:1px solid var(--kl-line);border-radius:15px;background:var(--kl-surface-2);color:var(--kl-ink);cursor:pointer}
+.teacher-main .class-item:hover{border-color:var(--kl-line-strong);background:var(--kl-soft)}
+.teacher-main .class-item strong,.teacher-main .class-item small{display:block}
+.teacher-main .class-item strong{font-size:11px}
+.teacher-main .class-item small{margin-top:4px;color:var(--kl-muted);font-size:9px}
+.teacher-main .student-row{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--kl-line);color:var(--kl-ink)}
+.teacher-main .student-row:last-child{border-bottom:0}
+.teacher-main .student-avatar{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:12px;background:var(--kl-soft);color:var(--kl-accent-2);font-weight:900}
+.teacher-main .student-row strong{font-size:11px}
+.teacher-main .student-row small{display:block;margin-top:4px;color:var(--kl-muted);font-size:9px}
+.teacher-main .student-score{margin-left:auto;text-align:right}
+.teacher-main .student-score b{font-size:10px}
+.teacher-main .empty{padding:18px;color:var(--kl-muted);font-size:11px;text-align:center;line-height:1.65}
+.teacher-main .status-pill{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid rgba(91,189,155,.22);border-radius:999px;background:rgba(91,189,155,.1);color:var(--kl-good);font-size:9px;font-weight:800}
+.teacher-btn,.create-pack-btn,.primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid transparent;border-radius:14px;background:linear-gradient(130deg,var(--kl-accent),var(--kl-accent-2));color:#110e24;font:800 11px "Be Vietnam Pro",sans-serif;cursor:pointer;box-shadow:0 9px 23px color-mix(in srgb,var(--kl-accent) 18%,transparent),inset 0 1px rgba(255,255,255,.3);transition:transform .2s var(--kl-motion),filter .2s}
+.teacher-btn:hover,.create-pack-btn:hover,.primary-btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.teacher-btn.secondary,.teacher-btn.danger{background:var(--kl-surface-2);border-color:var(--kl-line-strong);color:var(--kl-ink);box-shadow:none}
+.teacher-btn.danger{color:var(--kl-danger);border-color:color-mix(in srgb,var(--kl-danger) 24%,var(--kl-line))}
+.primary-btn:disabled,.teacher-btn:disabled,.create-pack-btn:disabled{opacity:.48;cursor:not-allowed;transform:none}
+.modal .modal-box{width:min(760px,calc(100vw - 28px));padding:clamp(20px,3vw,30px);border:1px solid var(--kl-line-strong);border-radius:27px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.025)),color-mix(in srgb,var(--kl-bg-elevated) 72%,transparent);color:var(--kl-ink);box-shadow:0 34px 90px rgba(0,0,0,.42);backdrop-filter:blur(24px) saturate(170%)}
+.modal .modal-box.wide{width:min(850px,calc(100vw - 28px));text-align:left}
+.modal .modal-box h2{margin:4px 0 14px;color:var(--kl-ink);font:700 23px "Fredoka","Be Vietnam Pro",sans-serif}
+.modal .modal-box>p{color:var(--kl-muted);font-size:11px;line-height:1.65}
+.teacher-form{display:grid;gap:14px}
+.teacher-form label{display:grid;gap:7px;color:var(--kl-muted);font-size:11px;font-weight:800}
+.teacher-form input,.teacher-form textarea,.teacher-form select{width:100%;box-sizing:border-box}
+.teacher-form textarea,.quick-add textarea{min-height:90px;resize:vertical;line-height:1.6}
+.pack-create-box{max-height:88dvh;overflow:auto}
+.pack-create-head{display:grid;gap:13px;padding-bottom:14px;border-bottom:1px solid var(--kl-line)}
+.pack-create-head h2{margin:0!important}
+.pack-create-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pack-create-actions select{flex:1;min-width:190px}
+.pack-create-actions button,.quick-add,.pack-help{min-height:38px;padding:0 11px;border:1px solid var(--kl-line-strong);border-radius:11px;background:var(--kl-surface-2);color:var(--kl-ink);font:800 10px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.pack-create-actions button:hover,.quick-add:hover,.pack-help:hover{background:var(--kl-soft)}
+.quick-add{margin-top:13px;color:var(--kl-accent-2)}
+.pack-form{margin-top:15px}
+.pack-word-row{display:grid;grid-template-columns:34px minmax(110px,1.1fr) minmax(95px,.8fr) minmax(120px,1fr) minmax(105px,.75fr) minmax(120px,1fr) minmax(100px,.85fr);gap:7px;align-items:center;margin-bottom:8px}
+.pack-word-row .row-number{color:var(--kl-muted);font-size:10px;font-weight:800}
+.pack-word-row input,.pack-word-row select{width:100%;min-width:0;min-height:39px;padding:8px;font-size:10px}
+.add-pack-row{width:100%;min-height:39px;margin:6px 0 12px;border:1px dashed var(--kl-line-strong);border-radius:12px;background:var(--kl-surface-2);color:var(--kl-accent-2);font:800 10px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.pack-create-footer{display:flex;justify-content:flex-end;gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid var(--kl-line)}
+.pack-create-footer .primary-btn{min-width:140px}
+.pack-action-menu{z-index:100000;min-width:240px;padding:7px;border:1px solid var(--kl-line-strong);border-radius:15px;background:var(--kl-surface-3);box-shadow:var(--kl-shadow);backdrop-filter:blur(20px)}
+.pack-action-menu button{display:block;width:100%;padding:10px 12px;border:0;border-radius:9px;background:transparent;color:var(--kl-ink);text-align:left;font:600 11px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.pack-action-menu button:hover{background:var(--kl-soft)}
+.pack-action-menu button.danger{color:var(--kl-danger)}
+.pack-more-btn{width:38px;height:38px;border:1px solid var(--kl-line);border-radius:11px;background:var(--kl-surface-2);color:var(--kl-ink);font-size:21px;cursor:pointer}
+.pack-summary,.word-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.pack-summary>div,.word-summary>div{padding:14px;border:1px solid var(--kl-line);border-radius:15px;background:var(--kl-surface-2);color:var(--kl-ink)}
+.pack-summary b,.pack-summary small,.word-summary b,.word-summary small{display:block}
+.pack-summary b,.word-summary b{margin:5px 0;font:700 20px "Fredoka",sans-serif}
+.pack-summary small,.word-summary small{color:var(--kl-muted);font-size:9px}
+.pack-library{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pack-tile{padding:16px;border:1px solid var(--kl-line);border-radius:18px;background:var(--kl-surface-2);color:var(--kl-ink)}
+.pack-tile h3{margin:10px 0 5px;color:var(--kl-ink);font:700 14px "Fredoka",sans-serif}
+.pack-tile p{color:var(--kl-muted);font-size:10px;line-height:1.55}
+.pack-tile button{padding:8px 10px;border:1px solid var(--kl-line);border-radius:10px;background:var(--kl-soft);color:var(--kl-accent-2);font:800 10px "Be Vietnam Pro",sans-serif;cursor:pointer}
+.word-table-card{overflow:auto;border:1px solid var(--kl-line);border-radius:18px;background:var(--kl-surface)}
+.word-table-head,.word-table-row{display:grid;grid-template-columns:1.1fr 1.3fr 1fr .6fr;gap:12px;align-items:center;padding:11px 15px}
+.word-table-head{background:var(--kl-surface-2);color:var(--kl-muted);font-size:9px;font-weight:900;text-transform:uppercase}
+.word-table-row{border-top:1px solid var(--kl-line);color:var(--kl-ink);font-size:10px}
+.word-table-row b{color:var(--kl-ink);font-size:11px}
+.word-table-row small{display:block;margin-top:3px;color:var(--kl-muted);font-size:9px}
+.site-footer{margin:18px 14px 0;padding:22px 15px;border-top:1px solid var(--kl-line);background:transparent;color:var(--kl-muted-2);font-size:10px;line-height:1.6;text-align:center}
+.site-footer img{margin-top:7px;vertical-align:middle}
+.class-analytics{margin-top:18px}
+.class-analytics-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.class-stat{padding:14px;border:1px solid var(--kl-line);border-radius:15px;background:var(--kl-surface-2)}
+.class-stat strong{color:var(--kl-ink);font-size:11px}
+.class-stat small,.class-stat li span{color:var(--kl-muted);font-size:9px}
+.class-stat ol{padding-left:20px;color:var(--kl-ink);font-size:10px;line-height:1.9}
+#teacherAccount{position:relative;display:flex;align-items:center;gap:8px;min-width:0;font-family:"Be Vietnam Pro",sans-serif}
+#teacherAccount .tha-btn,#teacherAccount .tha-user{display:flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 11px;border:1px solid var(--kl-line-strong);border-radius:999px;background:var(--kl-surface-2);color:var(--kl-ink);font:800 10px "Be Vietnam Pro",sans-serif;cursor:pointer}
+#teacherAccount .tha-user{max-width:min(260px,42vw);overflow:hidden}
+#teacherAccount .tha-user>span:nth-child(2){max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#teacherAccount .tha-avatar{display:grid;place-items:center;flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--kl-accent),var(--kl-pink));color:#fff;font-size:11px}
+#teacherAccount .tha-avatar.large{width:42px;height:42px;flex-basis:42px;font-size:15px}
+#teacherAccount .tha-panel{position:absolute;top:calc(100% + 10px);right:0;z-index:90;width:min(300px,calc(100vw - 24px));padding:15px;border:1px solid var(--kl-line-strong);border-radius:21px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.025)),color-mix(in srgb,var(--kl-bg-elevated) 74%,transparent);color:var(--kl-ink);box-shadow:var(--kl-shadow);backdrop-filter:blur(24px) saturate(165%)}
+#teacherAccount .tha-head{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--kl-line)}
+#teacherAccount .tha-head b{display:block;color:var(--kl-ink);font-size:12px}
+#teacherAccount .tha-head small{display:block;max-width:205px;margin-top:3px;overflow:hidden;color:var(--kl-muted);font-size:9px;text-overflow:ellipsis;white-space:nowrap}
+#teacherAccount .tha-role{margin:12px 0;padding:8px 10px;border:1px solid var(--kl-line);border-radius:11px;background:var(--kl-surface-2);color:var(--kl-muted);font-size:9px;font-weight:700;line-height:1.6}
+#teacherAccount .tha-menu{width:100%;margin-top:6px;padding:10px 11px;border:1px solid var(--kl-line);border-radius:11px;background:var(--kl-surface-2);color:var(--kl-ink);text-align:left;font:700 10px "Be Vietnam Pro",sans-serif;cursor:pointer}
+#teacherAccount .tha-menu:hover{background:var(--kl-soft);border-color:var(--kl-line-strong)}
+#teacherAccount .tha-menu.danger{color:var(--kl-danger)}
+@media(max-width:1100px){.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.teacher-grid{grid-template-columns:1fr}.teacher-home-hero .hero-art .cat-hero{right:15%}.pack-word-row{grid-template-columns:30px repeat(3,minmax(0,1fr))}.pack-word-row .pack-example,.pack-word-row .pack-note{grid-column:span 1}}
+@media(max-width:800px){.teacher-main .page{padding:22px 16px 38px}.teacher-main .page-intro{align-items:flex-start;flex-wrap:wrap}.teacher-home-hero .hero-art{display:none}.teacher-home-hero{min-height:0}.teacher-home-grid .activity-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pack-library{grid-template-columns:repeat(2,minmax(0,1fr))}.pack-summary,.word-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.teacher-main .page{padding:19px 11px 30px}.dashboard-grid{gap:9px}.metric{min-height:98px;padding:12px;grid-template-columns:31px minmax(0,1fr);gap:2px 8px}.metric>span{width:31px;height:31px;font-size:16px}.metric strong{font-size:23px}.teacher-main .teacher-card-panel{padding:15px}.teacher-home-grid .activity-grid{grid-template-columns:1fr}.teacher-home-grid .activity-card{min-height:72px}.pack-library{grid-template-columns:1fr}.pack-word-row{grid-template-columns:26px minmax(0,1fr)}.pack-word-row input,.pack-word-row select,.pack-word-row .pack-example,.pack-word-row .pack-note{grid-column:2}.pack-word-row .row-number{grid-column:1;grid-row:1}.pack-create-actions{align-items:stretch}.pack-create-actions select{flex-basis:100%}.pack-create-footer{justify-content:stretch}.pack-create-footer>*{flex:1}#teacherAccount .tha-btn{padding:0 8px;font-size:9px}#teacherAccount .tha-user>span:nth-child(2){display:none}.teacher-home-hero .hero-content{padding:22px}}
+@media(prefers-reduced-motion:reduce){.teacher-btn,.create-pack-btn,.primary-btn,.teacher-main .page.active-page{animation:none!important;transition:none!important}}
+
+/* Visible fallback while the secure Teacher role check is in progress. */
+.teacher-auth-state{display:none;position:relative;z-index:30;min-height:100vh;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 15%,color-mix(in srgb,var(--kl-accent) 15%,transparent),transparent 55%),var(--kl-bg);color:var(--kl-ink)}
+body.locked .teacher-auth-state{display:grid}
+body.locked .teacher-app-shell{visibility:hidden;pointer-events:none}
+.teacher-auth-state-card{width:min(480px,100%);padding:clamp(25px,5vw,42px);border:1px solid var(--kl-line-strong);border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025)),color-mix(in srgb,var(--kl-surface) 78%,transparent);text-align:center;box-shadow:var(--kl-shadow);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%)}
+.teacher-auth-state-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 18px;border:1px solid var(--kl-line);border-radius:19px;background:var(--kl-soft);color:var(--kl-accent-2)}
+.teacher-auth-spinner{display:block;width:25px;height:25px;border:3px solid color-mix(in srgb,var(--kl-accent) 22%,transparent);border-top-color:var(--kl-accent-2);border-radius:50%;animation:teacherAuthSpin .8s linear infinite}
+.teacher-auth-state-paw{font-size:26px}
+.teacher-auth-state-card .eyebrow{margin:0 0 8px;color:var(--kl-accent-2);font-size:9px;font-weight:900;letter-spacing:.14em}
+.teacher-auth-state-card h1{margin:0 0 9px;color:var(--kl-ink);font:700 clamp(21px,4vw,27px) "Fredoka","Be Vietnam Pro",sans-serif}
+.teacher-auth-state-card>p:not(.eyebrow){margin:0;color:var(--kl-muted);font-size:12px;line-height:1.7}
+.teacher-auth-state-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;margin-top:20px;padding:0 17px;border:1px solid var(--kl-line);border-radius:13px;background:linear-gradient(130deg,var(--kl-accent),var(--kl-accent-2));color:#110e24;font-size:11px;font-weight:900;text-decoration:none}
+.teacher-auth-state-link:hover{filter:brightness(1.06);transform:translateY(-1px)}
+@keyframes teacherAuthSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.teacher-auth-spinner{animation:none}}

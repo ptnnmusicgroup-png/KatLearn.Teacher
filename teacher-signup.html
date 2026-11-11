@@ -1,101 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KatLearn Teacher — Đăng ký giáo viên</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="auth-modern.css"><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet"><style>
-:root{--ink:#303747;--muted:#7f8999;--blue:#5d6bea;--line:#e7e9f0;--bg:#f7f8fc}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);font-family:'Be Vietnam Pro',sans-serif;color:var(--ink)}main{max-width:980px;margin:auto;padding:30px 18px 60px}.back{color:#5d6bea;font-weight:800;text-decoration:none}.hero{text-align:center;margin:34px auto 25px;max-width:720px}.hero h1{margin:0;font:700 46px Fredoka,sans-serif}.hero p{color:var(--muted);line-height:1.6}.card{background:#fff;border:1px solid var(--line);border-radius:25px;padding:28px;box-shadow:0 24px 70px #30374712}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:grid;gap:7px;font-size:12px;font-weight:800}input,select{width:100%;min-height:47px;border:1px solid var(--line);border-radius:13px;padding:0 13px;font:inherit;color:var(--ink);background:#fff}input:focus,select:focus{outline:none;border-color:#8d96ed;box-shadow:0 0 0 4px #5d6bea14}.full{grid-column:1/-1}.section{margin:22px 0 8px;font:700 18px Fredoka,sans-serif}.actions{display:flex;gap:10px;align-items:center;margin-top:20px}.submit{min-height:49px;border:0;border-radius:999px;padding:0 22px;background:#5d6bea;color:#fff;font-weight:800;cursor:pointer}.link{color:#5d6bea;font-weight:800;text-decoration:none;font-size:12px}.message{min-height:20px;color:#5d6bea;font-size:11px;font-weight:700}.notice{padding:13px 15px;border-radius:14px;background:#f7f8ff;color:#65708a;font-size:11px;line-height:1.6;margin-top:15px}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.hero h1{font-size:38px}}
-
-/* Teacher signup: dedicated centered layout, isolated from shared auth grid. */
-body>main.teacher-signup-page,
-main.teacher-signup-page{
-  display:block!important;
-  position:relative!important;
-  z-index:2!important;
-  width:min(1120px,calc(100% - 40px))!important;
-  min-height:100vh!important;
-  max-width:none!important;
-  margin:0 auto!important;
-  padding:34px 0 72px!important;
-  grid-template-columns:none!important;
-  grid-column:none!important;
-  align-items:initial!important;
-  gap:0!important;
-}
-.teacher-signup-page .back{
-  margin-bottom:20px!important;
-}
-.teacher-signup-page .hero{
-  max-width:900px!important;
-  margin:12px auto 30px!important;
-  text-align:center!important;
-}
-.teacher-signup-page .hero h1{
-  font-size:clamp(46px,6vw,70px)!important;
-  max-width:900px;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.teacher-signup-page .hero>p:not(:first-of-type){
-  max-width:760px!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.teacher-signup-page .card{
-  width:min(1040px,100%)!important;
-  margin:0 auto!important;
-  padding:42px 46px!important;
-}
-.teacher-signup-page .card:before{display:none!important;}
-.teacher-signup-page #form{
-  gap:18px!important;
-}
-.teacher-signup-page #form .grid{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:22px 28px!important;
-}
-.teacher-signup-page label{
-  gap:8px!important;
-  font-size:12px!important;
-}
-.teacher-signup-page input,
-.teacher-signup-page select{
-  min-height:60px!important;
-  padding:0 17px!important;
-  border-radius:15px!important;
-  font-size:14px!important;
-}
-.teacher-signup-page .notice{
-  margin-top:2px!important;
-  padding:15px 17px!important;
-  font-size:10px!important;
-}
-.teacher-signup-page .section{
-  margin:4px 0 0!important;
-  font-size:20px!important;
-}
-.teacher-signup-page .actions{
-  margin-top:2px!important;
-  gap:12px!important;
-}
-.teacher-signup-page .submit{
-  min-height:54px!important;
-  padding:0 28px!important;
-  font-size:13px!important;
-}
-.teacher-signup-page .actions .submit{min-width:190px!important}
-@media(max-width:760px){
-  .teacher-signup-page{
-    width:calc(100% - 22px)!important;
-    padding:20px 0 40px!important;
-  }
-  .teacher-signup-page .card{
-    padding:28px 20px!important;
-  }
-  .teacher-signup-page #form .grid{
-    grid-template-columns:1fr!important;
-    gap:15px!important;
-  }
-  .teacher-signup-page .hero{
-    margin-bottom:22px!important;
-  }
-}
-</style><link rel="stylesheet" href="katlearn-blue-theme.css?v=20261001-1"><link rel="stylesheet" href="/katlearn-astra.css?v=20261024-teacher-system2"></head><body><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div><main class="teacher-signup-page"><a class="back" href="index.html">← Quay lại KatLearn Teacher</a><section class="hero"><p class="kicker">KATLEARN TEACHER • DÀNH CHO GIÁO VIÊN VIỆT NAM</p><h1>Đăng ký tài khoản giáo viên 🇻🇳</h1><p>Điền đúng thông tin công tác. Tài khoản mới sẽ ở trạng thái <b>chờ xác minh</b> trước khi được mở quyền quản trị.</p></section><section class="card"><form id="form"><div class="grid"><label>Họ và tên<input id="name" required placeholder="Nguyễn Thị Như"></label><label>Email<input id="email" type="email" required placeholder="teacher@example.com"></label><label>Mật khẩu<input id="password" type="password" minlength="6" required placeholder="Ít nhất 6 ký tự"></label><label>Tỉnh/Thành phố công tác<select id="province" required><option value="">Chọn tỉnh/thành</option></select></label><label>Xã/Phường<select id="ward" required disabled><option value="">Chọn xã/phường</option></select></label><label>Trường công tác<select id="school" disabled><option value="">Chọn trường</option></select></label><label>Lớp đang quản lý<select id="classCatalog" disabled><option value="">Chọn lớp</option></select></label></div><div class="notice">Không thấy trường/lớp? Bạn có thể đề xuất trường/lớp mới ngay tại đây. Đề xuất sẽ được admin kiểm tra và đưa vào danh mục dùng chung sau khi hồ sơ được xác minh.</div><p class="section">Danh mục công tác</p><div class="grid"><label>Tạo trường mới (nếu cần)<input id="newSchool" placeholder="Ví dụ: THCS Chu Văn An"></label><label>Tạo lớp mới (nếu cần)<input id="newClass" placeholder="Ví dụ: 8B2"></label></div><div class="actions"><button class="submit" type="submit" id="submit">Gửi đăng ký →</button><a class="link" href="https://quanly-giaovien-katlearn.netlify.app/login.html">Đã có tài khoản? Đăng nhập</a></div><p class="message" id="status"></p></form></section></main>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KatLearn Teacher — Đăng ký giáo viên</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/katlearn-defaultdarkmode.css?v=20261111-lms-theme"><link rel="stylesheet" href="/teacher-katlearn-auth-layout.css?v=20261111-1"><link rel="stylesheet" href="/teacher-katlearn-auth-theme.css?v=20261111-2"></head><body><div class="vn-ui-motif" aria-hidden="true"><span class="vn-flag"></span><span class="vn-lotus">🪷</span><span class="vn-star">✦</span></div><main class="teacher-signup-page"><a class="back" href="index.html">← Quay lại KatLearn Teacher</a><section class="hero"><p class="kicker">KATLEARN TEACHER • DÀNH CHO GIÁO VIÊN VIỆT NAM</p><h1>Đăng ký tài khoản giáo viên 🇻🇳</h1><p>Điền đúng thông tin công tác. Tài khoản mới sẽ ở trạng thái <b>chờ xác minh</b> trước khi được mở quyền quản trị.</p></section><section class="card"><form id="form"><div class="grid"><label>Họ và tên<input id="name" required placeholder="Nguyễn Thị Như"></label><label>Email<input id="email" type="email" required placeholder="teacher@example.com"></label><label>Mật khẩu<input id="password" type="password" minlength="6" required placeholder="Ít nhất 6 ký tự"></label><label>Tỉnh/Thành phố công tác<select id="province" required><option value="">Chọn tỉnh/thành</option></select></label><label>Xã/Phường<select id="ward" required disabled><option value="">Chọn xã/phường</option></select></label><label>Trường công tác<select id="school" disabled><option value="">Chọn trường</option></select></label><label>Lớp đang quản lý<select id="classCatalog" disabled><option value="">Chọn lớp</option></select></label></div><div class="notice">Không thấy trường/lớp? Bạn có thể đề xuất trường/lớp mới ngay tại đây. Đề xuất sẽ được admin kiểm tra và đưa vào danh mục dùng chung sau khi hồ sơ được xác minh.</div><p class="section">Danh mục công tác</p><div class="grid"><label>Tạo trường mới (nếu cần)<input id="newSchool" placeholder="Ví dụ: THCS Chu Văn An"></label><label>Tạo lớp mới (nếu cần)<input id="newClass" placeholder="Ví dụ: 8B2"></label></div><div class="actions"><button class="submit" type="submit" id="submit">Gửi đăng ký →</button><a class="link" href="https://quanly-giaovien-katlearn.netlify.app/login.html">Đã có tài khoản? Đăng nhập</a></div><p class="message" id="status"></p></form></section></main>
 <script>
 const C={apiKey:'AIzaSyCgMDdCP0R5fW3QjhYrd3Ab8AJH3xYGiz8',authDomain:'elp---katlearn.firebaseapp.com',projectId:'elp---katlearn',storageBucket:'elp---katlearn.firebasestorage.app',messagingSenderId:'344478447672',appId:'1:344478447672:web:4ed109a40303d0b41b0ecd',measurementId:'G-KTW11GD97T'};
 const LMS_CATALOG='https://raw.githubusercontent.com/ptnnmusicgroup-png/KatLearn1/main/data/national-catalog/';
@@ -250,20 +153,28 @@ $('#newSchool').addEventListener('input',()=>{
 });
 function permissionFailure(error){
  const text=String([error?.message,error?.code,error?.details].filter(Boolean).join(" "));
- return /permission[_\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
-  ||error?.code==="teacher_registration_access_blocked"
-  ||(Number(error?.status)===503&&/firebase admin credentials|service account|firebase_credentials/i.test(text));
+ // Missing/invalid Admin credentials are server configuration faults; a client
+ // Firestore fallback cannot create server credentials or repair that condition.
+ if(/^firebase_(?:credentials_|project_)/.test(String(error?.code||'')))return false;
+ // Only retry through client Firestore for explicit hosting/credential/permission failures;
+ // Admin credential setup faults are excluded above, and generic HTTP 403/503 is not enough.
+ return /permission[_\\s-]*denied|missing or insufficient permissions|insufficient permissions|firestore.*permission/i.test(text)
+  ||error?.code==="teacher_registration_access_blocked";
 }
 async function submitTeacherProfileWithClient(user,payload){
- if(!db||!api?.getDoc||!api?.setDoc)throw new Error("Firebase Firestore chưa sẵn sàng.");
+ if(!db||!api?.getDoc||!api?.setDoc)throw Object.assign(new Error("Firebase Firestore chưa sẵn sàng."),{stage:"khởi tạo Firestore"});
+ const currentUser=auth?.currentUser;
+ if(!currentUser||currentUser.uid!==user.uid)throw Object.assign(new Error("Phiên Firebase Auth không trùng với tài khoản vừa đăng ký. Hãy đăng nhập lại bằng đúng tài khoản."),{stage:"kiểm tra phiên đăng nhập"});
+ try{await currentUser.getIdToken(true)}catch(error){throw Object.assign(new Error("Không làm mới được Firebase ID token: "+(error?.message||"unknown error")),{stage:"làm mới ID token",cause:error})}
  const ref=api.doc(db,"users",user.uid);
- const existing=await api.getDoc(ref);
+ let existing;
+ try{existing=await api.getDoc(ref)}catch(error){throw Object.assign(new Error(error?.message||"Không đọc được hồ sơ users/{uid}"),{stage:"đọc users/{uid}",cause:error})}
  if(existing.exists()){
   const current=existing.data()||{};
   if(String(current.email||"").toLowerCase()===payload.email&&current.role==="pending_teacher_verification"&&current.teacherVerification?.status==="pending"){
    return{ok:true,uid:user.uid,status:"pending_teacher_verification",existing:true,clientFallback:true};
   }
-  throw new Error("UID này đã có hồ sơ với quyền khác. Để bảo vệ tài khoản, hệ thống không ghi đè hồ sơ hiện tại.");
+  throw Object.assign(new Error("UID này đã có hồ sơ với quyền khác. Để bảo vệ tài khoản, hệ thống không ghi đè hồ sơ hiện tại."),{stage:"kiểm tra hồ sơ hiện có"});
  }
  const now=Date.now();
  const requestedClassName=payload.newClass||payload.selectedClassName||"";
@@ -288,7 +199,7 @@ async function submitTeacherProfileWithClient(user,payload){
   },
   createdAt:now,updatedAt:now
  };
- await api.setDoc(ref,profile);
+ try{await api.setDoc(ref,profile)}catch(error){throw Object.assign(new Error(error?.message||"Không tạo được hồ sơ users/{uid}"),{stage:"tạo users/{uid}",cause:error})}
  return{ok:true,uid:user.uid,status:"pending_teacher_verification",existing:false,clientFallback:true};
 }
 async function submitTeacherProfile(user){
@@ -336,12 +247,17 @@ async function submitTeacherProfile(user){
   const hostingAccessBlocked=/app\.netlify\.com\/edge-access/i.test(responseBody)||([401,403].includes(response.status)&&contentType.includes('text/html'));
   if(!response.ok||result.ok!==true){
    const serverError=Object.assign(new Error(hostingAccessBlocked?'Đường dẫn đăng ký đang bị chặn bởi lớp truy cập hosting.':(result.error||'Không thể lưu hồ sơ giáo viên.')),{code:hostingAccessBlocked?'teacher_registration_access_blocked':(result.code||'teacher_registration_failed'),status:response.status,details:hostingAccessBlocked?'Hosting returned an HTML access page.':result.details});
-   if(!permissionFailure(serverError))throw serverError;
-   $('#status').textContent='Máy chủ đăng ký đang bị giới hạn quyền truy cập. Đang chuyển sang kênh Firebase an toàn…';
-   console.warn('[KatLearn Teacher] Admin API is permission/access blocked; trying the restricted pending-teacher Firestore path.',serverError.code);
+   if(!permissionFailure(serverError)){
+    throw Object.assign(new Error('API đăng ký trả về HTTP '+response.status+' ('+serverError.code+'): '+serverError.message),{code:serverError.code,status:response.status,cause:serverError});
+   }
+   $('#status').textContent='Máy chủ đăng ký chưa sẵn sàng. Đang thử kênh Firebase giới hạn quyền…';
+   console.warn('[KatLearn Teacher] API fallback reason:',{status:serverError.status,code:serverError.code,message:serverError.message});
    try{return await submitTeacherProfileWithClient(user,payload)}
    catch(clientError){
-    throw Object.assign(new Error('Máy chủ đăng ký bị từ chối quyền ghi hồ sơ và phương án dự phòng Firebase cũng không thành công. Kiểm tra Firestore Rules cho users/{uid} (pending_teacher_verification) và quyền tài khoản dịch vụ Admin. Chi tiết: '+(clientError.message||'permission denied')),{code:'teacher_profile_permission_blocked',cause:clientError});
+    const serverDetail='API HTTP '+response.status+' ('+serverError.code+'): '+serverError.message;
+    const clientDetail='Firestore '+(clientError.stage||'fallback')+': '+(clientError.message||'permission denied');
+    console.error('[KatLearn Teacher] Registration fallback failed:',{serverStatus:response.status,serverCode:serverError.code,clientStage:clientError.stage,clientCode:clientError.cause?.code});
+    throw Object.assign(new Error(serverDetail+'. '+clientDetail+'. Không mở rộng quyền ghi công khai; cần sửa đúng cấu hình máy chủ hoặc quyền của tài khoản này.'),{code:'teacher_profile_permission_blocked',cause:clientError,serverError});
    }
   }
   return result;
@@ -384,7 +300,10 @@ $('#form').onsubmit=async e=>{
    'auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.',
    'auth/invalid-email':'Email không hợp lệ.',
    'auth/network-request-failed':'Mất kết nối mạng. Kiểm tra Internet rồi thử lại.',
-   'auth/too-many-requests':'Có quá nhiều yêu cầu. Hãy thử lại sau.'
+   'auth/too-many-requests':'Có quá nhiều yêu cầu. Hãy thử lại sau.',
+   'firebase_credentials_missing':'Máy chủ đăng ký chưa được cấu hình Firebase Admin cho Deploy Preview. Tài khoản đã tạo; hãy bấm “Thử lưu hồ sơ lại” sau khi quản trị viên hoàn tất cấu hình máy chủ.',
+   'firebase_credentials_invalid':'Cấu hình Firebase Admin trên máy chủ không hợp lệ. Tài khoản đã tạo; hãy thử lưu hồ sơ lại sau khi quản trị viên sửa cấu hình.',
+   'firebase_project_mismatch':'Máy chủ đăng ký đang kết nối nhầm dự án Firebase. Tài khoản đã tạo; hãy thử lưu hồ sơ lại sau khi quản trị viên sửa cấu hình.'
   };
   status.textContent='❌ '+(messages[error?.code]||error?.message||'Không thể gửi hồ sơ.');
   if(createdUser&&auth.currentUser?.uid===createdUser.uid){

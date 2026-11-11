@@ -6,20 +6,43 @@ let db,auth,user,fb={},classes=[],selectedClass=null,teacherAccess=false,account
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const esc=v=>String(v??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const isTeacher=()=>teacherAccess;
+function setTeacherAuthState(message,showLogin=false){
+  const messageNode=$('#teacherAuthStateMessage'),loginLink=$('#teacherAuthLogin'),spinner=$('#teacherAuthSpinner'),paw=$('#teacherAuthPaw');
+  if(messageNode)messageNode.textContent=String(message||'Đang xác thực phiên đăng nhập…');
+  if(loginLink)loginLink.hidden=!showLogin;
+  if(spinner)spinner.hidden=showLogin;
+  if(paw)paw.hidden=!showLogin;
+}
 const isAdminUser=()=>ADMIN_EMAILS.includes((user?.email||'').toLowerCase());
 function toast(msg){const t=$('#toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 function makeJoinCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=new Uint8Array(6);crypto.getRandomValues(bytes);return [...bytes].map(b=>chars[b%chars.length]).join('')}
 async function copyText(value){const text=String(value??'');if(!text)return;try{await navigator.clipboard.writeText(text);toast('✓ Đã sao chép mã lớp')}catch(_){const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();try{document.execCommand('copy');toast('✓ Đã sao chép mã lớp')}catch(e){toast('Không thể sao chép mã lớp.')}finally{area.remove()}}}
-function showPage(id){$$('.page').forEach(x=>x.classList.remove('active-page'));$('#'+id)?.classList.add('active-page');$$('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='dashboard')loadDashboard();if(id==='classes')loadClasses();if(id==='students')loadStudents();if(id==='packs')loadPacks();if(id==='progress')loadProgress();window.scrollTo({top:0,behavior:'smooth'})}
-$$('.nav-item').forEach(b=>b.onclick=()=>showPage(b.dataset.page));$('.menu-toggle').onclick=()=>$('.sidebar').classList.toggle('open');
+const TEACHER_PAGE_IDS=new Set(['dashboard','classes','students','packs','progress','games']);
+function teacherPageFromHash(){const value=decodeURIComponent((location.hash||'').replace(/^#/,'')).trim().toLowerCase();return TEACHER_PAGE_IDS.has(value)?value:'dashboard'}
+function showPage(id,{updateHash=true,refresh=true}={}){
+  if(!TEACHER_PAGE_IDS.has(id)||!$('#'+id)?.classList.contains('page'))id='dashboard';
+  document.querySelectorAll('.teacher-main .page').forEach(page=>page.classList.toggle('active-page',page.id===id));
+  document.querySelectorAll('.sidebar .nav-item').forEach(button=>{const active=button.dataset.page===id;button.classList.toggle('active',active);if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current')});
+  $('.sidebar')?.classList.remove('open');$('.menu-toggle')?.setAttribute('aria-expanded','false');
+  if(updateHash&&location.hash!=='#'+id)history.replaceState(history.state,'',location.pathname+location.search+'#'+id);
+  if(id==='dashboard'&&refresh)void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
+  if(id==='classes')void loadClasses().catch(error=>console.warn('[KatLearn] Class list load failed:',error));
+  if(id==='students')void loadStudents().catch(error=>console.warn('[KatLearn] Student list load failed:',error));
+  if(id==='packs')void loadPacks().catch(error=>console.warn('[KatLearn] Pack list load failed:',error));
+  if(id==='progress')void loadProgress().catch(error=>console.warn('[KatLearn] Progress load failed:',error));
+  window.dispatchEvent(new CustomEvent('katlearn-teacher-page-change',{detail:{page:id}}));window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.sidebar .nav-item').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.page)));
+$('.menu-toggle')?.addEventListener('click',()=>{const sidebar=$('.sidebar');if(!sidebar)return;const open=sidebar.classList.toggle('open');$('.menu-toggle')?.setAttribute('aria-expanded',String(open))});
+window.addEventListener('hashchange',()=>showPage(teacherPageFromHash(),{updateHash:false}));
 function openModal(id){$('#'+id).classList.add('show')}function closeModal(id){$('#'+id).classList.remove('show')}$$('.modal-close').forEach(b=>b.onclick=()=>closeModal(b.dataset.modal));
 if(!$('#classAnalytics'))$('#dashboard')?.insertAdjacentHTML('beforeend','<section class="teacher-card-panel class-analytics"><h3>Thống kê theo lớp / nhóm</h3><p>Hiệu quả trung bình và top 3 của từng lớp được tính từ kết quả học tập thực tế.</p><div id="classAnalytics" class="class-analytics-list"><div class="empty">Đang tải...</div></div></section>');
 
 function clearSsoHash(){if(location.hash.includes('katlearn_id_token'))history.replaceState(null,document.title,location.pathname+location.search)}
-function showBlocked(message='Tài khoản này là học sinh nên không thể truy cập cổng giáo viên.'){
+function showBlocked(message='Tài khoản này chưa được cấp quyền giáo viên.'){
   document.body.classList.add('locked');
-  const box=document.createElement('div');box.id='katlearnRoleLock';box.innerHTML=`<div class="kat-role-lock-card"><div class="kat-role-lock-icon">🚫</div><div class="kat-role-lock-error">ERROR!</div><h1>${esc(message)}</h1><p>Cổng giáo viên chỉ dành cho tài khoản giáo viên.</p><button id="katBackStudent">Quay về trang học sinh của bạn</button></div>`;
-  const style=document.createElement('style');style.textContent='#katlearnRoleLock{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:linear-gradient(135deg,#fff7f8,#f7f5ff);padding:24px}.kat-role-lock-card{width:min(560px,100%);padding:42px 34px;text-align:center;background:#fff;border:1px solid #eee6f0;border-radius:28px;box-shadow:0 24px 80px #3c31501c}.kat-role-lock-icon{font-size:54px;margin-bottom:10px}.kat-role-lock-error{font:800 14px "Be Vietnam Pro",system-ui;color:#d94c68;letter-spacing:.12em}.kat-role-lock-card h1{margin:12px auto 8px;max-width:480px;font:700 24px/1.35 Fredoka,"Be Vietnam Pro",system-ui;color:#3e3549}.kat-role-lock-card p{color:#8b8295;font:500 13px/1.6 "Be Vietnam Pro",system-ui}.kat-role-lock-card button{margin-top:18px;border:0;border-radius:13px;padding:13px 20px;background:#f47c93;color:#fff;font:700 13px "Be Vietnam Pro",system-ui;cursor:pointer}.kat-role-lock-card button:hover{filter:brightness(.97);transform:translateY(-1px)}';document.head.appendChild(style);document.body.appendChild(box);$('#katBackStudent').onclick=()=>location.replace(TEACHER_HOME+'/login.html');}
+  const box=document.createElement('div');box.id='katlearnRoleLock';box.innerHTML=`<div class="kat-role-lock-card"><div class="kat-role-lock-icon">🔐</div><div class="kat-role-lock-error">ACCESS RESTRICTED</div><h1>${esc(message)}</h1><p>Phiên đăng nhập vẫn được giữ nguyên. Quyền truy cập các chức năng giáo viên vẫn được kiểm tra riêng.</p><button id="katBackStudent">Quay về KatLearn LMS</button></div>`;
+  const style=document.createElement('style');style.textContent='#katlearnRoleLock{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:linear-gradient(135deg,#080711,#17132a);padding:24px}.kat-role-lock-card{width:min(560px,100%);padding:42px 34px;text-align:center;background:#12101f;border:1px solid rgba(190,178,255,.2);border-radius:28px;box-shadow:0 24px 80px #0007;color:#f3f0ff}.kat-role-lock-icon{font-size:54px;margin-bottom:10px}.kat-role-lock-error{font:800 12px "Be Vietnam Pro",system-ui;color:#f39bb1;letter-spacing:.12em}.kat-role-lock-card h1{margin:12px auto 8px;max-width:480px;font:700 24px/1.35 Fredoka,"Be Vietnam Pro",system-ui;color:#f3f0ff}.kat-role-lock-card p{color:#aaa4c4;font:500 13px/1.6 "Be Vietnam Pro",system-ui}.kat-role-lock-card button{margin-top:18px;border:0;border-radius:13px;padding:13px 20px;background:#a99cff;color:#080711;font:700 13px "Be Vietnam Pro",system-ui;cursor:pointer}.kat-role-lock-card button:hover{filter:brightness(1.05);transform:translateY(-1px)}';document.head.appendChild(style);document.body.appendChild(box);$('#katBackStudent').onclick=()=>location.replace('https://lms-katlearn.netlify.app/home.html');}
 async function exchangeSsoToken(idToken){
   const response=await fetch(SSO_EXCHANGE,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({idToken})});
   const data=await response.json().catch(()=>({}));
@@ -46,8 +69,16 @@ async function consumeIncomingSso(){
 }
 let ssoAttempted=sessionStorage.getItem('katlearn-sso-teacher-attempt')==='1';
 async function startCrossAppCheck(){
-  if(ssoAttempted||new URLSearchParams(location.search).has('sso'))return;
+  if(new URLSearchParams(location.search).has('sso')){
+    setTeacherAuthState('Liên kết đăng nhập chưa hoàn tất hoặc đã hết hạn. Hãy đăng nhập lại để tiếp tục.',true);
+    return;
+  }
+  if(ssoAttempted){
+    setTeacherAuthState('Chưa khôi phục được phiên đăng nhập. Bạn có thể đăng nhập lại để tiếp tục.',true);
+    return;
+  }
   ssoAttempted=true;sessionStorage.setItem('katlearn-sso-teacher-attempt','1');
+  setTeacherAuthState('Đang chuyển tới trang đăng nhập giáo viên…',false);
   // Keep visitors inside the Teacher portal. The old cross-app redirect sent
   // them to the legacy LMS hostname before the Teacher login could load.
   location.replace(TEACHER_HOME+'/login.html?required=teacher');
@@ -92,10 +123,12 @@ async function initFirebase(){
     window.dispatchEvent(new CustomEvent('katlearn-teacher-auth-change',{detail:{user:u,teacherAccess,role:accountRole}}));
     if(firstAuthEvent){firstAuthEvent=false;resolveReady(u)}
     if(u&&isTeacher()){
+      sessionStorage.removeItem('katlearn-sso-teacher-attempt');
       document.body.classList.remove('locked');
-      void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error));
+      void loadDashboard().catch(error=>console.warn('[KatLearn] Dashboard load failed:',error)).then(()=>showPage(teacherPageFromHash(),{updateHash:false,refresh:false}));
     }else{
       document.body.classList.add('locked');
+      setTeacherAuthState(new URLSearchParams(location.search).has('sso')?'Đang kiểm tra liên kết đăng nhập an toàn…':'Đang kiểm tra phiên đăng nhập…',false);
       showPage('dashboard');
     }
   });
@@ -110,6 +143,23 @@ async function getMembers(cls){const snap=await fb.getDocs(fb.collection(db,'cla
 function accuracy(s){const total=Number(s.questionsAnswered||0),correct=Number(s.correctAnswers||0);return total?Math.round(correct*100/total):0}
 function rankStudents(rows){return rows.sort((a,b)=>Number(b.correctAnswers||0)-Number(a.correctAnswers||0)||accuracy(b)-accuracy(a)||Number(b.energy||0)-Number(a.energy||0))}
 async function classStats(cls){const members=await getMembers(cls);const rows=await Promise.all(members.map(async m=>{try{const s=await fb.getDoc(fb.doc(db,'users',m.uid));return s.exists()?{id:s.id,...s.data(),member:m}:{...m}}catch{return m}}));rankStudents(rows);return{cls,rows,average:rows.length?Math.round(rows.reduce((sum,s)=>sum+accuracy(s),0)/rows.length):0}}
+window.katlearnTeacherGames=Object.freeze({
+  async getClasses(){
+    if(!user||!isTeacher())throw new Error('Chỉ tài khoản giáo viên được phép tải danh sách lớp.');
+    if(!classes.length)await loadClasses();
+    return classes.map(c=>({id:String(c.id),name:String(c.name||'Lớp chưa đặt tên'),grade:String(c.grade||'')}));
+  },
+  async getRoster(classId){
+    if(!user||!isTeacher())throw new Error('Bạn cần có quyền giáo viên để xem danh sách lớp.');
+    const cls=classes.find(c=>String(c.id)===String(classId));
+    if(!cls)throw new Error('Không tìm thấy lớp hoặc lớp không thuộc quyền quản lý của tài khoản này.');
+    const stat=await classStats(cls);
+    return stat.rows.map(s=>({
+      uid:String(s.uid||s.member?.uid||s.id||''),
+      name:String(s.displayName||s.name||s.email||'Học sinh')
+    })).filter(s=>s.uid&&s.name);
+  }
+});
 async function teacherAction(action,payload){const token=await user?.getIdToken();if(!token)throw new Error('Bạn cần đăng nhập lại.');const response=await fetch('/api/teacher-manage',{method:'POST',headers:{'content-type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action,...payload})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Không thể thực hiện thao tác.');return data}
 async function loadStudents(){const uid=String(user?.uid||'');if(!uid||!isTeacher())return;const myClasses=classes.slice();$('#classSelector').innerHTML=myClasses.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');if(!selectedClass&&myClasses[0])selectedClass=myClasses[0];if(String(user?.uid||'')!==uid||!isTeacher())return;if(selectedClass){$('#classSelector').value=selectedClass.id;await renderStudents(selectedClass)}else $('#studentList').innerHTML='<div class="empty">Hãy tạo lớp trước.</div>'}
 $('#classSelector').onchange=()=>{selectedClass=classes.find(c=>c.id===$('#classSelector').value);renderStudents(selectedClass)};const copyClassCodeBtn=$('#copyClassCodeBtn');if(copyClassCodeBtn)copyClassCodeBtn.onclick=()=>{if(!selectedClass)return toast('Chọn lớp trước.');copyText(selectedClass.joinCode||'Chưa có mã lớp')};const studentSearch=$('#studentSearch');if(studentSearch)studentSearch.oninput=()=>{const q=studentSearch.value.trim().toLowerCase();$('#studentList .student-row').forEach(row=>{row.style.display=!q||row.textContent.toLowerCase().includes(q)?'':'none'})};
@@ -278,7 +328,7 @@ $('#packForm').onsubmit=async e=>{
   }catch(err){toast('Không thể tạo pack: '+err.message)}
 };
 async function loadProgress(){const uid=String(user?.uid||'');if(!uid||!isTeacher())return;if(!selectedClass&&classes[0])selectedClass=classes[0];const cls=selectedClass;if(!cls){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}const stat=await classStats(cls);if(String(user?.uid||'')!==uid||!isTeacher()||selectedClass?.id!==cls.id)return;if(!stat||!stat.rows.length){$('#progressTable').innerHTML='<div class="empty">Chọn một lớp có học sinh để xem tiến độ.</div>';return}$('#progressTable').innerHTML=`<p class="progress-note">${esc(cls.name)} · xếp hạng theo số câu đúng, sau đó đến độ chính xác và XP.</p>`+stat.rows.map((s,i)=>`<div class="student-row"><b>#${i+1}</b><span class="student-avatar">${esc((s.displayName||'K')[0]).toUpperCase()}</span><div><strong>${esc(s.displayName||'KatLearn Student')}</strong><small>${esc(s.email||'')} · ${accuracy(s)}% chính xác</small></div><div class="student-score"><b>${Number(s.correctAnswers||0)} câu đúng</b><small>⚡ ${Number(s.energy||0).toLocaleString()} XP · 📚 ${Number(s.totalWords||0)} từ</small></div></div>`).join('')}
-$('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');
+$('#addStudentBtn').onclick=()=>openModal('studentModal');$('#createPackBtn').onclick=async()=>{await loadPackChoices();openModal('packCreateModal')};$('#createClassBtn').onclick=()=>openModal('classModal');$('#viewProgressBtn').onclick=()=>showPage('progress');$('#goClasses').onclick=()=>showPage('classes');$('#goStudents').onclick=()=>showPage('students');$('#goPacks').onclick=()=>showPage('packs');$('#goProgress').onclick=()=>showPage('progress');$('#goProgressCard').onclick=()=>showPage('progress');$('#goTeachingTools').onclick=()=>showPage('games');$('#goAllClasses').onclick=()=>showPage('classes');
 
 function parseCsvLine(line){const out=[];let cur='',quoted=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(quoted&&line[i+1]==='"'){cur+='"';i++;}else quoted=!quoted}else if(ch===','&&!quoted){out.push(cur.trim());cur=''}else cur+=ch}out.push(cur.trim());return out}
 async function importPackCsv(file){
@@ -334,11 +384,16 @@ $('#packFileInput').onchange=e=>importPackCsv(e.target.files?.[0]);
         location.replace('teacher-pending.html');
         return;
       }
-      await fb.signOut(auth).catch(()=>{});
-      location.replace(TEACHER_HOME+'/login.html?required=teacher');
+      // Keep Firebase's local session intact. The role gate still blocks all
+      // teacher data/actions; returning to LMS no longer forces a fresh login.
+      showBlocked('Tài khoản đã đăng nhập nhưng chưa được cấp quyền giáo viên.');
       return;
     }
-    if(!handled&&!user&&!new URLSearchParams(location.search).has('sso'))await startCrossAppCheck();
-  }catch(e){console.error(e);toast('Firebase chưa sẵn sàng: '+e.message)}
+    if(!handled&&!user)await startCrossAppCheck();
+  }catch(e){
+    console.error(e);
+    setTeacherAuthState('Không thể kết nối dịch vụ đăng nhập. Kiểm tra kết nối mạng rồi thử đăng nhập lại.',true);
+    toast('Firebase chưa sẵn sàng: '+e.message);
+  }
 })();
 

@@ -1,0 +1,10 @@
+KatLearn Default Dark Mode stylesheet
+
+Source repository: https://github.com/ptnnmusicgroup-png/KatLearn1
+Source file: katlearn-defaultdarkmode.css
+Copyright (C) 2026 Phuong Me Dev - Part Of PTNN.devgrp
+License: GNU General Public License v3.0 only (GPL-3.0-only)
+
+This stylesheet is copied from the KatLearn LMS repository into KatLearn Teacher.
+The source and destination repositories both identify their original code as GPL-3.0-only.
+The original stylesheet header and its source attribution are retained.

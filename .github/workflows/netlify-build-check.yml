@@ -2,7 +2,7 @@ name: Netlify build smoke check
 
 on:
   push:
-    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting]
+    branches: [main, codex/ui-motion-refresh, chore/netlify-only-remove-legacy-hosting, feat/teacher-classroom-games-dark-theme]
   pull_request:
     branches: [main]
 
@@ -37,6 +37,83 @@ jobs:
           fi
           grep -q 'LMS_CATALOG' teacher-signup.html
           echo "Verified signup.html redirects to the static LMS-backed Teacher registration form."
+      - name: Verify the KatLearn LMS shell and Teacher UI modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s home.html
+          test -s katlearn-defaultdarkmode.css
+          test -s teacher-katlearn-workspace.css
+          grep -q 'id="teacherAuthState"' home.html
+          grep -q 'body.locked .teacher-auth-state{display:grid}' teacher-katlearn-workspace.css
+          grep -q 'setTeacherAuthState' teacher.js
+          grep -q 'Liên kết đăng nhập chưa hoàn tất' teacher.js
+          test -s teacher-katlearn-auth-layout.css
+          test -s teacher-katlearn-auth-theme.css
+          test -s api/teacher-register.js
+          grep -q 'https://deploy-preview-41--quanly-giaovien-katlearn.netlify.app' api/teacher-register.js
+          grep -q 'https://deploy-preview-41--teacher-katlearn1.netlify.app' api/teacher-register.js
+          grep -q 'function isAllowedOrigin(origin)' api/teacher-register.js
+          grep -q "code: 'origin_not_allowed'" api/teacher-register.js
+          grep -q "firebase_credentials_missing':'Máy chủ đăng ký chưa được cấu hình Firebase Admin cho Deploy Preview" teacher-signup.html
+          grep -q 'Missing/invalid Admin credentials are server configuration faults' teacher-signup.html
+          if grep -q 'Number(error?.status)===503' teacher-signup.html; then
+            echo "::error::Missing Firebase Admin credentials must not trigger the browser Firestore fallback."
+            exit 1
+          fi
+          grep -q 'Deploy Previews' README.md
+          grep -q 'quanly-giaovien-katlearn' README.md
+          grep -q 'Only retry through client Firestore for explicit hosting/credential/permission' teacher-signup.html
+          grep -q "API HTTP '+response.status+' (" teacher-signup.html
+          grep -q 'Firestore.*clientError.stage' teacher-signup.html
+          if grep -Eq 'Number\(error\?\.status\)===403' teacher-signup.html; then
+            echo "::error::Generic HTTP 403 must not trigger a Firestore fallback."
+            exit 1
+          fi
+          grep -q '!isAllowedOrigin(origin)' api/teacher-register.js
+          if grep -Eq 'access-control-allow-origin[^\n]*\*' api/teacher-register.js; then
+            echo "::error::Teacher registration must not allow every CORS origin."
+            exit 1
+          fi
+          for legacy in style.css extras.css teacher.css auth-modern.css katlearn-blue-theme.css modern-ui.css teacher-system-ui-v3.css teacher-lms-professional.css; do
+            test ! -e "$legacy"
+          done
+          grep -q 'home.html' index.html
+          grep -q 'location.replace(target.toString())' index.html
+          for page_id in dashboard classes students packs progress games; do
+            grep -q "id=\"$page_id\"" home.html
+          done
+          grep -q 'teacher-katlearn-workspace.css' home.html
+          grep -q 'teacher-learning-tools.css' home.html
+          grep -q 'active-page" id="dashboard"' home.html
+          if grep -Eq 'href="(style|extras|teacher|auth-modern|modern-ui|katlearn-blue-theme|teacher-system-ui-v3|teacher-lms-professional)\.css' home.html; then
+            echo "::error::A legacy light/blue Teacher stylesheet is still linked by home.html."
+            exit 1
+          fi
+          if grep -Eq 'auth-modern\.css|katlearn-blue-theme\.css' login.html teacher-signup.html teacher-pending.html sso-bridge.html; then
+            echo "::error::Legacy auth theme is still linked."
+            exit 1
+          fi
+          for page in login.html teacher-signup.html teacher-pending.html sso-bridge.html; do
+            grep -q 'katlearn-defaultdarkmode.css' "$page"
+            grep -q 'teacher-katlearn-auth-layout.css' "$page"
+            grep -q 'teacher-katlearn-auth-theme.css' "$page"
+          done
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const html=fs.readFileSync('home.html','utf8');
+          const mainStart=html.indexOf('<main class="teacher-main"');
+          const mainEnd=html.indexOf('</main>',mainStart);
+          const games=html.indexOf('id="games"');
+          if(mainStart<0 || mainEnd<0 || games<mainStart || games>mainEnd) throw new Error('Games module is outside the LMS main shell');
+          if(!html.includes('class="page teacher-content active-page" id="dashboard"')) throw new Error('Dashboard is not the initial visible module');
+          const js=fs.readFileSync('teacher.js','utf8');
+          if(!js.includes("claims?.teacherAccess===true") || !js.includes("role==='teacher'")) throw new Error('Teacher role verification was changed');
+          if(!js.includes('function teacherPageFromHash()') || !js.includes("showPage(teacherPageFromHash(),{updateHash:false})")) throw new Error('Deep-link page routing is missing');
+          const account=fs.readFileSync('teacher-home-account.js','utf8');
+          if(account.includes('teacher-home-account-style') || account.includes('background:#fff')) throw new Error('Legacy white account skin remains injected by JS');
+          NODE
+          echo "Verified LMS shell, page routing, CSS separation, auth pages and Teacher-role checks."
       - name: Build Netlify static output
         env:
           KATLEARN_LMS_SITE_URL: https://lms-katlearn.netlify.app
@@ -59,11 +136,40 @@ jobs:
         run: |
           set -euo pipefail
           test -s dist/index.html
+          test -s dist/home.html
           test -s dist/deployment-config.js
           test -s dist/teacher-signup.html
           test -s dist/katlearn-astra.css
+          test -s dist/katlearn-defaultdarkmode.css
+          test -s dist/teacher-katlearn-theme.css
+          test -s dist/teacher-katlearn-workspace.css
+          test -s dist/teacher-katlearn-auth-layout.css
+          test -s dist/teacher-katlearn-auth-theme.css
+          for legacy in style.css extras.css teacher.css auth-modern.css katlearn-blue-theme.css modern-ui.css teacher-system-ui-v3.css teacher-lms-professional.css; do
+            test ! -e "dist/$legacy"
+          done
+          test -s dist/teacher-classroom-games.js
+          test -s dist/teacher-learning-tools.js
+          test -s dist/teacher-learning-tools.css
+          grep -q 'home.html' dist/index.html
+          grep -q 'data-page="games"' dist/home.html
+          grep -q 'id="games"' dist/home.html
+          grep -q 'teacher-classroom-games.js' dist/home.html
+          grep -q 'teacher-learning-tools.js' dist/home.html
+          grep -q 'teacher-learning-tools.css' dist/home.html
+          grep -q 'data-tool-card="flashcards"' dist/home.html
+          grep -q 'teacher-katlearn-workspace.css' dist/home.html
+          for page in login.html teacher-signup.html teacher-pending.html sso-bridge.html; do
+            grep -q 'katlearn-defaultdarkmode.css' "dist/$page"
+            grep -q 'teacher-katlearn-auth-layout.css' "dist/$page"
+            grep -q 'teacher-katlearn-auth-theme.css' "dist/$page"
+          done
+          if grep -Eq 'style.css|extras.css|teacher.css|auth-modern.css|modern-ui.css|katlearn-blue-theme.css|teacher-system-ui-v3.css|teacher-lms-professional.css' dist/home.html; then
+            echo "::error::Obsolete legacy theme remains in the Teacher workspace."
+            exit 1
+          fi
           grep -q 'quanly-giaovien-katlearn.netlify.app' dist/deployment-config.js
-          grep -q '20261024-teacher-system2' dist/teacher-signup.html
+          grep -q 'teacher-katlearn-auth-theme.css' dist/teacher-signup.html
           grep -q 'page-lms-directory' dist/admin.html
           test ! -e dist/api
           test ! -e dist/netlify
