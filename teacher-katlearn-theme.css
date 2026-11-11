@@ -1,0 +1,119 @@
+/* KatLearn Teacher: LMS Default Dark Mode bridge.
+   The full LMS stylesheet is loaded first; these scoped rules map the Teacher
+   portal components onto the same violet/cyan/pink glass design system. */
+:root{
+  --ink:var(--kl-ink);--muted:var(--kl-muted);--bg:var(--kl-bg);
+  --line:var(--kl-line);--purple:var(--kl-accent);--purple2:var(--kl-accent-2);
+  --coral:var(--kl-pink);--shadow:var(--kl-shadow-sm);
+}
+html,body{min-height:100%;background:var(--kl-bg);color:var(--kl-ink)}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif}
+.app-shell{background:transparent;color:var(--kl-ink)}
+.app-shell>.sidebar{
+  background:rgba(13,11,25,.88);color:var(--kl-ink);
+  border-right:1px solid var(--kl-line);box-shadow:12px 0 38px rgba(0,0,0,.16);
+  backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);
+}
+.sidebar .brand{color:var(--kl-ink)}
+.sidebar .brand span span{color:var(--kl-accent)}
+.sidebar .class-label{color:var(--kl-muted)}
+.sidebar .nav-item{color:var(--kl-muted);border:1px solid transparent;border-radius:12px;transition:background .2s,border-color .2s,color .2s}
+.sidebar .nav-item:hover{background:rgba(169,156,255,.1);color:var(--kl-ink)}
+.sidebar .nav-item.active{color:var(--kl-ink);background:linear-gradient(110deg,rgba(169,156,255,.22),rgba(56,183,220,.1));border-color:rgba(169,156,255,.32)}
+.sidebar .teacher-card{background:linear-gradient(145deg,rgba(169,156,255,.14),rgba(56,183,220,.08));border:1px solid var(--kl-line);color:var(--kl-ink)}
+.sidebar .teacher-card small{color:var(--kl-muted)}
+.app-shell>main{min-width:0;background:transparent;color:var(--kl-ink)}
+.topbar{background:rgba(13,11,25,.78);border-bottom:1px solid var(--kl-line);color:var(--kl-ink);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%)}
+.topbar .search{background:var(--kl-surface);border:1px solid var(--kl-line);color:var(--kl-muted);border-radius:12px}
+.teacher-content,.page{color:var(--kl-ink)}
+.teacher-hero{background:linear-gradient(115deg,rgba(121,101,232,.34),rgba(56,183,220,.2),rgba(243,155,177,.16));border:1px solid var(--kl-line-strong);box-shadow:var(--kl-shadow);color:var(--kl-ink)}
+.teacher-hero h1,.teacher-hero p{color:var(--kl-ink)}
+.teacher-hero p{opacity:.82}
+.teacher-hero .eyebrow,.page-intro .eyebrow{color:var(--kl-accent-2)}
+.metric,.teacher-card-panel,.modal-box{
+  background:linear-gradient(145deg,rgba(25,23,41,.96),rgba(18,16,31,.96));
+  color:var(--kl-ink);border:1px solid var(--kl-line);box-shadow:var(--kl-shadow-sm);
+}
+.metric small,.teacher-card-panel>p,.page-intro .subtext{color:var(--kl-muted)}
+.metric strong,.teacher-card-panel h3,.teacher-card-panel h2{color:var(--kl-ink)}
+.toolbar input,.toolbar select,.teacher-form input,.teacher-form textarea,
+.classroom-game-toolbar select,.quick-draw-controls select{
+  background:var(--kl-surface-2);border:1px solid var(--kl-line-strong);color:var(--kl-ink);border-radius:12px;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--kl-accent);box-shadow:var(--kl-focus)}
+.data-table{color:var(--kl-ink)}
+.data-table th{color:var(--kl-muted);background:rgba(169,156,255,.07);border-bottom:1px solid var(--kl-line)}
+.data-table td{border-bottom:1px solid var(--kl-line);color:var(--kl-ink)}
+.student-row,.class-item,.class-stat,.activity-card,.pack-action-menu{
+  background:var(--kl-surface-2);border:1px solid var(--kl-line);color:var(--kl-ink)
+}
+.student-row small,.class-item small,.class-stat small{color:var(--kl-muted)}
+button{font-family:"Be Vietnam Pro",system-ui,sans-serif}
+.teacher-btn.secondary,.login-btn{background:var(--kl-surface-2);border:1px solid var(--kl-line-strong);color:var(--kl-ink)}
+.modal{background:rgba(4,3,12,.72);backdrop-filter:blur(8px)}
+.modal-box h2,.modal-box label{color:var(--kl-ink)}
+.empty{color:var(--kl-muted)}
+#toast{background:var(--kl-surface-3);color:var(--kl-ink);border:1px solid var(--kl-line)}
+@media(max-width:900px){
+  .app-shell>.sidebar{box-shadow:18px 0 48px rgba(0,0,0,.35)}
+  .topbar{background:rgba(13,11,25,.9)}
+}
+@media(max-width:700px){
+  .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .teacher-grid{grid-template-columns:1fr}
+  .page-intro{gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .classroom-game-layout{grid-template-columns:1fr}
+  .classroom-game-toolbar{align-items:stretch}
+  .classroom-game-toolbar-actions{justify-content:flex-start;flex-wrap:wrap}
+}
+@media(max-width:420px){
+  .dashboard-grid{gap:9px}
+  .metric{padding:13px}
+  .teacher-hero{padding:22px}
+  .teacher-hero .hero-kat{font-size:56px}
+}
+
+/* Classroom Games */
+.classroom-games-intro{margin-bottom:18px}
+.classroom-game-toolbar{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.classroom-game-toolbar label{display:grid;gap:7px;min-width:min(320px,100%);color:var(--kl-muted);font-size:12px;font-weight:800}
+.classroom-game-toolbar select{min-height:42px;padding:0 12px}
+.classroom-game-toolbar-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.game-roster-status{font-size:11px;color:var(--kl-good);font-weight:700}
+.game-roster-status.is-error{color:var(--kl-danger)}
+.classroom-game-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.classroom-game-tabs button{padding:11px 15px;border:1px solid var(--kl-line);border-radius:999px;background:var(--kl-surface);color:var(--kl-muted);font-size:12px;font-weight:800;cursor:pointer}
+.classroom-game-tabs button.active{background:linear-gradient(110deg,rgba(169,156,255,.22),rgba(56,183,220,.12));color:var(--kl-ink);border-color:rgba(169,156,255,.4)}
+.classroom-game-panel[hidden]{display:none!important}
+.classroom-game-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}
+.classroom-wheel-card{position:relative;display:grid;justify-items:center;align-content:start;padding:26px;overflow:hidden}
+.classroom-wheel-pointer{position:absolute;z-index:2;top:13px;left:50%;transform:translateX(-50%);color:var(--kl-pink);font-size:34px;text-shadow:0 4px 12px #0008}
+#classroomWheel{display:block;width:min(100%,480px);height:auto;max-height:480px;filter:drop-shadow(0 18px 26px rgba(0,0,0,.24));transform-origin:center;transition:transform 4.2s cubic-bezier(.12,.72,.08,1)}
+.classroom-wheel-controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:16px}
+.classroom-wheel-controls small{color:var(--kl-muted);font-size:11px}
+.classroom-game-result{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:360px}
+.classroom-game-result .eyebrow{color:var(--kl-accent-2);font-size:10px;font-weight:900;letter-spacing:.12em}
+.game-winner-avatar{display:grid;place-items:center;width:76px;height:76px;margin:12px auto;border-radius:24px;background:linear-gradient(135deg,rgba(169,156,255,.25),rgba(243,155,177,.2));font-size:36px}
+.classroom-game-result h2{font-size:clamp(22px,3vw,30px);overflow-wrap:anywhere}
+.classroom-game-result>p{color:var(--kl-muted);font-size:12px}
+.game-history{width:100%;margin-top:20px;text-align:left;border-top:1px solid var(--kl-line);padding-top:14px}
+.game-history h3{font-size:12px;color:var(--kl-muted)}
+.game-history ol{margin:0;padding-left:22px;max-height:180px;overflow:auto;color:var(--kl-ink);font-size:12px;line-height:1.9}
+.game-history li span{color:var(--kl-accent-2);font-weight:800}
+.quick-draw-card{padding:26px}
+.quick-draw-card h2{margin:6px 0;color:var(--kl-ink)}
+.quick-draw-card>p:not(.eyebrow){color:var(--kl-muted);font-size:12px;line-height:1.7}
+.quick-draw-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0}
+.quick-draw-controls label{color:var(--kl-muted);font-size:12px;font-weight:800}
+.quick-draw-controls select{min-height:42px;padding:0 12px}
+.quick-draw-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
+.quick-draw-winner,.team-card{padding:16px;border:1px solid var(--kl-line);border-radius:16px;background:linear-gradient(145deg,rgba(169,156,255,.1),rgba(56,183,220,.06))}
+.quick-draw-winner{display:grid;grid-template-columns:32px 1fr;align-items:center;gap:5px 10px}
+.quick-draw-winner>span{grid-row:span 2;display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:rgba(169,156,255,.18);color:var(--kl-accent);font-weight:900}
+.quick-draw-winner strong{color:var(--kl-ink);overflow-wrap:anywhere}
+.quick-draw-winner small{color:var(--kl-muted);font-size:10px}
+.team-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:20px}
+.team-card h3{margin:0 0 10px;color:var(--kl-accent-2)}
+.team-card ol{margin:0;padding-left:20px;color:var(--kl-ink);font-size:12px;line-height:1.9}
+.classroom-game-privacy{margin:18px 2px;color:var(--kl-muted-2);font-size:10px;line-height:1.7}
+.primary-btn:disabled,.teacher-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
