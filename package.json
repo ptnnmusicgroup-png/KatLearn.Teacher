@@ -2,6 +2,11 @@
   "name": "katlearn-teacher",
   "private": true,
   "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server.js",
+    "test:local": "node scripts/smoke-standalone.mjs",
+    "check": "node scripts/check-inline-scripts.mjs"
+  },
   "dependencies": {
     "firebase-admin": "13.10.0"
   },
