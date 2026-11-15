@@ -76,7 +76,7 @@ async function batchDelete(refs,db){for(let i=0;i<refs.length;i+=400){const batc
 async function batchSet(changes,db){for(let i=0;i<changes.length;i+=400){const batch=db.batch();changes.slice(i,i+400).forEach(x=>batch.set(x.ref,x.data,{merge:true}));await batch.commit()}}
 export default async request=>{
   const origin=request.headers.get('origin')||'';
-  if(request.method==='OPTIONS')return new Response('',{status:204,headers:headers(origin)});
+  if(request.method==='OPTIONS')return new Response(null,{status:204,headers:headers(origin)});
   if(request.method!=='POST')return jsonResponse({error:'Method not allowed'},{status:405,headers:headers(origin)});
   if(!allowedOrigins.has(origin))return jsonResponse({error:'Origin not allowed'},{status:403,headers:headers(origin)});
   try{
