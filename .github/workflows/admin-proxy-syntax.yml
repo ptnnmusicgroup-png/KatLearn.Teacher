@@ -30,7 +30,7 @@ jobs:
           while IFS= read -r file; do
             echo "Checking $file"
             node --check "$file"
-          done < <(find . -type f \( -name '*.js' -o -name '*.mjs' \) -not -path './.git/*' | sort)
+          done < <(find . -type f \( -name '*.js' -o -name '*.mjs' \) -not -path './.git/*' -not -path './node_modules/*' -not -path './dist/*' | sort)
       - name: Check inline browser scripts
         run: node scripts/check-inline-scripts.mjs
       - name: Reject retired Netlify runtime references
