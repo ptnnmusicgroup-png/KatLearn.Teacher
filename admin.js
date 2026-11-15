@@ -186,8 +186,8 @@ async function requestAdminHub(suffix,init,timeoutMs=12000){
     const contentType=String(response.headers?.get?.("content-type")||"").toLowerCase();
     const looksLikeAccessPage=/app\.netlify\.com\/edge-access/i.test(raw)||/<!doctype html|<html[\s>]/i.test(raw.slice(0,2000));
     if(i<urls.length-1&&(contentType.includes("text/html")||looksLikeAccessPage)){
-     lastError=Object.assign(new Error("Endpoint Admin Hub bị chặn bởi trang truy cập của hosting."),{code:"admin_edge_access_blocked"});
-     console.warn("[KatLearn Admin] Admin Hub endpoint returned an HTML access page; trying the alternate endpoint.");
+     lastError=Object.assign(new Error("Endpoint Admin Hub trả về trang HTML thay vì JSON."),{code:"admin_edge_access_blocked"});
+     console.warn("[KatLearn Admin] Admin Hub endpoint returned HTML instead of JSON; trying the alternate endpoint.");
      continue;
     }
     throw Object.assign(new Error("Admin Hub trả dữ liệu không hợp lệ · HTTP "+response.status),{code:"admin_invalid_json",details:raw.slice(0,800)});
