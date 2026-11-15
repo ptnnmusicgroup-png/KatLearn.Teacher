@@ -29,6 +29,7 @@ export default async function handler(request){
       teacher=profile.exists&&String(profile.data()?.role||'').toLowerCase()==='teacher';
     }
     if(!teacher)return json({error:'Chỉ giáo viên được dùng tính năng này.'},403);
+    if(!LMS_BASE_URL)return json({error:'KATLEARN_LMS_SITE_URL chưa được cấu hình trên Teacher server.'},503);
 
     const requestBody=await request.text();
     const response=await fetch(STUDENT_AI_URL,{
