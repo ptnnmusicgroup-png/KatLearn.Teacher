@@ -2,10 +2,10 @@ const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-ka
 const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
 const ALLOWED_ORIGINS = new Set([
-  "https://quanly-giaovien-katlearn.netlify.app",
-  "https://lms-katlearn.netlify.app",
+  "http://localhost:3100",
+  "http://127.0.0.1:3100",
   "http://localhost:3000",
-  "http://localhost:5173",
+  "http://127.0.0.1:3000",
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || "").split(",").map((value) => value.trim()).filter(Boolean),
   ...(process.env.KATLEARN_LMS_SITE_URL ? [String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/, "")] : []),
   ...(process.env.KATLEARN_TEACHER_SITE_URL ? [String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/, "")] : []),
@@ -37,6 +37,8 @@ function jsonError(message, code, status, origin) {
 
 async function proxy(request) {
   const origin = request.headers.get("origin") || "";
+
+  if (!LMS_BASE_URL) return jsonError("KATLEARN_LMS_SITE_URL chưa được cấu hình trên Teacher server.", "lms_url_missing", 503, origin);
 
   if (request.method === "OPTIONS") {
     return new Response(null, {
@@ -117,8 +119,7 @@ async function proxy(request) {
   }
 }
 
-// Netlify Node.js Functions use the Web Handler export shape for /api functions.
-// Keep this as a fetch handler instead of a legacy default(request) signature.
+// Expose a Web Request handler so the standalone Node server can invoke this proxy directly.
 export default {
   fetch: proxy,
 };
