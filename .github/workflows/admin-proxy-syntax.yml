@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install server dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
       - name: Run standalone server smoke test
         run: node scripts/smoke-standalone.mjs
       - name: Check every JavaScript module
@@ -35,7 +37,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if grep -RInEi --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist 'netlify|\.netlify' .; then
+          if grep -RInEi --exclude-dir=.git --exclude-dir=.github --exclude-dir=node_modules --exclude-dir=dist 'netlify|\.netlify' .; then
             echo "::error::A retired Netlify runtime reference remains."
             exit 1
           fi
