@@ -1,4 +1,4 @@
-const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "").trim().replace(/\\/+$/, "");
+const LMS_BASE_URL = (() => { let value = String(process.env.KATLEARN_LMS_SITE_URL || "").trim(); while (value.endsWith("/")) value = value.slice(0, -1); return value; })();
 const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
 const ALLOWED_ORIGINS = new Set([
