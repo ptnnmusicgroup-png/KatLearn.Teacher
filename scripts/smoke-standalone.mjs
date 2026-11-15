@@ -25,6 +25,13 @@ async function main(){
     assert.equal(adminPreflight.status,204);
     assert.equal(adminPreflight.headers.get("access-control-allow-origin"),origin);
 
+    const ssoPreflight=await fetch(base+"/api/auth-exchange",{method:"OPTIONS",headers:{Origin:origin}});
+    assert.equal(ssoPreflight.status,204);
+    const managePreflight=await fetch(base+"/api/teacher-manage",{method:"OPTIONS",headers:{Origin:origin}});
+    assert.equal(managePreflight.status,204);
+    const registerPreflight=await fetch(base+"/api/teacher-register",{method:"OPTIONS",headers:{Origin:origin}});
+    assert.equal(registerPreflight.status,200);
+
     const admin=await fetch(base+"/api/admin-hub?section=overview");
     assert.equal(admin.status,503);
     assert.equal((await admin.json()).code,"lms_url_missing");
