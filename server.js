@@ -69,7 +69,7 @@ async function handleApi(req,res,url,endpoint){
   res.writeHead(response.status,responseHeaders);
   if(response.status===204||response.status===304||method==="HEAD")res.end();else res.end(payload);
  }catch(error){
-  console.error("[KatLearn Teacher API]",endpoint,error?.code||"handler_error",Number(error?.status)||500);
+  console.error("[KatLearn Teacher API]",endpoint,error?.code||"handler_error",Number(error?.status)||500,String(error?.message||error));
   sendJson(res,Number(error?.status||error?.statusCode)||500,{ok:false,error:Number(error?.status||error?.statusCode)>=500?"Server gặp lỗi khi xử lý yêu cầu. Hãy thử lại sau.":String(error?.message||"Yêu cầu không hợp lệ.")});
  }
 }
