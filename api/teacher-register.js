@@ -2,13 +2,12 @@ import { createHash } from 'node:crypto';
 import { admin } from './_firebase-admin.js';
 
 const ORIGINS = new Set([
-  'https://quanly-giaovien-katlearn.netlify.app',
-  // PR #41 previews use Netlify's deploy-preview-<PR>--<site> host format.
-  // Keep this list exact: do not reflect arbitrary origins or enable CORS "*".
-  'https://deploy-preview-41--quanly-giaovien-katlearn.netlify.app',
-  'https://deploy-preview-41--teacher-katlearn1.netlify.app',
+  'http://localhost:3100',
+  'http://127.0.0.1:3100',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean),
-  ...[process.env.KATLEARN_TEACHER_SITE_URL, process.env.URL, process.env.DEPLOY_PRIME_URL]
+  ...[process.env.KATLEARN_TEACHER_SITE_URL, process.env.KATLEARN_LMS_SITE_URL]
     .map(x => String(x || '').trim().replace(/\/+$/, ''))
     .filter(Boolean)
 ]);
