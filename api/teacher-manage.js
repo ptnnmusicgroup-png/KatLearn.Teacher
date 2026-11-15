@@ -3,12 +3,13 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { createHash } from 'node:crypto';
 
 const allowedOrigins=new Set([
- 'https://quanly-giaovien-katlearn.netlify.app',
- 'https://quanly-giaovien-katlearn.netlify.app',
+ 'http://localhost:3100',
+ 'http://127.0.0.1:3100',
+ 'http://localhost:3000',
+ 'http://127.0.0.1:3000',
  ...String(process.env.KATLEARN_ALLOWED_ORIGINS||'').split(',').map(value=>value.trim()).filter(Boolean),
  ...(process.env.KATLEARN_LMS_SITE_URL?[String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/,'')]:[]),
- ...(process.env.KATLEARN_TEACHER_SITE_URL?[String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/,'')]:[]),
- ...(process.env.URL?[String(process.env.URL).replace(/\/+$/,'')]:[])
+ ...(process.env.KATLEARN_TEACHER_SITE_URL?[String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/,'')]:[])
 ]);
 function headers(origin){const h={'content-type':'application/json; charset=utf-8','cache-control':'no-store'};if(allowedOrigins.has(origin)){h['access-control-allow-origin']=origin;h['access-control-allow-methods']='POST, OPTIONS';h['access-control-allow-headers']='content-type, authorization';h.vary='Origin'}return h}
 const jsonResponse=(body,init={})=>new Response(JSON.stringify(body),init);
