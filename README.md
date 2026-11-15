@@ -1,48 +1,66 @@
 # KatLearn Teacher
 
-Teacher portal for KatLearn.
+Standalone Teacher portal for the KatLearn ecosystem.
 
-## Firebase Admin runtime configuration
+## Runtime
 
-The Teacher registration API uses the Firebase Admin SDK and needs credentials at runtime.
-Configure the Netlify site environment variable `FIREBASE_SERVICE_ACCOUNT_JSON` with the
-complete service-account JSON for Firebase project `elp---katlearn`. The API also accepts
-`FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` (Base64-encoded JSON), or the three separate fields
-`FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY`.
+- Node.js 22 or newer
+- Firebase project: `elp---katlearn`
+- Default local address: `http://127.0.0.1:3100`
+- KatLearn LMS is expected at `http://127.0.0.1:3000` during local development.
 
-**Important for previews:** create the secret for the **Deploy Previews** context as well
-as **Production**. Setting it only for Production leaves PR Deploy Preview Functions
-without credentials and the registration API returns
-`firebase_credentials_missing`. The variable must be available to Netlify Functions
-(use the Functions scope, or all scopes if scope selection is unavailable).
+## Configure
 
-For the current canonical Teacher site, configure this on the Netlify site
-`quanly-giaovien-katlearn`. If testing its secondary preview site
-`teacher-katlearn1`, configure that Netlify site separately too.
+1. Install dependencies:
 
-Mark the value as secret/sensitive. Never commit a service-account JSON/private key to
-GitHub, put it in browser code, or paste it into chat. After changing Netlify environment
-variables, trigger a new deploy so Functions receive the updated value.
-## Classroom Games
+   ```powershell
+   npm.cmd install
+   ```
 
-The Teacher portal includes a classroom games area for no-repeat random student selection, a name wheel, and random team assignment. The roster is loaded only for the signed-in teacher's own classes and is kept in memory for the current page session.
+2. Copy the environment template:
 
-The no-repeat selection flow is adapted from [Sid Roberts' Random Name Picker](https://github.com/SidRoberts/random-name-picker), MIT License. See `THIRD-PARTY-NOTICES/CLASSROOM-RANDOM-PICKER-MIT.txt`.
+   ```powershell
+   Copy-Item .env.example .env.local
+   ```
 
-The Teacher portal also includes a copy of the LMS `katlearn-defaultdarkmode.css` stylesheet, licensed GPL-3.0-only. See `THIRD-PARTY-NOTICES/KATLEARN-LMS-THEME.txt`.
+3. Set `FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` in `.env.local` to the Base64-encoded Firebase Admin service-account JSON for project `elp---katlearn`.
 
+   The service-account key is a server-only secret. Never place it in browser code, Git, or a message.
 
-## Teaching tools library
+4. Keep `KATLEARN_LMS_SITE_URL=http://127.0.0.1:3000` while the LMS is running locally. The Teacher Admin Hub and Teacher Kat AI proxy call the LMS server through this URL.
 
-The Teacher portal includes a searchable teaching-tools library: random name wheel, quick draw, random teams, student pairing, flashcards, a matching game, question draw, word scramble, a class countdown timer, and a two-team score board. The additional tools in `teacher-learning-tools.js` are original KatLearn implementations; they do not add third-party runtime dependencies. The student roster tools continue to use the existing teacher-authorized class API. Text entered into tools and roster results are held in page memory only and are not saved to local storage.
+5. Keep the exact local origins in `KATLEARN_ALLOWED_ORIGINS`. Add production origins only when the corresponding domains are configured.
 
+## Run
 
-## LMS design system and Teacher workspace
+Start KatLearn LMS in its own terminal on port 3000, then start Teacher:
 
-The Teacher workspace is served from `/home.html`. It uses the full `katlearn-defaultdarkmode.css` stylesheet from the active LMS plus a scoped Teacher workspace adapter, a layout-only auth stylesheet and the dedicated classroom-tools layer. Sidebar, topbar, buttons, cards, modals, typography, motion and responsive behavior follow the KatLearn LMS glass design system.
+```powershell
+npm.cmd start
+```
 
-The dashboard, classes, students, packs, progress and teaching-tools areas are separate page modules with direct links: `/home.html#dashboard`, `#classes`, `#students`, `#packs`, `#progress` and `#games`. The legacy root `index.html` redirects to `/home.html` while preserving query strings and fragments for SSO and deep links.
+Open `http://localhost:3100`.
 
-The retired light/blue dashboard and authentication stylesheets have been removed from the repository and static output. Admin Control Center remains a separately scoped administration interface. Admin Control Center remains a separately scoped administration interface. The active LMS does not link `katlearn-polish.css`, so it is not loaded as a competing theme layer.
+## Test
 
-The copied LMS stylesheet is GPL-3.0-only; see `THIRD-PARTY-NOTICES/KATLEARN-LMS-THEME.txt`.
+```powershell
+npm.cmd run test:local
+npm.cmd run check
+```
+
+The standalone server serves the source web files directly and routes the five API endpoints to their Node.js Web Request handlers. Private source directories, environment files, package metadata, and Firebase credential files are not served.
+
+## Architecture
+
+```text
+Browser
+  ├── KatLearn LMS :3000
+  └── KatLearn Teacher :3100
+          ├── Firebase Auth / Firestore
+          ├── Admin Hub proxy ───────> LMS /api/admin-hub
+          └── Kat AI proxy ──────────> LMS /api/ai-pack
+```
+
+The Teacher and LMS applications use the same Firebase project. Teacher SSO exchanges a verified Firebase ID token for a Firebase custom token; it does not copy passwords or expose Admin credentials.
+
+Do not expose either server publicly until authentication, Firestore rules, CORS origins, and reverse-proxy settings have been reviewed. Keep both servers bound to `127.0.0.1` during local testing.
