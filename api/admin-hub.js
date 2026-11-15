@@ -1,4 +1,4 @@
-const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "https://lms-katlearn.netlify.app").replace(/\/+$/, "");
+const LMS_BASE_URL = String(process.env.KATLEARN_LMS_SITE_URL || "").trim().replace(/\\/+$/, "");
 const LMS_ADMIN = `${LMS_BASE_URL}/api/admin-hub`;
 
 const ALLOWED_ORIGINS = new Set([
@@ -9,7 +9,7 @@ const ALLOWED_ORIGINS = new Set([
   ...String(process.env.KATLEARN_ALLOWED_ORIGINS || "").split(",").map((value) => value.trim()).filter(Boolean),
   ...(process.env.KATLEARN_LMS_SITE_URL ? [String(process.env.KATLEARN_LMS_SITE_URL).replace(/\/+$/, "")] : []),
   ...(process.env.KATLEARN_TEACHER_SITE_URL ? [String(process.env.KATLEARN_TEACHER_SITE_URL).replace(/\/+$/, "")] : []),
-  ...(process.env.URL ? [String(process.env.URL).replace(/\/+$/, "")] : []),
+
 ]);
 
 function corsHeaders(origin) {
@@ -38,14 +38,14 @@ function jsonError(message, code, status, origin) {
 async function proxy(request) {
   const origin = request.headers.get("origin") || "";
 
-  if (!LMS_BASE_URL) return jsonError("KATLEARN_LMS_SITE_URL chưa được cấu hình trên Teacher server.", "lms_url_missing", 503, origin);
-
   if (request.method === "OPTIONS") {
     return new Response(null, {
       status: 204,
       headers: corsHeaders(origin),
     });
   }
+
+  if (!LMS_BASE_URL) return jsonError("KATLEARN_LMS_SITE_URL chưa được cấu hình trên Teacher server.", "lms_url_missing", 503, origin);
 
   if (request.method !== "GET" && request.method !== "POST") {
     return jsonError(
