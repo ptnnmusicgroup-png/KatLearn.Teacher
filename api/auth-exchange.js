@@ -14,7 +14,7 @@ const jsonResponse=(body,init={})=>new Response(JSON.stringify(body),init);
 
 export default async request=>{
  const origin=request.headers.get('origin')||'';
- if(request.method==='OPTIONS')return new Response('',{status:204,headers:headers(origin)});
+ if(request.method==='OPTIONS')return new Response(null,{status:204,headers:headers(origin)});
  if(request.method!=='POST')return jsonResponse({error:'Method not allowed'},{status:405,headers:headers(origin)});
  if(!allowedOrigins.has(origin))return jsonResponse({error:'Origin not allowed'},{status:403,headers:headers(origin)});
  try{
