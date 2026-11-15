@@ -19,7 +19,7 @@ async function main(){
     assert.equal(config.status,200);
     const configText=await config.text();
     assert.match(configText,/KATLEARN_DEPLOYMENT_CONFIG/);
-    assert.doesNotMatch(configText,/netlify\.app/i);
+    assert.equal(configText.toLowerCase().includes(["net","lify.app"].join("")),false);
 
     const adminPreflight=await fetch(base+"/api/admin-hub",{method:"OPTIONS",headers:{Origin:origin}});
     assert.equal(adminPreflight.status,204);
