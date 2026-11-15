@@ -1,6 +1,6 @@
 import { admin } from './_firebase-admin.js';
 
-const LMS_BASE_URL=String(process.env.KATLEARN_LMS_SITE_URL||'').trim().replace(/\\/+$/,'');
+const LMS_BASE_URL=(()=>{let value=String(process.env.KATLEARN_LMS_SITE_URL||'').trim();while(value.endsWith('/'))value=value.slice(0,-1);return value})();
 const STUDENT_AI_URL=LMS_BASE_URL+'/api/ai-pack';
 
 function headers(){
