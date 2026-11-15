@@ -9,7 +9,7 @@ const HOST=String(process.env.HOST||"127.0.0.1").trim()||"127.0.0.1";
 const PORT=Number.parseInt(process.env.PORT||"3100",10);
 const MAX_BODY_BYTES=10*1024*1024;
 const API_ENDPOINTS=new Set(["admin-hub","ai-pack","auth-exchange","teacher-manage","teacher-register"]);
-const BLOCKED_SEGMENTS=new Set([".git",".github","api","dist","netlify","node_modules","scripts"]);
+const BLOCKED_SEGMENTS=new Set([".git",".github","api","dist" ,"node_modules","scripts"]);
 const BLOCKED_FILES=new Set(["server.js","package.json","package-lock.json","pnpm-lock.yaml","yarn.lock","firestore.rules"]);
 const MIME_TYPES=Object.freeze({
  ".html":"text/html; charset=utf-8",".js":"text/javascript; charset=utf-8",".mjs":"text/javascript; charset=utf-8",
