@@ -1,42 +1,48 @@
-name: JavaScript syntax audit
+name: Teacher standalone checks
 
 on:
   push:
     paths:
       - "**/*.js"
-      - "admin.html"
-      - "admin.css"
+      - "**/*.mjs"
+      - "**/*.html"
+      - "package.json"
+      - ".env.example"
       - ".github/workflows/admin-proxy-syntax.yml"
   workflow_dispatch:
 
 jobs:
-  syntax:
+  standalone:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check every JavaScript file
+      - name: Run standalone server smoke test
+        run: node scripts/smoke-standalone.mjs
+      - name: Check every JavaScript module
         shell: bash
         run: |
           set -euo pipefail
           while IFS= read -r file; do
             echo "Checking $file"
             node --check "$file"
-          done < <(find . -type f -name '*.js' -not -path './.git/*' | sort)
-
-      - name: Reject Node-incompatible Response.json usage
+          done < <(find . -type f \( -name '*.js' -o -name '*.mjs' \) -not -path './.git/*' | sort)
+      - name: Check inline browser scripts
+        run: node scripts/check-inline-scripts.mjs
+      - name: Reject retired Netlify runtime references
         shell: bash
         run: |
           set -euo pipefail
-          if grep -RInE --include='*.js' 'Response[[:space:]]*\.[[:space:]]*json[[:space:]]*\(' api; then
-            echo "::error::Use new Response(JSON.stringify(...), ...) or a local JSON helper in Node functions."
+          if grep -RInEi --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist 'netlify|\.netlify' .; then
+            echo "::error::A retired Netlify runtime reference remains."
             exit 1
           fi
-
-      - name: Verify Node runtime target
-        shell: bash
+      - name: Verify standalone runtime files
         run: |
-          set -euo pipefail
-          node -e "const v=require('./package.json').engines?.node||''; if(!v.startsWith('>=22')){throw new Error('package.json must target Node >=22 for Netlify Functions. Got: '+v)}"
+          test -s server.js
+          test -s scripts/smoke-standalone.mjs
+          test ! -e netlify.toml
+          test ! -e netlify
+          test ! -e scripts/build-netlify.mjs
